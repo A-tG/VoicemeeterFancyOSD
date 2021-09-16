@@ -1,0 +1,98 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Ui="clr-namespace:VoicemeeterOsdProgram.UiControls">
+
+    <Style x:Key="IconBaseStyle" TargetType="{x:Type Ui:Icon}">
+        <Setter Property="SnapsToDevicePixels" Value="False"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="StatesNumber" Value="1"/>
+    </Style>
+
+    <Style x:Key="MonoIcon" TargetType="{x:Type Ui:Icon}" BasedOn="{StaticResource IconBaseStyle}">
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="StatesNumber" Value="2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Ui:Icon}">
+                    <Viewbox Stretch="{TemplateBinding Stretch}">
+                        <Canvas Width="60" Height="40">
+                            <Path x:Name="StereoPath" StrokeThickness="4" Stroke="{TemplateBinding NormalColor}">
+                                <Path.Data>
+                                    <!--TODO: Find a way to change GeometryCombineMode in trigger-->
+                                    <CombinedGeometry x:Name="StereoGeometry" GeometryCombineMode="Xor">
+                                        <CombinedGeometry.Geometry1>
+                                            <EllipseGeometry RadiusX="20" RadiusY="{Binding RadiusX, RelativeSource={RelativeSource Self}}" 
+                                                         Center="20,20"/>
+                                        </CombinedGeometry.Geometry1>
+                                        <CombinedGeometry.Geometry2>
+                                            <EllipseGeometry RadiusX="20" RadiusY="{Binding RadiusX, RelativeSource={RelativeSource Self}}" 
+                                                         Center="40,20"/>
+                                        </CombinedGeometry.Geometry2>
+                                    </CombinedGeometry>
+                                </Path.Data>
+                            </Path>
+                            <Path x:Name="MonoPath" StrokeThickness="5" Stroke="{TemplateBinding ToggledColor}" Visibility="Hidden">
+                                <Path.Data>
+                                    <EllipseGeometry RadiusX="13" RadiusY="{Binding RadiusX, RelativeSource={RelativeSource Self}}" 
+                                                 Center="30,20"/>
+                                </Path.Data>
+                            </Path>
+                            <Path x:Name="ReversePath" Fill="{TemplateBinding ToggledColor}" Visibility="Hidden"
+                                  Data="M 0,23 H 45 v 6 H 25 V 40 z
+                                        M 60,17 H 15 v -6 H 35 V 0 z">
+                            </Path>
+                        </Canvas>
+                    </Viewbox>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=State, RelativeSource={RelativeSource Self}}" 
+                                     Value="0">
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=State, RelativeSource={RelativeSource Self}}" 
+                                     Value="1">
+                            <Setter TargetName="MonoPath" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=State, RelativeSource={RelativeSource Self}}" 
+                                     Value="2">
+                            <Setter TargetName="ReversePath" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MonoReverseIcon" TargetType="{x:Type Ui:Icon}" BasedOn="{StaticResource MonoIcon}">
+        <Setter Property="StatesNumber" Value="3"/>
+    </Style>
+
+    <Style x:Key="MuteIcon" TargetType="{x:Type Ui:Icon}" BasedOn="{StaticResource IconBaseStyle}">
+        <Setter Property="StatesNumber" Value="2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Ui:Icon}">
+                    <Viewbox Stretch="{TemplateBinding Stretch}">
+                        <Canvas Width="100" Height="100">
+                            <Path x:Name="Speaker" Fill="{TemplateBinding NormalColor}"
+                                  Data="M 0,30 H 25 L 55,0 V 100 L 25,70 H 0 Z"/>
+                            <Path x:Name="Waves" Stroke="{TemplateBinding NormalColor}" StrokeThickness="10"
+                                  Data="M 65,10 A 65,65 0 0 1 65,90
+                                        M 85,5 A 85,85 0 0 1 85,95"/>
+                            <Path x:Name="Cross" Stroke="{TemplateBinding ToggledColor}" StrokeThickness="15" Visibility="Hidden"
+                                  Data="M 0,0 L 100,100 M 0,100 L 100,0"/>
+                        </Canvas>
+                    </Viewbox>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=State, RelativeSource={RelativeSource Self}}" 
+                                     Value="0">
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=State, RelativeSource={RelativeSource Self}}" 
+                                     Value="1">
+                            <Setter TargetName="Cross" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="Waves" Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

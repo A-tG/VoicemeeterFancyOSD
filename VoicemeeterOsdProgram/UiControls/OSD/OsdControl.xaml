@@ -1,0 +1,31 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls"
+    x:Name="OsdWindow" x:Class="VoicemeeterOsdProgram.UiControls.OSD.OsdControl"
+    mc:Ignorable="d"
+    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SnapsToDevicePixels="True">
+    <UserControl.Background>
+        <SolidColorBrush Color="{DynamicResource VmBgMainColor}"/>
+    </UserControl.Background>
+    <Viewbox x:Name="MainContentWrap" StretchDirection="DownOnly">
+        <Grid x:Name="SizeWrap">
+            <local:WrapPanelExt x:Name="MainContent" 
+                                Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                Margin="5"/>
+        </Grid>
+    </Viewbox>
+    <!-- Used to add rounded corners -->
+    <UserControl.Clip>
+        <RectangleGeometry RadiusX="10" RadiusY="10">
+            <RectangleGeometry.Rect>
+                <MultiBinding Converter="{StaticResource RectConverter}">
+                    <Binding ElementName="OsdWindow" Path="ActualWidth"/>
+                    <Binding ElementName="OsdWindow" Path="ActualHeight"/>
+                </MultiBinding>
+            </RectangleGeometry.Rect>
+        </RectangleGeometry>
+    </UserControl.Clip>
+</UserControl>

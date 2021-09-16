@@ -1,0 +1,84 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:strip="clr-namespace:VoicemeeterOsdProgram.UiControls.OSD.Strip"
+                    xmlns:converters="clr-namespace:VoicemeeterOsdProgram.UiControls.Converters">
+
+    <converters:IsGreaterThanConverter x:Key="IsGreaterThanConverter"/>
+    
+    <Style x:Key="StripBtnBaseStyle" TargetType="{x:Type strip:OutlineTglBtn}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="NormalColor">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource VmDarkElementColor}"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ToggledColor">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource VmActiveElementMainColor}"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="StatesNumber" Value="2"/>
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=NormalColor}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type strip:OutlineTglBtn}">
+                    <Border x:Name="border" Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6" BorderBrush="{TemplateBinding NormalColor}" 
+                            SnapsToDevicePixels="true">
+                        <ContentPresenter x:Name="contentPresenter" Focusable="False"
+                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                               Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" 
+                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=State, RelativeSource={RelativeSource Self},
+                                               Converter={StaticResource IsGreaterThanConverter}, ConverterParameter=0}" 
+                                     Value="True">
+                            <Setter Property="BorderBrush" TargetName="border" 
+                                    Value="{Binding ToggledColor, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Foreground" Value="{Binding ToggledColor, RelativeSource={RelativeSource Self}}"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MonoBtnStyle" TargetType="{x:Type strip:OutlineTglBtn}" BasedOn="{StaticResource StripBtnBaseStyle}">
+        <Setter Property="ToggledColor">
+            <Setter.Value>
+                <SolidColorBrush x:Name="ToggledBrush" Color="{DynamicResource VmActiveElementCyanColor}"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Content" Value="m"/>
+        <Style.Resources>
+            <SolidColorBrush x:Key="NormalBrush" 
+                             Color="{DynamicResource VmDarkElementColor}"/>
+        </Style.Resources>
+    </Style>
+
+    <Style x:Key="MonoReverseBtnStyle" TargetType="{x:Type strip:OutlineTglBtn}" BasedOn="{StaticResource MonoBtnStyle}">
+        <Setter Property="StatesNumber" Value="3"/>
+    </Style>
+
+    <Style x:Key="SoloBtnStyle" TargetType="{x:Type strip:OutlineTglBtn}" BasedOn="{StaticResource StripBtnBaseStyle}">
+        <Setter Property="ToggledColor">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource VmActiveElementOrangeColor}"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Content" Value="S"/>
+    </Style>
+
+    <Style x:Key="MuteBtnStyle" TargetType="{x:Type strip:OutlineTglBtn}" BasedOn="{StaticResource StripBtnBaseStyle}">
+        <Setter Property="ToggledColor">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource VmActiveElementRedColor}"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Content" Value="M"/>
+    </Style>
+</ResourceDictionary>
