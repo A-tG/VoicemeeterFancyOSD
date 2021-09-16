@@ -1,4 +1,6 @@
 # Voicemeeter Fancy OSD
+[.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) WPF project
+
 **WIP** Prototype. Voicemeeter API is not integrated yet!
 Start/build in debug mode to get acces to Debug Window in tray menu.
 
