@@ -11,4 +11,8 @@ Based on modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Com
 # Build instructions
  * hostfxr.dll is required. You can publish the program as Self-contained and copy hostfxr.dll to output folder
  * Launch \*Host.exe or fullscreen ontop functionality will not work
+
+# Explanation
  * app.manifest is crucial if you want to modify/make your own program based on this
+ * All magic stuff happens in Host and Bridge projects. Without it's not possible to create "true" topmost window. Only alternative is to sing your exe file with Microsoft Windows certificate.
+ * [What "private" API is used](https://blog.adeltax.com/window-z-order-in-windows-10/)
