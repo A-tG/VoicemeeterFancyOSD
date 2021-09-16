@@ -9,7 +9,7 @@ Support for other Windows versions can be added but without fullscreen apps supp
 Based on modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts) (Thanks for advices and directions from it's Discord server!)
 
 # Build instructions
-* Select Target Platform (x64, x86)
+* Select Target Platform (e.g. x64, x86)
 * hostfxr.dll is required. You can publish the program as Self-contained and copy hostfxr.dll to output folder
 * Launch \*Host.exe or fullscreen ontop functionality will not work
 
