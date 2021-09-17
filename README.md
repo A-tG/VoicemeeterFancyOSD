@@ -17,7 +17,7 @@ Based on modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Com
 * Launch \*Host.exe or fullscreen ontop functionality will not work
 
 # Explanation
-* app.manifest is crucial if you want to modify/make your own program based on this
+* Dont forget app.manifest if you want to modify/make your own program based on this
 * All magic stuff happens in Host and Bridge projects. Without it, it's not possible to create "true" topmost window. Only alternative is to sing your exe file with Microsoft Windows certificate.
 * Main code for topmost window is located in [Interop](VoicemeeterOsdProgram/Interop)
 * [Program.cs](VoicemeeterOsdProgram/Program.cs) is a entry point for the program and the "host"
