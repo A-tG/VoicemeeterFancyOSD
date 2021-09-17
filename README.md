@@ -6,8 +6,8 @@ Start/build in debug mode to get acces to Debug Window in tray menu.
 
 On-Screen display for Voicemeeter that work with fullscreen apps by using private Windows' API without hooking into Graphics API.
 
-In order to show OSD on top of fullscreen apps Windows 10 is required. 
-Support for other Windows versions can be added but without fullscreen apps support.
+In order to show OSD on top of fullscreen apps Windows 10 or newer is required. 
+Support for older Windows versions can be added but without fullscreen apps support.
 
 Based on modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts) (Thanks for advices and directions from it's Discord server!)
 
