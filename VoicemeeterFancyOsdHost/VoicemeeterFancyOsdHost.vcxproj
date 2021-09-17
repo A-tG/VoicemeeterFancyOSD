@@ -32,7 +32,6 @@
     <ProjectGuid>{2d0112a7-6a15-4ac6-90d4-26ff30f5af00}</ProjectGuid>
     <RootNamespace>VoicemeeterFancyOsdHost</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>VoicemeeterFancyOsdHost</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">
@@ -53,6 +52,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)</TargetName>
+    <IntDir>$(Platform)\x86\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\x86\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IntDir>$(Platform)\x86\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\x86\$(Configuration)\</OutDir>
   </PropertyGroup>
   <!--<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -67,22 +72,43 @@
     </Link>
   </ItemDefinitionGroup>-->
   <ItemGroup Condition="'$(Platform)'=='ARM64'">
-    <None Include="VoicemeeterFancyOsdHost_A64.exe">
+    <None Include="Host_A64.exe">
       <Link>$(ProjectName).exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DeploymentContent>true</DeploymentContent>
     </None>
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64'">
-    <None Include="VoicemeeterFancyOsdHost_x64.exe">
+    <None Include="Host_x64.exe">
       <Link>$(ProjectName).exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DeploymentContent>true</DeploymentContent>
     </None>
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='Win32'">
-    <None Include="VoicemeeterFancyOsdHost_x86.exe">
+    <None Include="Host_x86.exe">
       <Link>$(ProjectName).exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='ARM64'">
+    <None Include="hostfxr_A64.dll">
+      <Link>hostfxr.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='x64'">
+    <None Include="hostfxr_x64.dll">
+      <Link>hostfxr.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='Win32'">
+    <None Include="hostfxr_x86.dll">
+      <Link>hostfxr.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DeploymentContent>true</DeploymentContent>
     </None>

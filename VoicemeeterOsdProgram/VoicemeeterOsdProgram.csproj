@@ -5,7 +5,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU;x64;x86</Platforms>
     <ApplicationIcon>Resources\Icons\MainIcon.ico</ApplicationIcon>
     <StartupObject>VoicemeeterOsdProgram.Program</StartupObject>
     <Authors></Authors>
@@ -24,7 +24,17 @@
     <OutputPath>$(SolutionDir)$(Platform)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>$(SolutionDir)$(Platform)\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutputPath>$(SolutionDir)$(Platform)\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <OutputPath>$(SolutionDir)$(Platform)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 

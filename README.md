@@ -13,7 +13,6 @@ Based on modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Com
 
 # Build instructions
 * Select Target Platform (e.g. x64, x86)
-* hostfxr.dll is required. You can publish the program as Self-contained and copy hostfxr.dll to output folder
 * Launch \*Host.exe or fullscreen ontop functionality will not work
 
 # Explanation
