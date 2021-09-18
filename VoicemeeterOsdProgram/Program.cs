@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Permissions;
-using System.Text;
+using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Interop;
 using VoicemeeterOsdProgram.Interop;
-using System.Diagnostics;
-using System.Windows;
 
 namespace VoicemeeterOsdProgram
 {
@@ -58,6 +53,13 @@ namespace VoicemeeterOsdProgram
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Debug.WriteLine("UNHANDLED EXCEPTION");
+            Tray.TrayIconManager.Remove();
+
+            var ex = e.ExceptionObject as Exception;
+            string msg = "PRESS Ctrl + C TO COPY THIS TEXT\n" +
+                "Unhandled exception:\n" + 
+                $"{ex?.Message}\n{ex?.StackTrace}";
+            MessageBox.Show(msg, name, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private static void OnProcessExit(object sender, EventArgs e)
