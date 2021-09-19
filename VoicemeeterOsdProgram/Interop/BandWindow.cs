@@ -311,13 +311,19 @@ namespace VoicemeeterOsdProgram.Interop
             if (regResult == 0)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            IntPtr hWnd = CreateWindowInBand(
-                    (int)(ExtendedWindowStyles.WS_EX_TRANSPARENT | ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP
+            var extStyles = (int)(ExtendedWindowStyles.WS_EX_TRANSPARENT | ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP
                     | (Activatable ? 0 : ExtendedWindowStyles.WS_EX_NOACTIVATE)
-                    | (TopMost ? ExtendedWindowStyles.WS_EX_TOPMOST : 0)),
+                    | (TopMost ? ExtendedWindowStyles.WS_EX_TOPMOST : 0));
+            var styles = (uint)WindowStyles.WS_POPUP & ~(uint)WindowStyles.WS_SYSMENU;
+
+            IntPtr hWnd;
+            if (IsBandWindowSupported())
+            {
+                hWnd = CreateWindowInBand(
+                    extStyles,
                     regResult,
                     string.Empty,
-                    (uint)WindowStyles.WS_POPUP & ~(uint)WindowStyles.WS_SYSMENU,
+                    styles,
                     (int)Math.Round(Left),
                     (int)Math.Round(Top),
                     0,
@@ -327,6 +333,23 @@ namespace VoicemeeterOsdProgram.Interop
                     wind_class.hInstance,
                     IntPtr.Zero,
                     (int)ZBandID);
+            }
+            else
+            {
+                hWnd = CreateWindowEx(
+                    extStyles,
+                    regResult,
+                    string.Empty,
+                    styles,
+                    (int)Math.Round(Left),
+                    (int)Math.Round(Top),
+                    0,
+                    0,
+                    IntPtr.Zero,
+                    IntPtr.Zero,
+                    wind_class.hInstance,
+                    IntPtr.Zero);
+            }
             if (hWnd == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             Handle = hWnd;
