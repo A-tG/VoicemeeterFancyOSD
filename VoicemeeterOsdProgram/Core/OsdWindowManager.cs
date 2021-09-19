@@ -9,7 +9,7 @@ using VoicemeeterOsdProgram.UiControls.OSD;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 using static VoicemeeterOsdProgram.Interop.NativeMethods;
 
-namespace VoicemeeterOsdProgram
+namespace VoicemeeterOsdProgram.Core
 {
     public static class OsdWindowManager
     {
@@ -21,7 +21,7 @@ namespace VoicemeeterOsdProgram
         private static Stopwatch m_stopWatch = new();
         private static bool m_isIdle = false;
 
-        public static void Init()
+        public static void  Init()
         {
             OsdControl osd = new();
             OsdContentFactory.FillOsdWindow(ref osd, AtgDev.Voicemeeter.Types.VoicemeeterType.Potato);
@@ -43,7 +43,6 @@ namespace VoicemeeterOsdProgram
             m_timer.Interval = TimeSpan.FromMilliseconds(m_tickMs);
             m_timer.Tick += TimerTick;
             m_timer.Start();
-            //RandomizeElementsState();
         }
 
         public static double Scale
