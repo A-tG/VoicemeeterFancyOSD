@@ -79,6 +79,7 @@ namespace VoicemeeterOsdProgram.Interop
         {
             // if program recieve termination signal and the window is shown "Invalid window handle" exception is thrown
             // same exception if trying to dispose hwndSource manually
+            // so it's better to dispose it manually on Exit event, catch exception, so Dispose() will not be called automatically
             try
             {
                 hwndSource?.Dispose();
