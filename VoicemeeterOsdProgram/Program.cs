@@ -53,12 +53,16 @@ namespace VoicemeeterOsdProgram
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Debug.WriteLine("UNHANDLED EXCEPTION");
-            Tray.TrayIconManager.Remove();
+            m_app.Dispatcher.Invoke(() =>
+            {
+                Tray.TrayIconManager.Remove();
+            });
 
             var ex = e.ExceptionObject as Exception;
             string msg = "PRESS Ctrl + C TO COPY THIS TEXT\n" +
                 "Unhandled exception:\n" + 
-                $"{ex?.Message}\n{ex?.StackTrace}";
+                $"{ex?.Message}\n" + 
+                $"{ex?.StackTrace}";
             MessageBox.Show(msg, name, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
