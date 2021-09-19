@@ -72,32 +72,14 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             return Screen.FromPoint(pointInt);
         }
 
-        public void UpdateWorkingArea()
+        private void UpdateWorkingArea()
         {
-            const int defMargin = 45;
-            const int defHeight = 1080;
-            const int defWidth = 1920;
-            const double defHorPercent = defMargin / defWidth;
-            const double defVertPercent = defMargin / defHeight;
-
-            var scr = Screen.PrimaryScreen;
-            var resolution = scr.Bounds;
-            double marginH = (resolution.Width >= defWidth) ? defMargin : (double)(resolution.Width * defHorPercent);
-            double marginV = (resolution.Height >= defHeight) ? defMargin : (double)(resolution.Height * defVertPercent);
-
-            var area = scr.WorkingArea;
-            var x = (int)Math.Round(marginH);
-            var y = (int)Math.Round(marginV);
-            area.Width -= x * 2;
-            area.Height -= y * 2;
-            area.X += x;
-            area.Y += y;
-            m_workingArea = area;
-
+            
+            m_workingArea = Core.ScreenWorkingAreaManager.GetWokringArea();
             UpdateContMaxSize();
         }
 
-        public void UpdatePosAlign()
+        private void UpdatePosAlign()
         {
             var area = m_workingArea;
             var h = ActualHeight;
