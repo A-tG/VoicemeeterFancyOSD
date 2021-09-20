@@ -9,7 +9,13 @@ namespace VoicemeeterOsdProgram.Core
 {
     public static class ScreenWorkingAreaManager
     {
-        private static Screen m_mainScreen = Screen.PrimaryScreen;
+        private static Screen m_mainScreen;
+
+        public static Screen MainScreen
+        {
+            get => IsMainScreenConnected() ? m_mainScreen : Screen.PrimaryScreen;
+            set => m_mainScreen = value;
+        }
 
         public static System.Drawing.Rectangle GetWokringArea()
         {
@@ -19,7 +25,7 @@ namespace VoicemeeterOsdProgram.Core
             const double defHorPercent = defMargin / defWidth;
             const double defVertPercent = defMargin / defHeight;
 
-            var scr = m_mainScreen;
+            var scr = MainScreen;
             var resolution = scr.Bounds;
             double marginH = (resolution.Width >= defWidth) ? defMargin : (double)(resolution.Width * defHorPercent);
             double marginV = (scr.Bounds.Height >= defHeight) ? defMargin : (double)(resolution.Height * defVertPercent);
@@ -33,6 +39,13 @@ namespace VoicemeeterOsdProgram.Core
             area.Y += y;
 
             return area;
+        }
+
+        private static bool IsMainScreenConnected()
+        {
+            if (m_mainScreen is null) return false;
+
+            return Screen.AllScreens.Contains(m_mainScreen);
         }
     }
 }
