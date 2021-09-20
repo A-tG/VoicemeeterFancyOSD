@@ -36,7 +36,7 @@ namespace VoicemeeterOsdProgram.Core
                 Activatable = false,
                 TopMost = true,
                 IsClickThrough = true,
-                ZBandID = GetZBandID()
+                ZBandID = GetTopMostZBandID()
             };
             m_window = win;
 
@@ -68,18 +68,6 @@ namespace VoicemeeterOsdProgram.Core
         {
             m_isIdle = false;
             m_window.HideAnimated();
-        }
-
-        private static ZBandID GetZBandID()
-        {
-            var zbid = ZBandID.Default;
-            using (var proc = Process.GetCurrentProcess())
-            {
-                var isImmersive = IsImmersiveProcess(proc.Handle);
-                var hasUiAccess = HasUiAccessProcess(proc.Handle);
-                zbid = isImmersive ? ZBandID.AboveLockUX : hasUiAccess ? ZBandID.UIAccess : ZBandID.Desktop;
-            }
-            return zbid;
         }
 
         private static void TimerTick(object sender, EventArgs e)

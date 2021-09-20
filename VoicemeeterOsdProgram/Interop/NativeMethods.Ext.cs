@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace VoicemeeterOsdProgram.Interop
@@ -14,6 +15,23 @@ namespace VoicemeeterOsdProgram.Interop
                 NativeLibrary.Free(libHandle);
             }
             return result;
+        }
+
+        public static ZBandID GetTopMostZBandID()
+        {
+            var zbid = ZBandID.Default;
+            // if procedures are not supported in old Windows version
+            try
+            {
+                using (var proc = Process.GetCurrentProcess())
+                {
+                    var isImmersive = IsImmersiveProcess(proc.Handle);
+                    var hasUiAccess = HasUiAccessProcess(proc.Handle);
+                    zbid = isImmersive ? ZBandID.AboveLockUX : hasUiAccess ? ZBandID.UIAccess : ZBandID.Desktop;
+                }
+            }
+            catch { }
+            return zbid;
         }
     }
 }
