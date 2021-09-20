@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace VoicemeeterOsdProgram.Core
@@ -17,7 +15,7 @@ namespace VoicemeeterOsdProgram.Core
             set => m_mainScreen = value;
         }
 
-        public static System.Drawing.Rectangle GetWokringArea()
+        public static Rect GetWokringArea()
         {
             const int defMargin = 45;
             const int defHeight = 1080;
@@ -30,13 +28,18 @@ namespace VoicemeeterOsdProgram.Core
             double marginH = (resolution.Width >= defWidth) ? defMargin : (double)(resolution.Width * defHorPercent);
             double marginV = (scr.Bounds.Height >= defHeight) ? defMargin : (double)(resolution.Height * defVertPercent);
 
-            var area = scr.WorkingArea;
-            var x = (int)Math.Round(marginH);
-            var y = (int)Math.Round(marginV);
-            area.Width -= x * 2;
-            area.Height -= y * 2;
-            area.X += x;
-            area.Y += y;
+            var wArea = scr.WorkingArea;
+            Rect area = new()
+            { 
+                X = wArea.X, 
+                Y = wArea.Y,
+                Width = wArea.Width,
+                Height = wArea.Height
+            };
+            area.Width -= marginH * 2;
+            area.Height -= marginV * 2;
+            area.X += marginH;
+            area.Y += marginV;
 
             return area;
         }
