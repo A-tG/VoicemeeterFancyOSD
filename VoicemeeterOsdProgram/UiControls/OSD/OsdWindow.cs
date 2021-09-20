@@ -36,7 +36,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private const int FadeOutTimeMs = 200;
 
-        private System.Drawing.Rectangle m_workingArea = Screen.PrimaryScreen.WorkingArea;
+        private Rect m_workingArea;
         private VertAlignment m_vertAlign = VertAlignment.Top;
         private HorAlignment m_horAlign = HorAlignment.Left;
         private DoubleAnimation m_fadeOutAnim;
@@ -74,8 +74,13 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void UpdateWorkingArea()
         {
-            
-            m_workingArea = Core.ScreenWorkingAreaManager.GetWokringArea();
+            var dpi = VisualTreeHelper.GetDpi(this);
+            System.Diagnostics.Debug.WriteLine(dpi.DpiScaleX);
+            var area = Core.ScreenWorkingAreaManager.GetWokringArea();
+            m_workingArea.Height = area.Height / dpi.DpiScaleX;
+            m_workingArea.Width = area.Width / dpi.DpiScaleY;
+            m_workingArea.X = area.X;
+            m_workingArea.Y = area.Y;
             UpdateContMaxSize();
         }
 
