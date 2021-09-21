@@ -13,12 +13,13 @@ namespace VoicemeeterOsdProgram.Core
 {
     public static class OsdWindowManager
     {
-        private const int m_tickMs = 1000 / 30;
+        private static TimeSpan m_normalTickTime = TimeSpan.FromMilliseconds(1000 / 30);
+        private static TimeSpan m_slowTickTime = TimeSpan.FromSeconds(1);
 
         private static OsdControl m_wpfControl;
         private static OsdWindow m_window;
-        private static DispatcherTimer m_timer = new();
-        private static Stopwatch m_stopWatch = new();
+        private static DispatcherTimer m_TickTimer;
+        private static Stopwatch m_stopWatch;
         private static bool m_isIdle = false;
 
         public static void Init()
@@ -40,9 +41,11 @@ namespace VoicemeeterOsdProgram.Core
             };
             m_window = win;
 
-            m_timer.Interval = TimeSpan.FromMilliseconds(m_tickMs);
-            m_timer.Tick += TimerTick;
-            m_timer.Start();
+            m_stopWatch = new();
+            m_TickTimer = new();
+            m_TickTimer.Interval = m_normalTickTime;
+            m_TickTimer.Tick += TimerTick;
+            m_TickTimer.Start();
         }
 
         public static double Scale
@@ -56,6 +59,18 @@ namespace VoicemeeterOsdProgram.Core
             get;
             set;
         } = 2000;
+
+        private static TimeSpan TickTime
+        {
+            get => m_TickTimer.Interval;
+            set
+            {
+                if (m_TickTimer.Interval != value)
+                {
+                    m_TickTimer.Interval = value;
+                }
+            }
+        }
 
         public static void Show()
         {
@@ -78,7 +93,15 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void VoicemeeterTick()
         {
-            if (!VoicemeeterApiClient.IsLoaded) return;
+            if ((VoicemeeterApiClient.IsLoaded) && (VoicemeeterApiClient.IsInitialized))
+            {
+                TickTime = m_normalTickTime;
+            }
+            else
+            {
+                TickTime = m_slowTickTime;
+                return;
+            }
 
             int res = VoicemeeterApiClient.Api.IsParametersDirty();
             if ((res == 1) && (!IsVoicemeeterWindowForeground()))
