@@ -21,7 +21,7 @@ namespace VoicemeeterOsdProgram.Core
         private static Stopwatch m_stopWatch = new();
         private static bool m_isIdle = false;
 
-        public static void  Init()
+        public static void Init()
         {
             OsdControl osd = new();
             OsdContentFactory.FillOsdWindow(ref osd, AtgDev.Voicemeeter.Types.VoicemeeterType.Potato);
@@ -72,8 +72,25 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void TimerTick(object sender, EventArgs e)
         {
-            // Voicemeeter logic for reading parameters will be here
+            VoicemeeterTick();
+            ShowDurationTick();
+        }
 
+        private static void VoicemeeterTick()
+        {
+            if (!VoicemeeterApiClient.IsLoaded) return;
+
+            int res = VoicemeeterApiClient.Api.IsParametersDirty();
+            if ((res == 1) && (!IsVoicemeeterWindowForeground()))
+            {
+                // Update OSD Content here
+                RandomizeElementsState(); // Just for demonstration/test purpose
+                Show();
+            }
+        }
+
+        private static void ShowDurationTick()
+        {
             if ((!m_isIdle) || (DurationMs == 0)) return;
 
             if (m_stopWatch.ElapsedMilliseconds >= DurationMs)
