@@ -76,8 +76,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         {
             var dpi = VisualTreeHelper.GetDpi(this);
             m_workingArea = Core.ScreenWorkingAreaManager.GetWokringArea();
-            m_workingArea.Height /= dpi.DpiScaleX;
-            m_workingArea.Width /= dpi.DpiScaleY;
+            m_workingArea.Height /= dpi.DpiScaleY;
+            m_workingArea.Width /= dpi.DpiScaleX;
             UpdateContMaxSize();
         }
 
