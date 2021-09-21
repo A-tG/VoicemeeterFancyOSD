@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using VoicemeeterOsdProgram.UiControls;
@@ -89,20 +90,20 @@ namespace VoicemeeterOsdProgram.Tray
             if (m_debugWin is null)
             {
                 m_debugWin = new DebugWindow();
+                m_debugWin.Closing += OnDebugWin_Closing;
                 m_debugWin.Show();
             }
             else
             {
-                if (m_debugWin.IsLoaded)
-                {
-                    m_debugWin.Activate();
-                }
-                else
-                {
-                    m_debugWin = new DebugWindow();
-                    m_debugWin.Show();
-                }
+                m_debugWin.Show();
             }
+        }
+
+        private static void OnDebugWin_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            var win = sender as Window;
+            win.Hide();
         }
 #endif
     }
