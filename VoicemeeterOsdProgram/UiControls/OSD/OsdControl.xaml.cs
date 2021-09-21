@@ -60,7 +60,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         public void UpdateSeparators()
         {
-            var cont = MainContent;
+            WrapPanelExt cont = MainContent;
             var lines = cont.GetChildrenLines();
             foreach (var line in lines)
             {
@@ -79,7 +79,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
                 {
                     item.ShowHorizontalSeparatorAfter = true;
                 }
-                var lastInLine = (StripControl)visibleElements[len - 1];
+                var lastInLine = (StripControl)visibleElements[^1];
                 lastInLine.ShowHorizontalSeparatorAfter = false;
             }
         }
