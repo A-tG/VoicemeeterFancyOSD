@@ -75,11 +75,9 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         private void UpdateWorkingArea()
         {
             var dpi = VisualTreeHelper.GetDpi(this);
-            var area = Core.ScreenWorkingAreaManager.GetWokringArea();
-            m_workingArea.Height = area.Height / dpi.DpiScaleX;
-            m_workingArea.Width = area.Width / dpi.DpiScaleY;
-            m_workingArea.X = area.X;
-            m_workingArea.Y = area.Y;
+            m_workingArea = Core.ScreenWorkingAreaManager.GetWokringArea();
+            m_workingArea.Height /= dpi.DpiScaleX;
+            m_workingArea.Width /= dpi.DpiScaleY;
             UpdateContMaxSize();
         }
 
@@ -91,30 +89,20 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             if ((area.Height == 0) || (area.Width == 0) || (h == 0) || (w == 0)) 
                 return;
 
-            switch (WorkingAreaHorAlignment)
+            _ = WorkingAreaHorAlignment switch
             {
-                case HorAlignment.Left:
-                    Left = area.X;
-                    break;
-                case HorAlignment.Center:
-                    Left = area.X + (area.Width - w) / 2;
-                    break;
-                case HorAlignment.Right:
-                    Left = area.X + area.Width - w;
-                    break;
-            }
-            switch (WorkingAreaVertAlignment)
+                HorAlignment.Left => Left = area.X,
+                HorAlignment.Center => Left = area.X + (area.Width - w) / 2,
+                HorAlignment.Right => Left = area.X + area.Width - w,
+                _ => 0
+            };
+            _ = WorkingAreaVertAlignment switch
             {
-                case VertAlignment.Top:
-                    Top = area.Y;
-                    break;
-                case VertAlignment.Center:
-                    Top = area.Y + (area.Height - h) / 2;
-                    break;
-                case VertAlignment.Bottom:
-                    Top = area.Y + area.Height - h;
-                    break;
-            }
+                VertAlignment.Top => Top = area.Y,
+                VertAlignment.Center => Top = area.Y + (area.Height - h) / 2,
+                VertAlignment.Bottom => Top = area.Y + area.Height - h,
+                _ => 0
+            };
         }
 
         private void UpdateContMaxSize()
