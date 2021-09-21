@@ -17,14 +17,14 @@ namespace VoicemeeterOsdProgram
         [STAThread]
         static void Main(string[] args)
         {
-            if (!m_mutex.WaitOne(0, false))
-            {
-                MessageBox.Show("Program already running", name, MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+
+            if (!m_mutex.WaitOne(0, false))
+            {
+                MessageBox.Show("The program is already running", name, MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             Thread thread = new(() =>
             {
@@ -53,10 +53,6 @@ namespace VoicemeeterOsdProgram
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Debug.WriteLine("UNHANDLED EXCEPTION");
-            m_app.Dispatcher.Invoke(() =>
-            {
-                Tray.TrayIconManager.Remove();
-            });
 
             var ex = e.ExceptionObject as Exception;
             string msg = "PRESS Ctrl + C TO COPY THIS TEXT\n" +

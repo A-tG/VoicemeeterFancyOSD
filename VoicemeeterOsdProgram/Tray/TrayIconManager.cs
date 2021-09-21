@@ -16,27 +16,21 @@ namespace VoicemeeterOsdProgram.Tray
 
         public static void Init()
         {
+            AppDomain.CurrentDomain.UnhandledException += (_, _) => Remove();
+            App.Current.Exit += (_, _) => Remove();
             m_trayIcon = new()
             {
                 Icon = Properties.Resources.MainIcon,
                 Text = "Voicemeeter Fancy OSD"
             };
             ContextMenuInit();
-            App.Current.Exit += OnAppExit;
             m_trayIcon.Visible = true;
         }
 
         public static void Remove()
         {
-            m_contextMenu.Visible = false;
-            m_trayIcon.Visible = false;
-            m_trayIcon.Dispose();
-        }
-
-        private static void OnAppExit(object sender, System.Windows.ExitEventArgs e)
-        {
-            Remove();
-            System.Diagnostics.Debug.WriteLine("REMOVING TRAY ICON");
+            m_contextMenu?.Dispose();
+            m_trayIcon?.Dispose();
         }
 
         private static void ContextMenuInit()
