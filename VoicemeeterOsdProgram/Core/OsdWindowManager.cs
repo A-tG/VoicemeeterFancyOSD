@@ -110,6 +110,10 @@ namespace VoicemeeterOsdProgram.Core
                 RandomizeElementsState(); // Just for demonstration/test purpose
                 Show();
             }
+            else if (res == -2)
+            {
+                TickTime = m_slowTickTime;
+            }
         }
 
         private static void ShowDurationTick()
