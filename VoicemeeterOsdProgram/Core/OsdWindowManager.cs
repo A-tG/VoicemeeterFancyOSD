@@ -13,9 +13,6 @@ namespace VoicemeeterOsdProgram.Core
 {
     public static class OsdWindowManager
     {
-        private static TimeSpan m_normalTickTime = TimeSpan.FromMilliseconds(1000 / 30);
-        private static TimeSpan m_slowTickTime = TimeSpan.FromSeconds(1);
-
         private static OsdControl m_wpfControl;
         private static OsdWindow m_window;
         private static DispatcherTimer m_TickTimer;
@@ -44,9 +41,11 @@ namespace VoicemeeterOsdProgram.Core
 
             m_stopWatch = new();
             m_TickTimer = new();
-            m_TickTimer.Interval = m_normalTickTime;
+            m_TickTimer.Interval = TimeSpan.FromMilliseconds(1000 / 20);
             m_TickTimer.Tick += TimerTick;
             m_TickTimer.Start();
+
+            VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
         }
 
         public static double Scale
@@ -60,18 +59,6 @@ namespace VoicemeeterOsdProgram.Core
             get;
             set;
         } = 2000;
-
-        private static TimeSpan TickTime
-        {
-            get => m_TickTimer.Interval;
-            set
-            {
-                if (m_TickTimer.Interval != value)
-                {
-                    m_TickTimer.Interval = value;
-                }
-            }
-        }
 
         public static void Show()
         {
@@ -88,36 +75,20 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void TimerTick(object sender, EventArgs e)
         {
-            VoicemeeterTick();
-            ShowDurationTick();
+            DisplayDurationTick();
         }
 
-        private static void VoicemeeterTick()
+        private static void UpdateOsd()
         {
-            if ((VoicemeeterApiClient.IsLoaded) && (VoicemeeterApiClient.IsInitialized))
-            {
-                TickTime = m_normalTickTime;
-            }
-            else
-            {
-                TickTime = m_slowTickTime;
-                return;
-            }
-
-            int res = VoicemeeterApiClient.Api.IsParametersDirty();
-            if ((res == 1) && (!IsVoicemeeterWindowForeground()))
+            if (!IsVoicemeeterWindowForeground())
             {
                 // Update OSD Content here
                 RandomizeElementsState(); // Just for demonstration/test purpose
                 Show();
             }
-            else if (res == -2)
-            {
-                TickTime = m_slowTickTime;
-            }
         }
 
-        private static void ShowDurationTick()
+        private static void DisplayDurationTick()
         {
             if ((!m_isIdle) || (DurationMs == 0)) return;
 
@@ -137,6 +108,11 @@ namespace VoicemeeterOsdProgram.Core
             return (hWnd != IntPtr.Zero) && 
                 (GetWindowClassName(hWnd) == WindowClass) && 
                 (GetWindowText(hWnd) == WindowText);
+        }
+
+        private static void OnNewVoicemeeterParams(object sender, EventArgs e)
+        {
+            App.Current.Dispatcher.Invoke(() => UpdateOsd());
         }
 
         internal static void RandomizeElementsState()

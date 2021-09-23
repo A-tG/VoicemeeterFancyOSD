@@ -3,11 +3,16 @@ using AtgDev.Voicemeeter.Utils;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace VoicemeeterOsdProgram.Core
 {
     public static class VoicemeeterApiClient
     {
+        private const double SlowTickTimeMs = 1000;
+        private const double FastTickTimeMs = 1000 / 60;
+
+        private static Timer m_timer;
 
         public static async void Init()
         {
@@ -19,6 +24,14 @@ namespace VoicemeeterOsdProgram.Core
                 Api.Login();
                 _ = await WaitForNewParamsAsync();
                 IsInitialized = true;
+
+                m_timer = new Timer()
+                {
+                    AutoReset = true,
+                    Interval = FastTickTimeMs
+                };
+                m_timer.Elapsed += OnTimerTick;
+                m_timer.Start();
             }
         }
 
@@ -39,6 +52,17 @@ namespace VoicemeeterOsdProgram.Core
             get;
             private set;
         }
+        private static double TickTime
+        {
+            get => m_timer.Interval;
+            set
+            {
+                if (m_timer.Interval != value)
+                {
+                    m_timer.Interval = value;
+                }
+            }
+        }
 
         public static void Load()
         {
@@ -54,6 +78,7 @@ namespace VoicemeeterOsdProgram.Core
 
         public static void Logout()
         {
+            m_timer.Stop();
             Api?.Logout();
         }
 
@@ -71,6 +96,25 @@ namespace VoicemeeterOsdProgram.Core
                 await Task.Delay(timeSpan);
             };
             return resp;
+        }
+
+        private static void OnTimerTick(object sender, ElapsedEventArgs e)
+        {
+            int res = Api.IsParametersDirty();
+            switch (res)
+            {
+                case 1:
+                    OnNewParameters();
+                    break;
+            }
+            TickTime = (res == -2) ? SlowTickTimeMs : FastTickTimeMs;
+        }
+
+        public static event EventHandler NewParameters;
+
+        private static void OnNewParameters()
+        {
+            NewParameters?.Invoke(null, EventArgs.Empty);
         }
     }
 }
