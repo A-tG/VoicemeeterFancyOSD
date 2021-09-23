@@ -3,14 +3,13 @@ using AtgDev.Voicemeeter.Utils;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 
 namespace VoicemeeterOsdProgram.Core
 {
     public static class VoicemeeterApiClient
     {
 
-        public static void Init()
+        public static async void Init()
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Logout();
             App.Current.Exit += (_, _) => Logout();
@@ -18,7 +17,8 @@ namespace VoicemeeterOsdProgram.Core
             if (IsLoaded)
             {
                 Api.Login();
-                _ = WaitForNewParamsAsync().ContinueWith(_ => IsInitialized = true);
+                _ = await WaitForNewParamsAsync();
+                IsInitialized = true;
             }
         }
 
@@ -58,7 +58,7 @@ namespace VoicemeeterOsdProgram.Core
         }
 
         // workaround to "clean" IsParametersDirty()
-        // right after Login() it can incorrectly return 1 (New parameters) and it will trigger OSD to show
+        // right after Login() it can incorrectly return 1 (New parameters)
         // so we call IsParametersDirty() in a loop until it returns !0 or maxTime is reached (to not stuck in infinite loop)
         private static async Task<int> WaitForNewParamsAsync(double maxTime = 250, double tickTime = 1000 / 60)
         {
