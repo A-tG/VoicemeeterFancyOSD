@@ -2,22 +2,22 @@
 [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) WPF project
 
 **WIP** Prototype. Voicemeeter API is not fully integrated yet!
-Start/build in debug mode to get acces to Debug Window in tray menu.
+Start/build in debug mode to get acces to Debug Window in tray context menu.
 
-On-Screen display for Voicemeeter that work with fullscreen apps by using private Windows' API without hooking into Graphics API.
+On-Screen display for Voicemeeter that works with fullscreen apps by using private WinAPI without hooking into Graphics API.
 
-In order to show OSD on top of fullscreen apps Windows 10 or newer is required. 
-Support for older Windows versions can be added but without fullscreen apps support.
+Windows 10 or newer is required. 
+Support for older Windows versions can be added but OSD will work as normal window and will not be displayed on top of fullscreen applications.
 
-Based on modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts) (Thanks for advices and directions from it's Discord server!)
+Based on a modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts) (Thanks for advice and directions from their Discord server!)
 
 # Build instructions
 * Select Target Platform (e.g. x64, x86)
 * Launch \*Host.exe or fullscreen ontop functionality will not work
 
 # Explanation
-* Dont forget app.manifest if you want to modify/make your own program based on this
-* All magic stuff happens in Host and Bridge projects. Without it, it's Not possible to create "true" topmost window. Only alternative is to sign your exe file with Microsoft Windows certificate.
+* Don't forget app.manifest if you want to modify/make your own program based on this or BandWindow might throw Exception.
+* All magic stuff happens in Host and Bridge projects. Without it, it's not that easy to create "true" topmost window. Only alternative is to sign your exe file with Microsoft Windows certificate.
 * Main code for topmost window is located in [Interop](VoicemeeterOsdProgram/Interop)
 * [Program.cs](VoicemeeterOsdProgram/Program.cs) is a entry point for the program and the "host"
 * As far as I know, host is actually renamed ApplicationFrameHost.exe from System32
