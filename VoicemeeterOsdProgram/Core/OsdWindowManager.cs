@@ -39,6 +39,7 @@ namespace VoicemeeterOsdProgram.Core
                 IsClickThrough = true,
                 ZBandID = GetTopMostZBandID()
             };
+            win.CreateWindow();
             m_window = win;
 
             m_stopWatch = new();
