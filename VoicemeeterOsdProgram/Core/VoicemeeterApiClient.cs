@@ -10,14 +10,15 @@ namespace VoicemeeterOsdProgram.Core
     public static class VoicemeeterApiClient
     {
         private const double SlowTickTimeMs = 1000;
+        private const double NormalTickTime = 1000 / 30;
         private const double FastTickTimeMs = 1000 / 60;
 
         private static Timer m_timer;
 
         public static async void Init()
         {
-            AppDomain.CurrentDomain.UnhandledException += (_, _) => Logout();
-            App.Current.Exit += (_, _) => Logout();
+            AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
+            App.Current.Exit += (_, _) => Exit();
             Load();
             if (IsLoaded)
             {
@@ -76,9 +77,9 @@ namespace VoicemeeterOsdProgram.Core
             catch { }
         }
 
-        public static void Logout()
+        public static void Exit()
         {
-            m_timer.Stop();
+            m_timer?.Stop();
             Api?.Logout();
         }
 
@@ -101,13 +102,20 @@ namespace VoicemeeterOsdProgram.Core
         private static void OnTimerTick(object sender, ElapsedEventArgs e)
         {
             int res = Api.IsParametersDirty();
+            var tickTime = NormalTickTime;
             switch (res)
             {
+                case 0:
+                    TickTime = tickTime;
+                    break;
                 case 1:
                     OnNewParameters();
+                    TickTime = tickTime;
+                    break;
+                default:
+                    TickTime = SlowTickTimeMs;
                     break;
             }
-            TickTime = (res == -2) ? SlowTickTimeMs : FastTickTimeMs;
         }
 
         public static event EventHandler NewParameters;
