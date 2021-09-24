@@ -15,25 +15,11 @@ namespace VoicemeeterOsdProgram.Core
 
         private static Timer m_timer;
 
-        public static async void Init()
+        public static void Init()
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
             App.Current.Exit += (_, _) => Exit();
             Load();
-            if (IsLoaded)
-            {
-                Api.Login();
-                _ = await WaitForNewParamsAsync();
-                IsInitialized = true;
-
-                m_timer = new Timer()
-                {
-                    AutoReset = true,
-                    Interval = FastTickTimeMs
-                };
-                m_timer.Elapsed += OnTimerTick;
-                m_timer.Start();
-            }
         }
 
         public static RemoteApiExtender Api
@@ -65,16 +51,36 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
-        public static void Load()
+        public static async void Load()
         {
             if (IsLoaded) return;
 
             try
             {
                 Api = new(PathHelper.GetDllPath());
-                IsLoaded = true;
+
+                Api.Login();
+                _ = await WaitForNewParamsAsync();
+
+                m_timer = new Timer()
+                {
+                    AutoReset = true,
+                    Interval = FastTickTimeMs
+                };
+                m_timer.Elapsed += OnTimerTick;
+                m_timer.Start();
+
+                IsInitialized = IsLoaded = true;
             }
-            catch { }
+            catch 
+            {
+                if (m_timer is not null)
+                {
+                    m_timer.Stop();
+                    m_timer.Elapsed -= OnTimerTick;
+                    m_timer = null;
+                }
+            }
         }
 
         public static void Exit()
