@@ -44,14 +44,11 @@ namespace VoicemeeterOsdProgram.Core
             private set;
         }
 
-        public static bool IsParamsHandlingEnabled
+        public static bool IsHandlingParams
         {
-            get => IsInitialized && m_timer.Enabled;
-            set
-            {
-                m_timer.Enabled = value;
-            }
-        }
+            get;
+            set;
+        } = true;
 
         public static VoicemeeterType ProgramType
         {
@@ -136,6 +133,12 @@ namespace VoicemeeterOsdProgram.Core
         {
             int res = Api.IsParametersDirty();
             var tickTime = NormalTickTime;
+
+            if (!IsHandlingParams)
+            {
+                TickTime = SlowTickTimeMs;
+                return;
+            }
 
             var type = ProgramType;
             if (type != m_type)
