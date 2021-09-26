@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Drawing;
+using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.UiControls;
 
 namespace VoicemeeterOsdProgram.Tray
@@ -13,6 +10,7 @@ namespace VoicemeeterOsdProgram.Tray
     public static class TrayIconManager
     {
         private static NotifyIcon m_trayIcon;
+        private static ToolStripMenuItem m_toggleBtn;
         private static ContextMenuStrip m_contextMenu;
 
         public static void Init()
@@ -25,6 +23,7 @@ namespace VoicemeeterOsdProgram.Tray
                 Text = "Voicemeeter Fancy OSD"
             };
             ContextMenuInit();
+            m_trayIcon.DoubleClick += OnToggleButton;
             m_trayIcon.Visible = true;
         }
 
@@ -41,11 +40,21 @@ namespace VoicemeeterOsdProgram.Tray
             context.Items.Add(CreateDebugWindow());
             context.Items.Add(new ToolStripSeparator());
 #endif
+            context.Items.Add(CreateToggleButton());
             context.Items.Add(CreateExitButton());
             context.Items.Add(new ToolStripSeparator());
             context.Items.Add(CreateCloseMenuButton());
             m_contextMenu = context;
             m_trayIcon.ContextMenuStrip = context;
+        }
+
+        private static ToolStripMenuItem CreateToggleButton()
+        {
+            ToolStripMenuItem item = new();
+            item.Text = "Paused";
+            item.Click += OnToggleButton;
+            m_toggleBtn = item;
+            return item;
         }
 
         private static ToolStripMenuItem CreateExitButton()
@@ -62,6 +71,30 @@ namespace VoicemeeterOsdProgram.Tray
             item.Text = "Close Menu";
             item.Click += OnCloseClick;
             return item;
+        }
+
+        private static void OnToggleButton(object sender, EventArgs e)
+        {
+            if (!VoicemeeterApiClient.IsInitialized) return;
+
+            ToggleOsdHandling();
+        }
+
+        private static void ToggleOsdHandling()
+        {
+            var item = m_toggleBtn;
+            if (OsdWindowManager.IsEnabled)
+            {
+                OsdWindowManager.IsEnabled = false;
+                item.Checked = true;
+                item.Font = new(item.Font, System.Drawing.FontStyle.Bold);
+            }
+            else
+            {
+                OsdWindowManager.IsEnabled = true;
+                item.Checked = false;
+                item.Font = new(item.Font, System.Drawing.FontStyle.Regular);
+            }
         }
 
         private static void OnCloseClick(object sender, EventArgs e)

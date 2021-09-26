@@ -48,6 +48,14 @@ namespace VoicemeeterOsdProgram.Core
             VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
         }
 
+        public static bool IsEnabled
+        {
+            get => VoicemeeterApiClient.IsParamsHandlingEnabled;
+            set
+            {
+                VoicemeeterApiClient.IsParamsHandlingEnabled = value;
+            }
+        }
         public static double Scale
         {
             get => m_wpfControl.Scale;

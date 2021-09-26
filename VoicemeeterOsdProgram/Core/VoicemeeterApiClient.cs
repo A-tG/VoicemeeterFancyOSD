@@ -39,6 +39,16 @@ namespace VoicemeeterOsdProgram.Core
             get;
             private set;
         }
+
+        public static bool IsParamsHandlingEnabled
+        {
+            get => IsInitialized && m_timer.Enabled;
+            set
+            {
+                m_timer.Enabled = value;
+            }
+        }
+
         private static double TickTime
         {
             get => m_timer.Interval;
