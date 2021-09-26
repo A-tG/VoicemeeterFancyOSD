@@ -19,7 +19,7 @@ namespace VoicemeeterOsdProgram.Core
         private static Stopwatch m_stopWatch;
         private static bool m_isIdle = false;
 
-        public static void Init()
+        static OsdWindowManager()
         {
             OsdControl osd = new();
             OsdContentFactory.FillOsdWindow(ref osd, AtgDev.Voicemeeter.Types.VoicemeeterType.Potato);
@@ -47,6 +47,8 @@ namespace VoicemeeterOsdProgram.Core
 
             VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
         }
+
+        public static void Init() { }
 
         public static bool IsEnabled
         {

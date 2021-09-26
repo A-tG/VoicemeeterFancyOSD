@@ -13,10 +13,11 @@ namespace VoicemeeterOsdProgram.Tray
         private static ToolStripMenuItem m_toggleBtn;
         private static ContextMenuStrip m_contextMenu;
 
-        public static void Init()
+        static TrayIconManager()
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Remove();
             App.Current.Exit += (_, _) => Remove();
+
             m_trayIcon = new()
             {
                 Icon = Properties.Resources.MainIcon,
@@ -26,6 +27,8 @@ namespace VoicemeeterOsdProgram.Tray
             m_trayIcon.DoubleClick += OnToggleButton;
             m_trayIcon.Visible = true;
         }
+
+        public static void Init() { }
 
         public static void Remove()
         {

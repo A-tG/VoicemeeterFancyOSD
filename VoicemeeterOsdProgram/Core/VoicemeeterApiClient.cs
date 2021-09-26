@@ -17,12 +17,14 @@ namespace VoicemeeterOsdProgram.Core
         private static Timer m_timer;
         private static VoicemeeterType m_type = 0;
 
-        public static void Init()
+        static VoicemeeterApiClient()
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
             App.Current.Exit += (_, _) => Exit();
             Load();
         }
+
+        public static void Init() { }
 
         public static RemoteApiExtender Api
         {
