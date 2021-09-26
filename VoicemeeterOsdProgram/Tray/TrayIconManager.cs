@@ -38,9 +38,9 @@ namespace VoicemeeterOsdProgram.Tray
             ContextMenuStrip context = new();
 #if DEBUG
             context.Items.Add(CreateDebugWindow());
-            context.Items.Add(new ToolStripSeparator());
 #endif
             context.Items.Add(CreateToggleButton());
+            context.Items.Add(new ToolStripSeparator());
             context.Items.Add(CreateExitButton());
             context.Items.Add(new ToolStripSeparator());
             context.Items.Add(CreateCloseMenuButton());
@@ -124,19 +124,15 @@ namespace VoicemeeterOsdProgram.Tray
             {
                 m_debugWin = new DebugWindow();
                 m_debugWin.Closing += OnDebugWin_Closing;
-                m_debugWin.Show();
             }
-            else
-            {
-                m_debugWin.Show();
-            }
+            m_debugWin.Show();
+            m_debugWin.Activate();
         }
 
         private static void OnDebugWin_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
-            var win = sender as Window;
-            win.Hide();
+            m_debugWin.Hide();
         }
 #endif
     }

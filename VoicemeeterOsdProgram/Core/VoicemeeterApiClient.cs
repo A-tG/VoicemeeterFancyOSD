@@ -1,4 +1,5 @@
 ﻿using AtgDev.Voicemeeter;
+using AtgDev.Voicemeeter.Types;
 using AtgDev.Voicemeeter.Utils;
 using System;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ namespace VoicemeeterOsdProgram.Core
         private const double FastTickTimeMs = 1000 / 60;
 
         private static Timer m_timer;
+        private static VoicemeeterType m_type = 0;
 
         public static void Init()
         {
@@ -46,6 +48,19 @@ namespace VoicemeeterOsdProgram.Core
             set
             {
                 m_timer.Enabled = value;
+            }
+        }
+
+        public static VoicemeeterType ProgramType
+        {
+            get
+            {
+                var res = Api.GetVoicemeeterType(out VoicemeeterType type);
+                if (res != 0)
+                {
+                    type = 0;
+                }
+                return type;
             }
         }
 
@@ -82,7 +97,7 @@ namespace VoicemeeterOsdProgram.Core
 
                 IsInitialized = IsLoaded = true;
             }
-            catch 
+            catch
             {
                 if (m_timer is not null)
                 {
@@ -119,6 +134,14 @@ namespace VoicemeeterOsdProgram.Core
         {
             int res = Api.IsParametersDirty();
             var tickTime = NormalTickTime;
+
+            var type = ProgramType;
+            if (type != m_type)
+            {
+                m_type = type;
+                OnProgramTypeChange(m_type);
+            }
+            
             switch (res)
             {
                 case 0:
@@ -135,10 +158,16 @@ namespace VoicemeeterOsdProgram.Core
         }
 
         public static event EventHandler NewParameters;
+        public static event EventHandler<VoicemeeterType> ProgramTypeChange;
 
         private static void OnNewParameters()
         {
             NewParameters?.Invoke(null, EventArgs.Empty);
+        }
+
+        private static void OnProgramTypeChange(VoicemeeterType type)
+        {
+            ProgramTypeChange?.Invoke(null, type);
         }
     }
 }
