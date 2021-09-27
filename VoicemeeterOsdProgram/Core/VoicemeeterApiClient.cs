@@ -14,8 +14,14 @@ namespace VoicemeeterOsdProgram.Core
         private const double NormalTickTime = 1000 / 30;
         private const double FastTickTimeMs = 1000 / 60;
 
-        private static Timer m_timer;
+        private static Timer m_timer = new()
+        {
+            AutoReset = true,
+            Interval = NormalTickTime
+        };
         private static VoicemeeterType m_type;
+        private static bool m_isSlowUpdate;
+        private static bool m_isHandlingParams = true;
 
         static VoicemeeterApiClient()
         {
@@ -46,9 +52,13 @@ namespace VoicemeeterOsdProgram.Core
 
         public static bool IsHandlingParams
         {
-            get;
-            set;
-        } = true;
+            get => m_isHandlingParams;
+            set
+            {
+                m_isHandlingParams = value;
+                IsSlowUpdate = !value;
+            }
+        }
 
         public static VoicemeeterType ProgramType
         {
@@ -75,26 +85,35 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
+        private static bool IsSlowUpdate
+        {
+            get => m_isSlowUpdate;
+            set
+            {
+                m_isSlowUpdate = value;
+                TickTime = value ? SlowTickTimeMs : NormalTickTime;
+            }
+        }
+
         public static async void Load()
         {
-            if (IsLoaded) return;
+            if (IsInitialized) return;
 
             try
             {
-                Api = new(PathHelper.GetDllPath());
-
-                Api.Login();
-                _ = await Api.WaitForNewParamsAsync(250, 1000 / 30);
-
-                m_timer = new Timer()
+                if (!IsLoaded)
                 {
-                    AutoReset = true,
-                    Interval = FastTickTimeMs
-                };
+                    Api = new(PathHelper.GetDllPath());
+                    Api.Login();
+                    _ = await Api.WaitForNewParamsAsync(250, 1000 / 30);
+
+                    IsLoaded = true;
+                }
+
                 m_timer.Elapsed += OnTimerTick;
                 m_timer.Start();
 
-                IsInitialized = IsLoaded = true;
+                IsInitialized = true;
             }
             catch
             {
@@ -102,7 +121,6 @@ namespace VoicemeeterOsdProgram.Core
                 {
                     m_timer.Stop();
                     m_timer.Elapsed -= OnTimerTick;
-                    m_timer = null;
                 }
             }
         }
@@ -115,33 +133,41 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void OnTimerTick(object sender, ElapsedEventArgs e)
         {
-            int res = Api.IsParametersDirty();
-            var tickTime = NormalTickTime;
-
             if (!IsHandlingParams)
             {
-                TickTime = SlowTickTimeMs;
+                _ = Api.IsParametersDirty();
+                IsSlowUpdate = true;
                 return;
             }
 
+            HandleProgramType();
+            HandleParameters();
+        }
+
+        private static void HandleProgramType()
+        {
             var type = ProgramType;
-            if ((type != m_type) && (type != VoicemeeterType.None))
+            if (type != m_type)
             {
-                m_type = type;
+                if (type != VoicemeeterType.None) m_type = type;
                 OnProgramTypeChange(m_type);
             }
-            
+        }
+
+        private static void HandleParameters()
+        {
+            int res = Api.IsParametersDirty();
             switch (res)
             {
                 case 0:
-                    TickTime = tickTime;
+                    IsSlowUpdate = false;
                     break;
                 case 1:
                     OnNewParameters();
-                    TickTime = tickTime;
+                    IsSlowUpdate = false;
                     break;
                 default:
-                    TickTime = SlowTickTimeMs;
+                    IsSlowUpdate = true;
                     break;
             }
         }
