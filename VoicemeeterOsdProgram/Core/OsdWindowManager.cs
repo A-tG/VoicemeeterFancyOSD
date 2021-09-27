@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
 using VoicemeeterOsdProgram.Factories;
-using VoicemeeterOsdProgram.Interop;
 using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.OSD;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;

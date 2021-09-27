@@ -54,6 +54,7 @@
 
   <ItemGroup>
     <None Remove="Resources\Icons\MainIcon.ico" />
+    <None Remove="Resources\Icons\MainIconInactive.ico" />
     <None Remove="Resources\Icons\Tray.ico" />
   </ItemGroup>
 
@@ -63,6 +64,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\Icons\MainIcon.ico" />
+    <Resource Include="Resources\Icons\MainIconInactive.ico" />
   </ItemGroup>
 
   <ItemGroup>

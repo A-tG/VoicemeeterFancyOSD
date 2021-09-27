@@ -89,12 +89,14 @@ namespace VoicemeeterOsdProgram.Tray
             if (OsdWindowManager.IsEnabled)
             {
                 OsdWindowManager.IsEnabled = false;
+                m_trayIcon.Icon = Properties.Resources.MainIconInactive;
                 item.Checked = true;
                 item.Font = new(item.Font, System.Drawing.FontStyle.Bold);
             }
             else
             {
                 OsdWindowManager.IsEnabled = true;
+                m_trayIcon.Icon = Properties.Resources.MainIcon;
                 item.Checked = false;
                 item.Font = new(item.Font, System.Drawing.FontStyle.Regular);
             }

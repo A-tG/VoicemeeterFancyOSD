@@ -69,5 +69,15 @@ namespace VoicemeeterOsdProgram.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon MainIconInactive {
+            get {
+                object obj = ResourceManager.GetObject("MainIconInactive", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }
