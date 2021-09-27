@@ -59,7 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="a-tg.VmrapiDynWrapExt" Version="1.0.0" />
+    <PackageReference Include="a-tg.VmrapiDynWrapExt" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>

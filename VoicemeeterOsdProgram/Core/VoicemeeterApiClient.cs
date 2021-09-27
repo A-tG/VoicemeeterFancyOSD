@@ -15,7 +15,7 @@ namespace VoicemeeterOsdProgram.Core
         private const double FastTickTimeMs = 1000 / 60;
 
         private static Timer m_timer;
-        private static VoicemeeterType m_type = 0;
+        private static VoicemeeterType m_type;
 
         static VoicemeeterApiClient()
         {
@@ -57,7 +57,7 @@ namespace VoicemeeterOsdProgram.Core
                 var res = Api.GetVoicemeeterType(out VoicemeeterType type);
                 if (res != 0)
                 {
-                    type = 0;
+                    type = VoicemeeterType.None;
                 }
                 return type;
             }
@@ -84,7 +84,7 @@ namespace VoicemeeterOsdProgram.Core
                 Api = new(PathHelper.GetDllPath());
 
                 Api.Login();
-                _ = await WaitForNewParamsAsync();
+                _ = await Api.WaitForNewParamsAsync(250, 1000 / 30);
 
                 m_timer = new Timer()
                 {
@@ -113,22 +113,6 @@ namespace VoicemeeterOsdProgram.Core
             Api?.Logout();
         }
 
-        // workaround to "clean" IsParametersDirty()
-        // right after Login() it can incorrectly return 1 (New parameters)
-        // so we call IsParametersDirty() in a loop until it returns !0 or maxTime is reached (to not stuck in infinite loop)
-        private static async Task<int> WaitForNewParamsAsync(double maxTime = 250, double tickTime = 1000 / 60)
-        {
-            var timeSpan = TimeSpan.FromMilliseconds(tickTime);
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            int resp;
-            while (((resp = Api.IsParametersDirty()) == 0) && (stopwatch.ElapsedMilliseconds <= maxTime))
-            {
-                await Task.Delay(timeSpan);
-            };
-            return resp;
-        }
-
         private static void OnTimerTick(object sender, ElapsedEventArgs e)
         {
             int res = Api.IsParametersDirty();
@@ -141,7 +125,7 @@ namespace VoicemeeterOsdProgram.Core
             }
 
             var type = ProgramType;
-            if (type != m_type)
+            if ((type != m_type) && (type != VoicemeeterType.None))
             {
                 m_type = type;
                 OnProgramTypeChange(m_type);
