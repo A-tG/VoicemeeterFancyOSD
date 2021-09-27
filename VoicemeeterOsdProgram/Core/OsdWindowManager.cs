@@ -16,8 +16,6 @@ namespace VoicemeeterOsdProgram.Core
         private static OsdControl m_wpfControl;
         private static OsdWindow m_window;
         private static DispatcherTimer m_TickTimer;
-        private static Stopwatch m_stopWatch;
-        private static bool m_isIdle = false;
 
         static OsdWindowManager()
         {
@@ -39,11 +37,9 @@ namespace VoicemeeterOsdProgram.Core
             win.CreateWindow();
             m_window = win;
 
-            m_stopWatch = new();
-            m_TickTimer = new();
-            m_TickTimer.Interval = TimeSpan.FromMilliseconds(1000 / 20);
+            m_TickTimer = new(DispatcherPriority.Normal);
+            m_TickTimer.Interval = TimeSpan.FromMilliseconds(2000);
             m_TickTimer.Tick += TimerTick;
-            m_TickTimer.Start();
 
             VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
         }
@@ -64,28 +60,31 @@ namespace VoicemeeterOsdProgram.Core
             set => m_wpfControl.Scale = value;
         }
 
-        public static uint DurationMs
+        public static double DurationMs
         {
-            get;
-            set;
-        } = 2000;
+            get => m_TickTimer.Interval.TotalMilliseconds;
+            set => m_TickTimer.Interval = TimeSpan.FromMilliseconds(value);
+        }
 
         public static void Show()
         {
-            m_isIdle = true;
-            m_stopWatch.Restart();
+            if (DurationMs != 0)
+            {
+                m_TickTimer.Stop();
+                m_TickTimer.Start();
+            }
             m_window.Show();
         }
 
         public static void Hide()
         {
-            m_isIdle = false;
             m_window.HideAnimated();
         }
 
         private static void TimerTick(object sender, EventArgs e)
         {
-            DisplayDurationTick();
+            Hide();
+            m_TickTimer.Stop();
         }
 
         private static void UpdateOsd()
@@ -95,17 +94,6 @@ namespace VoicemeeterOsdProgram.Core
                 // Update OSD Content here
                 RandomizeElementsState(); // Just for demonstration/test purpose
                 Show();
-            }
-        }
-
-        private static void DisplayDurationTick()
-        {
-            if ((!m_isIdle) || (DurationMs == 0)) return;
-
-            if (m_stopWatch.ElapsedMilliseconds >= DurationMs)
-            {
-                m_stopWatch.Reset();
-                Hide();
             }
         }
 
@@ -122,7 +110,7 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void OnNewVoicemeeterParams(object sender, EventArgs e)
         {
-            App.Current.Dispatcher.Invoke(() => UpdateOsd());
+            App.Current.Dispatcher.Invoke(UpdateOsd);
         }
 
         internal static void RandomizeElementsState()
