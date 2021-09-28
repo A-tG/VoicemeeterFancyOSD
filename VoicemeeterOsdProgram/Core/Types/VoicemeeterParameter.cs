@@ -3,7 +3,7 @@ using System;
 
 namespace VoicemeeterOsdProgram.Core.Types
 {
-    class VoicemeeterParameter
+    public class VoicemeeterParameter
     {
         private readonly string m_command;
         private readonly RemoteApiExtender m_api;

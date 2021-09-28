@@ -32,17 +32,17 @@ namespace VoicemeeterOsdProgram.UiControls
         public IEnumerable<IEnumerable<UIElement>> GetChildrenLines()
         {
             var len = Children.Count;
-             if (len == 0) throw new ArgumentException("Element have no children");
+            List<IEnumerable<UIElement>> lines = new();
+            List<UIElement> line = new();
+            lines.Add(line);
+            if (len == 0) return lines;
 
             var isHorizontal = Orientation == Orientation.Horizontal;
             // PROBLEM: width can be limited just by the parent,
             // and RenderSize, Actual* return incorrect value. Bug ticket rejected in WPF's github
             double maxWidth = isHorizontal ? MaxWidth : MaxHeight;
             if (maxWidth is double.NaN) throw new ArgumentNullException("MaxWidth/MaxHeight must be specified");
-
-            List<IEnumerable<UIElement>> lines = new();
-            List<UIElement> line = new();
-            lines.Add(line);
+            
             double lineW = 0;
             foreach (FrameworkElement child in Children)
             {

@@ -18,8 +18,8 @@ namespace VoicemeeterOsdProgram
         void OnAppStartup(object sender, StartupEventArgs e)
         {
             TrayIconManager.Init();
-            OsdWindowManager.Init();
             VoicemeeterApiClient.Init();
+            OsdWindowManager.Init();
         }
     }
 }

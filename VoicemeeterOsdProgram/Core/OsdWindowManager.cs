@@ -2,10 +2,12 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
+using VoicemeeterOsdProgram.Core.Types;
 using VoicemeeterOsdProgram.Factories;
 using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.OSD;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
+using AtgDev.Voicemeeter.Types;
 using static VoicemeeterOsdProgram.Interop.NativeMethods;
 
 namespace VoicemeeterOsdProgram.Core
@@ -15,11 +17,12 @@ namespace VoicemeeterOsdProgram.Core
         private static OsdControl m_wpfControl;
         private static OsdWindow m_window;
         private static DispatcherTimer m_TickTimer;
+        private static VoicemeeterParameter[] m_parameters;
 
         static OsdWindowManager()
         {
             OsdControl osd = new();
-            OsdContentFactory.FillOsdWindow(ref osd, AtgDev.Voicemeeter.Types.VoicemeeterType.Potato);
+            OsdContentFactory.FillOsdWindow(ref osd, ref m_parameters, VoicemeeterApiClient.ProgramType);
             osd.Background.Opacity = 0.9;
             m_wpfControl = osd;
 
@@ -41,6 +44,7 @@ namespace VoicemeeterOsdProgram.Core
             m_TickTimer.Tick += TimerTick;
 
             VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
+            VoicemeeterApiClient.ProgramTypeChange += OnVoicemeeterTypeChange;
         }
 
         public static void Init() { }
@@ -48,10 +52,7 @@ namespace VoicemeeterOsdProgram.Core
         public static bool IsEnabled
         {
             get => VoicemeeterApiClient.IsHandlingParams;
-            set
-            {
-                VoicemeeterApiClient.IsHandlingParams = value;
-            }
+            set => VoicemeeterApiClient.IsHandlingParams = value;
         }
         public static double Scale
         {
@@ -90,10 +91,22 @@ namespace VoicemeeterOsdProgram.Core
         {
             if (!IsVoicemeeterWindowForeground())
             {
-                // Update OSD Content here
-                RandomizeElementsState(); // Just for demonstration/test purpose
+                HideOsdElements();
+                var len = m_parameters.Length;
+                for (int i = 0; i < len; i++)
+                {
+                    m_parameters[i].Read();
+                }
+
                 Show();
             }
+        }
+
+        private static void RefillOsd(VoicemeeterType type)
+        {
+            m_wpfControl.MainContent.Children.Clear();
+            m_parameters = null;
+            OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_parameters, type);
         }
 
         private static bool IsVoicemeeterWindowForeground()
@@ -107,9 +120,39 @@ namespace VoicemeeterOsdProgram.Core
                 (GetWindowText(hWnd) == WindowText);
         }
 
+        private static void HideOsdElements()
+        {
+            m_wpfControl.AllowAutoUpdateSeparators = false;
+
+            var children = m_wpfControl.MainContent.Children;
+            foreach (StripControl strip in children)
+            {
+                strip.Visibility = Visibility.Collapsed;
+                strip.FaderCont.Visibility = Visibility.Collapsed;
+                strip.BusBtnsContainer.Visibility = Visibility.Collapsed;
+                strip.ControlBtnsContainer.Visibility = Visibility.Collapsed;
+                foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
+                {
+                    btnCont.Btn.Visibility = Visibility.Collapsed;
+                }
+                foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
+                {
+                    btnCont.Btn.Visibility = Visibility.Collapsed;
+                }
+            }
+
+            m_wpfControl.UpdateSeparators();
+            m_wpfControl.AllowAutoUpdateSeparators = true;
+        }
+
         private static void OnNewVoicemeeterParams(object sender, EventArgs e)
         {
             App.Current.Dispatcher.Invoke(UpdateOsd);
+        }
+
+        private static void OnVoicemeeterTypeChange(object sender, VoicemeeterType t)
+        {
+            App.Current.Dispatcher.Invoke(() => RefillOsd(t));
         }
 
         internal static void RandomizeElementsState()
@@ -117,7 +160,7 @@ namespace VoicemeeterOsdProgram.Core
             m_wpfControl.AllowAutoUpdateSeparators = false;
             var random = new Random();
             var children = m_wpfControl.MainContent.Children;
-            foreach (StripControl strip in m_wpfControl.MainContent.Children)
+            foreach (StripControl strip in children)
             {
                 if (random.Next(100) < 50)
                 {

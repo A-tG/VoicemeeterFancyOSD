@@ -64,6 +64,8 @@ namespace VoicemeeterOsdProgram.Core
         {
             get
             {
+                if (!IsLoaded) return VoicemeeterType.None;
+
                 var res = Api.GetVoicemeeterType(out VoicemeeterType type);
                 if (res != 0)
                 {
