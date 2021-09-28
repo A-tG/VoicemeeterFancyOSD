@@ -22,9 +22,9 @@ namespace VoicemeeterOsdProgram.Factories
             {
                 var strip = GetHardwareInputStrip(properties);
                 VoicemeeterApiClient.Api.GetParameter(VoicemeeterCommandsFactory.GetStripLabel(i), out string name);
-                strip.StripLabel.Text = (String.IsNullOrEmpty(name)) ? $"Hard In{i + 1}" : name;
+                strip.StripLabel.Text = string.IsNullOrEmpty(name) ? $"Hard In{i + 1}" : name;
 
-                GetStripParameters(vmParams, strip, i);
+                vmParams.Add(GetStripParameters(strip, i));
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -34,9 +34,9 @@ namespace VoicemeeterOsdProgram.Factories
                 var stripIndex = properties.hardInputs + i;
                 var strip = GetVirtualInputStrip(properties);
                 VoicemeeterApiClient.Api.GetParameter(VoicemeeterCommandsFactory.GetStripLabel(stripIndex), out string name);
-                strip.StripLabel.Text = (String.IsNullOrEmpty(name)) ? $"Virt In{i + 1}" : name;
+                strip.StripLabel.Text = string.IsNullOrEmpty(name) ? $"Virt In{i + 1}" : name;
 
-                GetStripParameters(vmParams, strip, stripIndex);
+                vmParams.Add(GetStripParameters(strip, stripIndex));
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -47,7 +47,7 @@ namespace VoicemeeterOsdProgram.Factories
                 var name = properties.hardOutputs == 1 ? $"A" : $"A{i + 1}";
                 strip.StripLabel.Text = name;
 
-                GetBusParameters(vmParams, strip,  i);
+                vmParams.Add(GetBusParameters(strip,  i));
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -58,7 +58,7 @@ namespace VoicemeeterOsdProgram.Factories
                 var name = properties.virtOutputs == 1 ? $"B" : $"B{i + 1}";
                 strip.StripLabel.Text = name;
 
-                GetBusParameters(vmParams, strip, properties.hardOutputs + i);
+                vmParams.Add(GetBusParameters(strip, properties.hardOutputs + i));
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -119,7 +119,7 @@ namespace VoicemeeterOsdProgram.Factories
             return strip;
         }
 
-        private static void GetStripParameters(List<VoicemeeterParameter> parameters, StripControl strip, int i)
+        private static VoicemeeterParameter GetStripParameters(StripControl strip, int i)
         {
             var p = new VoicemeeterParameter(VoicemeeterApiClient.Api, VoicemeeterCommandsFactory.GetStripGain(i));
             p.ValueChanged += (sender, e) =>
@@ -128,10 +128,10 @@ namespace VoicemeeterOsdProgram.Factories
                 strip.FaderCont.Visibility = Visibility.Visible;
                 strip.FaderCont.Fader.Value = e.newVal;
             };
-            parameters.Add(p);
+            return p;
         }
 
-        private static void GetBusParameters(List<VoicemeeterParameter> parameters, StripControl strip, int i)
+        private static VoicemeeterParameter GetBusParameters(StripControl strip, int i)
         {
             var p = new VoicemeeterParameter(VoicemeeterApiClient.Api, VoicemeeterCommandsFactory.GetBusGain(i));
             p.ValueChanged += (sender, e) =>
@@ -140,7 +140,7 @@ namespace VoicemeeterOsdProgram.Factories
                 strip.FaderCont.Visibility = Visibility.Visible;
                 strip.FaderCont.Fader.Value = e.newVal;
             };
-            parameters.Add(p);
+            return p;
         }
     }
 }

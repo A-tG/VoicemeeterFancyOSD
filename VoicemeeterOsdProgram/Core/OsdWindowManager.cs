@@ -25,7 +25,7 @@ namespace VoicemeeterOsdProgram.Core
             OsdContentFactory.FillOsdWindow(ref osd, ref m_parameters, VoicemeeterApiClient.ProgramType);
             osd.Background.Opacity = 0.9;
             m_wpfControl = osd;
-            HideOsdElements();
+            ApplyVisibilityToOsdElements(Visibility.Collapsed);
 
             var win = new OsdWindow()
             {
@@ -67,6 +67,12 @@ namespace VoicemeeterOsdProgram.Core
             set => m_TickTimer.Interval = TimeSpan.FromMilliseconds(value);
         }
 
+        public static bool IsShown
+        {
+            get;
+            private set;
+        }
+
         public static void Show()
         {
             if (DurationMs != 0)
@@ -74,11 +80,13 @@ namespace VoicemeeterOsdProgram.Core
                 m_TickTimer.Stop();
                 m_TickTimer.Start();
             }
+            IsShown = true;
             m_window.Show();
         }
 
         public static void Hide()
         {
+            IsShown = false;
             m_window.HideAnimated();
         }
 
@@ -92,7 +100,7 @@ namespace VoicemeeterOsdProgram.Core
         {
             if (!IsVoicemeeterWindowForeground())
             {
-                HideOsdElements();
+                if (!IsShown) ApplyVisibilityToOsdElements(Visibility.Collapsed);
 
                 var len = m_parameters.Length;
                 for (int i = 0; i < len; i++)
@@ -109,6 +117,7 @@ namespace VoicemeeterOsdProgram.Core
             m_wpfControl.MainContent.Children.Clear();
             m_parameters = null;
             OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_parameters, type);
+            ApplyVisibilityToOsdElements(Visibility.Collapsed);
         }
 
         private static bool IsVoicemeeterWindowForeground()
@@ -122,24 +131,24 @@ namespace VoicemeeterOsdProgram.Core
                 (GetWindowText(hWnd) == WindowText);
         }
 
-        private static void HideOsdElements()
+        private static void ApplyVisibilityToOsdElements(Visibility vis)
         {
             m_wpfControl.AllowAutoUpdateSeparators = false;
 
             var children = m_wpfControl.MainContent.Children;
             foreach (StripControl strip in children)
             {
-                strip.Visibility = Visibility.Collapsed;
-                strip.FaderCont.Visibility = Visibility.Collapsed;
-                strip.BusBtnsContainer.Visibility = Visibility.Collapsed;
-                strip.ControlBtnsContainer.Visibility = Visibility.Collapsed;
+                strip.Visibility = vis;
+                strip.FaderCont.Visibility = vis;
+                strip.BusBtnsContainer.Visibility = vis;
+                strip.ControlBtnsContainer.Visibility = vis;
                 foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
                 {
-                    btnCont.Btn.Visibility = Visibility.Collapsed;
+                    btnCont.Btn.Visibility = vis;
                 }
                 foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
                 {
-                    btnCont.Btn.Visibility = Visibility.Collapsed;
+                    btnCont.Btn.Visibility = vis;
                 }
             }
 
@@ -159,6 +168,8 @@ namespace VoicemeeterOsdProgram.Core
 
         internal static void RandomizeElementsState()
         {
+            ApplyVisibilityToOsdElements(Visibility.Visible);
+
             m_wpfControl.AllowAutoUpdateSeparators = false;
             var random = new Random();
             var children = m_wpfControl.MainContent.Children;
