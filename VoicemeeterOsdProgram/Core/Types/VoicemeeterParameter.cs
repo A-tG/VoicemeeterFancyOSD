@@ -35,6 +35,8 @@ namespace VoicemeeterOsdProgram.Core.Types
 
         public void Read()
         {
+            if (m_api is null) return;
+
             var res = m_api.GetParameter(m_command, out float val);
             if (res == 0)
             {
