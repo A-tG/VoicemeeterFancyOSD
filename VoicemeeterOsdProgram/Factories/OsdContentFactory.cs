@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VoicemeeterOsdProgram.UiControls.OSD;
-using AtgDev.Voicemeeter.Types;
-using VoicemeeterOsdProgram.UiControls.OSD.Strip;
-using System.Windows;
+﻿using AtgDev.Voicemeeter.Types;
 using VoicemeeterOsdProgram.Core.Types;
+using VoicemeeterOsdProgram.UiControls.OSD;
+using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 
 namespace VoicemeeterOsdProgram.Factories
 {
