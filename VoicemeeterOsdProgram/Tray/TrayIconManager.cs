@@ -78,8 +78,6 @@ namespace VoicemeeterOsdProgram.Tray
 
         private static void OnToggleButton(object sender, EventArgs e)
         {
-            if (!VoicemeeterApiClient.IsInitialized) return;
-
             ToggleOsdHandling();
         }
 
