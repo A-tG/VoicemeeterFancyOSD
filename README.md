@@ -1,8 +1,10 @@
 # Voicemeeter Fancy OSD
 [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) WPF project
 
-**WIP** Prototype. Voicemeeter API is not fully integrated yet!
+**WIP**
 Start/build in debug mode to get acces to Debug Window in tray context menu.
+
+Currenlty only few parameters are tracked (e.g. OSD is only displayed when gain is changed)
 
 On-Screen display for Voicemeeter that works with fullscreen apps by using private WinAPI without hooking into Graphics API.
 
