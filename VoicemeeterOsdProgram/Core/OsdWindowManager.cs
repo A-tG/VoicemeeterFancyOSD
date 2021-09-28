@@ -25,6 +25,7 @@ namespace VoicemeeterOsdProgram.Core
             OsdContentFactory.FillOsdWindow(ref osd, ref m_parameters, VoicemeeterApiClient.ProgramType);
             osd.Background.Opacity = 0.9;
             m_wpfControl = osd;
+            HideOsdElements();
 
             var win = new OsdWindow()
             {
@@ -92,6 +93,7 @@ namespace VoicemeeterOsdProgram.Core
             if (!IsVoicemeeterWindowForeground())
             {
                 HideOsdElements();
+
                 var len = m_parameters.Length;
                 for (int i = 0; i < len; i++)
                 {
