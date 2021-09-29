@@ -4,8 +4,6 @@
 **WIP**
 Start/build in debug mode to get acces to Debug Window in tray context menu.
 
-Currenlty only few parameters are tracked (e.g. OSD is only displayed when gain is changed)
-
 On-Screen display for Voicemeeter that works with fullscreen apps by using private WinAPI without hooking into Graphics API.
 
 Windows 10 or newer is required. 
