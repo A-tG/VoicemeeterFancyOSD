@@ -21,15 +21,15 @@ namespace VoicemeeterOsdProgram.Core.Types
             get => m_value;
             private set
             {
-                if (value != m_value)
+                if (m_isInit)
                 {
-                    if (m_isInit)
-                    {
-                        OnValueChanged(m_value, value);
-                    }
-                    m_isInit = true;
-                    m_value = value;
+                    if (value != m_value) OnValueChanged(m_value, value);
                 }
+                else
+                {
+                    m_isInit = true;
+                }
+                m_value = value;
             }
         }
 
