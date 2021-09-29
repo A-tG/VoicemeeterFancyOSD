@@ -22,3 +22,6 @@ Based on a modified code from [ModernFlyouts](https://github.com/ModernFlyouts-C
 * [Program.cs](VoicemeeterOsdProgram/Program.cs) and [App.xaml.cs](VoicemeeterOsdProgram/App.xaml.cs) are entry points. The program dll's name should be defined [here](Bridge/dllmain.cpp#L42)
 * As far as I know, host is actually renamed ApplicationFrameHost.exe from System32
 * [What "private" API is used](https://blog.adeltax.com/window-z-order-in-windows-10/)
+
+## Do you like my projects? Donate
+[![Paypal Logo](https://www.paypalobjects.com/webstatic/paypalme/images/pp_logo_small.png)](https://www.paypal.me/atgDeveloperMusician/5)
