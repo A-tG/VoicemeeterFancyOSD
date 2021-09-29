@@ -73,6 +73,7 @@ namespace VoicemeeterOsdProgram.Factories
             }
 
             vmParams = m_vmParams.ToArray();
+            m_vmParams.Clear();
         }
 
         private static StripControl GetOutputStrip(int stripIndex)
