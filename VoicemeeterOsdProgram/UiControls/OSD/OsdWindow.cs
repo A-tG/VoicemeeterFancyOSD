@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using VoicemeeterOsdProgram.Interop;
+using TopmostApp.Interop;
 using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD

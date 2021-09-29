@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace VoicemeeterOsdProgram.Interop
+namespace TopmostApp.Interop
 {
     public static partial class NativeMethods
     {

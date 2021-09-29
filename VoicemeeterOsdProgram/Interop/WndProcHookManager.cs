@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VoicemeeterOsdProgram.Interop
+namespace TopmostApp.Interop
 {
     internal interface IWndProcObject
     {

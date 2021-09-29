@@ -4,7 +4,7 @@ using System.Security;
 using System.Text;
 using System.Windows;
 
-namespace VoicemeeterOsdProgram.Interop
+namespace TopmostApp.Interop
 {
     #region Enums
 

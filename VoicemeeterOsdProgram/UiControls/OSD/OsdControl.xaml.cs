@@ -13,6 +13,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VoicemeeterOsdProgram.Core.Types;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 using static VoicemeeterOsdProgram.Interop.NativeMethods;
 
@@ -30,6 +31,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         }
 
         public bool AllowAutoUpdateSeparators { get; set; } = true;
+        internal VoicemeeterParameter[] vmParameters;
 
         private double m_scale = 1;
 

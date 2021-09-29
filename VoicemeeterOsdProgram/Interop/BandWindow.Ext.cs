@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using static VoicemeeterOsdProgram.Interop.NativeMethods;
+using static TopmostApp.Interop.NativeMethods;
 
-namespace VoicemeeterOsdProgram.Interop
+namespace TopmostApp.Interop
 {
     public partial class BandWindow
     {
         private void BandWindowExt()
         {
             Loaded += InitCustomProperties;
-            App.Current.Exit += OnAppExit;
+            Application.Current.Exit += OnAppExit;
         }
 
         public static readonly DependencyProperty LeftProperty = DependencyProperty.Register(

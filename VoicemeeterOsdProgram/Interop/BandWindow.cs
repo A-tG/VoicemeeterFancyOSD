@@ -5,9 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
-using static VoicemeeterOsdProgram.Interop.NativeMethods;
+using static TopmostApp.Interop.NativeMethods;
 
-namespace VoicemeeterOsdProgram.Interop
+namespace TopmostApp.Interop
 {
     public enum ZBandID : int
     {
