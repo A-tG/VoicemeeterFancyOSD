@@ -98,7 +98,7 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void UpdateOsd()
         {
-            //if (IsVoicemeeterWindowForeground()) return;
+            if (IsVoicemeeterWindowForeground()) return;
 
             if (!IsShown) ApplyVisibilityToOsdElements(Visibility.Collapsed);
 
