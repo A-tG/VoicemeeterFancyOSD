@@ -8,7 +8,7 @@ using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.OSD;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 using AtgDev.Voicemeeter.Types;
-using static VoicemeeterOsdProgram.Interop.NativeMethods;
+using static TopmostApp.Interop.NativeMethods;
 
 namespace VoicemeeterOsdProgram.Core
 {
@@ -17,12 +17,12 @@ namespace VoicemeeterOsdProgram.Core
         private static OsdControl m_wpfControl;
         private static OsdWindow m_window;
         private static DispatcherTimer m_TickTimer;
-        private static VoicemeeterParameter[] m_parameters;
+        private static VoicemeeterParameter[] m_vmParams;
 
         static OsdWindowManager()
         {
             OsdControl osd = new();
-            OsdContentFactory.FillOsdWindow(ref osd, ref m_parameters, VoicemeeterApiClient.ProgramType);
+            OsdContentFactory.FillOsdWindow(ref osd, ref m_vmParams, VoicemeeterApiClient.ProgramType);
             osd.Background.Opacity = 0.9;
             m_wpfControl = osd;
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
@@ -98,25 +98,24 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void UpdateOsd()
         {
-            if (!IsVoicemeeterWindowForeground())
+            //if (IsVoicemeeterWindowForeground()) return;
+
+            if (!IsShown) ApplyVisibilityToOsdElements(Visibility.Collapsed);
+
+            var len = m_vmParams.Length;
+            for (int i = 0; i < len; i++)
             {
-                if (!IsShown) ApplyVisibilityToOsdElements(Visibility.Collapsed);
-
-                var len = m_parameters.Length;
-                for (int i = 0; i < len; i++)
-                {
-                    m_parameters[i].Read();
-                }
-
-                Show();
+                m_vmParams[i].Read();
             }
+
+            Show();
         }
 
         private static void RefillOsd(VoicemeeterType type)
         {
             m_wpfControl.MainContent.Children.Clear();
-            m_parameters = null;
-            OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_parameters, type);
+            m_vmParams = null;
+            OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_vmParams, type);
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
         }
 
@@ -140,15 +139,13 @@ namespace VoicemeeterOsdProgram.Core
             {
                 strip.Visibility = vis;
                 strip.FaderCont.Visibility = vis;
-                strip.BusBtnsContainer.Visibility = vis;
-                strip.ControlBtnsContainer.Visibility = vis;
                 foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
                 {
-                    btnCont.Btn.Visibility = vis;
+                    btnCont.Visibility = vis;
                 }
                 foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
                 {
-                    btnCont.Btn.Visibility = vis;
+                    btnCont.Visibility = vis;
                 }
             }
 

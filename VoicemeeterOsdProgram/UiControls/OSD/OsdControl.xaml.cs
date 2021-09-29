@@ -1,21 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using VoicemeeterOsdProgram.Core.Types;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
-using static VoicemeeterOsdProgram.Interop.NativeMethods;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD
 {
@@ -31,7 +18,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         }
 
         public bool AllowAutoUpdateSeparators { get; set; } = true;
-        internal VoicemeeterParameter[] vmParameters;
 
         private double m_scale = 1;
 
@@ -50,14 +36,14 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             // Need to find better solution for automatic resize
             return;
 
-            var scale = GetContentScaleX();
+            /*var scale = GetContentScaleX();
             if (scale >= 1)
             {
                 MainContent.MaxWidth = MainContentWrap.MaxWidth;
                 return;
             }
             // PROBLEM: When size is decreased but scale < 1 incorrect MaxWidth is assigned
-            MainContent.MaxWidth = MainContentWrap.MaxWidth / scale;
+            MainContent.MaxWidth = MainContentWrap.MaxWidth / scale;*/
         }
 
         public void UpdateSeparators()

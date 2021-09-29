@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
-using VoicemeeterOsdProgram.Interop;
+using TopmostApp.Interop;
 
 namespace VoicemeeterOsdProgram
 {

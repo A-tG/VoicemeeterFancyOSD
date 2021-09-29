@@ -151,8 +151,11 @@ namespace VoicemeeterOsdProgram.Core
             var type = ProgramType;
             if (type != m_type)
             {
-                if (type != VoicemeeterType.None) m_type = type;
-                OnProgramTypeChange(m_type);
+                if (type != VoicemeeterType.None)
+                {
+                    m_type = type;
+                    OnProgramTypeChange(m_type);
+                }
             }
         }
 
