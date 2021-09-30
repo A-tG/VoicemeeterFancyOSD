@@ -1,15 +1,15 @@
 # Voicemeeter Fancy OSD
-[.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) WPF project
-
-**WIP**
-Start/build in debug mode to get acces to Debug Window in tray context menu.
-
+![](https://i.imgur.com/YpWj6YI.gif)
 On-Screen display for Voicemeeter that works with fullscreen apps by using private WinAPI without hooking into Graphics API.
 
 Windows 10 or newer is required. 
-Support for older Windows versions can be added but OSD will work as normal window and will not be displayed on top of fullscreen applications.
+Should work with older Windows versions but OSD will work as normal window and will not be displayed on top of fullscreen applications.
 
 Based on a modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts) (Thanks for advice and directions from their Discord server!)
+
+[.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) WPF project
+
+Start/build in debug mode to get acces to Debug Window in tray context menu.
 
 # Build instructions
 * Select Target Platform (e.g. x64, x86)
