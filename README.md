@@ -1,5 +1,6 @@
 # Voicemeeter Fancy OSD
 ![](https://i.imgur.com/YpWj6YI.gif)
+
 On-Screen display for Voicemeeter that works with fullscreen apps by using private WinAPI without hooking into Graphics API.
 
 Windows 10 or newer is required. 
