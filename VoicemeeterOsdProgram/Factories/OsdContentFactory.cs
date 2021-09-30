@@ -61,11 +61,12 @@ namespace VoicemeeterOsdProgram.Factories
             for (int i = 0; i < m_vmProperties.virtOutputs; i++)
             {
                 var stripIndex = m_vmProperties.hardOutputs + i;
+
                 var strip = GetOutputStrip(stripIndex);
                 var name = m_vmProperties.virtOutputs == 1 ? $"B" : $"B{i + 1}";
                 strip.StripLabel.Text = name;
 
-                MakeFaderParam(strip, m_vmProperties.hardOutputs + i, StripType.Output);
+                MakeFaderParam(strip, stripIndex, StripType.Output);
 
                 osd.MainContent.Children.Add(strip);
             }
