@@ -122,14 +122,7 @@ namespace VoicemeeterOsdProgram.Core
             var len = m_vmParams.Length;
             for (int i = 0; i < len; i++)
             {
-                if (isSkipEvents)
-                {
-                    m_vmParams[i].ReadNoEvent();
-                }
-                else
-                {
-                    m_vmParams[i].Read();
-                }
+                m_vmParams[i].ReadIsIgnoreEvent(isSkipEvents);
             }
         }
 

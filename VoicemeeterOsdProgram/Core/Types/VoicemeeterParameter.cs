@@ -39,7 +39,7 @@ namespace VoicemeeterOsdProgram.Core.Types
             ReadIsIgnoreEvent(true);
         }
 
-        private void ReadIsIgnoreEvent(bool isIgnore)
+        public void ReadIsIgnoreEvent(bool isIgnore)
         {
             if (m_api is null) return;
 
