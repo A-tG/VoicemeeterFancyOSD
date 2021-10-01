@@ -72,6 +72,11 @@ namespace VoicemeeterOsdProgram.Core
             private set;
         }
 
+        public static bool IsIgnoreVmParameters
+        {
+            get => IsVoicemeeterWindowForeground();
+        }
+
         public static void Show()
         {
             if (DurationMs != 0)
@@ -97,22 +102,30 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void UpdateOsd()
         {
-            if (IsVoicemeeterWindowForeground()) return;
-
+            bool isIgnoreParams = IsIgnoreVmParameters;
             if (!IsShown)
             {
                 ApplyVisibilityToOsdElements(Visibility.Collapsed);
             }
-            UpdateVmParams();
+            UpdateVmParams(isIgnoreParams);
+            if (isIgnoreParams) return;
+
             Show();
         }
 
-        private static void UpdateVmParams()
+        private static void UpdateVmParams(bool isSkipEvents)
         {
             var len = m_vmParams.Length;
             for (int i = 0; i < len; i++)
             {
-                m_vmParams[i].Read();
+                if (isSkipEvents)
+                {
+                    m_vmParams[i].ReadNoEvent();
+                }
+                else
+                {
+                    m_vmParams[i].Read();
+                }
             }
         }
 

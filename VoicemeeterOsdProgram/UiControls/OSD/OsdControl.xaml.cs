@@ -9,7 +9,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
     /// <summary>
     /// Interaction logic for OSD.xaml
     /// </summary>
-    public partial class OsdControl : System.Windows.Controls.UserControl
+    public partial class OsdControl : UserControl
     {
         public OsdControl()
         {

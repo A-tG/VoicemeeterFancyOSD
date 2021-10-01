@@ -10,7 +10,7 @@ namespace VoicemeeterOsdProgram.Factories
     {
         private static void InitFaderParam(StripControl strip, ref VoicemeeterParameter p)
         {
-            p.ValueChanged += (sender, e) =>
+            p.ReadValueChanged += (sender, e) =>
             {
                 strip.Visibility = Visibility.Visible;
                 strip.FaderCont.Visibility = Visibility.Visible;
@@ -27,7 +27,7 @@ namespace VoicemeeterOsdProgram.Factories
 
         private static void InitBtnParam(StripControl strip, ButtonContainer btnCtn, ref VoicemeeterParameter p)
         {
-            p.ValueChanged += (sender, e) =>
+            p.ReadValueChanged += (sender, e) =>
             {
                 strip.Visibility = Visibility.Visible;
                 btnCtn.Visibility = Visibility.Visible;

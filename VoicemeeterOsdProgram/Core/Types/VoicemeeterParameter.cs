@@ -23,7 +23,7 @@ namespace VoicemeeterOsdProgram.Core.Types
             {
                 if (m_isInit)
                 {
-                    if (value != m_value) OnValueChanged(m_value, value);
+                    if (value != m_value) OnReadValueChanged(m_value, value);
                 }
                 else
                 {
@@ -44,12 +44,24 @@ namespace VoicemeeterOsdProgram.Core.Types
             }
         }
 
-        public event EventHandler<ValuesPair<float>> ValueChanged;
+        public void ReadNoEvent()
+        {
+            if (m_api is null) return;
 
-        private void OnValueChanged(float oldVal, float newVal)
+            var res = m_api.GetParameter(m_command, out float val);
+            if (res == 0)
+            {
+                m_value = val;
+                if (!m_isInit) m_isInit = true;
+            }
+        }
+
+        public event EventHandler<ValuesPair<float>> ReadValueChanged;
+
+        private void OnReadValueChanged(float oldVal, float newVal)
         {
             ValuesPair<float> values = new(oldVal, newVal);
-            ValueChanged?.Invoke(this, values);
+            ReadValueChanged?.Invoke(this, values);
         }
     }
 }
