@@ -13,7 +13,9 @@ Based on a modified code from [ModernFlyouts](https://github.com/ModernFlyouts-C
 Start/build in debug mode to get acces to Debug Window in tray context menu.
 
 # Build instructions
-* Select Target Platform (e.g. x64, x86)
+* Select Target Platform (x64 or x86, dont use AnyCpu or \*Host.exe will not be copied)
+* Press "Rebuild Solution" to ensure that Host.exe and dependencies are copied to result folder.
+* Program will be compiled in **Solution's** folder
 * Launch \*Host.exe or ontop fullscreen functionality will not work
 
 # Explanation
