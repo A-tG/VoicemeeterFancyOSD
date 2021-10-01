@@ -52,7 +52,11 @@ namespace VoicemeeterOsdProgram.Core
         public static bool IsEnabled
         {
             get => VoicemeeterApiClient.IsHandlingParams;
-            set => VoicemeeterApiClient.IsHandlingParams = value;
+            set
+            {
+                if (value) UpdateVmParams(true);
+                VoicemeeterApiClient.IsHandlingParams = value;
+            }
         }
         public static double Scale
         {
