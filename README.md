@@ -14,7 +14,7 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 
 # Build instructions
 * Select Target Platform (x64 or x86, dont use AnyCpu or \*Host.exe will not be copied)
-* Press "Rebuild Solution" to ensure that Host.exe and dependencies are copied to result folder.
+* Press "Rebuild Solution" to guarantee that up-to-date Host.exe and dependencies are copied to result folder.
 * Program will be compiled in **Solution's** folder
 * Launch \*Host.exe or ontop fullscreen functionality will not work
 
