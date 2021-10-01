@@ -55,5 +55,19 @@ namespace VoicemeeterOsdProgram.Factories
             InitBtnParam(strip, btnCtn, ref p);
             m_vmParams.Add(p);
         }
+
+        private static void MakePhysBusAssignParam(StripControl strip, ButtonContainer btnCtn, int i, int busIndex)
+        {
+            var p = new VoicemeeterParameter(VoicemeeterApiClient.Api, HardBusAssign(i, busIndex));
+            InitBtnParam(strip, btnCtn, ref p);
+            m_vmParams.Add(p);
+        }
+
+        private static void MakeVirtBusAssignParam(StripControl strip, ButtonContainer btnCtn, int i, int busIndex)
+        {
+            var p = new VoicemeeterParameter(VoicemeeterApiClient.Api, VirtBusAssign(i, busIndex));
+            InitBtnParam(strip, btnCtn, ref p);
+            m_vmParams.Add(p);
+        }
     }
 }

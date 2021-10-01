@@ -12,6 +12,10 @@ namespace VoicemeeterOsdProgram.Factories
 
         public static string Mono(int i, StripType t) => GetCommandHead(i, t) + "Mono";
 
+        public static string HardBusAssign(int i, int busIndex) => GetCommandHead(i) + $"A{busIndex}";
+
+        public static string VirtBusAssign(int i, int busIndex) => GetCommandHead(i) + $"B{busIndex}";
+
         private static string GetCommandHead(int i, StripType type = StripType.Input)
         {
             return type switch

@@ -111,19 +111,27 @@ namespace VoicemeeterOsdProgram.Factories
             MakeMuteParam(strip, btn, stripIndex, StripType.Input);
             strip.ControlBtnsContainer.Children.Add(btn);
 
+            // adding A1, A2, ... buttons
             for (int i = 0; i < m_vmProperties.hardOutputs; i++)
             {
                 var btnCont = StripButtonFactory.GetBusSelect();
-                var name = (m_vmProperties.hardOutputs == 1) ? $"A" : $"A{i + 1}";
+                var busIndex = i + 1;
+                var name = (m_vmProperties.hardOutputs == 1) ? $"A" : $"A{busIndex}";
                 btnCont.Btn.Content = name;
+                MakePhysBusAssignParam(strip, btnCont, stripIndex, busIndex);
+
                 strip.BusBtnsContainer.Children.Add(btnCont);
             }
 
+            // adding B1, B2, ... buttons
             for (int i = 0; i < m_vmProperties.virtOutputs; i++)
             {
                 var btnCont = StripButtonFactory.GetBusSelect();
-                var name = (m_vmProperties.virtOutputs == 1) ? $"B" : $"B{i + 1}";
+                var busIndex = i + 1;
+                var name = (m_vmProperties.virtOutputs == 1) ? $"B" : $"B{busIndex}";
                 btnCont.Btn.Content = name;
+                MakeVirtBusAssignParam(strip, btnCont, stripIndex, busIndex);
+
                 strip.BusBtnsContainer.Children.Add(btnCont);
             }
 
