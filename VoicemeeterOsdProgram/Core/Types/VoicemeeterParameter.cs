@@ -37,8 +37,7 @@ namespace VoicemeeterOsdProgram.Core.Types
         {
             if (m_api is null) return;
 
-            var res = m_api.GetParameter(m_command, out float val);
-            if (res == 0)
+            if (m_api.GetParameter(m_command, out float val) == 0)
             {
                 Value = val;
             }
@@ -48,8 +47,7 @@ namespace VoicemeeterOsdProgram.Core.Types
         {
             if (m_api is null) return;
 
-            var res = m_api.GetParameter(m_command, out float val);
-            if (res == 0)
+            if (m_api.GetParameter(m_command, out float val) == 0)
             {
                 m_value = val;
                 if (!m_isInit) m_isInit = true;

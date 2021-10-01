@@ -77,7 +77,7 @@ namespace VoicemeeterOsdProgram.Factories
             // read first time to initialize values
             foreach (var p in m_vmParams)
             {
-                p.Read();
+                p.ReadNoEvent();
             }
 
             vmParams = m_vmParams.ToArray();
