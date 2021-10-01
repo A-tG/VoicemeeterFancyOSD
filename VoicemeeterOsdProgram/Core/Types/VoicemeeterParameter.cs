@@ -21,13 +21,9 @@ namespace VoicemeeterOsdProgram.Core.Types
             get => m_value;
             private set
             {
-                if (m_isInit)
+                if (value != m_value)
                 {
-                    if (value != m_value) OnReadValueChanged(m_value, value);
-                }
-                else
-                {
-                    m_isInit = true;
+                    OnReadValueChanged(m_value, value);
                 }
                 m_value = value;
             }
@@ -35,22 +31,29 @@ namespace VoicemeeterOsdProgram.Core.Types
 
         public void Read()
         {
-            if (m_api is null) return;
-
-            if (m_api.GetParameter(m_command, out float val) == 0)
-            {
-                Value = val;
-            }
+            ReadIsIgnoreEvent(false);
         }
 
         public void ReadNoEvent()
+        {
+            ReadIsIgnoreEvent(true);
+        }
+
+        private void ReadIsIgnoreEvent(bool isIgnore)
         {
             if (m_api is null) return;
 
             if (m_api.GetParameter(m_command, out float val) == 0)
             {
-                m_value = val;
-                if (!m_isInit) m_isInit = true;
+                if (isIgnore)
+                {
+                    m_value = val;
+                } 
+                else
+                {
+                    Value = val;
+                }
+                m_isInit = true;
             }
         }
 
