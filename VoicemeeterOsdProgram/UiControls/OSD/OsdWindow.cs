@@ -21,7 +21,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             {
                 From = 1.0,
                 To = 0.0,
-                EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut },
+                EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseIn },
                 Duration = new Duration(TimeSpan.FromMilliseconds(FadeOutTimeMs)),
                 FillBehavior = FillBehavior.Stop
             };
