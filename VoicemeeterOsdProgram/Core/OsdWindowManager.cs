@@ -22,7 +22,6 @@ namespace VoicemeeterOsdProgram.Core
         static OsdWindowManager()
         {
             OsdControl osd = new();
-            OsdContentFactory.FillOsdWindow(ref osd, ref m_vmParams, VoicemeeterApiClient.ProgramType);
             osd.Background.Opacity = 0.9;
             m_wpfControl = osd;
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
@@ -120,7 +119,7 @@ namespace VoicemeeterOsdProgram.Core
         private static void RefillOsd(VoicemeeterType type)
         {
             m_wpfControl.MainContent.Children.Clear();
-            m_vmParams = null;
+            m_vmParams = Array.Empty<VoicemeeterParameter>();
             OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_vmParams, type);
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
         }
