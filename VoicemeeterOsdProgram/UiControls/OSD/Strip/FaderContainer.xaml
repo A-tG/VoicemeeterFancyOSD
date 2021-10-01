@@ -17,7 +17,8 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <local:ClrChangeSlider x:Name="Fader" Style="{DynamicResource FaderStyle}" MinHeight="140"
+        <local:ClrChangeSlider x:Name="Fader" Style="{DynamicResource FaderStyle}" Focusable="False"
+                               MinHeight="140"
                                Background="{DynamicResource FaderMainBrush}" Foreground="White"
                                SecondBg="{DynamicResource FaderPositiveGainBrush}" GreaterThanValChangeClr="0"
                                Minimum="-60" Maximum="12" TickFrequency="0.1" IsSnapToTickEnabled="True"

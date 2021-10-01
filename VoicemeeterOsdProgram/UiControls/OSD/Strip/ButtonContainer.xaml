@@ -17,7 +17,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <local:OutlineTglBtn Style="{DynamicResource StripBtnBaseStyle}" x:Name="Btn"
+        <local:OutlineTglBtn Style="{DynamicResource StripBtnBaseStyle}" x:Name="Btn" Focusable="False"
                              FontSize="14" FontWeight="Medium"
                              Width="35" Height="22"
                              VerticalAlignment="Center" HorizontalAlignment="Center"
