@@ -39,7 +39,7 @@ bool load_hostfxr()
 HRESULT LoadCLR()
 {
     auto host_path = GetExecutableDir() + L"\\";
-    auto exec_path = host_path + L"VoicemeeterOsdProgram.dll";
+    auto exec_path = host_path + L"VoicemeeterFancyOsd.dll";
 
     if (!load_hostfxr())
     {

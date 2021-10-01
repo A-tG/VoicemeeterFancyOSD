@@ -8,14 +8,18 @@
     <Platforms>AnyCPU;x64;x86</Platforms>
     <ApplicationIcon>Resources\Icons\MainIcon.ico</ApplicationIcon>
     <StartupObject>VoicemeeterOsdProgram.Program</StartupObject>
-    <Authors></Authors>
-    <Product />
-    <Company></Company>
+    <Authors>Dmitriy Kurbatov</Authors>
+    <Product>VoicemeeterFancyOsd</Product>
+    <Company>A-tG</Company>
   </PropertyGroup>
 
   <PropertyGroup>
       <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
       <ApplicationManifest>app.manifest</ApplicationManifest>
+      <Version>0.8.2</Version>
+      <PackageId>VoicemeeterFancyOsd</PackageId>
+      <Description>On-screen display for Voicemeeter</Description>
+      <AssemblyName>VoicemeeterFancyOsd</AssemblyName>
   </PropertyGroup>
 
 
