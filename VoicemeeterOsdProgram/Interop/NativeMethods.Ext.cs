@@ -11,7 +11,7 @@ namespace TopmostApp.Interop
             bool result = NativeLibrary.TryLoad("user32.dll", out IntPtr libHandle);
             if (result)
             {
-                result = NativeLibrary.TryGetExport(libHandle, "CreateWindowInBand", out IntPtr procHandle);
+                result = NativeLibrary.TryGetExport(libHandle, "CreateWindowInBand", out _);
                 NativeLibrary.Free(libHandle);
             }
             return result;
@@ -23,12 +23,14 @@ namespace TopmostApp.Interop
             // if procedures are not supported in old Windows version
             try
             {
-                using (var proc = Process.GetCurrentProcess())
-                {
-                    var isImmersive = IsImmersiveProcess(proc.Handle);
-                    var hasUiAccess = HasUiAccessProcess(proc.Handle);
-                    zbid = isImmersive ? ZBandID.AboveLockUX : hasUiAccess ? ZBandID.UIAccess : ZBandID.Desktop;
-                }
+                using var proc = Process.GetCurrentProcess();
+
+                var isImmersive = IsImmersiveProcess(proc.Handle);
+                var hasUiAccess = HasUiAccessProcess(proc.Handle);
+                bool isWinTenOrNewer = Environment.OSVersion.Version >= new Version(10, 0);
+
+                ZBandID topId = isWinTenOrNewer ? ZBandID.AboveLockUX : ZBandID.SystemTools;
+                zbid = isImmersive ? topId : hasUiAccess ? ZBandID.UIAccess : ZBandID.Desktop;
             }
             catch { }
             return zbid;
