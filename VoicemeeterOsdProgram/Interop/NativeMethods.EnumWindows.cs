@@ -11,22 +11,17 @@ namespace TopmostApp.Interop
         [DllImport("user32.dll")]
         public static extern int EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
 
+        [DllImport("user32.dll")]
+        public static extern bool IsWindowVisible(IntPtr hwnd);
+
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern int GetWindowText(IntPtr hwnd, StringBuilder lptrString, int nMaxCount);
 
         public static string GetWindowText(IntPtr hWnd)
         {
-            int nRet;
             StringBuilder text = new(256);
-            nRet = GetWindowText(hWnd, text, text.Capacity);
-            if (nRet != 0)
-            {
-                return text.ToString();
-            }
-            else
-            {
-                return string.Empty;
-            }
+            var res = GetWindowText(hWnd, text, text.Capacity);
+            return (res != 0) ? text.ToString() : string.Empty;
         }
     }
 }
