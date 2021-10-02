@@ -21,7 +21,7 @@ namespace VoicemeeterOsdProgram.Core.Types
             get => m_value;
             private set
             {
-                if (value != m_value)
+                if ((value != m_value) && m_isInit)
                 {
                     OnReadValueChanged(m_value, value);
                 }
