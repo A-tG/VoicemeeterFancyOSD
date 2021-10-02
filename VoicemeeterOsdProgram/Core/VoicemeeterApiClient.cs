@@ -66,8 +66,7 @@ namespace VoicemeeterOsdProgram.Core
             {
                 if (!IsLoaded) return VoicemeeterType.None;
 
-                var res = Api.GetVoicemeeterType(out VoicemeeterType type);
-                if (res != 0)
+                if (Api.GetVoicemeeterType(out VoicemeeterType type) != 0)
                 {
                     type = VoicemeeterType.None;
                 }
@@ -110,6 +109,8 @@ namespace VoicemeeterOsdProgram.Core
                     _ = await Api.WaitForNewParamsAsync(250, 1000 / 30);
 
                     IsLoaded = true;
+
+                    OnLoad();
                 }
 
                 m_timer.Elapsed += OnTimerTick;
@@ -149,13 +150,15 @@ namespace VoicemeeterOsdProgram.Core
         private static void HandleProgramType()
         {
             var type = ProgramType;
+            if (type == VoicemeeterType.None) return;
+
             if (type != m_type)
             {
-                if (type != VoicemeeterType.None)
+                if (m_type != VoicemeeterType.None)
                 {
-                    m_type = type;
                     OnProgramTypeChange(m_type);
                 }
+                m_type = type;
             }
         }
 
@@ -177,8 +180,25 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
+        private static event EventHandler m_loaded;
+
         public static event EventHandler NewParameters;
         public static event EventHandler<VoicemeeterType> ProgramTypeChange;
+        public static event EventHandler Loaded
+        {
+            add
+            {
+                if (IsLoaded)
+                {
+                    value.Invoke(null, EventArgs.Empty);
+                }
+                else
+                {
+                    m_loaded += value;
+                }
+            }
+            remove => m_loaded -= value;
+        }
 
         private static void OnNewParameters()
         {
@@ -188,6 +208,11 @@ namespace VoicemeeterOsdProgram.Core
         private static void OnProgramTypeChange(VoicemeeterType type)
         {
             ProgramTypeChange?.Invoke(null, type);
+        }
+
+        private static void OnLoad()
+        {
+            m_loaded?.Invoke(null, EventArgs.Empty);
         }
     }
 }

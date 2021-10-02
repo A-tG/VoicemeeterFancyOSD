@@ -47,6 +47,7 @@ namespace VoicemeeterOsdProgram.Core
 
             VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
             VoicemeeterApiClient.ProgramTypeChange += OnVoicemeeterTypeChange;
+            VoicemeeterApiClient.Loaded += OnVoicemeeterLoad;
         }
 
         public static void Init() { }
@@ -145,7 +146,7 @@ namespace VoicemeeterOsdProgram.Core
 
             bool result = false;
             IntPtr hWnd = FindWindowEx(IntPtr.Zero, IntPtr.Zero, WindowClass, WindowText);
-            if ((hWnd != IntPtr.Zero) && (GetWindowText(hWnd) == WindowText))
+            if (hWnd != IntPtr.Zero)
             {
                 result = !WindowObscureHelper.IsWindowObscured(hWnd);
             }
@@ -213,12 +214,17 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void OnNewVoicemeeterParams(object sender, EventArgs e)
         {
-            App.Current.Dispatcher.Invoke(UpdateOsd);
+            Application.Current.Dispatcher.Invoke(UpdateOsd);
         }
 
         private static void OnVoicemeeterTypeChange(object sender, VoicemeeterType t)
         {
-            App.Current.Dispatcher.Invoke(() => RefillOsd(t));
+            Application.Current.Dispatcher.Invoke(() => RefillOsd(t));
+        }
+
+        private static void OnVoicemeeterLoad(object sender, EventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(() => RefillOsd(VoicemeeterApiClient.ProgramType));
         }
     }
 }
