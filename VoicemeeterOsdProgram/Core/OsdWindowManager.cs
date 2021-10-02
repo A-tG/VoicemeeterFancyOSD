@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
@@ -17,7 +18,7 @@ namespace VoicemeeterOsdProgram.Core
         private static OsdControl m_wpfControl;
         private static OsdWindow m_window;
         private static DispatcherTimer m_TickTimer;
-        private static VoicemeeterParameter[] m_vmParams;
+        private static VoicemeeterParameter[] m_vmParams = Array.Empty<VoicemeeterParameter>();
 
         static OsdWindowManager()
         {
@@ -114,6 +115,7 @@ namespace VoicemeeterOsdProgram.Core
             UpdateVmParams(isIgnoreParams);
             if (isIgnoreParams) return;
 
+            UpdateOsdElementsVis();
             Show();
         }
 
@@ -143,6 +145,42 @@ namespace VoicemeeterOsdProgram.Core
             return (hWnd != IntPtr.Zero) && 
                 (GetWindowClassName(hWnd) == WindowClass) && 
                 (GetWindowText(hWnd) == WindowText);
+        }
+
+        private static void UpdateOsdElementsVis()
+        {
+            m_wpfControl.AllowAutoUpdateSeparators = false;
+
+            var children = m_wpfControl.MainContent.Children;
+            foreach (StripControl strip in children)
+            {
+                bool isAnyVisibleBtn = false;
+                foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
+                {
+                    if (btnCont.Visibility == Visibility.Visible)
+                    {
+                        isAnyVisibleBtn = true;
+                        break;
+                    }
+                }
+                foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
+                {
+                    if (btnCont.Visibility == Visibility.Visible)
+                    {
+                        isAnyVisibleBtn = true;
+                        break;
+                    }
+                }
+
+                bool isVisibleChildren = (strip.FaderCont.Visibility == Visibility.Visible) || isAnyVisibleBtn;
+                if (isVisibleChildren)
+                {
+                    strip.Visibility = Visibility.Visible;
+                }
+            }
+
+            m_wpfControl.UpdateSeparators();
+            m_wpfControl.AllowAutoUpdateSeparators = true;
         }
 
         private static void ApplyVisibilityToOsdElements(Visibility vis)

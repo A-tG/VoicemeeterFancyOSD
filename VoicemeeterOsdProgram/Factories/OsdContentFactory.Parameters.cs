@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Core.Types;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
@@ -8,11 +9,19 @@ namespace VoicemeeterOsdProgram.Factories
 {
     partial class OsdContentFactory
     {
+        private enum BtnType
+        {
+            Mute,
+            Mono,
+            Solo,
+            A,
+            B
+        }
+
         private static void InitFaderParam(StripControl strip, ref VoicemeeterParameter p)
         {
             p.ReadValueChanged += (sender, e) =>
             {
-                strip.Visibility = Visibility.Visible;
                 strip.FaderCont.Visibility = Visibility.Visible;
                 strip.FaderCont.Fader.Value = e.newVal;
             };
@@ -25,48 +34,28 @@ namespace VoicemeeterOsdProgram.Factories
             m_vmParams.Add(p);
         }
 
-        private static void InitBtnParam(StripControl strip, ButtonContainer btnCtn, ref VoicemeeterParameter p)
+        private static void InitBtnParam(ButtonContainer btnCtn, ref VoicemeeterParameter p)
         {
             p.ReadValueChanged += (sender, e) =>
             {
-                strip.Visibility = Visibility.Visible;
                 btnCtn.Visibility = Visibility.Visible;
                 btnCtn.Btn.State = (uint)e.newVal;
             };
         }
 
-        private static void MakeMonoParam(StripControl strip, ButtonContainer btnCtn, int i, StripType type)
+        private static void MakeButtonParam(BtnType bType, StripType sType, ButtonContainer btnCtn, int i, int busIndex = 0)
         {
-            var p = new VoicemeeterParameter(VoicemeeterApiClient.Api, Mono(i, type));
-            InitBtnParam(strip, btnCtn, ref p);
-            m_vmParams.Add(p);
-        }
-
-        private static void MakeMuteParam(StripControl strip, ButtonContainer btnCtn, int i, StripType type)
-        {
-            var p = new VoicemeeterParameter(VoicemeeterApiClient.Api, Mute(i, type));
-            InitBtnParam(strip, btnCtn, ref p);
-            m_vmParams.Add(p);
-        }
-
-        private static void MakeSoloParam(StripControl strip, ButtonContainer btnCtn, int i, StripType type)
-        {
-            var p = new VoicemeeterParameter(VoicemeeterApiClient.Api, Solo(i, type));
-            InitBtnParam(strip, btnCtn, ref p);
-            m_vmParams.Add(p);
-        }
-
-        private static void MakePhysBusAssignParam(StripControl strip, ButtonContainer btnCtn, int i, int busIndex)
-        {
-            var p = new VoicemeeterParameter(VoicemeeterApiClient.Api, HardBusAssign(i, busIndex));
-            InitBtnParam(strip, btnCtn, ref p);
-            m_vmParams.Add(p);
-        }
-
-        private static void MakeVirtBusAssignParam(StripControl strip, ButtonContainer btnCtn, int i, int busIndex)
-        {
-            var p = new VoicemeeterParameter(VoicemeeterApiClient.Api, VirtBusAssign(i, busIndex));
-            InitBtnParam(strip, btnCtn, ref p);
+            var api = VoicemeeterApiClient.Api;
+            VoicemeeterParameter p = bType switch
+            {
+                BtnType.Mono => new (api, Mono(i, sType)),
+                BtnType.Mute => new (api, Mute(i, sType)),
+                BtnType.Solo => new (api, Solo(i, sType)),
+                BtnType.A => new (api, HardBusAssign(i, busIndex)),
+                BtnType.B => new (api, VirtBusAssign(i, busIndex)),
+                _ => new (null, string.Empty)
+            }; 
+            InitBtnParam(btnCtn, ref p);
             m_vmParams.Add(p);
         }
     }
