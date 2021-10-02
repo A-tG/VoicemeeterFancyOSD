@@ -9,6 +9,7 @@ using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.OSD;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 using AtgDev.Voicemeeter.Types;
+using VoicemeeterOsdProgram.Interop;
 using static TopmostApp.Interop.NativeMethods;
 
 namespace VoicemeeterOsdProgram.Core
@@ -17,7 +18,7 @@ namespace VoicemeeterOsdProgram.Core
     {
         private static OsdControl m_wpfControl;
         private static OsdWindow m_window;
-        private static DispatcherTimer m_TickTimer;
+        private static DispatcherTimer m_tickTimer;
         private static VoicemeeterParameter[] m_vmParams = Array.Empty<VoicemeeterParameter>();
 
         static OsdWindowManager()
@@ -40,9 +41,9 @@ namespace VoicemeeterOsdProgram.Core
             win.CreateWindow();
             m_window = win;
 
-            m_TickTimer = new(DispatcherPriority.Normal);
-            m_TickTimer.Interval = TimeSpan.FromMilliseconds(2000);
-            m_TickTimer.Tick += TimerTick;
+            m_tickTimer = new(DispatcherPriority.Normal);
+            m_tickTimer.Interval = TimeSpan.FromMilliseconds(2000);
+            m_tickTimer.Tick += TimerTick;
 
             VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
             VoicemeeterApiClient.ProgramTypeChange += OnVoicemeeterTypeChange;
@@ -56,6 +57,7 @@ namespace VoicemeeterOsdProgram.Core
             set
             {
                 if (value) UpdateVmParams(true);
+
                 VoicemeeterApiClient.IsHandlingParams = value;
             }
         }
@@ -67,8 +69,8 @@ namespace VoicemeeterOsdProgram.Core
 
         public static double DurationMs
         {
-            get => m_TickTimer.Interval.TotalMilliseconds;
-            set => m_TickTimer.Interval = TimeSpan.FromMilliseconds(value);
+            get => m_tickTimer.Interval.TotalMilliseconds;
+            set => m_tickTimer.Interval = TimeSpan.FromMilliseconds(value);
         }
 
         public static bool IsShown
@@ -86,8 +88,8 @@ namespace VoicemeeterOsdProgram.Core
         {
             if (DurationMs != 0)
             {
-                m_TickTimer.Stop();
-                m_TickTimer.Start();
+                m_tickTimer.Stop();
+                m_tickTimer.Start();
             }
             IsShown = true;
             m_window.Show();
@@ -102,7 +104,7 @@ namespace VoicemeeterOsdProgram.Core
         private static void TimerTick(object sender, EventArgs e)
         {
             Hide();
-            m_TickTimer.Stop();
+            m_tickTimer.Stop();
         }
 
         private static void UpdateOsd()
@@ -141,10 +143,13 @@ namespace VoicemeeterOsdProgram.Core
             const string WindowClass = "VBCABLE0Voicemeeter0MainWindow0";
             const string WindowText = "VoiceMeeter";
 
-            IntPtr hWnd = GetForegroundWindow();
-            return (hWnd != IntPtr.Zero) && 
-                (GetWindowClassName(hWnd) == WindowClass) && 
-                (GetWindowText(hWnd) == WindowText);
+            bool result = false;
+            IntPtr hWnd = FindWindowEx(IntPtr.Zero, IntPtr.Zero, WindowClass, WindowText);
+            if ((hWnd != IntPtr.Zero) && (GetWindowText(hWnd) == WindowText))
+            {
+                result = !WindowObscureHelper.IsWindowObscured(hWnd);
+            }
+            return result;
         }
 
         private static void UpdateOsdElementsVis()
