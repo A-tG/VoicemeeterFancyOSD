@@ -57,11 +57,11 @@ namespace VoicemeeterOsdProgram.Core.Types
             }
         }
 
-        public event EventHandler<ValuesPair<float>> ReadValueChanged;
+        public event EventHandler<ValOldNew<float>> ReadValueChanged;
 
         private void OnReadValueChanged(float oldVal, float newVal)
         {
-            ValuesPair<float> values = new(oldVal, newVal);
+            ValOldNew<float> values = new(oldVal, newVal);
             ReadValueChanged?.Invoke(this, values);
         }
     }

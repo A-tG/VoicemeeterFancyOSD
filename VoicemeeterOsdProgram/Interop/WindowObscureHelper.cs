@@ -7,17 +7,17 @@ namespace VoicemeeterOsdProgram.Interop
 {
     public static class WindowObscureHelper
     {
-        private static IntPtr targetHwnd;
+        private static IntPtr m_targetHwnd;
         private static List<IntPtr> m_windowsOnTop = new();
 
         public static bool IsWindowObscured(IntPtr hWnd)
         {
             if ((hWnd == IntPtr.Zero) || !IsWindowVisible(hWnd)) return true;
 
-            targetHwnd = hWnd;
+            m_targetHwnd = hWnd;
             _ = EnumWindows(EnumWindowsHigherZOrder, IntPtr.Zero);
 
-            GetWindowRect(targetHwnd, out RECT r);
+            GetWindowRect(m_targetHwnd, out RECT r);
             var targetRect = r.ToRect();
             bool result = m_windowsOnTop.Any(hWnd =>
             {
@@ -26,16 +26,16 @@ namespace VoicemeeterOsdProgram.Interop
             });
 
             m_windowsOnTop.Clear();
-            targetHwnd = IntPtr.Zero;
+            m_targetHwnd = IntPtr.Zero;
             return result;
         }
 
         private static bool EnumWindowsHigherZOrder(IntPtr hWnd, IntPtr lParam)
         {
-            bool isFound = hWnd == targetHwnd;
+            bool isFound = hWnd == m_targetHwnd;
             if (isFound)
             {
-                targetHwnd = hWnd;
+                m_targetHwnd = hWnd;
             }
             else
             {
