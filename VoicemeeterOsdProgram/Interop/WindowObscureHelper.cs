@@ -15,7 +15,7 @@ namespace VoicemeeterOsdProgram.Interop
             if ((hWnd == IntPtr.Zero) || !IsWindowVisible(hWnd)) return true;
 
             targetHwnd = hWnd;
-            EnumWindows(EnumWindowsHigherZOrder, IntPtr.Zero);
+            _ = EnumWindows(EnumWindowsHigherZOrder, IntPtr.Zero);
 
             GetWindowRect(targetHwnd, out RECT r);
             var targetRect = r.ToRect();
