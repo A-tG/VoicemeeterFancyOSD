@@ -24,5 +24,5 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 * As far as I know, host is actually renamed ApplicationFrameHost.exe from System32
 * [What "private" API is used](https://blog.adeltax.com/window-z-order-in-windows-10/)
 
-## Do you like my projects? Donate
+## Donate to support the project
 [![Paypal Logo](https://www.paypalobjects.com/webstatic/paypalme/images/pp_logo_small.png)](https://www.paypal.me/atgDeveloperMusician/5)
