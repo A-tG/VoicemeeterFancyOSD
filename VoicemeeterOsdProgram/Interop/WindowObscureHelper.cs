@@ -10,6 +10,7 @@ namespace VoicemeeterOsdProgram.Interop
         private static IntPtr m_targetHwnd;
         private static List<IntPtr> m_windowsOnTop = new();
 
+        // need to add check for screens bounds, (maybe) taskbar and virtual desktops
         public static bool IsWindowObscured(IntPtr hWnd)
         {
             if ((hWnd == IntPtr.Zero) || !IsWindowVisible(hWnd)) return true;
