@@ -29,6 +29,10 @@ namespace TopmostApp.Interop
         [DllImport("Dwmapi.dll")]
         public static extern int DwmGetWindowAttribute(IntPtr hwnd, DwmWindowAttribute dwAttribute, ref int pvAttribute, int cbAttribute);
 
+        /// <summary>
+        ///     Relevant to Win 8+ Start, Action center, Search, etc, Microsoft Store apps windows,
+        ///     because IsWindowVisible always returns true for these.
+        /// </summary>
         public static bool IsWindowCloaked(IntPtr hWnd)
         {
             int cloakVal = 0;
