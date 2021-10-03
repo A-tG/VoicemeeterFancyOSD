@@ -41,7 +41,7 @@ namespace VoicemeeterOsdProgram.Core.Types
 
         public void ReadIsIgnoreEvent(bool isIgnore)
         {
-            if (m_api is null) return;
+            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
 
             if (m_api.GetParameter(m_command, out float val) == 0)
             {

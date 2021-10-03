@@ -46,6 +46,8 @@ namespace VoicemeeterOsdProgram.Factories
         private static void MakeButtonParam(BtnType bType, StripType sType, ButtonContainer btnCtn, int i, int busIndex = 0)
         {
             var api = VoicemeeterApiClient.Api;
+            if (api is null) return;
+
             VoicemeeterParameter p = bType switch
             {
                 BtnType.Mono => new (api, Mono(i, sType)),
@@ -53,8 +55,10 @@ namespace VoicemeeterOsdProgram.Factories
                 BtnType.Solo => new (api, Solo(i, sType)),
                 BtnType.A => new (api, HardBusAssign(i, busIndex)),
                 BtnType.B => new (api, VirtBusAssign(i, busIndex)),
-                _ => new (null, string.Empty)
-            }; 
+                _ => null
+            };
+            if (p is null) return;
+
             InitBtnParam(btnCtn, ref p);
             m_vmParams.Add(p);
         }
