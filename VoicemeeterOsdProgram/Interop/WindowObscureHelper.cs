@@ -46,10 +46,7 @@ namespace VoicemeeterOsdProgram.Interop
             // detects if Start, Search, Action center, GameBar, MicrosoftStore App windows are visible
             if ((winClass == AppFrameWindowClass) || (winClass == CoreWindowClass))
             {
-                int cloakVal = 0;
-                var res = DwmGetWindowAttribute(hWnd, DwmWindowAttribute.CLOAKED, ref cloakVal, Marshal.SizeOf(cloakVal));
-                bool isCloaked = (res == 0) && (cloakVal != 0);
-                if (isCloaked) return true;
+                if (IsWindowCloaked(hWnd)) return true;
             }
             m_windowsOnTop.Add(hWnd);
             return true;

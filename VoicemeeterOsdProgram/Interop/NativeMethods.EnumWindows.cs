@@ -29,6 +29,13 @@ namespace TopmostApp.Interop
         [DllImport("Dwmapi.dll")]
         public static extern int DwmGetWindowAttribute(IntPtr hwnd, DwmWindowAttribute dwAttribute, ref int pvAttribute, int cbAttribute);
 
+        public static bool IsWindowCloaked(IntPtr hWnd)
+        {
+            int cloakVal = 0;
+            var res = DwmGetWindowAttribute(hWnd, DwmWindowAttribute.CLOAKED, ref cloakVal, Marshal.SizeOf(cloakVal));
+            return (res == 0) && (cloakVal != 0);
+        }
+
         public delegate bool EnumWindowsProc(IntPtr hwnd, IntPtr lParam);
 
         [DllImport("user32.dll")]
