@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using static TopmostApp.Interop.NativeMethods;
 
 namespace VoicemeeterOsdProgram.Interop
 {
     public static class WindowObscureHelper
     {
+        private const string CoreWindowClass = "Windows.UI.Core.CoreWindow";
+        private const string AppFrameWindowClass = "ApplicationFrameWindow";
+
         private static IntPtr m_targetHwnd;
         private static List<IntPtr> m_windowsOnTop = new();
 
@@ -17,6 +21,7 @@ namespace VoicemeeterOsdProgram.Interop
 
             m_targetHwnd = hWnd;
             _ = EnumWindows(EnumWindowsHigherZOrder, IntPtr.Zero);
+            System.Diagnostics.Debug.WriteLine("");
 
             GetWindowRect(m_targetHwnd, out RECT r);
             var targetRect = r.ToRect();
@@ -33,19 +38,21 @@ namespace VoicemeeterOsdProgram.Interop
 
         private static bool EnumWindowsHigherZOrder(IntPtr hWnd, IntPtr lParam)
         {
-            bool isFound = hWnd == m_targetHwnd;
-            if (isFound)
+            if (hWnd == m_targetHwnd) return false;
+
+            if (!IsWindowVisible(hWnd)) return true;
+
+            var winClass = GetWindowClassName(hWnd);
+            // detects if Start, Search, Action center, GameBar, MicrosoftStore App windows are visible
+            if ((winClass == AppFrameWindowClass) || (winClass == CoreWindowClass))
             {
-                m_targetHwnd = hWnd;
+                int cloakVal = 0;
+                var res = DwmGetWindowAttribute(hWnd, DwmWindowAttribute.CLOAKED, ref cloakVal, Marshal.SizeOf(cloakVal));
+                bool isCloaked = (res == 0) && (cloakVal != 0);
+                if (isCloaked) return true;
             }
-            else
-            {
-                if (IsWindowVisible(hWnd))
-                {
-                    m_windowsOnTop.Add(hWnd);
-                }
-            }
-            return !isFound;
+            m_windowsOnTop.Add(hWnd);
+            return true;
         }
     }
 }

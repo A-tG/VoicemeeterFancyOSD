@@ -27,6 +27,10 @@ namespace VoicemeeterOsdProgram
                 return;
             }
 
+#if DEBUG
+            //if (!Debugger.IsAttached) Debugger.Launch();
+#endif
+
             Thread thread = new(() =>
             {
                 ComponentDispatcher.ThreadFilterMessage += OnTerminationSignal;
