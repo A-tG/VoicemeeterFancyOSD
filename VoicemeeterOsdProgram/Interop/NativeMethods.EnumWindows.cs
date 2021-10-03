@@ -6,6 +6,29 @@ namespace TopmostApp.Interop
 {
     public static partial class NativeMethods
     {
+        public enum DwmWindowAttribute
+        {
+            NCRENDERING_ENABLED = 1,
+            NCRENDERING_POLICY,
+            TRANSITIONS_FORCEDISABLED,
+            ALLOW_NCPAINT,
+            CAPTION_BUTTON_BOUNDS,
+            NONCLIENT_RTL_LAYOUT,
+            FORCE_ICONIC_REPRESENTATION,
+            FLIP3D_POLICY,
+            EXTENDED_FRAME_BOUNDS,
+            HAS_ICONIC_BITMAP,
+            DISALLOW_PEEK,
+            EXCLUDED_FROM_PEEK,
+            CLOAK,
+            CLOAKED,
+            FREEZE_REPRESENTATION,
+            LAST
+        }
+
+        [DllImport("Dwmapi.dll")]
+        public static extern int DwmGetWindowAttribute(IntPtr hwnd, DwmWindowAttribute dwAttribute, ref int pvAttribute, int cbAttribute);
+
         public delegate bool EnumWindowsProc(IntPtr hwnd, IntPtr lParam);
 
         [DllImport("user32.dll")]
