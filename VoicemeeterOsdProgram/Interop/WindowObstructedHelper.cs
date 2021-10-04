@@ -7,9 +7,6 @@ namespace VoicemeeterOsdProgram.Interop
 {
     public static class WindowObstructedHelper
     {
-        private const string CoreWindowClass = "Windows.UI.Core.CoreWindow";
-        private const string AppFrameWindowClass = "ApplicationFrameWindow";
-
         private static IntPtr m_targetHwnd;
         private static List<IntPtr> m_windowsOnTop = new();
 
@@ -60,11 +57,11 @@ namespace VoicemeeterOsdProgram.Interop
 
             var winClass = GetWindowClassName(hWnd);
             // detects if Start, Search, Action center, GameBar, MicrosoftStore App windows are visible
-            if ((winClass == AppFrameWindowClass) || (winClass == CoreWindowClass))
+            // in case if they are visible for EnumWindows procedure
+            if (!IsWindowCloaked(hWnd))
             {
-                if (IsWindowCloaked(hWnd)) return true;
+                m_windowsOnTop.Add(hWnd);
             }
-            m_windowsOnTop.Add(hWnd);
             return true;
         }
     }
