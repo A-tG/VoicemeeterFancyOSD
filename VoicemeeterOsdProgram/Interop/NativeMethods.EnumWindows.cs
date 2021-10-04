@@ -27,17 +27,27 @@ namespace TopmostApp.Interop
         }
 
         [DllImport("Dwmapi.dll")]
-        public static extern int DwmGetWindowAttribute(IntPtr hwnd, DwmWindowAttribute dwAttribute, ref int pvAttribute, int cbAttribute);
+        private static extern int DwmGetWindowAttribute(IntPtr hwnd, DwmWindowAttribute dwAttribute, ref int pvAttribute, int cbAttribute);
+
+        [DllImport("Dwmapi.dll")]
+        private static extern int DwmGetWindowAttribute(IntPtr hwnd, DwmWindowAttribute dwAttribute, ref RECT rect, int cbAttribute);
 
         /// <summary>
         ///     Relevant to Win 8+ Start, Action center, Search, etc, Microsoft Store apps windows,
         ///     because IsWindowVisible always returns true for these.
         /// </summary>
-        public static bool IsWindowCloaked(IntPtr hWnd)
+        public static bool IsDwmWindowCloaked(IntPtr hWnd)
         {
             int cloakVal = 0;
             var res = DwmGetWindowAttribute(hWnd, DwmWindowAttribute.CLOAKED, ref cloakVal, Marshal.SizeOf(cloakVal));
             return (res == 0) && (cloakVal != 0);
+        }
+
+        public static int GetDwmWindowRect(IntPtr hWnd, out RECT r)
+        {
+            r = new RECT();
+            var res = DwmGetWindowAttribute(hWnd, DwmWindowAttribute.EXTENDED_FRAME_BOUNDS, ref r, Marshal.SizeOf(r));
+            return res;
         }
 
         public delegate bool EnumWindowsProc(IntPtr hwnd, IntPtr lParam);

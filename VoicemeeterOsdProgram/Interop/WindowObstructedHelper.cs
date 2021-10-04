@@ -17,7 +17,7 @@ namespace VoicemeeterOsdProgram.Interop
             m_targetHwnd = hWnd;
             _ = EnumWindows(EnumWindowsHigherZOrder, IntPtr.Zero);
 
-            GetWindowRect(m_targetHwnd, out RECT r);
+            GetDwmWindowRect(m_targetHwnd, out RECT r);
 
             bool isInsideScreen = IsRectInScreen(r);
             bool result = !isInsideScreen;
@@ -27,7 +27,7 @@ namespace VoicemeeterOsdProgram.Interop
                 var targetRect = r.ToRect();
                 result = m_windowsOnTop.Any(hWnd =>
                 {
-                    GetWindowRect(hWnd, out RECT r);
+                    GetDwmWindowRect(hWnd, out RECT r);
                     return targetRect.IntersectsWith(r.ToRect());
                 });
             }
@@ -55,10 +55,9 @@ namespace VoicemeeterOsdProgram.Interop
 
             if (!IsWindowVisible(hWnd)) return true;
 
-            var winClass = GetWindowClassName(hWnd);
             // detects if Start, Search, Action center, GameBar, MicrosoftStore App windows are visible
             // in case if they are visible for EnumWindows procedure
-            if (!IsWindowCloaked(hWnd))
+            if (!IsDwmWindowCloaked(hWnd))
             {
                 m_windowsOnTop.Add(hWnd);
             }
