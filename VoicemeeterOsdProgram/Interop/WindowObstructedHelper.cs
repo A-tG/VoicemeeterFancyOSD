@@ -5,7 +5,7 @@ using static TopmostApp.Interop.NativeMethods;
 
 namespace VoicemeeterOsdProgram.Interop
 {
-    public static class WindowObscureHelper
+    public static class WindowObstructedHelper
     {
         private const string CoreWindowClass = "Windows.UI.Core.CoreWindow";
         private const string AppFrameWindowClass = "ApplicationFrameWindow";
@@ -14,7 +14,7 @@ namespace VoicemeeterOsdProgram.Interop
         private static List<IntPtr> m_windowsOnTop = new();
 
         // need to add check for screens bounds, (maybe) taskbar and virtual desktops
-        public static bool IsWindowObscured(IntPtr hWnd)
+        public static bool IsObstructed(IntPtr hWnd)
         {
             if ((hWnd == IntPtr.Zero) || !IsWindowVisible(hWnd)) return true;
 

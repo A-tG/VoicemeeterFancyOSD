@@ -148,7 +148,7 @@ namespace VoicemeeterOsdProgram.Core
             IntPtr hWnd = FindWindowEx(IntPtr.Zero, IntPtr.Zero, WindowClass, WindowText);
             if (hWnd != IntPtr.Zero)
             {
-                result = !WindowObscureHelper.IsWindowObscured(hWnd);
+                result = !WindowObstructedHelper.IsObstructed(hWnd);
             }
             return result;
         }
