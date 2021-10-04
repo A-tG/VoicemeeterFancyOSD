@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using static TopmostApp.Interop.NativeMethods;
 
 namespace VoicemeeterOsdProgram.Interop
@@ -21,15 +20,24 @@ namespace VoicemeeterOsdProgram.Interop
 
             m_targetHwnd = hWnd;
             _ = EnumWindows(EnumWindowsHigherZOrder, IntPtr.Zero);
-            System.Diagnostics.Debug.WriteLine("");
 
             GetWindowRect(m_targetHwnd, out RECT r);
-            var targetRect = r.ToRect();
-            bool result = m_windowsOnTop.Any(hWnd =>
+
+            POINTSTRUCT topLeft = new(r.Left, r.Top);
+            POINTSTRUCT bottomRight = new(r.Right, r.Bottom);
+            bool isInsideScreen = (MonitorFromPoint(topLeft, 0) != IntPtr.Zero) &&
+                (MonitorFromPoint(bottomRight, 0) != IntPtr.Zero);
+            bool result = !isInsideScreen;
+
+            if (isInsideScreen)
             {
-                GetWindowRect(hWnd, out RECT r);
-                return targetRect.IntersectsWith(r.ToRect());
-            });
+                var targetRect = r.ToRect();
+                result = m_windowsOnTop.Any(hWnd =>
+                {
+                    GetWindowRect(hWnd, out RECT r);
+                    return targetRect.IntersectsWith(r.ToRect());
+                });
+            }
 
             m_windowsOnTop.Clear();
             m_targetHwnd = IntPtr.Zero;
