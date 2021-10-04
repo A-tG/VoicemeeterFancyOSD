@@ -13,7 +13,6 @@ namespace VoicemeeterOsdProgram.Interop
         private static IntPtr m_targetHwnd;
         private static List<IntPtr> m_windowsOnTop = new();
 
-        // need to add check for screens bounds, (maybe) taskbar and virtual desktops
         public static bool IsObstructed(IntPtr hWnd)
         {
             if ((hWnd == IntPtr.Zero) || !IsWindowVisible(hWnd)) return true;
@@ -23,10 +22,7 @@ namespace VoicemeeterOsdProgram.Interop
 
             GetWindowRect(m_targetHwnd, out RECT r);
 
-            POINTSTRUCT topLeft = new(r.Left, r.Top);
-            POINTSTRUCT bottomRight = new(r.Right, r.Bottom);
-            bool isInsideScreen = (MonitorFromPoint(topLeft, 0) != IntPtr.Zero) &&
-                (MonitorFromPoint(bottomRight, 0) != IntPtr.Zero);
+            bool isInsideScreen = IsRectInScreen(r);
             bool result = !isInsideScreen;
 
             if (isInsideScreen)
@@ -42,6 +38,13 @@ namespace VoicemeeterOsdProgram.Interop
             m_windowsOnTop.Clear();
             m_targetHwnd = IntPtr.Zero;
             return result;
+        }
+
+        private static bool IsRectInScreen(RECT r)
+        {
+            POINTSTRUCT topLeft = new(r.Left, r.Top);
+            POINTSTRUCT bottomRight = new(r.Right, r.Bottom);
+            return (MonitorFromPoint(topLeft, 0) != IntPtr.Zero) && (MonitorFromPoint(bottomRight, 0) != IntPtr.Zero);
         }
 
         private static bool EnumWindowsHigherZOrder(IntPtr hWnd, IntPtr lParam)
