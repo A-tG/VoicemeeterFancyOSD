@@ -44,7 +44,7 @@ namespace VoicemeeterOsdProgram.Interop
         {
             POINTSTRUCT topLeft = new(r.Left, r.Top);
             POINTSTRUCT bottomRight = new(r.Right, r.Bottom);
-            return (MonitorFromPoint(topLeft, 0) != IntPtr.Zero) && (MonitorFromPoint(bottomRight, 0) != IntPtr.Zero);
+            return (MonitorFromPoint(topLeft) != IntPtr.Zero) && (MonitorFromPoint(bottomRight) != IntPtr.Zero);
         }
 
         private static bool EnumWindowsHigherZOrder(IntPtr hWnd, IntPtr lParam)
