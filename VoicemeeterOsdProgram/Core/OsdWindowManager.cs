@@ -82,7 +82,10 @@ namespace VoicemeeterOsdProgram.Core
 
         public static bool IsIgnoreVmParameters
         {
-            get => IsVoicemeeterWindowForeground();
+            get
+            {
+                return Properties.Settings.Default.IsShowOsdWhenVoicemeeterVisible ? false : IsVoicemeeterWindowForeground();
+            }
         }
 
         public static void Show()
@@ -144,13 +147,8 @@ namespace VoicemeeterOsdProgram.Core
             const string WindowClass = "VBCABLE0Voicemeeter0MainWindow0";
             const string WindowText = "VoiceMeeter";
 
-            bool result = false;
             IntPtr hWnd = FindWindowEx(IntPtr.Zero, IntPtr.Zero, WindowClass, WindowText);
-            if (hWnd != IntPtr.Zero)
-            {
-                result = !WindowObstructedHelper.IsObstructed(hWnd);
-            }
-            return result;
+            return !WindowObstructedHelper.IsObstructed(hWnd); ;
         }
 
         private static void UpdateOsdElementsVis()
