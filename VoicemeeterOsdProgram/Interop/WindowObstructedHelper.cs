@@ -42,9 +42,14 @@ namespace VoicemeeterOsdProgram.Interop
 
         private static bool IsRectInScreen(RECT r)
         {
-            POINTSTRUCT topLeft = new(r.Left, r.Top);
-            POINTSTRUCT bottomRight = new(r.Right, r.Bottom);
-            return (MonitorFromPoint(topLeft) != IntPtr.Zero) && (MonitorFromPoint(bottomRight) != IntPtr.Zero);
+            POINTSTRUCT lt = new(r.Left, r.Top);
+            POINTSTRUCT rt = new(r.Right, r.Top);
+            POINTSTRUCT rb = new(r.Right, r.Bottom);
+            POINTSTRUCT lb = new(r.Left, r.Bottom);
+            return (MonitorFromPoint(lt) != IntPtr.Zero) && 
+                (MonitorFromPoint(rt) != IntPtr.Zero) &&
+                (MonitorFromPoint(rb) != IntPtr.Zero) && 
+                (MonitorFromPoint(lb) != IntPtr.Zero);
         }
 
         private static bool EnumWindowsHigherZOrder(IntPtr hWnd, IntPtr lParam)
