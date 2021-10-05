@@ -20,6 +20,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         public bool AllowAutoUpdateSeparators { get; set; } = true;
 
         private double m_scale = 1;
+        private bool m_isInteractable;
 
         public double Scale
         {
@@ -28,6 +29,18 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             {
                 m_scale = value;
                 SetScale(value);
+            }
+        }
+
+        public bool IsInteractable
+        {
+            get => m_isInteractable;
+            set
+            {
+                if (m_isInteractable == value) return;
+
+                CloseBtn.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                m_isInteractable = value;
             }
         }
 

@@ -19,6 +19,8 @@ namespace VoicemeeterOsdProgram.Core
         private static OsdControl m_wpfControl;
         private static OsdWindow m_window;
         private static DispatcherTimer m_tickTimer;
+        private static bool m_isInteractable;
+        private static bool m_isMouseEntered;
         private static VoicemeeterParameter[] m_vmParams = Array.Empty<VoicemeeterParameter>();
 
         static OsdWindowManager()
@@ -45,6 +47,10 @@ namespace VoicemeeterOsdProgram.Core
             m_tickTimer.Interval = TimeSpan.FromMilliseconds(2000);
             m_tickTimer.Tick += TimerTick;
 
+            m_wpfControl.CloseBtn.Click += OnCloseButtonClick;
+            m_wpfControl.MouseEnter += OnMouseEnter;
+            m_wpfControl.MouseLeave += OnMouseLeave;
+
             VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
             VoicemeeterApiClient.ProgramTypeChange += OnVoicemeeterTypeChange;
             VoicemeeterApiClient.Loaded += OnVoicemeeterLoad;
@@ -62,6 +68,20 @@ namespace VoicemeeterOsdProgram.Core
                 VoicemeeterApiClient.IsHandlingParams = value;
             }
         }
+
+        public static bool IsInteractable
+        {
+            get => m_wpfControl.IsInteractable;
+            set
+            {
+                if (m_wpfControl.IsInteractable == value) return;
+
+                m_window.IsClickThrough = !value;
+                m_wpfControl.IsInteractable = value;
+                m_isInteractable = value;
+            }
+        }
+
         public static double Scale
         {
             get => m_wpfControl.Scale;
@@ -80,21 +100,16 @@ namespace VoicemeeterOsdProgram.Core
             private set;
         }
 
-        public static bool IsIgnoreVmParameters
-        {
-            get
-            {
-                return OptionsStorage.Osd.IsShowOnlyIfVoicemeeterHidden && IsVoicemeeterWindowForeground();
-            }
-        }
+        public static bool IsIgnoreVmParameters => m_isMouseEntered || OptionsStorage.Osd.IsShowOnlyIfVoicemeeterHidden && IsVoicemeeterWindowForeground();
 
         public static void Show()
         {
-            if (DurationMs != 0)
+            if (!m_isMouseEntered)
             {
-                m_tickTimer.Stop();
-                m_tickTimer.Start();
+                ResetShowTimer();
             }
+            if (IsShown) return;
+
             IsShown = true;
             m_window.Show();
         }
@@ -107,8 +122,8 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void TimerTick(object sender, EventArgs e)
         {
-            Hide();
             m_tickTimer.Stop();
+            Hide();
         }
 
         private static void UpdateOsd()
@@ -140,6 +155,15 @@ namespace VoicemeeterOsdProgram.Core
             m_vmParams = Array.Empty<VoicemeeterParameter>();
             OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_vmParams, type);
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
+        }
+
+        private static void ResetShowTimer()
+        {
+            if (DurationMs != 0)
+            {
+                m_tickTimer.Stop();
+                m_tickTimer.Start();
+            }
         }
 
         private static bool IsVoicemeeterWindowForeground()
@@ -223,6 +247,30 @@ namespace VoicemeeterOsdProgram.Core
         private static void OnVoicemeeterLoad(object sender, EventArgs e)
         {
             Application.Current.Dispatcher.Invoke(() => RefillOsd(VoicemeeterApiClient.ProgramType));
+        }
+
+        private static void OnMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            m_isMouseEntered = true;
+            m_tickTimer.Stop();
+            Debug.WriteLine("mouse enter OSD");
+        }
+
+        private static void OnMouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            m_isMouseEntered = false;
+            if (IsShown)
+            {
+                ResetShowTimer();
+            }
+            Debug.WriteLine("mouse leave OSD");
+        }
+
+        private static void OnCloseButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (!IsShown) return;
+
+            Hide();
         }
     }
 }

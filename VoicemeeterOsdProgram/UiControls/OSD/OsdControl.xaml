@@ -12,9 +12,12 @@
     </UserControl.Background>
     <Viewbox x:Name="MainContentWrap" StretchDirection="DownOnly">
         <Grid x:Name="SizeWrap">
-            <local:WrapPanelExt x:Name="MainContent" 
-                                Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                Margin="5"/>
+            <StackPanel Orientation="Horizontal">
+                <local:WrapPanelExt x:Name="MainContent" 
+                                    Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                    Margin="5"/>
+                <Button x:Name="CloseBtn" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Collapsed"/>
+            </StackPanel>
         </Grid>
     </Viewbox>
     <!-- Used to add rounded corners -->
