@@ -61,7 +61,7 @@ namespace TopmostApp.Interop
             }
             else
             {
-                styles &= stylesToApply;
+                styles &= ~stylesToApply;
             }
             SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)styles);
         }
