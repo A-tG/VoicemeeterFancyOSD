@@ -1,5 +1,4 @@
 ﻿using System;
-using static TopmostApp.Interop.NativeMethods;
 
 namespace TopmostApp.Interop
 {

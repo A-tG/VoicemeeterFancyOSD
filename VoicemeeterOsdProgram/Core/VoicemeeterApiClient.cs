@@ -120,6 +120,12 @@ namespace VoicemeeterOsdProgram.Core
             }
             catch
             {
+                if (!IsLoaded)
+                {
+                    Api?.Dispose();
+                    Api = null;
+                }
+
                 if (m_timer is not null)
                 {
                     m_timer.Stop();
