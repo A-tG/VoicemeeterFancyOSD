@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
@@ -11,6 +10,7 @@ using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 using AtgDev.Voicemeeter.Types;
 using VoicemeeterOsdProgram.Interop;
 using static TopmostApp.Interop.NativeMethods;
+using VoicemeeterOsdProgram.Options;
 
 namespace VoicemeeterOsdProgram.Core
 {
@@ -84,7 +84,7 @@ namespace VoicemeeterOsdProgram.Core
         {
             get
             {
-                return Properties.Settings.Default.IsShowOsdWhenVoicemeeterVisible ? false : IsVoicemeeterWindowForeground();
+                return OptionsStorage.Osd.IsShowOnlyIfVoicemeeterHidden && IsVoicemeeterWindowForeground();
             }
         }
 
