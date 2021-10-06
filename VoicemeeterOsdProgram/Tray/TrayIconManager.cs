@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Forms;
-using System.Drawing;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.UiControls;
 

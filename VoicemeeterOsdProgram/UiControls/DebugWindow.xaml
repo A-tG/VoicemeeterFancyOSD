@@ -28,7 +28,8 @@
         <Separator/>
         <StackPanel>
             <Button x:Name="RandomizeBtn" FontSize="18" Padding="5" Width="130"
-                    Click="RandomizeBtn_Click">Randomize OSD</Button>
+                    Click="RandomizeBtn_Click">Randomize OSD
+            </Button>
         </StackPanel>
     </WrapPanel>
 </Window>
