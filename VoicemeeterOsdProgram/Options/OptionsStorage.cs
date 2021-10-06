@@ -17,11 +17,20 @@ namespace VoicemeeterOsdProgram.Options
 
         private static readonly FileIniDataParser m_parser = new();
         private static IniData m_data = new();
+        private static readonly FileSystemWatcher m_watcher; 
 
         static OptionsStorage()
         {
             TryRead();
             TrySave();
+            m_watcher = new()
+            {
+                Path = Path.GetDirectoryName(m_path),
+                Filter = Path.GetFileName(m_path),
+                EnableRaisingEvents = true,
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size
+            };
+            m_watcher.Changed += OnConfigFileChanged;
         }
 
         public static void Init() { }
@@ -107,6 +116,11 @@ namespace VoicemeeterOsdProgram.Options
         {
             var members = typeof(OptionsStorage).GetFields(BindingFlags.Static | BindingFlags.Public);
             return members.First(m => m.FieldType.Name == optionsObj.GetType().Name).Name;
+        }
+
+        private static void OnConfigFileChanged(object sender, FileSystemEventArgs e)
+        {
+            Debug.WriteLine($"config file changed");
         }
     }
 }

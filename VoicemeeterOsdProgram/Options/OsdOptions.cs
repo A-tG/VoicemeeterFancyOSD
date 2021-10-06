@@ -14,11 +14,10 @@ namespace VoicemeeterOsdProgram.Options
             get => m_isShowOnlyIfVoicemeeterHidden;
             set
             {
-                if (value != m_isShowOnlyIfVoicemeeterHidden)
-                {
-                    m_isShowOnlyIfVoicemeeterHidden = value;
-                    IsShowOnlyIfVoicemeeterHiddenChanged?.Invoke(this, value);
-                }
+                if (value == m_isShowOnlyIfVoicemeeterHidden) return;
+
+                m_isShowOnlyIfVoicemeeterHidden = value;
+                IsShowOnlyIfVoicemeeterHiddenChanged?.Invoke(this, value);
             }
         }
 
@@ -27,11 +26,10 @@ namespace VoicemeeterOsdProgram.Options
             get => m_isInteractable;
             set
             {
-                if (value != m_isInteractable)
-                {
-                    m_isInteractable = value;
-                    IsInteractableChanged?.Invoke(this, value);
-                }
+                if (value == m_isInteractable) return;
+
+                m_isInteractable = value;
+                IsInteractableChanged?.Invoke(this, value);
             }
         }
 
@@ -40,11 +38,10 @@ namespace VoicemeeterOsdProgram.Options
             get => m_durationMs;
             set
             {
-                if (value != m_durationMs)
-                {
-                    m_durationMs = value;
-                    DurationMsChanged?.Invoke(this, value);
-                }
+                if (value == m_durationMs) return;
+
+                m_durationMs = value;
+                DurationMsChanged?.Invoke(this, value);
             }
         }
 
@@ -53,11 +50,10 @@ namespace VoicemeeterOsdProgram.Options
             get => m_backgroundOpacity;
             set
             {
-                if (value != m_backgroundOpacity)
-                {
-                    m_backgroundOpacity = value;
-                    BackgroundOpacityChanged?.Invoke(this, value);
-                }
+                if (value == m_backgroundOpacity) return;
+
+                m_backgroundOpacity = value;
+                BackgroundOpacityChanged?.Invoke(this, value);
             }
         }
 
