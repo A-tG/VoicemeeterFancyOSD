@@ -10,6 +10,7 @@ namespace VoicemeeterOsdProgram.Options
 {
     public static class OptionsStorage
     {
+        // field name will be used as INI file Section name
         public static readonly OsdOptions Osd = new();
 
         private static readonly string m_path = @$"{AppDomain.CurrentDomain.BaseDirectory}config\config.ini";
