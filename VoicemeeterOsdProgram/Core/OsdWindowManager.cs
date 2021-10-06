@@ -24,7 +24,6 @@ namespace VoicemeeterOsdProgram.Core
         static OsdWindowManager()
         {
             OsdControl osd = new();
-            osd.Background.Opacity = 0.9;
             m_wpfControl = osd;
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
 
@@ -45,11 +44,17 @@ namespace VoicemeeterOsdProgram.Core
             m_tickTimer.Interval = TimeSpan.FromMilliseconds(OptionsStorage.Osd.DurationMs);
             m_tickTimer.Tick += TimerTick;
 
+            IsInteractable = OptionsStorage.Osd.IsInteractable;
+            BgOpacity = OptionsStorage.Osd.BackgroundOpacity;
+
+            OptionsStorage.Osd.IsInteractableChanged += (_, val) => IsInteractable = val;
+            OptionsStorage.Osd.DurationMsChanged += (_, val) => DurationMs = val;
+            OptionsStorage.Osd.BackgroundOpacityChanged += (_, val) => BgOpacity = val;
+
             m_wpfControl.CloseBtn.Click += OnCloseButtonClick;
             m_wpfControl.MouseEnter += OnMouseEnter;
             m_wpfControl.MouseLeave += OnMouseLeave;
 
-            IsInteractable = OptionsStorage.Osd.IsInteractable;
 
             VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
             VoicemeeterApiClient.ProgramTypeChange += OnVoicemeeterTypeChange;
@@ -81,6 +86,18 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
+        public static double BgOpacity
+        {
+            get => m_wpfControl.Background.Opacity;
+            set
+            {
+                if (value >= 0)
+                {
+                    m_wpfControl.Background.Opacity = value;
+                }
+            }
+        }
+
         public static double Scale
         {
             get => m_wpfControl.Scale;
@@ -90,7 +107,13 @@ namespace VoicemeeterOsdProgram.Core
         public static double DurationMs
         {
             get => m_tickTimer.Interval.TotalMilliseconds;
-            set => m_tickTimer.Interval = TimeSpan.FromMilliseconds(value);
+            set
+            {
+                if (value >= 0)
+                {
+                    m_tickTimer.Interval = TimeSpan.FromMilliseconds(value);
+                }
+            }
         }
 
         public static bool IsShown
