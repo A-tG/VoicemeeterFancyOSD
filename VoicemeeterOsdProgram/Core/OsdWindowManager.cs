@@ -44,12 +44,14 @@ namespace VoicemeeterOsdProgram.Core
             m_window = win;
 
             m_tickTimer = new(DispatcherPriority.Normal);
-            m_tickTimer.Interval = TimeSpan.FromMilliseconds(2000);
+            m_tickTimer.Interval = TimeSpan.FromMilliseconds(OptionsStorage.Osd.DurationMs);
             m_tickTimer.Tick += TimerTick;
 
             m_wpfControl.CloseBtn.Click += OnCloseButtonClick;
             m_wpfControl.MouseEnter += OnMouseEnter;
             m_wpfControl.MouseLeave += OnMouseLeave;
+
+            IsInteractable = OptionsStorage.Osd.IsInteractable;
 
             VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
             VoicemeeterApiClient.ProgramTypeChange += OnVoicemeeterTypeChange;
@@ -253,7 +255,6 @@ namespace VoicemeeterOsdProgram.Core
         {
             m_isMouseEntered = true;
             m_tickTimer.Stop();
-            Debug.WriteLine("mouse enter OSD");
         }
 
         private static void OnMouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
@@ -263,7 +264,6 @@ namespace VoicemeeterOsdProgram.Core
             {
                 ResetShowTimer();
             }
-            Debug.WriteLine("mouse leave OSD");
         }
 
         private static void OnCloseButtonClick(object sender, RoutedEventArgs e)
