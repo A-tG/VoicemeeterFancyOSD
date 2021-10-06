@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Threading;
 
 namespace VoicemeeterOsdProgram.Options
 {
@@ -17,12 +18,19 @@ namespace VoicemeeterOsdProgram.Options
 
         private static readonly FileIniDataParser m_parser = new();
         private static IniData m_data = new();
-        private static readonly FileSystemWatcher m_watcher; 
+        private static readonly FileSystemWatcher m_watcher;
+        private static DispatcherTimer m_timer = new() { Interval = TimeSpan.FromMilliseconds(1000)};
 
         static OptionsStorage()
         {
+            AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
+            System.Windows.Application.Current.Exit += (_, _) => Exit();
+
             TryRead();
             TrySave();
+
+            m_timer.Tick += OnTimerTick;
+
             m_watcher = new()
             {
                 Path = Path.GetDirectoryName(m_path),
@@ -118,9 +126,25 @@ namespace VoicemeeterOsdProgram.Options
             return members.First(m => m.FieldType.Name == optionsObj.GetType().Name).Name;
         }
 
+        private static void Exit()
+        {
+            m_timer?.Stop();
+        }
+
         private static void OnConfigFileChanged(object sender, FileSystemEventArgs e)
         {
+            m_timer.Stop();
+            m_timer.Start();
             Debug.WriteLine($"config file changed");
+        }
+
+        private static void OnTimerTick(object sender, EventArgs e)
+        {
+            m_timer.Stop();
+            m_watcher.EnableRaisingEvents = false;
+            TryRead();
+            TrySave();
+            m_watcher.EnableRaisingEvents = true;
         }
     }
 }
