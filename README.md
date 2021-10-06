@@ -4,7 +4,11 @@
 On-Screen display for Voicemeeter that works with fullscreen apps by using private WinAPI without hooking into Graphics API.
 
 Windows 10 or newer is required. 
-Should work with older Windows versions but OSD will work as normal window and will not be displayed on top of fullscreen applications.
+May work with older Windows versions (not older than Windows 7) but OSD will work as normal window and will not be displayed on top of fullscreen applications.
+
+Install .NET 5.0 Desktop runtime so I will not need to upload "portable" version of program around 150 MB in size.
+
+You can change settings in config/config.ini (created on program launch if not exist). And settings are automatically validated and updated on file change, no need to restart.
 
 [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) WPF project
 
@@ -16,8 +20,14 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 * The program will be compiled in the **Solution's** folder.
 * Launch \*Host.exe or ontop fullscreen functionality will not work.
 
+# Uses
+* [Ini File Parser](https://github.com/rickyah/ini-parser)
+* [Extended Voicemeeter Remote API wrapper](https://github.com/A-tG/voicemeeter-remote-api-extended)
+* Partially code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts)
+
 # Explanation
 * Don't forget app.manifest if you want to modify/make your own program based on this or BandWindow might throw Exception.
+* Make whatever WPF UserControl you want and assign it to BandWindow's Content
 * All magic stuff happens in Host and Bridge projects (copied from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts)). Without it, it's not that easy to create "true" topmost window. The alternative is to sign your exe file with Microsoft Windows certificate.
 * Main code for topmost window is located in [Interop](VoicemeeterOsdProgram/Interop) based on a modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts) (Thanks for advice and directions from their Discord server!)
 * [Program.cs](VoicemeeterOsdProgram/Program.cs) and [App.xaml.cs](VoicemeeterOsdProgram/App.xaml.cs) are entry points. The program dll's name should be defined [here](Bridge/dllmain.cpp#L42)
