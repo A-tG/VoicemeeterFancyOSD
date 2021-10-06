@@ -19,7 +19,6 @@ namespace VoicemeeterOsdProgram.Core
         private static OsdControl m_wpfControl;
         private static OsdWindow m_window;
         private static DispatcherTimer m_tickTimer;
-        private static bool m_isInteractable;
         private static bool m_isMouseEntered;
         private static VoicemeeterParameter[] m_vmParams = Array.Empty<VoicemeeterParameter>();
 
@@ -80,7 +79,6 @@ namespace VoicemeeterOsdProgram.Core
 
                 m_window.IsClickThrough = !value;
                 m_wpfControl.IsInteractable = value;
-                m_isInteractable = value;
             }
         }
 
@@ -120,6 +118,12 @@ namespace VoicemeeterOsdProgram.Core
         {
             IsShown = false;
             m_window.HideAnimated();
+        }
+
+        public static void Hide(uint fadeOutDuration)
+        {
+            IsShown = false;
+            m_window.HideAnimated(fadeOutDuration);
         }
 
         private static void TimerTick(object sender, EventArgs e)
@@ -270,7 +274,7 @@ namespace VoicemeeterOsdProgram.Core
         {
             if (!IsShown) return;
 
-            Hide();
+            Hide(75);
         }
     }
 }

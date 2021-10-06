@@ -11,6 +11,13 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 {
     public class OsdWindow : BandWindow
     {
+        private const int FadeOutTimeMs = 200;
+
+        private Rect m_workingArea;
+        private VertAlignment m_vertAlign = VertAlignment.Top;
+        private HorAlignment m_horAlign = HorAlignment.Left;
+        private DoubleAnimation m_fadeOutAnim;
+
         public OsdWindow() : base()
         {
             var anim = new DoubleAnimation()
@@ -29,13 +36,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             Shown += OnShow;
             SystemEvents.DisplaySettingsChanging += OnDisplaySettingsChange;
         }
-
-        private const int FadeOutTimeMs = 200;
-
-        private Rect m_workingArea;
-        private VertAlignment m_vertAlign = VertAlignment.Top;
-        private HorAlignment m_horAlign = HorAlignment.Left;
-        private DoubleAnimation m_fadeOutAnim;
 
         public VertAlignment WorkingAreaVertAlignment
         {
@@ -57,9 +57,17 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             }
         }
 
-        public void HideAnimated()
+        public void HideAnimated(uint duration = FadeOutTimeMs)
         {
-            BeginAnimation(OpacityProperty, m_fadeOutAnim);
+            if (duration > 0)
+            {
+                m_fadeOutAnim.Duration = new Duration(TimeSpan.FromMilliseconds(duration));
+                BeginAnimation(OpacityProperty, m_fadeOutAnim);
+            }
+            else
+            {
+                Hide();
+            }
         }
 
         public Screen OnWhatDisplay()
