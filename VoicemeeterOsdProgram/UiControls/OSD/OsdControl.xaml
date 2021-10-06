@@ -7,6 +7,14 @@
     x:Name="OsdWindow" x:Class="VoicemeeterOsdProgram.UiControls.OSD.OsdControl"
     mc:Ignorable="d"
     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SnapsToDevicePixels="True">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Voicemeeter/StripButtons.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
     <UserControl.Background>
         <SolidColorBrush Color="{DynamicResource VmBgMainColor}"/>
     </UserControl.Background>
@@ -16,7 +24,18 @@
                 <local:WrapPanelExt x:Name="MainContent" 
                                     Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
                                     Margin="5"/>
-                <Button x:Name="CloseBtn" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Collapsed"/>
+                <Button x:Name="CloseBtn" Style="{DynamicResource PressButton}"
+                        Margin="5" BorderThickness="0"
+                        Width="15" Height="15"
+                        HorizontalAlignment="Right" VerticalAlignment="Top" 
+                        Visibility="Collapsed" Background="Transparent">
+                    <Viewbox Stretch="Uniform">
+                        <Canvas Width="100" Height="100">
+                            <Path x:Name="Cross" StrokeThickness="20" Stroke="{Binding Foreground, ElementName=CloseBtn}"
+                                  Data="M 0,0 L 100,100 M 0,100 L 100,0"/>
+                        </Canvas>
+                    </Viewbox>
+                </Button>
             </StackPanel>
         </Grid>
     </Viewbox>
