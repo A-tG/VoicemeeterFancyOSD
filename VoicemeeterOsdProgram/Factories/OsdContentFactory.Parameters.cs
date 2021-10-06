@@ -23,10 +23,15 @@ namespace VoicemeeterOsdProgram.Factories
             p.ReadValueChanged += (sender, e) =>
             {
                 strip.FaderCont.Visibility = Visibility.Visible;
+                strip.FaderCont.Fader.isIgnoreValueChanged = true;
                 strip.FaderCont.Fader.Value = e.newVal;
+                strip.FaderCont.Fader.isIgnoreValueChanged = false;
             };
             strip.FaderCont.Fader.ValueChanged += (sender, e) =>
             {
+                var fader = sender as ClrChangeSlider;
+                if ((fader is null) || fader.isIgnoreValueChanged) return;
+
                 p.Write((float)e.NewValue);
             };
         }
@@ -48,10 +53,9 @@ namespace VoicemeeterOsdProgram.Factories
             btnCtn.Btn.Click += (sender, e) =>
             {
                 var btn = sender as OutlineTglBtn;
-                if (btn is not null)
-                {
-                    p.Write((float)btn.State);
-                }
+                if (btn is null) return;
+
+                p.Write((float)btn.State);
             };
         }
 

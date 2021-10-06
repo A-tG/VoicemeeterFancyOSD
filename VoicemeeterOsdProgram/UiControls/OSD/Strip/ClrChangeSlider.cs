@@ -11,6 +11,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
     public class ClrChangeSlider : Slider
     {
+        public bool isIgnoreValueChanged;
+
         public ClrChangeSlider() : base()
         {
             ValueChanged += OnValueChange;

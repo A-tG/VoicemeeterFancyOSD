@@ -48,7 +48,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             get => (uint)GetValue(StateProperty);
             set
             {
-                if (StatesNumber is 0) return;
+                if ((StatesNumber is 0) || (State == value)) return;
+
                 uint val = value < StatesNumber ? value : value % StatesNumber;
                 SetValue(StateProperty, val);
             }
