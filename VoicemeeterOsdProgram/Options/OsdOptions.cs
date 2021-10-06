@@ -1,58 +1,50 @@
 ﻿using IniParser.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace VoicemeeterOsdProgram.Options
 {
     public class OsdOptions
     {
+        private const string SectionName = "Osd";
+
         public bool IsShowOnlyIfVoicemeeterHidden { get; set; } = true;
         public bool IsInteractable { get; set; } = false;
         public int DurationMs { get; set; } = 2000;
 
         public void ToIniData(ref IniData data)
         {
-            data["Osd"][nameof(IsShowOnlyIfVoicemeeterHidden)] = IsShowOnlyIfVoicemeeterHidden.ToString();
-            data["Osd"][nameof(IsInteractable)] = IsInteractable.ToString();
-            data["Osd"][nameof(DurationMs)] = DurationMs.ToString();
+            var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var prop in properties)
+            {
+                data[SectionName][prop.Name] = prop.GetValue(this).ToString();
+            }
         }
 
         public void FromIniData(ref IniData data)
         {
-            bool result;
-            int resultInt;
+            var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var prop in properties)
+            {
+                ValidateOption(ref data, prop);
+            }
+        }
 
-            var field = data["Osd"][nameof(IsShowOnlyIfVoicemeeterHidden)];
-            if (bool.TryParse(field, out result))
+        private void ValidateOption(ref IniData data, PropertyInfo prop)
+        {
+            var name = prop.Name;
+            var field = data[SectionName][name];
+            try
             {
-                IsShowOnlyIfVoicemeeterHidden = result;
-            } else
-            {
-                data["Osd"][nameof(IsShowOnlyIfVoicemeeterHidden)] = IsShowOnlyIfVoicemeeterHidden.ToString();
+                var result = Convert.ChangeType(field, prop.PropertyType);
+                if (result is not null)
+                {
+                    prop.SetValue(this, result);
+                    return;
+                }
             }
-
-            field = data["Osd"][nameof(IsInteractable)];
-            if (bool.TryParse(field, out result))
-            {
-                IsInteractable = result;
-            }
-            else
-            {
-                data["Osd"][nameof(IsInteractable)] = IsInteractable.ToString();
-            }
-
-            field = data["Osd"][nameof(DurationMs)];
-            if (int.TryParse(field, out resultInt))
-            {
-                DurationMs = resultInt;
-            }
-            else
-            {
-                data["Osd"][nameof(DurationMs)] = DurationMs.ToString();
-            }
+            catch { }
+            data[SectionName][name] = prop.GetValue(this).ToString();
         }
     }
 }
