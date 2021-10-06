@@ -57,6 +57,16 @@ namespace VoicemeeterOsdProgram.Core.Types
             }
         }
 
+        public void Write(float value)
+        {
+            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
+
+            if (m_api.SetParameter(m_command, value) == 0)
+            {
+                m_value = value;
+            }
+        }
+
         public event EventHandler<ValOldNew<float>> ReadValueChanged;
 
         private void OnReadValueChanged(float oldVal, float newVal)

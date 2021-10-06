@@ -18,28 +18,40 @@ namespace VoicemeeterOsdProgram.Factories
             B
         }
 
-        private static void InitFaderParam(StripControl strip, ref VoicemeeterParameter p)
+        private static void InitFaderParam(StripControl strip, VoicemeeterParameter p)
         {
             p.ReadValueChanged += (sender, e) =>
             {
                 strip.FaderCont.Visibility = Visibility.Visible;
                 strip.FaderCont.Fader.Value = e.newVal;
             };
+            strip.FaderCont.Fader.ValueChanged += (sender, e) =>
+            {
+                p.Write((float)e.NewValue);
+            };
         }
 
         private static void MakeFaderParam(StripControl strip, int i, StripType type)
         {
             var p = new VoicemeeterParameter(VoicemeeterApiClient.Api, Gain(i, type));
-            InitFaderParam(strip, ref p);
+            InitFaderParam(strip, p);
             m_vmParams.Add(p);
         }
 
-        private static void InitBtnParam(ButtonContainer btnCtn, ref VoicemeeterParameter p)
+        private static void InitBtnParam(ButtonContainer btnCtn, VoicemeeterParameter p)
         {
             p.ReadValueChanged += (sender, e) =>
             {
                 btnCtn.Visibility = Visibility.Visible;
                 btnCtn.Btn.State = (uint)e.newVal;
+            };
+            btnCtn.Btn.Click += (sender, e) =>
+            {
+                var btn = sender as OutlineTglBtn;
+                if (btn is not null)
+                {
+                    p.Write((float)btn.State);
+                }
             };
         }
 
@@ -59,7 +71,7 @@ namespace VoicemeeterOsdProgram.Factories
             };
             if (p is null) return;
 
-            InitBtnParam(btnCtn, ref p);
+            InitBtnParam(btnCtn, p);
             m_vmParams.Add(p);
         }
     }
