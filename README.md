@@ -18,7 +18,7 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 
 # Explanation
 * Don't forget app.manifest if you want to modify/make your own program based on this or BandWindow might throw Exception.
-* All magic stuff happens in Host and Bridge projects. Without it, it's not that easy to create "true" topmost window. The only alternative is to sign your exe file with Microsoft Windows certificate.
+* All magic stuff happens in Host and Bridge projects (copied from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts)). Without it, it's not that easy to create "true" topmost window. The alternative is to sign your exe file with Microsoft Windows certificate.
 * Main code for topmost window is located in [Interop](VoicemeeterOsdProgram/Interop) based on a modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts) (Thanks for advice and directions from their Discord server!)
 * [Program.cs](VoicemeeterOsdProgram/Program.cs) and [App.xaml.cs](VoicemeeterOsdProgram/App.xaml.cs) are entry points. The program dll's name should be defined [here](Bridge/dllmain.cpp#L42)
 * As far as I know, host is actually renamed ApplicationFrameHost.exe from System32
