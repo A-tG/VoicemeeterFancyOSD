@@ -10,11 +10,11 @@ Install .NET 5.0 Desktop runtime so I don't have to upload a "portable" version 
 
 You can change settings in config/config.ini (created on program launch if not exist). And settings are automatically validated and updated on file change, no need to restart.
 
+# Build instructions
 [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) WPF project
 
 Start/build in debug mode to get acces to Debug Window in tray context menu.
 
-# Build instructions
 * Select Target Platform (x64 or x86, dont use AnyCpu or \*Host.exe will not be copied).
 * Press "Rebuild Solution" to guarantee that up-to-date Host.exe and dependencies are copied to result folder.
 * The program will be compiled in the **Solution's** folder.
