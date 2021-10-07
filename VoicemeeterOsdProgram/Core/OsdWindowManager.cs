@@ -74,6 +74,12 @@ namespace VoicemeeterOsdProgram.Core
             m_window.Show();
         }
 
+        public static void ShowFull()
+        {
+            ApplyVisibilityToOsdElements(Visibility.Visible);
+            Show();
+        }
+
         public static void Hide()
         {
             IsShown = false;

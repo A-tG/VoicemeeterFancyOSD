@@ -18,6 +18,9 @@ namespace VoicemeeterOsdProgram
         [STAThread]
         static void Main(string[] args)
         {
+#if DEBUG
+            //if (!Debugger.IsAttached) Debugger.Launch();
+#endif
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
@@ -26,10 +29,6 @@ namespace VoicemeeterOsdProgram
                 MessageBox.Show("The program is already running", name, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
-#if DEBUG
-            //if (!Debugger.IsAttached) Debugger.Launch();
-#endif
 
             Thread thread = new(() =>
             {

@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls"
         mc:Ignorable="d"
-        Title="DebugWindow" Height="400" Width="400"
+        Title="DebugWindow" ResizeMode="NoResize" SizeToContent="WidthAndHeight"
         Icon="/Resources/Icons/MainIcon.ico">
-    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Margin="15">
         <Button x:Name="ShowBtn" FontSize="18" Padding="5" Width="130"
                 Click="ShowBtn_Click">Show OSD</Button>
         <Separator/>
@@ -27,9 +27,7 @@
         </StackPanel>
         <Separator/>
         <StackPanel>
-            <Button x:Name="RandomizeBtn" FontSize="18" Padding="5" Width="130"
-                    Click="RandomizeBtn_Click">Randomize OSD
-            </Button>
+            <CheckBox x:Name="IsInteractableCheckBox" Content="OSD Window interactable" Click="IsInteractable_Click"/>
         </StackPanel>
     </WrapPanel>
 </Window>

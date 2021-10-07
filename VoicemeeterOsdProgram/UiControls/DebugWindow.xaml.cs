@@ -38,18 +38,18 @@ namespace VoicemeeterOsdProgram.UiControls
 
         private void ShowBtn_Click(object sender, RoutedEventArgs e)
         {
-            OsdWindowManager.Show();
-        }
-
-        private void RandomizeBtn_Click(object sender, RoutedEventArgs e)
-        {
-            OsdWindowManager.RandomizeElementsState();
+            OsdWindowManager.ShowFull();
         }
 
         private void DurationInput_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine(OnlyNumeric(e.Text));
             e.Handled = !OnlyNumeric(e.Text);
+        }
+
+        private void IsInteractable_Click(object sender, RoutedEventArgs e)
+        {
+            OsdWindowManager.IsInteractable = (bool)IsInteractableCheckBox.IsChecked;
         }
     }
 }
