@@ -21,7 +21,9 @@
                                MinHeight="140"
                                Background="{DynamicResource FaderMainBrush}" Foreground="White"
                                SecondBg="{DynamicResource FaderPositiveGainBrush}" GreaterThanValChangeClr="0"
-                               Minimum="-60" Maximum="12" TickFrequency="0.1" IsSnapToTickEnabled="True"
-                               HorizontalAlignment="Center" VerticalAlignment="Stretch" Orientation="Vertical"/>
+                               Minimum="-60" Maximum="12" TickFrequency="0.1" SmallChange="0" LargeChange="0"
+                               IsSnapToTickEnabled="True"
+                               HorizontalAlignment="Center" VerticalAlignment="Stretch" Orientation="Vertical"
+                               MouseWheel="OnFaderMouseWheel" MouseDoubleClick="OnFaderMouseDoubleClick"/>
     </Grid>
 </UserControl>
