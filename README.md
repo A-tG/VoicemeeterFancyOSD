@@ -21,7 +21,7 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 * Launch \*Host.exe or ontop fullscreen functionality will not work.
 
 # Uses
-* [Ini File Parser](https://github.com/rickyah/ini-parser)
+* [INI File Parser](https://github.com/rickyah/ini-parser)
 * [Extended Voicemeeter Remote API wrapper](https://github.com/A-tG/voicemeeter-remote-api-extended)
 * Partially code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts)
 
