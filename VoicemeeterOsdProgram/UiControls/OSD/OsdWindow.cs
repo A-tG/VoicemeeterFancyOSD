@@ -111,8 +111,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void UpdateContMaxSize()
         {
-            var cont = Content as OsdControl;
-            if (cont is null) return;
+            if (Content is not OsdControl cont) return;
 
             cont.MainContentWrap.MaxWidth = m_workingArea.Width;
             cont.MainContentWrap.MaxHeight = m_workingArea.Height;

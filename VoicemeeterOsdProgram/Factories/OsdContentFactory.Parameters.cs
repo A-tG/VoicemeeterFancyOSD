@@ -52,10 +52,9 @@ namespace VoicemeeterOsdProgram.Factories
             };
             btnCtn.Btn.Click += (sender, e) =>
             {
-                var btn = sender as OutlineTglBtn;
-                if (btn is null) return;
+                if (sender is not OutlineTglBtn btn) return;
 
-                p.Write((float)btn.State);
+                p.Write(btn.State);
             };
         }
 

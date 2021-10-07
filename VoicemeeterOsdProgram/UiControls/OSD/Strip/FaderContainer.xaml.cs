@@ -15,8 +15,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private void OnFaderMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            var slider = sender as Slider;
-            if (sender is null) return;
+            if (sender is not Slider slider) return;
 
             double val = 3;
             if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
@@ -34,8 +33,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private void OnFaderMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var slider = sender as Slider;
-            if (sender is null) return;
+            if (sender is not Slider slider) return;
 
             slider.Value = 0;
         }
