@@ -27,7 +27,7 @@ namespace VoicemeeterOsdProgram.Core
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
             App.Current.Exit += (_, _) => Exit();
 
-            _ = Load();
+            _ = LoadAsync();
         }
 
         public static void Init() { }
@@ -96,7 +96,7 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
-        public static async Task Load()
+        public static async Task LoadAsync()
         {
             if (IsInitialized) return;
 
