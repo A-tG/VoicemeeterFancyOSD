@@ -25,7 +25,7 @@
                                     Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
                                     Margin="5"/>
                 <Button x:Name="CloseBtn" Style="{DynamicResource PressButton}"
-                        Margin="5" BorderThickness="0"
+                        Margin="0,3,3,0" BorderThickness="0"
                         Width="15" Height="15"
                         HorizontalAlignment="Right" VerticalAlignment="Top" 
                         Visibility="Collapsed" Background="Transparent">
@@ -41,7 +41,7 @@
     </Viewbox>
     <!-- Used to add rounded corners -->
     <UserControl.Clip>
-        <RectangleGeometry RadiusX="10" RadiusY="10">
+        <RectangleGeometry RadiusX="6" RadiusY="6">
             <RectangleGeometry.Rect>
                 <MultiBinding Converter="{StaticResource RectConverter}">
                     <Binding ElementName="OsdWindow" Path="ActualWidth"/>
