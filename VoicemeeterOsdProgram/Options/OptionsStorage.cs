@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Timers;
+using System.Windows.Threading;
 
 namespace VoicemeeterOsdProgram.Options
 {
@@ -18,8 +18,10 @@ namespace VoicemeeterOsdProgram.Options
 
         private static readonly FileIniDataParser m_parser = new();
         private static IniData m_data = new();
-        private static FileSystemWatcher m_watcher;
-        private static Timer m_timer = new() { Interval = 1000, AutoReset = false};
+        private static FileSystemWatcher m_watcher = new();
+        private static DispatcherTimer m_timer = new(DispatcherPriority.Background) { Interval = TimeSpan.FromMilliseconds(1000)};
+        private static bool m_isWatcherEnabled;
+        private static bool m_isWatcherPaused;
 
         static OptionsStorage()
         {
@@ -29,17 +31,78 @@ namespace VoicemeeterOsdProgram.Options
             _ = InitAsync();
         }
 
+        private static async Task InitAsync()
+        {
+            _ = await TryReadAsync();
+            _ = await TrySaveAsync();
+
+            m_timer.Tick += OnTimerTick;
+
+            m_watcher.Path = Path.GetDirectoryName(m_path);
+            m_watcher.Filter = Path.GetFileName(m_path);
+            m_watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+            m_watcher.Changed += OnConfigFileChanged;
+            IsWatcherEnabled = true;
+        }
+
         public static void Init() { }
+
+        public static bool IsWatcherEnabled
+        {
+            get => m_isWatcherEnabled;
+            set
+            {
+                m_isWatcherEnabled = value;
+                if (value)
+                {
+                    m_watcher.EnableRaisingEvents = !IsWatcherPaused;
+                    if (IsWatcherPaused)
+                    {
+                        m_timer.Stop();
+                    }
+                }
+                else
+                {
+                    m_watcher.EnableRaisingEvents = false;
+                    m_timer.Stop();
+                }
+            }
+        }
+
+        public static bool IsWatcherPaused
+        {
+            get => m_isWatcherPaused;
+            set
+            {
+                m_isWatcherPaused = value;
+                if (value)
+                {
+                    m_watcher.EnableRaisingEvents = false;
+                    m_timer.Stop();
+                }
+                else
+                {
+                    m_watcher.EnableRaisingEvents = IsWatcherEnabled;
+                    if (!IsWatcherEnabled)
+                    {
+                        m_timer.Stop();
+                    }
+                }
+            }
+        }
 
         public static async Task<bool> TrySaveAsync()
         {
-            await Task.Yield();
+            await Task.Delay(1);
             return TrySave();
         }
 
         public static bool TrySave()
         {
             bool result = false;
+
+            IsWatcherPaused = true;
+
             try
             {
                 var directoryPath = Path.GetDirectoryName(m_path);
@@ -54,12 +117,14 @@ namespace VoicemeeterOsdProgram.Options
             }
             catch { }
 
+            IsWatcherPaused = false;
+
             return result;
         }
 
         public static async Task<bool> TryReadAsync()
         {
-            await Task.Yield();
+            await Task.Delay(1);
             return TryRead();
         }
 
@@ -77,23 +142,6 @@ namespace VoicemeeterOsdProgram.Options
             catch { }
 
             return result;
-        }
-
-        private static async Task InitAsync()
-        {
-            _ = await TryReadAsync();
-            _ = await TrySaveAsync();
-
-            m_timer.Elapsed += OnTimerTick;
-
-            m_watcher = new()
-            {
-                Path = Path.GetDirectoryName(m_path),
-                Filter = Path.GetFileName(m_path),
-                EnableRaisingEvents = true,
-                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size
-            };
-            m_watcher.Changed += OnConfigFileChanged;
         }
 
         private static void ToIniData<T>(T optionsObj)
@@ -156,10 +204,8 @@ namespace VoicemeeterOsdProgram.Options
         private static void OnTimerTick(object sender, EventArgs e)
         {
             m_timer.Stop();
-            m_watcher.EnableRaisingEvents = false;
             TryRead();
             TrySave();
-            m_watcher.EnableRaisingEvents = true;
         }
     }
 }

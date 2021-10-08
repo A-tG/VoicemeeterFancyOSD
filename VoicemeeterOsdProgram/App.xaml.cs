@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Tray;
