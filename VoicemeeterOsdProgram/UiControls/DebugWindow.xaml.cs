@@ -43,7 +43,6 @@ namespace VoicemeeterOsdProgram.UiControls
 
         private void DurationInput_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine(OnlyNumeric(e.Text));
             e.Handled = !OnlyNumeric(e.Text);
         }
 
