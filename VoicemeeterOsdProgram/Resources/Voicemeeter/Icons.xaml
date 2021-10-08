@@ -3,7 +3,6 @@
                     xmlns:Ui="clr-namespace:VoicemeeterOsdProgram.UiControls">
 
     <Style x:Key="IconBaseStyle" TargetType="{x:Type Ui:Icon}">
-        <Setter Property="SnapsToDevicePixels" Value="False"/>
         <Setter Property="Stretch" Value="Uniform"/>
         <Setter Property="StatesNumber" Value="1"/>
     </Style>
@@ -74,7 +73,7 @@
                         <Canvas Width="100" Height="100">
                             <Path x:Name="Speaker" Fill="{TemplateBinding NormalColor}"
                                   Data="M 0,30 H 25 L 55,0 V 100 L 25,70 H 0 Z"/>
-                            <Path x:Name="Waves" Stroke="{TemplateBinding NormalColor}" StrokeThickness="10"
+                            <Path x:Name="Waves" Stroke="{TemplateBinding NormalColor}" StrokeThickness="12"
                                   Data="M 65,10 A 65,65 0 0 1 65,90
                                         M 85,5 A 85,85 0 0 1 85,95"/>
                             <Path x:Name="Cross" Stroke="{TemplateBinding ToggledColor}" StrokeThickness="15" Visibility="Hidden"
