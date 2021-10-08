@@ -44,12 +44,13 @@ namespace VoicemeeterOsdProgram.Core
             m_tickTimer.Interval = TimeSpan.FromMilliseconds(OptionsStorage.Osd.DurationMs);
             m_tickTimer.Tick += TimerTick;
 
-            IsInteractable = OptionsStorage.Osd.IsInteractable;
-            BgOpacity = OptionsStorage.Osd.BackgroundOpacity;
+            var options = OptionsStorage.Osd;
+            IsInteractable = options.IsInteractable;
+            BgOpacity = options.BackgroundOpacity;
 
-            OptionsStorage.Osd.IsInteractableChanged += (_, val) => IsInteractable = val;
-            OptionsStorage.Osd.DurationMsChanged += (_, val) => DurationMs = val;
-            OptionsStorage.Osd.BackgroundOpacityChanged += (_, val) => BgOpacity = val;
+            options.IsInteractableChanged += (_, val) => IsInteractable = val;
+            options.DurationMsChanged += (_, val) => DurationMs = val;
+            options.BackgroundOpacityChanged += (_, val) => BgOpacity = val;
 
             m_wpfControl.CloseBtn.Click += OnCloseButtonClick;
             m_wpfControl.MouseEnter += OnMouseEnter;
