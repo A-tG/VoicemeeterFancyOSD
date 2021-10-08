@@ -36,7 +36,7 @@
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Foreground">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="{DynamicResource VmActiveElementRedColor}"/>
+                                    <SolidColorBrush Color="{DynamicResource VmActiveElementCyanColor}"/>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
