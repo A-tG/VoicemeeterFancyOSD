@@ -2,7 +2,6 @@
 using AtgDev.Voicemeeter.Types;
 using AtgDev.Voicemeeter.Utils;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -27,7 +26,8 @@ namespace VoicemeeterOsdProgram.Core
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
             App.Current.Exit += (_, _) => Exit();
-            Load();
+
+            _ = Load();
         }
 
         public static void Init() { }
@@ -96,7 +96,7 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
-        public static async void Load()
+        public static async Task Load()
         {
             if (IsInitialized) return;
 

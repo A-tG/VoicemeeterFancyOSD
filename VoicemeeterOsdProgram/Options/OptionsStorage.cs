@@ -1,11 +1,11 @@
 ﻿using IniParser;
 using IniParser.Model;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace VoicemeeterOsdProgram.Options
 {
@@ -18,38 +18,30 @@ namespace VoicemeeterOsdProgram.Options
 
         private static readonly FileIniDataParser m_parser = new();
         private static IniData m_data = new();
-        private static readonly FileSystemWatcher m_watcher;
-        private static DispatcherTimer m_timer = new() { Interval = TimeSpan.FromMilliseconds(1000)};
+        private static FileSystemWatcher m_watcher;
+        private static Timer m_timer = new() { Interval = 1000, AutoReset = false};
 
         static OptionsStorage()
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
             System.Windows.Application.Current.Exit += (_, _) => Exit();
 
-            TryRead();
-            TrySave();
-
-            m_timer.Tick += OnTimerTick;
-
-            m_watcher = new()
-            {
-                Path = Path.GetDirectoryName(m_path),
-                Filter = Path.GetFileName(m_path),
-                EnableRaisingEvents = true,
-                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size
-            };
-            m_watcher.Changed += OnConfigFileChanged;
+            _ = InitAsync();
         }
 
         public static void Init() { }
+
+        public static async Task<bool> TrySaveAsync()
+        {
+            await Task.Yield();
+            return TrySave();
+        }
 
         public static bool TrySave()
         {
             bool result = false;
             try
             {
-                m_data = new();
-
                 var directoryPath = Path.GetDirectoryName(m_path);
                 if (!Directory.Exists(directoryPath))
                 {
@@ -65,6 +57,12 @@ namespace VoicemeeterOsdProgram.Options
             return result;
         }
 
+        public static async Task<bool> TryReadAsync()
+        {
+            await Task.Yield();
+            return TryRead();
+        }
+
         public static bool TryRead()
         {
             bool result = false;
@@ -73,11 +71,29 @@ namespace VoicemeeterOsdProgram.Options
                 m_data = m_parser.ReadFile(m_path);
                 FromIniData(Osd);
 
+                m_data = new();
                 result = true;
             }
             catch { }
 
             return result;
+        }
+
+        private static async Task InitAsync()
+        {
+            _ = await TryReadAsync();
+            _ = await TrySaveAsync();
+
+            m_timer.Elapsed += OnTimerTick;
+
+            m_watcher = new()
+            {
+                Path = Path.GetDirectoryName(m_path),
+                Filter = Path.GetFileName(m_path),
+                EnableRaisingEvents = true,
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size
+            };
+            m_watcher.Changed += OnConfigFileChanged;
         }
 
         private static void ToIniData<T>(T optionsObj)
@@ -135,7 +151,6 @@ namespace VoicemeeterOsdProgram.Options
         {
             m_timer.Stop();
             m_timer.Start();
-            Debug.WriteLine($"config file changed");
         }
 
         private static void OnTimerTick(object sender, EventArgs e)
