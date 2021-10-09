@@ -1,7 +1,7 @@
 # Voicemeeter Fancy OSD
 ![](https://i.imgur.com/YpWj6YI.gif)
 
-On-Screen display for Voicemeeter that works with fullscreen apps by using private WinAPI without hooking into Graphics API.
+On-Screen display for [Voicemeeter](https://voicemeeter.com/) that works with fullscreen apps by using private WinAPI without hooking into Graphics API.
 
 Windows 10 or newer is required. 
 May work with older Windows versions (not older than Windows 7) but OSD will work as normal window and will not be displayed on top of fullscreen applications.
