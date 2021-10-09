@@ -8,7 +8,7 @@ May work with older Windows versions (not older than Windows 7) but OSD will wor
 
 Install .NET 5.0 Desktop runtime so I don't have to upload a "portable" version of the program that's about 150 MB in size.
 
-You can change settings in config\config.ini (created on program launch if not exist). And settings are automatically validated and updated on file change, no need to restart.
+You can change settings in *PROGRAM_LOCATION\config\config.ini* (created on program launch if not exist). And settings are automatically validated and updated on file change, no need to restart.
 
 # What's the point?
 If you change gain/routing by using Voicemeeter Macro Buttons (or maybe some other way), for example if some of your Button's configuration looks like this
