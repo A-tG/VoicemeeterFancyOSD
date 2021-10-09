@@ -33,8 +33,7 @@ namespace VoicemeeterOsdProgram.Options
 
         private static async Task InitAsync()
         {
-            _ = await TryReadAsync();
-            _ = await TrySaveAsync();
+            await ValidateConfigFileAsync();
 
             m_timer.Tick += OnTimerTick;
 
@@ -93,6 +92,7 @@ namespace VoicemeeterOsdProgram.Options
 
         public static async Task<bool> TrySaveAsync()
         {
+            // Dirty hack to make it async
             await Task.Delay(1);
             return TrySave();
         }
@@ -124,6 +124,7 @@ namespace VoicemeeterOsdProgram.Options
 
         public static async Task<bool> TryReadAsync()
         {
+            // Dirty hack to make it async
             await Task.Delay(1);
             return TryRead();
         }
@@ -131,6 +132,9 @@ namespace VoicemeeterOsdProgram.Options
         public static bool TryRead()
         {
             bool result = false;
+
+            IsWatcherPaused = false;
+
             try
             {
                 m_data = m_parser.ReadFile(m_path);
@@ -140,6 +144,8 @@ namespace VoicemeeterOsdProgram.Options
                 result = true;
             }
             catch { }
+
+            IsWatcherPaused = true;
 
             return result;
         }
@@ -190,6 +196,12 @@ namespace VoicemeeterOsdProgram.Options
             return members.First(m => m.FieldType.Name == optionsObj.GetType().Name).Name;
         }
 
+        private static async Task ValidateConfigFileAsync()
+        {
+            bool readRes = await TryReadAsync();
+            bool writeRes = await TrySaveAsync();
+        }
+
         private static void Exit()
         {
             m_timer?.Stop();
@@ -204,8 +216,7 @@ namespace VoicemeeterOsdProgram.Options
         private static void OnTimerTick(object sender, EventArgs e)
         {
             m_timer.Stop();
-            TryRead();
-            TrySave();
+            _ = ValidateConfigFileAsync();
         }
     }
 }
