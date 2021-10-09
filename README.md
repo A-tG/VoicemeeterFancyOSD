@@ -10,6 +10,14 @@ Install .NET 5.0 Desktop runtime so I don't have to upload a "portable" version 
 
 You can change settings in config\config.ini (created on program launch if not exist). And settings are automatically validated and updated on file change, no need to restart.
 
+# What's the point?
+If you change gain/routing by using Voicemeeter Macro Buttons (or maybe some other way), for example some of your Button's configuration looks like that
+![](https://i.imgur.com/M3mwHnY.png)
+it's very convenient to see changes on little On-screen display instead of opening the Voicemeeter window.
+In other words it works similar to Windows volume pop-up but for Voicemeeter so you can enjoy all good thing like volume/gain in decibels instead of unnatural 0-100 range.
+For example in Voicemeeter you change gain from 0 to -60 you will experience smooth volume transition form loud to quiet, but in Windows volume pop-up
+100% is 0 in Voicemeeter, 50% is actually a equivalent to Voicemeeter's -10.0, 25% is around -20.0, 12.5% is -30.0 and so on - not very smooth transition.
+
 # Build instructions
 [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) WPF project
 
