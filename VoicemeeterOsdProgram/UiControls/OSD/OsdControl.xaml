@@ -26,7 +26,7 @@
                                     Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
                                     Margin="0"/>
                 <Button x:Name="CloseBtn" Style="{DynamicResource PressButton}"
-                        Margin="5" BorderThickness="0"
+                        Margin="5" Padding="0" BorderThickness="0"
                         Width="20" Height="20"
                         HorizontalAlignment="Right" VerticalAlignment="Top" 
                         Visibility="Collapsed" Background="Transparent">
