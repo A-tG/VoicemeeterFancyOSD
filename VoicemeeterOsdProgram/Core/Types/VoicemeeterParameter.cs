@@ -1,14 +1,18 @@
 ﻿using AtgDev.Voicemeeter;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace VoicemeeterOsdProgram.Core.Types
 {
-    public class VoicemeeterParameter
+    public class VoicemeeterParameter<T>
     {
-        private readonly string m_command;
-        private readonly RemoteApiExtender m_api;
-        private bool m_isInit;
-        private float m_value;
+        protected readonly string m_command;
+        protected readonly RemoteApiExtender m_api;
+        protected bool m_isInit;
+        protected T m_value;
 
         public VoicemeeterParameter(RemoteApiExtender api, string command)
         {
@@ -16,12 +20,12 @@ namespace VoicemeeterOsdProgram.Core.Types
             m_command = command;
         }
 
-        public float Value
+        public T Value
         {
             get => m_value;
-            private set
+            protected set
             {
-                if ((value != m_value) && m_isInit)
+                if ((!m_value.Equals(value)) && m_isInit)
                 {
                     OnReadValueChanged(m_value, value);
                 }
@@ -29,49 +33,11 @@ namespace VoicemeeterOsdProgram.Core.Types
             }
         }
 
-        public void Read()
+        public event EventHandler<ValOldNew<T>> ReadValueChanged;
+
+        private void OnReadValueChanged(T oldVal, T newVal)
         {
-            ReadIsIgnoreEvent(false);
-        }
-
-        public void ReadNoEvent()
-        {
-            ReadIsIgnoreEvent(true);
-        }
-
-        public void ReadIsIgnoreEvent(bool isIgnore)
-        {
-            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
-
-            if (m_api.GetParameter(m_command, out float val) == 0)
-            {
-                if (isIgnore)
-                {
-                    m_value = val;
-                } 
-                else
-                {
-                    Value = val;
-                }
-                m_isInit = true;
-            }
-        }
-
-        public void Write(float value)
-        {
-            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
-
-            if (m_api.SetParameter(m_command, value) == 0)
-            {
-                m_value = value;
-            }
-        }
-
-        public event EventHandler<ValOldNew<float>> ReadValueChanged;
-
-        private void OnReadValueChanged(float oldVal, float newVal)
-        {
-            ValOldNew<float> values = new(oldVal, newVal);
+            ValOldNew<T> values = new(oldVal, newVal);
             ReadValueChanged?.Invoke(this, values);
         }
     }

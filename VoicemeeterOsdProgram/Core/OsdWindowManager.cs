@@ -19,7 +19,7 @@ namespace VoicemeeterOsdProgram.Core
         private static OsdWindow m_window;
         private static DispatcherTimer m_tickTimer;
         private static bool m_isMouseEntered;
-        private static VoicemeeterParameter[] m_vmParams = Array.Empty<VoicemeeterParameter>();
+        private static IVmParamReadable[] m_vmParams = Array.Empty<IVmParamReadable>();
 
         static OsdWindowManager()
         {
@@ -55,9 +55,7 @@ namespace VoicemeeterOsdProgram.Core
             m_wpfControl.CloseBtn.Click += OnCloseButtonClick;
             m_wpfControl.MouseEnter += OnMouseEnter;
             m_wpfControl.MouseLeave += OnMouseLeave;
-
-            VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
-            VoicemeeterApiClient.ProgramTypeChange += OnVoicemeeterTypeChange;
+            
             VoicemeeterApiClient.Loaded += OnVoicemeeterLoad;
         }
 
@@ -127,7 +125,7 @@ namespace VoicemeeterOsdProgram.Core
             if (type == VoicemeeterType.None) return;
 
             m_wpfControl.MainContent.Children.Clear();
-            m_vmParams = Array.Empty<VoicemeeterParameter>();
+            m_vmParams = Array.Empty<IVmParamReadable>();
             OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_vmParams, type);
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
         }
@@ -162,6 +160,8 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void OnVoicemeeterLoad(object sender, EventArgs e)
         {
+            VoicemeeterApiClient.ProgramTypeChange += OnVoicemeeterTypeChange;
+            VoicemeeterApiClient.NewParameters += OnNewVoicemeeterParams;
             Application.Current.Dispatcher.Invoke(() => RefillOsd(VoicemeeterApiClient.ProgramType));
         }
 

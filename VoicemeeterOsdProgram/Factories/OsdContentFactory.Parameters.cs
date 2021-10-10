@@ -18,7 +18,7 @@ namespace VoicemeeterOsdProgram.Factories
             B
         }
 
-        private static void InitFaderParam(StripControl strip, VoicemeeterParameter p)
+        private static void InitFaderParam(StripControl strip, VoicemeeterNumParam p)
         {
             p.ReadValueChanged += (sender, e) =>
             {
@@ -38,12 +38,12 @@ namespace VoicemeeterOsdProgram.Factories
 
         private static void MakeFaderParam(StripControl strip, int i, StripType type)
         {
-            var p = new VoicemeeterParameter(VoicemeeterApiClient.Api, Gain(i, type));
+            var p = new VoicemeeterNumParam(VoicemeeterApiClient.Api, Gain(i, type));
             InitFaderParam(strip, p);
             m_vmParams.Add(p);
         }
 
-        private static void InitBtnParam(ButtonContainer btnCtn, VoicemeeterParameter p)
+        private static void InitBtnParam(ButtonContainer btnCtn, VoicemeeterNumParam p)
         {
             p.ReadValueChanged += (sender, e) =>
             {
@@ -63,7 +63,7 @@ namespace VoicemeeterOsdProgram.Factories
             var api = VoicemeeterApiClient.Api;
             if (api is null) return;
 
-            VoicemeeterParameter p = bType switch
+            VoicemeeterNumParam p = bType switch
             {
                 BtnType.Mono => new (api, Mono(i, sType)),
                 BtnType.Mute => new (api, Mute(i, sType)),

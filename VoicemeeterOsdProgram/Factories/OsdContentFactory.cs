@@ -9,10 +9,10 @@ namespace VoicemeeterOsdProgram.Factories
 {
     public static partial class OsdContentFactory
     {
-        private static List<VoicemeeterParameter> m_vmParams;
+        private static List<IVmParamReadable> m_vmParams;
         private static VoicemeeterProperties m_vmProperties;
 
-        public static void FillOsdWindow(ref OsdControl osd, ref VoicemeeterParameter[] vmParams, VoicemeeterType type)
+        public static void FillOsdWindow(ref OsdControl osd, ref IVmParamReadable[] vmParams, VoicemeeterType type)
         {
             m_vmProperties = new VoicemeeterProperties(type);
             m_vmParams = new();
