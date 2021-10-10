@@ -12,15 +12,16 @@ namespace VoicemeeterOsdProgram.Core
         private const double SlowTickTimeMs = 1000;
         private const double NormalTickTime = 1000 / 30;
         private const double FastTickTimeMs = 1000 / 60;
+        private const int VmTypeChangeDelayMs = 4000;
 
         private static Timer m_timer = new()
         {
             AutoReset = true,
             Interval = NormalTickTime
         };
+        private static Timer m_typeChangeTimer;
         private static VoicemeeterType m_type;
         private static bool m_isSlowUpdate;
-        private static bool m_isHandlingParams = true;
 
         static VoicemeeterApiClient()
         {
@@ -50,15 +51,7 @@ namespace VoicemeeterOsdProgram.Core
             private set;
         }
 
-        public static bool IsHandlingParams
-        {
-            get => m_isHandlingParams;
-            set
-            {
-                m_isHandlingParams = value;
-                IsSlowUpdate = !value;
-            }
-        }
+        public static bool IsHandlingParams { get; set; } = true;
 
         public static VoicemeeterType ProgramType
         {
@@ -137,6 +130,7 @@ namespace VoicemeeterOsdProgram.Core
         public static void Exit()
         {
             m_timer?.Stop();
+            m_typeChangeTimer?.Stop();
             Api?.Logout();
         }
 
@@ -210,7 +204,19 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void OnProgramTypeChange(VoicemeeterType type)
         {
-            ProgramTypeChange?.Invoke(null, type);
+            m_typeChangeTimer?.Stop();
+            m_typeChangeTimer?.Dispose();
+
+            m_typeChangeTimer = new() 
+            {
+                AutoReset = false,
+                Interval = VmTypeChangeDelayMs
+            };
+            m_typeChangeTimer.Elapsed += (sender, _) =>
+            {
+                ProgramTypeChange.Invoke(null, type);
+                if (sender is Timer t) t.Dispose();
+            };
         }
 
         private static void OnLoad()
