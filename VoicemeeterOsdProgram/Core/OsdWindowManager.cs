@@ -145,7 +145,8 @@ namespace VoicemeeterOsdProgram.Core
             const string WindowText = "VoiceMeeter";
 
             IntPtr hWnd = FindWindowEx(IntPtr.Zero, IntPtr.Zero, WindowClass, WindowText);
-            return !WindowObstructedHelper.IsObstructed(hWnd);
+            bool isFocused = GetForegroundWindow() == hWnd;
+            return isFocused || !WindowObstructedHelper.IsObstructed(hWnd);
         }
 
         private static void OnNewVoicemeeterParams(object sender, EventArgs e)
