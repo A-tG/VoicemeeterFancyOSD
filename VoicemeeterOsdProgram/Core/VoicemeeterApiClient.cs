@@ -160,10 +160,7 @@ namespace VoicemeeterOsdProgram.Core
 
             if (type != m_type)
             {
-                if (m_type != VoicemeeterType.None)
-                {
-                    OnProgramTypeChange(m_type);
-                }
+                OnProgramTypeChange(type);
                 m_type = type;
             }
         }

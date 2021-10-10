@@ -124,6 +124,8 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void RefillOsd(VoicemeeterType type)
         {
+            if (type == VoicemeeterType.None) return;
+
             m_wpfControl.MainContent.Children.Clear();
             m_vmParams = Array.Empty<VoicemeeterParameter>();
             OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_vmParams, type);
