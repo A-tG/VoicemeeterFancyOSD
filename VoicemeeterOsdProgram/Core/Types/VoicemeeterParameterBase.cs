@@ -32,6 +32,8 @@ namespace VoicemeeterOsdProgram.Core.Types
                 m_value = value;
             }
         }
+        public abstract int GetParameter(out T value);
+        public abstract int SetParameter(T value);
 
         public void ReadNotifyChanges()
         {
@@ -63,7 +65,15 @@ namespace VoicemeeterOsdProgram.Core.Types
             }
         }
 
-        public abstract int GetParameter(out T value);
+        public void Write(T value)
+        {
+            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
+
+            if (SetParameter(value) == 0)
+            {
+                m_value = value;
+            }
+        }
 
         public event EventHandler<ValOldNew<T>> ReadValueChanged;
         public event EventHandler<ValOldNew<T>> ValueRead;

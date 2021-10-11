@@ -22,6 +22,7 @@ namespace VoicemeeterOsdProgram.Core
         private static VoicemeeterType m_type;
         private static bool m_isSlowUpdate;
         private static bool m_isTypeChanging;
+        private static bool m_isVmRunning;
 
         static VoicemeeterApiClient()
         {
@@ -39,7 +40,24 @@ namespace VoicemeeterOsdProgram.Core
 
         public static bool IsInitialized { get; private set; }
 
-        public static bool IsVoicemeeterRunning { get; private set; }
+        public static bool IsVoicemeeterRunning 
+        {
+            get => m_isVmRunning;
+            private set
+            {
+                if (m_isVmRunning == value) return;
+
+                m_isVmRunning = value;
+                if (value)
+                {
+                    VoicemeeterTurnedOn?.Invoke(null, EventArgs.Empty);
+                }
+                else
+                {
+                    VoicemeeterTurnedOff?.Invoke(null, EventArgs.Empty);
+                }
+            }
+        }
 
         public static bool IsHandlingParams { get; set; } = true;
 
@@ -155,6 +173,8 @@ namespace VoicemeeterOsdProgram.Core
                     IsVoicemeeterRunning = false;
                     break;
                 default:
+                    // if Voicemeeter launched after OSD it can return -1 (error) infinitely
+                    // until IsParametersDirty() is called
                     Api.IsParametersDirty();
                     break;
             }
@@ -185,6 +205,8 @@ namespace VoicemeeterOsdProgram.Core
         private static event EventHandler m_loaded;
 
         public static event EventHandler NewParameters;
+        public static event EventHandler VoicemeeterTurnedOff;
+        public static event EventHandler VoicemeeterTurnedOn;
         public static event EventHandler<VoicemeeterType> ProgramTypeChange;
         public static event EventHandler Loaded
         {

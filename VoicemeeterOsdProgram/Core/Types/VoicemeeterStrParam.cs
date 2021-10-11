@@ -11,19 +11,8 @@ namespace VoicemeeterOsdProgram.Core.Types
             m_isInit = true;
         }
 
-        public override int GetParameter(out string val)
-        {
-            return m_api.GetParameter(m_command, out val);
-        }
+        public override int GetParameter(out string val) => m_api.GetParameter(m_command, out val);
 
-        public void Write(string value)
-        {
-            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
-
-            if (m_api.SetParameter(m_command, value) == 0)
-            {
-                m_value = value;
-            }
-        }
+        public override int SetParameter(string value) => m_api.SetParameter(m_command, value);
     }
 }
