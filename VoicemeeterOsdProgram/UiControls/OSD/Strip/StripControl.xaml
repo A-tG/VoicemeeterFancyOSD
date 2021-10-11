@@ -13,14 +13,13 @@
         <SolidColorBrush Color="{DynamicResource VmSepColor}"/>
     </UserControl.BorderBrush>
     <DockPanel Name="ContentWrap" LastChildFill="True">
-        <TextBlock Name="StripLabel"
+        <TextBlock Name="StripLabel" Text="STRIP_LABEL"
                    DockPanel.Dock="Top" MaxWidth="75"
                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"
                    TextTrimming="CharacterEllipsis" FontSize="16" FontWeight="Bold">
             <TextBlock.Foreground>
                 <SolidColorBrush Color="{DynamicResource VmDarkTextColor}"/>
             </TextBlock.Foreground>
-            STRIP_LABEL
         </TextBlock>
         
         <Grid Name="ControlElements" HorizontalAlignment="Center">

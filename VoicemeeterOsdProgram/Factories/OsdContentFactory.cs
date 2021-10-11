@@ -16,6 +16,7 @@ namespace VoicemeeterOsdProgram.Factories
         {
             m_vmProperties = new VoicemeeterProperties(type);
             m_vmParams = new();
+            var api = VoicemeeterApiClient.Api;
 
             osd.AllowAutoUpdateSeparators = false;
 
@@ -23,9 +24,8 @@ namespace VoicemeeterOsdProgram.Factories
             for (int i = 0; i < m_vmProperties.hardInputs; i++)
             {
                 var strip = GetHardwareInputStrip(i);
-                VoicemeeterApiClient.Api.GetParameter(VoicemeeterCommandsFactory.InputLabel(i), out string name);
-                strip.StripLabel.Text = string.IsNullOrEmpty(name) ? $"HardIn{i + 1}" : name;
 
+                MakeStripLabelParam(strip, i, $"HardIn{i + 1}");
                 MakeFaderParam(strip, i, StripType.Input);
 
                 osd.MainContent.Children.Add(strip);
@@ -37,9 +37,8 @@ namespace VoicemeeterOsdProgram.Factories
                 var stripIndex = m_vmProperties.hardInputs + i;
 
                 var strip = GetVirtualInputStrip(stripIndex);
-                VoicemeeterApiClient.Api.GetParameter(VoicemeeterCommandsFactory.InputLabel(stripIndex), out string name);
-                strip.StripLabel.Text = string.IsNullOrEmpty(name) ? $"VirtIn{i + 1}" : name;
 
+                MakeStripLabelParam(strip, stripIndex, $"VirtIn{i + 1}");
                 MakeFaderParam(strip, stripIndex, StripType.Input);
 
                 osd.MainContent.Children.Add(strip);
@@ -49,7 +48,7 @@ namespace VoicemeeterOsdProgram.Factories
             for (int i = 0; i < m_vmProperties.hardOutputs; i++)
             {
                 var strip = GetOutputStrip(i);
-                var name = m_vmProperties.hardOutputs == 1 ? $"A" : $"A{i + 1}";
+                var name = (m_vmProperties.hardOutputs == 1) ? "A" : $"A{i + 1}";
                 strip.StripLabel.Text = name;
 
                 MakeFaderParam(strip, i, StripType.Output);
@@ -63,7 +62,7 @@ namespace VoicemeeterOsdProgram.Factories
                 var stripIndex = m_vmProperties.hardOutputs + i;
 
                 var strip = GetOutputStrip(stripIndex);
-                var name = m_vmProperties.virtOutputs == 1 ? $"B" : $"B{i + 1}";
+                var name = (m_vmProperties.virtOutputs == 1) ? "B" : $"B{i + 1}";
                 strip.StripLabel.Text = name;
 
                 MakeFaderParam(strip, stripIndex, StripType.Output);
@@ -77,7 +76,7 @@ namespace VoicemeeterOsdProgram.Factories
             // read first time to initialize values
             foreach (var p in m_vmParams)
             {
-                p.ReadNoEvent();
+                p.Read();
             }
 
             vmParams = m_vmParams.ToArray();

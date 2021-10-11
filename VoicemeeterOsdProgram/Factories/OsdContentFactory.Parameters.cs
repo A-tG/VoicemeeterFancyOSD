@@ -18,6 +18,22 @@ namespace VoicemeeterOsdProgram.Factories
             B
         }
 
+        private static void MakeStripLabelParam(StripControl strip, int index, string defaultLabel)
+        {
+            var api = VoicemeeterApiClient.Api;
+
+            VoicemeeterStrParam p = new(api, InputLabel(index));
+            p.ValueRead += (_, e) =>
+            {
+                string name = e.newVal;
+                if (e.newVal == e.oldVal) return;
+
+                strip.StripLabel.Text = string.IsNullOrEmpty(name) ? defaultLabel : name;
+            };
+            p.ReadIsNotifyChanges(true);
+            m_vmParams.Add(p);
+        }
+
         private static void InitFaderParam(StripControl strip, VoicemeeterNumParam p)
         {
             p.ReadValueChanged += (sender, e) =>

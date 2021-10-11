@@ -2,16 +2,10 @@
 {
     public interface IVmParamReadable
     {
-        public void Read()
-        {
-            ReadIsIgnoreEvent(false);
-        }
+        public void ReadNotifyChanges();
 
-        public void ReadNoEvent()
-        {
-            ReadIsIgnoreEvent(true);
-        }
+        public void Read();
 
-        public void ReadIsIgnoreEvent(bool isIgnore);
+        public void ReadIsNotifyChanges(bool isIgnore);
     }
 }

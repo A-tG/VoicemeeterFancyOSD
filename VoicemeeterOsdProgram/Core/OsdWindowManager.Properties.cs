@@ -10,7 +10,7 @@ namespace VoicemeeterOsdProgram.Core
             get => VoicemeeterApiClient.IsHandlingParams;
             set
             {
-                if (value) UpdateVmParams(true);
+                if (value) UpdateVmParams(false);
 
                 VoicemeeterApiClient.IsHandlingParams = value;
             }

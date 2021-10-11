@@ -21,6 +21,7 @@ namespace VoicemeeterOsdProgram.Core
         };
         private static VoicemeeterType m_type;
         private static bool m_isSlowUpdate;
+        private static bool m_isTypeChanging;
 
         static VoicemeeterApiClient()
         {
@@ -61,7 +62,7 @@ namespace VoicemeeterOsdProgram.Core
             get => m_timer.Interval;
             set
             {
-                if (m_timer.Interval != value)
+                if ((m_timer.Interval != value) && (value > 0))
                 {
                     m_timer.Interval = value;
                 }
@@ -134,31 +135,36 @@ namespace VoicemeeterOsdProgram.Core
             }
 
             HandleProgramType();
-            if (IsVoicemeeterLaunched) HandleParameters();
+            if (IsVoicemeeterLaunched && !m_isTypeChanging) HandleParameters();
         }
 
         private static void HandleServerConnection()
         {
             var dummyCommand = "Strip[0].Mute";
-            var res = Api?.GetParameter(dummyCommand, out float _);
+            var res = Api.GetParameter(dummyCommand, out float _);
             if (res == -2)
             {
                 IsSlowUpdate = true;
+                IsVoicemeeterLaunched = false;
             }
             else if (res == 0)
             {
                 IsSlowUpdate = false;
+                IsVoicemeeterLaunched = true;
             }
         }
 
         private static void HandleProgramType()
         {
+            if (m_isTypeChanging) return;
+
             var type = ProgramType;
+            if (type == VoicemeeterType.None) return;
 
             if (type != m_type)
             {
+                if (m_type != VoicemeeterType.None) OnProgramTypeChange(type);
                 m_type = type;
-                OnProgramTypeChange(type);
             }
         }
 
@@ -202,8 +208,11 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void OnProgramTypeChange(VoicemeeterType type)
         {
+            m_isTypeChanging = true;
+
             ProgramTypeChange?.Invoke(null, type);
-            IsVoicemeeterLaunched = type != VoicemeeterType.None;
+
+            m_isTypeChanging = false;
         }
     }
 }

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace VoicemeeterOsdProgram.Core.Types
 {
-    public class VoicemeeterParameter<T>
+    public abstract class VoicemeeterParameterBase<T> : IVmParamReadable
     {
         protected readonly string m_command;
         protected readonly RemoteApiExtender m_api;
         protected bool m_isInit;
-        protected T m_value;
+        protected T m_value; // can be null, initialize in derived class
 
-        public VoicemeeterParameter(RemoteApiExtender api, string command)
+        public VoicemeeterParameterBase(RemoteApiExtender api, string command)
         {
             m_api = api;
             m_command = command;
@@ -32,13 +32,31 @@ namespace VoicemeeterOsdProgram.Core.Types
                 m_value = value;
             }
         }
+        public void ReadNotifyChanges()
+        {
+            ReadIsNotifyChanges(true);
+        }
+
+        public void Read()
+        {
+            ReadIsNotifyChanges(false);
+        }
+
+        public abstract void ReadIsNotifyChanges(bool isNotify);
 
         public event EventHandler<ValOldNew<T>> ReadValueChanged;
+        public event EventHandler<ValOldNew<T>> ValueRead;
 
         private void OnReadValueChanged(T oldVal, T newVal)
         {
             ValOldNew<T> values = new(oldVal, newVal);
             ReadValueChanged?.Invoke(this, values);
+        }
+
+        protected void OnValueRead(T oldVal, T newVal)
+        {
+            ValOldNew<T> values = new(oldVal, newVal);
+            ValueRead?.Invoke(this, values);
         }
     }
 }

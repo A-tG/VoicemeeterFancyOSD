@@ -3,25 +3,30 @@ using System;
 
 namespace VoicemeeterOsdProgram.Core.Types
 {
-    public class VoicemeeterStrParam : VoicemeeterParameter<string>, IVmParamReadable
+    public class VoicemeeterStrParam : VoicemeeterParameterBase<string>
     {
-        public VoicemeeterStrParam(RemoteApiExtender api, string command) : base(api, command) { }
+        public VoicemeeterStrParam(RemoteApiExtender api, string command) : base(api, command)
+        {
+            m_value = string.Empty;
+            m_isInit = true;
+        }
 
-        public void ReadIsIgnoreEvent(bool isIgnore)
+        public override void ReadIsNotifyChanges(bool isNotify)
         {
             if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
 
             if (m_api.GetParameter(m_command, out string val) == 0)
             {
-                if (isIgnore)
-                {
-                    m_value = val;
-                }
-                else
+                var oldVal = m_value;
+                if (isNotify)
                 {
                     Value = val;
                 }
-                m_isInit = true;
+                else
+                {
+                    m_value = val;
+                }
+                OnValueRead(oldVal, val);
             }
         }
 
