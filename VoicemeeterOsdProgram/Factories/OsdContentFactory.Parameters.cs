@@ -21,14 +21,16 @@ namespace VoicemeeterOsdProgram.Factories
         private static void MakeStripLabelParam(StripControl strip, int index, string defaultLabel)
         {
             var api = VoicemeeterApiClient.Api;
+            var stripLabel = strip.StripLabel;
 
             VoicemeeterStrParam p = new(api, InputLabel(index));
             p.ValueRead += (_, e) =>
             {
                 string name = e.newVal;
-                if (e.newVal == e.oldVal) return;
+                string newName = string.IsNullOrEmpty(name) ? defaultLabel : name;
+                if (stripLabel.Text == newName) return;
 
-                strip.StripLabel.Text = string.IsNullOrEmpty(name) ? defaultLabel : name;
+                stripLabel.Text = newName;
             };
             p.ReadIsNotifyChanges(true);
             m_vmParams.Add(p);
@@ -36,14 +38,17 @@ namespace VoicemeeterOsdProgram.Factories
 
         private static void InitFaderParam(StripControl strip, VoicemeeterNumParam p)
         {
+            var faderCont = strip.FaderCont;
+            var fader = faderCont.Fader;
+
             p.ReadValueChanged += (sender, e) =>
             {
-                strip.FaderCont.Visibility = Visibility.Visible;
-                strip.FaderCont.Fader.isIgnoreValueChanged = true;
-                strip.FaderCont.Fader.Value = e.newVal;
-                strip.FaderCont.Fader.isIgnoreValueChanged = false;
+                faderCont.Visibility = Visibility.Visible;
+                fader.isIgnoreValueChanged = true;
+                fader.Value = e.newVal;
+                fader.isIgnoreValueChanged = false;
             };
-            strip.FaderCont.Fader.ValueChanged += (sender, e) =>
+            fader.ValueChanged += (sender, e) =>
             {
                 var fader = sender as ClrChangeSlider;
                 if ((fader is null) || fader.isIgnoreValueChanged) return;
@@ -61,12 +66,13 @@ namespace VoicemeeterOsdProgram.Factories
 
         private static void InitBtnParam(ButtonContainer btnCtn, VoicemeeterNumParam p)
         {
+            var btn = btnCtn.Btn;
             p.ReadValueChanged += (sender, e) =>
             {
                 btnCtn.Visibility = Visibility.Visible;
-                btnCtn.Btn.State = (uint)e.newVal;
+                btn.State = (uint)e.newVal;
             };
-            btnCtn.Btn.Click += (sender, e) =>
+            btn.Click += (sender, e) =>
             {
                 if (sender is not OutlineTglBtn btn) return;
 
