@@ -17,8 +17,9 @@ namespace VoicemeeterOsdProgram.Core
     {
         private static OsdControl m_wpfControl;
         private static OsdWindow m_window;
-        private static DispatcherTimer m_tickTimer;
+        private static DispatcherTimer m_displayDurationTimer;
         private static bool m_isMouseEntered;
+        private static bool m_isRefillingOsdContent;
         private static IVmParamReadable[] m_vmParams = Array.Empty<IVmParamReadable>();
 
         static OsdWindowManager()
@@ -40,9 +41,9 @@ namespace VoicemeeterOsdProgram.Core
             win.CreateWindow();
             m_window = win;
 
-            m_tickTimer = new(DispatcherPriority.Normal);
-            m_tickTimer.Interval = TimeSpan.FromMilliseconds(OptionsStorage.Osd.DurationMs);
-            m_tickTimer.Tick += TimerTick;
+            m_displayDurationTimer = new(DispatcherPriority.Normal);
+            m_displayDurationTimer.Interval = TimeSpan.FromMilliseconds(OptionsStorage.Osd.DurationMs);
+            m_displayDurationTimer.Tick += TimerTick;
 
             var options = OptionsStorage.Osd;
             IsInteractable = options.IsInteractable;
@@ -93,12 +94,14 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void TimerTick(object sender, EventArgs e)
         {
-            m_tickTimer.Stop();
+            m_displayDurationTimer.Stop();
             Hide();
         }
 
         private static void UpdateOsd()
         {
+            if (m_isRefillingOsdContent) return;
+
             bool isNotifyChanges = !IsIgnoreVmParameters;
             if (!IsShown)
             {
@@ -122,18 +125,23 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void RefillOsd(VoicemeeterType type)
         {
+            m_isRefillingOsdContent = true;
+
+            ApplyVisibilityToOsdElements(Visibility.Collapsed);
             m_wpfControl.MainContent.Children.Clear();
             m_vmParams = Array.Empty<IVmParamReadable>();
             OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_vmParams, type);
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
+
+            m_isRefillingOsdContent = false;
         }
 
         private static void ResetShowTimer()
         {
             if (DurationMs != 0)
             {
-                m_tickTimer.Stop();
-                m_tickTimer.Start();
+                m_displayDurationTimer.Stop();
+                m_displayDurationTimer.Start();
             }
         }
 
@@ -172,7 +180,7 @@ namespace VoicemeeterOsdProgram.Core
         private static void OnMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             m_isMouseEntered = true;
-            m_tickTimer.Stop();
+            m_displayDurationTimer.Stop();
         }
 
         private static void OnMouseLeave(object sender, System.Windows.Input.MouseEventArgs e)

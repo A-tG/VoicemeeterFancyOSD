@@ -48,12 +48,12 @@ namespace VoicemeeterOsdProgram.Core
 
         public static double DurationMs
         {
-            get => m_tickTimer.Interval.TotalMilliseconds;
+            get => m_displayDurationTimer.Interval.TotalMilliseconds;
             set
             {
                 if (value >= 0)
                 {
-                    m_tickTimer.Interval = TimeSpan.FromMilliseconds(value);
+                    m_displayDurationTimer.Interval = TimeSpan.FromMilliseconds(value);
                 }
             }
         }
