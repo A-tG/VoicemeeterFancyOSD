@@ -22,7 +22,7 @@ namespace VoicemeeterOsdProgram.Core
         private static VoicemeeterType m_type;
         private static bool m_isSlowUpdate;
         private static bool m_isTypeChanging;
-        private static bool m_isVmRunning;
+        private static bool? m_isVmRunning;
 
         static VoicemeeterApiClient()
         {
@@ -42,9 +42,14 @@ namespace VoicemeeterOsdProgram.Core
 
         public static bool IsVoicemeeterRunning 
         {
-            get => m_isVmRunning;
+            get => m_isVmRunning ?? false;
             private set
             {
+                if (m_isVmRunning is null)
+                {
+                    m_isVmRunning = value;
+                    return;
+                }
                 if (m_isVmRunning == value) return;
 
                 m_isVmRunning = value;
