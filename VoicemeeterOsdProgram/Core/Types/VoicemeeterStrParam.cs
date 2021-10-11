@@ -11,23 +11,9 @@ namespace VoicemeeterOsdProgram.Core.Types
             m_isInit = true;
         }
 
-        public override void ReadIsNotifyChanges(bool isNotify)
+        public override int GetParameter(out string val)
         {
-            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
-
-            if (m_api.GetParameter(m_command, out string val) == 0)
-            {
-                var oldVal = m_value;
-                if (isNotify)
-                {
-                    Value = val;
-                }
-                else
-                {
-                    m_value = val;
-                }
-                OnValueRead(oldVal, val);
-            }
+            return m_api.GetParameter(m_command, out val);
         }
 
         public void Write(string value)

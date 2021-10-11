@@ -7,22 +7,9 @@ namespace VoicemeeterOsdProgram.Core.Types
     {
         public VoicemeeterNumParam(RemoteApiExtender api, string command) : base(api, command) { }
 
-        public override void ReadIsNotifyChanges(bool isNotify)
+        public override int GetParameter(out float val)
         {
-            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
-
-            if (m_api.GetParameter(m_command, out float val) == 0)
-            {
-                if (isNotify)
-                {
-                    Value = val;
-                }
-                else
-                {
-                    m_value = val;
-                }
-                m_isInit = true;
-            }
+            return m_api.GetParameter(m_command, out val);
         }
 
         public void Write(float value)
