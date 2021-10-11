@@ -1,5 +1,4 @@
 ﻿using AtgDev.Voicemeeter;
-using System;
 
 namespace VoicemeeterOsdProgram.Core.Types
 {
