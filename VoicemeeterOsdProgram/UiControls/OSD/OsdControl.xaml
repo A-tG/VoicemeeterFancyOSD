@@ -4,7 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls"
-    x:Name="OsdWindow" x:Class="VoicemeeterOsdProgram.UiControls.OSD.OsdControl"
+    x:Class="VoicemeeterOsdProgram.UiControls.OSD.OsdControl"
     mc:Ignorable="d"
     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SnapsToDevicePixels="True">
     <UserControl.Resources>
@@ -19,13 +19,13 @@
         <SolidColorBrush Color="{DynamicResource VmBgMainColor}"/>
     </UserControl.Background>
 
-    <Viewbox x:Name="MainContentWrap" StretchDirection="DownOnly">
-        <Grid x:Name="SizeWrap">
+    <Viewbox Name="MainContentWrap" StretchDirection="DownOnly">
+        <Grid Name="SizeWrap">
             <StackPanel Orientation="Horizontal">
                 <local:WrapPanelExt x:Name="MainContent" 
                                     Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
                                     Margin="0"/>
-                <Button x:Name="CloseBtn" Style="{DynamicResource PressButton}"
+                <Button Name="CloseBtn" Style="{DynamicResource PressButton}"
                         Margin="5" Padding="0" BorderThickness="0"
                         Width="20" Height="20"
                         HorizontalAlignment="Right" VerticalAlignment="Top" 
@@ -45,8 +45,8 @@
         <RectangleGeometry RadiusX="8" RadiusY="8">
             <RectangleGeometry.Rect>
                 <MultiBinding Converter="{StaticResource RectConverter}">
-                    <Binding ElementName="OsdWindow" Path="ActualWidth"/>
-                    <Binding ElementName="OsdWindow" Path="ActualHeight"/>
+                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                 </MultiBinding>
             </RectangleGeometry.Rect>
         </RectangleGeometry>
