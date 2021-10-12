@@ -32,7 +32,11 @@ namespace VoicemeeterOsdProgram.Core.Types
                 m_value = value;
             }
         }
+
+        public bool IsEnabled { get; set; } = true;
+
         public abstract int GetParameter(out T value);
+
         public abstract int SetParameter(T value);
 
         public void ReadNotifyChanges()
@@ -47,6 +51,8 @@ namespace VoicemeeterOsdProgram.Core.Types
 
         public void ReadIsNotifyChanges(bool isNotify)
         {
+            if (!IsEnabled) return;
+
             if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
 
             if (GetParameter(out T val) == 0)
@@ -67,6 +73,8 @@ namespace VoicemeeterOsdProgram.Core.Types
 
         public void Write(T value)
         {
+            if (!IsEnabled) return;
+
             if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
 
             if (SetParameter(value) == 0)
@@ -80,12 +88,16 @@ namespace VoicemeeterOsdProgram.Core.Types
 
         private void OnReadValueChanged(T oldVal, T newVal)
         {
+            if (!IsEnabled) return;
+
             ValOldNew<T> values = new(oldVal, newVal);
             ReadValueChanged?.Invoke(this, values);
         }
 
         protected void OnValueRead(T oldVal, T newVal)
         {
+            if (!IsEnabled) return;
+
             ValOldNew<T> values = new(oldVal, newVal);
             ValueRead?.Invoke(this, values);
         }
