@@ -14,7 +14,7 @@ namespace VoicemeeterOsdProgram.Core
         private const double NormalTickTime = 1000 / 30;
         private const double FastTickTimeMs = 1000 / 60;
 
-        private static Timer m_timer = new()
+        private static Timer m_loopTimer = new()
         {
             AutoReset = true,
             Interval = NormalTickTime
@@ -22,7 +22,8 @@ namespace VoicemeeterOsdProgram.Core
         private static VoicemeeterType m_type;
         private static bool m_isSlowUpdate;
         private static bool m_isTypeChanging;
-        private static bool? m_isVmRunning;
+        private static bool m_isVmRunning;
+        private static bool m_isVmTurningOn;
 
         static VoicemeeterApiClient()
         {
@@ -42,24 +43,19 @@ namespace VoicemeeterOsdProgram.Core
 
         public static bool IsVoicemeeterRunning 
         {
-            get => m_isVmRunning ?? false;
+            get => Api?.GetVoicemeeterType(out _) == 0;
             private set
             {
-                if (m_isVmRunning is null)
-                {
-                    m_isVmRunning = value;
-                    return;
-                }
                 if (m_isVmRunning == value) return;
 
                 m_isVmRunning = value;
                 if (value)
                 {
-                    VoicemeeterTurnedOn?.Invoke(null, EventArgs.Empty);
+                    OnVmTurnedOn();
                 }
                 else
                 {
-                    VoicemeeterTurnedOff?.Invoke(null, EventArgs.Empty);
+                    OnVmTurnedOff();
                 }
             }
         }
@@ -70,24 +66,30 @@ namespace VoicemeeterOsdProgram.Core
         {
             get
             {
-                if (!IsLoaded) return VoicemeeterType.None;
+                var type = VoicemeeterType.None;
+                bool isCompleted = Api?.GetVoicemeeterType(out type) == 0;
+                return isCompleted ? type : VoicemeeterType.None;
+            }
+            private set
+            {
+                if ((value == VoicemeeterType.None) || (m_type == value)) return;
 
-                if (Api.GetVoicemeeterType(out VoicemeeterType type) != 0)
+                if (m_type != VoicemeeterType.None)
                 {
-                    type = VoicemeeterType.None;
+                    OnProgramTypeChange();
                 }
-                return type;
+                m_type = value;
             }
         }
 
         private static double TickTime
         {
-            get => m_timer.Interval;
+            get => m_loopTimer.Interval;
             set
             {
-                if ((m_timer.Interval != value) && (value > 0))
+                if ((m_loopTimer.Interval != value) && (value > 0))
                 {
-                    m_timer.Interval = value;
+                    m_loopTimer.Interval = value;
                 }
             }
         }
@@ -114,14 +116,15 @@ namespace VoicemeeterOsdProgram.Core
                     Api.Login();
                     _ = await Api.WaitForNewParamsAsync(250, 1000 / 30);
                     m_type = ProgramType;
+                    m_isVmRunning = IsVoicemeeterRunning;
 
                     IsLoaded = true;
 
                     OnLoad();
                 }
 
-                m_timer.Elapsed += OnTimerTick;
-                m_timer.Start();
+                m_loopTimer.Elapsed += OnTimerTick;
+                m_loopTimer.Start();
 
                 IsInitialized = true;
 
@@ -134,17 +137,17 @@ namespace VoicemeeterOsdProgram.Core
                     Api = null;
                 }
 
-                if (m_timer is not null)
+                if (m_loopTimer is not null)
                 {
-                    m_timer.Stop();
-                    m_timer.Elapsed -= OnTimerTick;
+                    m_loopTimer.Stop();
+                    m_loopTimer.Elapsed -= OnTimerTick;
                 }
             }
         }
 
         public static void Exit()
         {
-            m_timer?.Stop();
+            m_loopTimer?.Stop();
             Api?.Logout();
         }
 
@@ -159,42 +162,26 @@ namespace VoicemeeterOsdProgram.Core
                 return;
             }
 
+            if (!m_isVmRunning && m_isVmTurningOn && m_isTypeChanging) return;
+
             HandleProgramType();
-            if (IsVoicemeeterRunning && !m_isTypeChanging) HandleParameters();
+            HandleParameters();
         }
 
         private static void HandleServerConnection()
         {
-            const string dummyCommand = "Strip[0].Mute";
+            if (m_isVmTurningOn) return;
 
-            var res = Api.GetParameter(dummyCommand, out float val);
-            switch (res)
-            {
-                case 0:
-                    IsSlowUpdate = false;
-                    IsVoicemeeterRunning = true;
-                    break;
-                case -2:
-                    IsSlowUpdate = true;
-                    IsVoicemeeterRunning = false;
-                    break;
-                default:
-                    // if Voicemeeter launched after OSD it can return -1 (error) infinitely
-                    // until IsParametersDirty() is called
-                    Api.IsParametersDirty();
-                    break;
-            }
+            bool isRunning = IsVoicemeeterRunning;
+            IsSlowUpdate = !isRunning;
+            IsVoicemeeterRunning = isRunning;
         }
 
         private static void HandleProgramType()
         {
             if (m_isTypeChanging) return;
 
-            var type = ProgramType;
-            if ((type == VoicemeeterType.None) || (m_type == type)) return;
-
-            if (m_type != VoicemeeterType.None) OnProgramTypeChange(type);
-            m_type = type;
+            ProgramType = ProgramType;
         }
 
         private static void HandleParameters()
@@ -238,10 +225,28 @@ namespace VoicemeeterOsdProgram.Core
             m_loaded?.Invoke(null, EventArgs.Empty);
         }
 
-        private static void OnProgramTypeChange(VoicemeeterType type)
+        private static void OnVmTurnedOff()
+        {
+            VoicemeeterTurnedOff?.Invoke(null, EventArgs.Empty);
+        }
+
+        private static void OnVmTurnedOn()
+        {
+            m_isVmTurningOn = true;
+            VoicemeeterTurnedOn?.Invoke(null, EventArgs.Empty);
+            m_isVmTurningOn = false;
+        }
+
+        private static void OnProgramTypeChange()
         {
             m_isTypeChanging = true;
-            ProgramTypeChange?.Invoke(null, type);
+           
+            var type = ProgramType;
+            if (ProgramType != VoicemeeterType.None)
+            {
+                ProgramTypeChange?.Invoke(null, ProgramType);
+            }
+
             m_isTypeChanging = false;
         }
     }

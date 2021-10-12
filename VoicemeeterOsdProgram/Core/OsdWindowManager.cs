@@ -16,20 +16,36 @@ namespace VoicemeeterOsdProgram.Core
 {
     public static partial class OsdWindowManager
     {
+        private const int WaitMsAfterVmStarted = 5000;
+        private const int WaitMsAfetVmTypeChange = 11000;
+
         private static OsdControl m_wpfControl;
         private static OsdWindow m_window;
-        private static DispatcherTimer m_displayDurationTimer;
-        private static DispatcherTimer m_WaitforVoicemeeterTimer = new(DispatcherPriority.Normal) 
-        { 
-            Interval = TimeSpan.FromMilliseconds(5000) 
+
+        private static DispatcherTimer m_displayDurationTimer = new(DispatcherPriority.Normal)
+        {
+            Interval = TimeSpan.FromMilliseconds(OptionsStorage.Osd.DurationMs)
         };
+        private static DispatcherTimer m_WaitForVmStartedTimer = new(DispatcherPriority.Normal) 
+        { 
+            Interval = TimeSpan.FromMilliseconds(WaitMsAfterVmStarted) 
+        };
+        private static DispatcherTimer m_WaitForVmTypeTimer = new(DispatcherPriority.Normal)
+        {
+            Interval = TimeSpan.FromMilliseconds(WaitMsAfetVmTypeChange)
+        };
+
         private static bool m_isMouseEntered;
         private static bool m_changingOsdContent;
-        private static bool m_isWaitforVoicemeeterInit;
+        private static bool m_isVmStarting;
+        private static bool m_isVmTypeChanging;
         private static IVmParamReadable[] m_vmParams = Array.Empty<IVmParamReadable>();
 
         static OsdWindowManager()
         {
+            AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
+            Application.Current.Exit += (_, _) => Exit();
+
             OsdControl osd = new();
             m_wpfControl = osd;
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
@@ -47,11 +63,9 @@ namespace VoicemeeterOsdProgram.Core
             win.CreateWindow();
             m_window = win;
 
-            m_displayDurationTimer = new(DispatcherPriority.Normal);
-            m_displayDurationTimer.Interval = TimeSpan.FromMilliseconds(OptionsStorage.Osd.DurationMs);
             m_displayDurationTimer.Tick += TimerTick;
-
-            m_WaitforVoicemeeterTimer.Tick += WaitForVoicemeeterTimerTick;
+            m_WaitForVmStartedTimer.Tick += WaitForVmTimerTick;
+            m_WaitForVmTypeTimer.Tick += WaitForVmTypeTimerTick;
 
             var options = OptionsStorage.Osd;
             IsInteractable = options.IsInteractable;
@@ -108,9 +122,9 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void UpdateOsd()
         {
-            if (m_changingOsdContent) return;
+            if (m_changingOsdContent || m_isVmTypeChanging) return;
 
-            if (m_isWaitforVoicemeeterInit)
+            if (m_isVmStarting)
             {
                 UpdateVmParams(false);
                 return;
@@ -141,6 +155,7 @@ namespace VoicemeeterOsdProgram.Core
         {
             var children = m_wpfControl.MainContent.Children;
             // removing elements with x:Name and Name attribute that are used in events
+            // in attempt to prevent memory leak
             foreach (StripControl strip in children)
             {
                 foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
@@ -162,6 +177,8 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void RefillOsd(VoicemeeterType type)
         {
+            if (type == VoicemeeterType.None) return;
+
             m_changingOsdContent = true;
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
 
@@ -190,6 +207,12 @@ namespace VoicemeeterOsdProgram.Core
             IntPtr hWnd = FindWindowEx(IntPtr.Zero, IntPtr.Zero, WindowClass, WindowText);
             bool isFocused = GetForegroundWindow() == hWnd;
             return isFocused || !WindowObstructedHelper.IsObstructed(hWnd);
+        }
+
+        private static void Exit()
+        {
+            m_displayDurationTimer?.Stop();
+            m_WaitForVmStartedTimer?.Stop();
         }
     }
 }

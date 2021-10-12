@@ -11,7 +11,9 @@ namespace VoicemeeterOsdProgram.Core
         {
             if (t == VoicemeeterType.None) return;
 
-            Application.Current.Dispatcher.Invoke(() => RefillOsd(t));
+            m_isVmTypeChanging = true;
+            m_WaitForVmTypeTimer.Stop();
+            m_WaitForVmTypeTimer.Start();
         }
 
         private static void OnVoicemeeterLoad(object sender, EventArgs e)
@@ -32,18 +34,25 @@ namespace VoicemeeterOsdProgram.Core
             RefillOsd(type);
         }
 
-        private static void WaitForVoicemeeterTimerTick(object sender, EventArgs e)
+        private static void WaitForVmTypeTimerTick(object sender, EventArgs e)
         {
-            m_WaitforVoicemeeterTimer.Stop();
-            m_isWaitforVoicemeeterInit = false;
+            m_WaitForVmTypeTimer.Stop();
+            RefillOsd(VoicemeeterApiClient.ProgramType);
+            m_isVmTypeChanging = false;
+        }
+
+        private static void WaitForVmTimerTick(object sender, EventArgs e)
+        {
+            m_WaitForVmStartedTimer.Stop();
+            m_isVmStarting = false;
         }
 
         private static void OnVoicemeeterTurnedOn()
         {
             // workaround to prevent showing bugged parameters after Voicemeeter launch
-            m_isWaitforVoicemeeterInit = true;
-            m_WaitforVoicemeeterTimer.Stop();
-            m_WaitforVoicemeeterTimer.Start();
+            m_isVmStarting = true;
+            m_WaitForVmStartedTimer.Stop();
+            m_WaitForVmStartedTimer.Start();
         }
 
         private static void OnVoicemeeterTurnedOff()
