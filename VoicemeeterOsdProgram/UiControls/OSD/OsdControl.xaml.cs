@@ -59,6 +59,19 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             MainContent.MaxWidth = MainContentWrap.MaxWidth / scale;*/
         }
 
+        public bool IsAnyVisibleChild()
+        {
+            var children = MainContent.Children;
+            foreach (UIElement child in children)
+            {
+                if (child.Visibility == Visibility.Visible)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void UpdateSeparators()
         {
             WrapPanelExt cont = MainContent;
