@@ -34,7 +34,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             Loaded += OnLoaded;
             SizeChanged += OnSizeChange;
             Shown += OnShow;
-            SystemEvents.DisplaySettingsChanging += OnDisplaySettingsChange;
+            SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChange;
+            DpiChanged += OnDisplaySettingsChange;
         }
 
         public VertAlignment WorkingAreaVertAlignment
@@ -151,12 +152,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         private void OnFadeOutComplete(object sender, EventArgs e)
         {
             Hide();
-        }
-
-        ~OsdWindow()
-        {
-            SystemEvents.DisplaySettingsChanging -= OnDisplaySettingsChange;
-            HwndSource.Dispose();
         }
     }
 }

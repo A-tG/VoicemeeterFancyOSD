@@ -17,16 +17,16 @@ namespace VoicemeeterOsdProgram.Core
 
         public static Rect GetWokringArea()
         {
-            const int defMargin = 45;
-            const int defHeight = 1080;
-            const int defWidth = 1920;
+            const double defMargin = 45;
+            const double defHeight = 1080;
+            const double defWidth = 1920;
             const double defHorPercent = defMargin / defWidth;
             const double defVertPercent = defMargin / defHeight;
 
             var scr = MainScreen;
             var resolution = scr.Bounds;
-            double marginH = (resolution.Width >= defWidth) ? defMargin : (double)(resolution.Width * defHorPercent);
-            double marginV = (scr.Bounds.Height >= defHeight) ? defMargin : (double)(resolution.Height * defVertPercent);
+            double marginH = (resolution.Width >= defWidth) ? defMargin : resolution.Width * defHorPercent;
+            double marginV = (scr.Bounds.Height >= defHeight) ? defMargin : resolution.Height * defVertPercent;
 
             var wArea = scr.WorkingArea;
             Rect area = new()
