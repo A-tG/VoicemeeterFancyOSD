@@ -1,6 +1,7 @@
 ﻿using AtgDev.Voicemeeter.Types;
 using System;
 using System.Windows;
+using VoicemeeterOsdProgram.Core.Types;
 
 namespace VoicemeeterOsdProgram.Core
 {
@@ -21,12 +22,19 @@ namespace VoicemeeterOsdProgram.Core
             VoicemeeterApiClient.VoicemeeterTurnedOff += (_, _) => dis.Invoke(OnVoicemeeterTurnedOff);
             VoicemeeterApiClient.VoicemeeterTurnedOn += (_, _) => dis.Invoke(OnVoicemeeterTurnedOn);
 
-            if (VoicemeeterApiClient.IsVoicemeeterRunning) OnVoicemeeterTurnedOn();
+            var type = VoicemeeterApiClient.ProgramType;
+            if (type == VoicemeeterType.None)
+            {
+                VoicemeeterApiClient.VoicemeeterTurnedOn += OnLateVmStart;
+                return;
+            }
+
+            RefillOsd(type);
         }
 
         private static void WaitForVoicemeeterTimerTick(object sender, EventArgs e)
         {
-            UpdateVmParams(false);
+            m_WaitforVoicemeeterTimer.Stop();
             m_isWaitforVoicemeeterInit = false;
         }
 
@@ -36,19 +44,24 @@ namespace VoicemeeterOsdProgram.Core
             m_isWaitforVoicemeeterInit = true;
             m_WaitforVoicemeeterTimer.Stop();
             m_WaitforVoicemeeterTimer.Start();
-
-            var type = VoicemeeterApiClient.ProgramType;
-            if (type == VoicemeeterType.None) return;
-
-            Application.Current.Dispatcher.Invoke(() => RefillOsd(VoicemeeterType.Potato));
         }
 
         private static void OnVoicemeeterTurnedOff()
         {
             // workaround to prevent showing bugged parameters after Voicemeeter shut down
             m_changingOsdContent = true;
+
+            ApplyVisibilityToOsdElements(Visibility.Collapsed);
             Hide(0);
+
             m_changingOsdContent = false;
+        }
+
+        private static void OnLateVmStart(object sender, EventArgs e)
+        {
+            VoicemeeterApiClient.VoicemeeterTurnedOn -= OnLateVmStart;
+            var type = VoicemeeterApiClient.ProgramType;
+            Application.Current.Dispatcher.Invoke(() => RefillOsd(type));
         }
 
         private static void OnMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
