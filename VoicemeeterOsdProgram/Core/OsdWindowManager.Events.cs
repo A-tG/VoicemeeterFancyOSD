@@ -22,14 +22,13 @@ namespace VoicemeeterOsdProgram.Core
             VoicemeeterApiClient.VoicemeeterTurnedOff += (_, _) => dis.Invoke(OnVoicemeeterTurnedOff);
             VoicemeeterApiClient.VoicemeeterTurnedOn += (_, _) => dis.Invoke(OnVoicemeeterTurnedOn);
 
-            var type = VoicemeeterApiClient.ProgramType;
-            if (type == VoicemeeterType.None)
+            if (!VoicemeeterApiClient.IsVoicemeeterRunning)
             {
                 VoicemeeterApiClient.VoicemeeterTurnedOn += OnLateVmStart;
                 return;
             }
 
-            RefillOsd(type);
+            RefillOsd(VoicemeeterApiClient.ProgramType);
         }
 
         private static void WaitForVoicemeeterTimerTick(object sender, EventArgs e)
