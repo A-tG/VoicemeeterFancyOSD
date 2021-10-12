@@ -172,16 +172,17 @@ namespace VoicemeeterOsdProgram.Core
         {
             if (m_isVmTurningOn) return;
 
-            bool isRunning = IsVoicemeeterRunning;
-            IsSlowUpdate = !isRunning;
-            IsVoicemeeterRunning = isRunning;
+            bool isRunningActual = IsVoicemeeterRunning;
+            IsSlowUpdate = !isRunningActual;
+            IsVoicemeeterRunning = isRunningActual;
         }
 
         private static void HandleProgramType()
         {
             if (m_isTypeChanging) return;
 
-            ProgramType = ProgramType;
+            var actualType = ProgramType;
+            ProgramType = actualType;
         }
 
         private static void HandleParameters()
