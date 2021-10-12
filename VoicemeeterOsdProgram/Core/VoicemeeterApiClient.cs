@@ -55,11 +55,11 @@ namespace VoicemeeterOsdProgram.Core
                 m_isVmRunning = value;
                 if (value)
                 {
-                    VoicemeeterTurnedOn?.Invoke(null, EventArgs.Empty);
+                    m_voicemeeterTurnedOn?.Invoke(null, EventArgs.Empty);
                 }
                 else
                 {
-                    VoicemeeterTurnedOff?.Invoke(null, EventArgs.Empty);
+                    m_voicemeeterTurnedOff?.Invoke(null, EventArgs.Empty);
                 }
             }
         }
@@ -124,6 +124,7 @@ namespace VoicemeeterOsdProgram.Core
                 m_timer.Start();
 
                 IsInitialized = true;
+
             }
             catch
             {
@@ -190,13 +191,10 @@ namespace VoicemeeterOsdProgram.Core
             if (m_isTypeChanging) return;
 
             var type = ProgramType;
-            if (type == VoicemeeterType.None) return;
+            if ((type == VoicemeeterType.None) || (m_type == type)) return;
 
-            if (type != m_type)
-            {
-                OnProgramTypeChange(type);
-                m_type = type;
-            }
+            if (m_type != VoicemeeterType.None) OnProgramTypeChange(type);
+            m_type = type;
         }
 
         private static void HandleParameters()
@@ -208,11 +206,12 @@ namespace VoicemeeterOsdProgram.Core
         }
 
         private static event EventHandler m_loaded;
+        private static event EventHandler m_voicemeeterTurnedOff;
+        private static event EventHandler m_voicemeeterTurnedOn;
 
         public static event EventHandler NewParameters;
-        public static event EventHandler VoicemeeterTurnedOff;
-        public static event EventHandler VoicemeeterTurnedOn;
         public static event EventHandler<VoicemeeterType> ProgramTypeChange;
+
         public static event EventHandler Loaded
         {
             add
@@ -227,6 +226,38 @@ namespace VoicemeeterOsdProgram.Core
                 }
             }
             remove => m_loaded -= value;
+        }
+
+        public static event EventHandler VoicemeeterTurnedOff
+        {
+            add
+            {
+                if (IsVoicemeeterRunning)
+                {
+                    m_voicemeeterTurnedOff += value;
+                }
+                else
+                {
+                    value?.Invoke(null, EventArgs.Empty);
+                }
+            }
+            remove => m_voicemeeterTurnedOff -= value;
+        }
+
+        public static event EventHandler VoicemeeterTurnedOn
+        {
+            add
+            {
+                if (IsVoicemeeterRunning)
+                {
+                    value?.Invoke(null, EventArgs.Empty);
+                }
+                else
+                {
+                    m_voicemeeterTurnedOn += value;
+                }
+            }
+            remove => m_voicemeeterTurnedOn -= value;
         }
 
         private static void OnNewParameters()
