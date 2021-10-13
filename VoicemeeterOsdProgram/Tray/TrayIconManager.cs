@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using VoicemeeterOsdProgram.Core;
+using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.UiControls;
 
 namespace VoicemeeterOsdProgram.Tray
@@ -40,6 +42,7 @@ namespace VoicemeeterOsdProgram.Tray
 #if DEBUG
             context.Items.Add(CreateDebugWindow());
 #endif
+            context.Items.Add(CreateOpenConfigButton());
             context.Items.Add(CreateToggleButton());
             context.Items.Add(new ToolStripSeparator());
             context.Items.Add(CreateExitButton());
@@ -47,6 +50,14 @@ namespace VoicemeeterOsdProgram.Tray
             context.Items.Add(CreateCloseMenuButton());
             m_contextMenu = context;
             m_trayIcon.ContextMenuStrip = context;
+        }
+
+        private static ToolStripMenuItem CreateOpenConfigButton()
+        {
+            ToolStripMenuItem item = new();
+            item.Text = "Open Config File";
+            item.Click += OnOpenConfigFileClick;
+            return item;
         }
 
         private static ToolStripMenuItem CreateToggleButton()
@@ -96,6 +107,18 @@ namespace VoicemeeterOsdProgram.Tray
                 item.Checked = false;
                 item.Font = new(item.Font, System.Drawing.FontStyle.Regular);
             }
+        }
+
+        private static void OnOpenConfigFileClick(object sender, EventArgs e)
+        {
+            try
+            {
+                using Process texEditor = new();
+                texEditor.StartInfo.FileName = "explorer.exe";
+                texEditor.StartInfo.Arguments = $@"""{OptionsStorage.ConfigFilePath}""";
+                texEditor.Start();
+            }
+            catch {}
         }
 
         private static void OnCloseClick(object sender, EventArgs e)
