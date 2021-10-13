@@ -34,8 +34,10 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             Loaded += OnLoaded;
             SizeChanged += OnSizeChange;
             Shown += OnShow;
-            SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChange;
-            DpiChanged += OnDisplaySettingsChange;
+
+            // triggered if any setting is changed including taskbar resize, display resolution
+            SystemEvents.UserPreferenceChanged += OnSystemSettingsChanged;
+            DpiChanged += OnDisplaySettingsChanged;
         }
 
         public VertAlignment WorkingAreaVertAlignment
@@ -81,13 +83,19 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         {
             var dpi = VisualTreeHelper.GetDpi(this);
             m_workingArea = Core.ScreenWorkingAreaManager.GetWokringArea();
+
             m_workingArea.Height /= dpi.DpiScaleY;
             m_workingArea.Width /= dpi.DpiScaleX;
+
             UpdateContMaxSize();
         }
 
         private void UpdatePosAlign()
         {
+            var dpi = VisualTreeHelper.GetDpi(this);
+            double wScale = 1 / dpi.DpiScaleX;
+            double hScale = 1 / dpi.DpiScaleY;
+
             var area = m_workingArea;
             var h = ActualHeight;
             var w = ActualWidth;
@@ -97,15 +105,15 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             _ = WorkingAreaHorAlignment switch
             {
                 HorAlignment.Left => Left = area.X,
-                HorAlignment.Center => Left = area.X + (area.Width - w) / 2,
-                HorAlignment.Right => Left = area.X + area.Width - w,
+                HorAlignment.Center => Left = area.X + (area.Width - w) / 2 / hScale,
+                HorAlignment.Right => Left = area.X + (area.Width - w) / wScale,
                 _ => 0
             };
             _ = WorkingAreaVertAlignment switch
             {
                 VertAlignment.Top => Top = area.Y,
-                VertAlignment.Center => Top = area.Y + (area.Height - h) / 2,
-                VertAlignment.Bottom => Top = area.Y + area.Height - h,
+                VertAlignment.Center => Top = area.Y + (area.Height - h) / 2 / hScale,
+                VertAlignment.Bottom => Top = area.Y + (area.Height - h) / wScale,
                 _ => 0
             };
         }
@@ -128,8 +136,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void OnLoaded(object sender, EventArgs e)
         {
-            UpdateWorkingArea();
-            UpdatePosAlign();
+            OnDisplaySettingsChanged(sender, e);
         }
 
         private void OnSizeChange(object sender, SizeChangedEventArgs e)
@@ -137,10 +144,17 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             UpdatePosAlign();
         }
 
-        private void OnDisplaySettingsChange(object sender, EventArgs e)
+        private void OnDisplaySettingsChanged(object sender, EventArgs e)
         {
             UpdateWorkingArea();
             UpdatePosAlign();
+        }
+
+        private void OnSystemSettingsChanged(object sender, UserPreferenceChangedEventArgs e)
+        {
+            if (e.Category != UserPreferenceCategory.Desktop) return;
+
+            OnDisplaySettingsChanged(sender, e);
         }
 
         private void OnShow(object sender, EventArgs e)
