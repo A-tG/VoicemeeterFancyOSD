@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace VoicemeeterOsdProgram.Core.Types
 {
-    public abstract class VoicemeeterParameterBase<T> : IVmParamReadable
+    public abstract class VoicemeeterParameterBase
     {
         protected readonly string m_command;
         protected readonly RemoteApiExtender m_api;
         protected bool m_isInit;
-        protected T m_value; // can be null, initialize in derived class
 
         public VoicemeeterParameterBase(RemoteApiExtender api, string command)
         {
@@ -20,24 +19,7 @@ namespace VoicemeeterOsdProgram.Core.Types
             m_command = command;
         }
 
-        public T Value
-        {
-            get => m_value;
-            protected set
-            {
-                if ((!m_value.Equals(value)) && m_isInit)
-                {
-                    OnReadValueChanged(m_value, value);
-                }
-                m_value = value;
-            }
-        }
-
         public bool IsEnabled { get; set; } = true;
-
-        public abstract int GetParameter(out T value);
-
-        public abstract int SetParameter(T value);
 
         public void ReadNotifyChanges()
         {
@@ -49,57 +31,6 @@ namespace VoicemeeterOsdProgram.Core.Types
             ReadIsNotifyChanges(false);
         }
 
-        public void ReadIsNotifyChanges(bool isNotify)
-        {
-            if (!IsEnabled) return;
-
-            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
-
-            if (GetParameter(out T val) == 0)
-            {
-                var oldVal = m_value;
-                if (isNotify)
-                {
-                    Value = val;
-                }
-                else
-                {
-                    m_value = val;
-                }
-                m_isInit = true;
-                OnValueRead(oldVal, val);
-            }
-        }
-
-        public void Write(T value)
-        {
-            if (!IsEnabled) return;
-
-            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
-
-            if (SetParameter(value) == 0)
-            {
-                m_value = value;
-            }
-        }
-
-        public event EventHandler<ValOldNew<T>> ReadValueChanged;
-        public event EventHandler<ValOldNew<T>> ValueRead;
-
-        private void OnReadValueChanged(T oldVal, T newVal)
-        {
-            if (!IsEnabled) return;
-
-            ValOldNew<T> values = new(oldVal, newVal);
-            ReadValueChanged?.Invoke(this, values);
-        }
-
-        protected void OnValueRead(T oldVal, T newVal)
-        {
-            if (!IsEnabled) return;
-
-            ValOldNew<T> values = new(oldVal, newVal);
-            ValueRead?.Invoke(this, values);
-        }
+        public abstract void ReadIsNotifyChanges(bool isNotify);
     }
 }

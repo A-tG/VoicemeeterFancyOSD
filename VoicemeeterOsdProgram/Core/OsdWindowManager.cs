@@ -39,7 +39,7 @@ namespace VoicemeeterOsdProgram.Core
         private static bool m_changingOsdContent;
         private static bool m_isVmStarting;
         private static bool m_isVmTypeChanging;
-        private static IVmParamReadable[] m_vmParams = Array.Empty<IVmParamReadable>();
+        private static VoicemeeterParameterBase[] m_vmParams = Array.Empty<VoicemeeterParameterBase>();
 
         static OsdWindowManager()
         {
@@ -183,7 +183,7 @@ namespace VoicemeeterOsdProgram.Core
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
 
             ClearOsd();
-            m_vmParams = Array.Empty<IVmParamReadable>();
+            m_vmParams = Array.Empty<VoicemeeterParameterBase>();
             OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_vmParams, type);
 
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
