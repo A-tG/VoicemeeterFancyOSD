@@ -31,6 +31,8 @@ namespace VoicemeeterOsdProgram.Options
             _ = InitAsync();
         }
 
+        public static string ConfigFilePath => m_path;
+
         private static async Task InitAsync()
         {
             await ValidateConfigFileAsync();
