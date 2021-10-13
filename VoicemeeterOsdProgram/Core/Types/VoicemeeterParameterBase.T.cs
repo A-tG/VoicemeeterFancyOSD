@@ -65,6 +65,25 @@ namespace VoicemeeterOsdProgram.Core.Types
             }
         }
 
+        public override void Dispose()
+        {
+            if (ReadValueChanged is not null)
+            {
+                foreach (EventHandler<ValOldNew<T>> del in ReadValueChanged.GetInvocationList())
+                {
+                    ReadValueChanged -= del;
+                }
+            }
+
+            if (ValueRead is not null)
+            {
+                foreach (EventHandler<ValOldNew<T>> del in ValueRead.GetInvocationList())
+                {
+                    ValueRead -= del;
+                }
+            }
+        }
+
         public event EventHandler<ValOldNew<T>> ReadValueChanged;
         public event EventHandler<ValOldNew<T>> ValueRead;
 

@@ -16,7 +16,7 @@ namespace VoicemeeterOsdProgram.Core
 {
     public static partial class OsdWindowManager
     {
-        private const int WaitMsAfterVmStarted = 5000;
+        private const int WaitMsAfterVmStarted = 6000;
         private const int WaitMsAfetVmTypeChange = 11000;
 
         private static OsdControl m_wpfControl;
@@ -151,28 +151,14 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
-        private static void ClearOsd()
+        private static void Clear()
         {
-            var children = m_wpfControl.MainContent.Children;
-            // removing elements with x:Name and Name attribute that are used in events
-            // in attempt to prevent memory leak
-            foreach (StripControl strip in children)
+            foreach (var p in m_vmParams)
             {
-                foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
-                {
-                    btnCont.Btn = null;
-                }
-                foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
-                {
-                    btnCont.Btn = null;
-                }
-                strip.StripLabel = null;
-                strip.BusBtnsContainer = null;
-                strip.ControlBtnsContainer = null;
-                strip.FaderCont.Fader = null;
-                strip.FaderCont = null;
+                p.Dispose();
             }
-            children.Clear();
+            m_wpfControl.MainContent.Children.Clear();
+            m_vmParams = Array.Empty<VoicemeeterParameterBase>();
         }
 
         private static void RefillOsd(VoicemeeterType type)
@@ -182,8 +168,7 @@ namespace VoicemeeterOsdProgram.Core
             m_changingOsdContent = true;
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
 
-            ClearOsd();
-            m_vmParams = Array.Empty<VoicemeeterParameterBase>();
+            Clear();
             OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_vmParams, type);
 
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
