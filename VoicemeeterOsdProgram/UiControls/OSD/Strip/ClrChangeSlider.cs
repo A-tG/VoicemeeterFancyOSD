@@ -9,6 +9,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     {
         public bool isIgnoreValueChanged;
 
+        private bool m_isChangeToSecondColor = false;
+
         public ClrChangeSlider() : base()
         {
             ValueChanged += OnValueChange;
@@ -53,8 +55,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                 }
             }
         }
-
-        private bool m_isChangeToSecondColor = false;
 
         private void OnValueChange(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

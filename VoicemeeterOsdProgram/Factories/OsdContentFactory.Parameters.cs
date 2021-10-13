@@ -41,7 +41,7 @@ namespace VoicemeeterOsdProgram.Factories
             var faderCont = strip.FaderCont;
             var fader = faderCont.Fader;
 
-            p.ReadValueChanged += (sender, e) =>
+            p.ReadValueChanged += (_, e) =>
             {
                 faderCont.Visibility = Visibility.Visible;
                 fader.isIgnoreValueChanged = true;
