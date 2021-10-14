@@ -1,9 +1,5 @@
 ﻿using AtgDev.Voicemeeter;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VoicemeeterOsdProgram.Core.Types
 {
@@ -65,7 +61,7 @@ namespace VoicemeeterOsdProgram.Core.Types
             }
         }
 
-        public override void Dispose()
+        public override void ClearEvents()
         {
             if (ReadValueChanged is not null)
             {

@@ -155,7 +155,7 @@ namespace VoicemeeterOsdProgram.Core
         {
             foreach (var p in m_vmParams)
             {
-                p.Dispose();
+                p.ClearEvents();
             }
             m_wpfControl.MainContent.Children.Clear();
             m_vmParams = Array.Empty<VoicemeeterParameterBase>();

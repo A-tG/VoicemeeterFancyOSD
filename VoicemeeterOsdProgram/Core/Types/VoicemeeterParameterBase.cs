@@ -33,6 +33,6 @@ namespace VoicemeeterOsdProgram.Core.Types
 
         public abstract void ReadIsNotifyChanges(bool isNotify);
 
-        public abstract void Dispose();
+        public abstract void ClearEvents();
     }
 }
