@@ -62,7 +62,6 @@ namespace VoicemeeterOsdProgram.Core
 
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
             Hide(0);
-            Clear();
 
             m_changingOsdContent = false;
         }
