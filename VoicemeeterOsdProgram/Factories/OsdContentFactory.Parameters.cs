@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using VoicemeeterOsdProgram.Core;
+﻿using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Core.Types;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 using static VoicemeeterOsdProgram.Factories.VoicemeeterCommandsFactory;
@@ -20,64 +18,17 @@ namespace VoicemeeterOsdProgram.Factories
 
         private static void MakeStripLabelParam(StripControl strip, int index, string defaultLabel)
         {
-            var api = VoicemeeterApiClient.Api;
-            var stripLabel = strip.StripLabel;
-
-            VoicemeeterStrParam p = new(api, InputLabel(index));
-            p.ValueRead += (_, e) =>
-            {
-                string name = e.newVal;
-                string newName = string.IsNullOrEmpty(name) ? defaultLabel : name;
-                if (stripLabel.Text == newName) return;
-
-                stripLabel.Text = newName;
-            };
-            p.ReadIsNotifyChanges(true);
+            VoicemeeterStrParam p = new(VoicemeeterApiClient.Api, InputLabel(index));
+            strip.defaultLabel = defaultLabel;
+            strip.VmParameter = p;
             m_vmParams.Add(p);
-        }
-
-        private static void InitFaderParam(StripControl strip, VoicemeeterNumParam p)
-        {
-            var faderCont = strip.FaderCont;
-            var fader = faderCont.Fader;
-
-            p.ReadValueChanged += (_, e) =>
-            {
-                faderCont.Visibility = Visibility.Visible;
-                fader.isIgnoreValueChanged = true;
-                fader.Value = e.newVal;
-                fader.isIgnoreValueChanged = false;
-            };
-            fader.ValueChanged += (sender, e) =>
-            {
-                var fader = sender as ClrChangeSlider;
-                if ((fader is null) || fader.isIgnoreValueChanged) return;
-
-                p.Write((float)e.NewValue);
-            };
         }
 
         private static void MakeFaderParam(StripControl strip, int i, StripType type)
         {
             var p = new VoicemeeterNumParam(VoicemeeterApiClient.Api, Gain(i, type));
-            InitFaderParam(strip, p);
+            strip.FaderCont.VmParameter = p;
             m_vmParams.Add(p);
-        }
-
-        private static void InitBtnParam(ButtonContainer btnCtn, VoicemeeterNumParam p)
-        {
-            var btn = btnCtn.Btn;
-            p.ReadValueChanged += (sender, e) =>
-            {
-                btnCtn.Visibility = Visibility.Visible;
-                btn.State = (uint)e.newVal;
-            };
-            btn.Click += (sender, e) =>
-            {
-                if (sender is not OutlineTglBtn btn) return;
-
-                p.Write(btn.State);
-            };
         }
 
         private static void MakeButtonParam(BtnType bType, StripType sType, ButtonContainer btnCtn, int i, int busIndex = 0)
@@ -96,7 +47,7 @@ namespace VoicemeeterOsdProgram.Factories
             };
             if (p is null) return;
 
-            InitBtnParam(btnCtn, p);
+            btnCtn.VmParameter = p;
             m_vmParams.Add(p);
         }
     }

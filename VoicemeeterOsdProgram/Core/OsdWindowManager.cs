@@ -1,16 +1,14 @@
-﻿using System;
-using System.Diagnostics;
+﻿using AtgDev.Voicemeeter.Types;
+using System;
 using System.Windows;
 using System.Windows.Threading;
 using VoicemeeterOsdProgram.Core.Types;
 using VoicemeeterOsdProgram.Factories;
+using VoicemeeterOsdProgram.Interop;
+using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.OSD;
-using AtgDev.Voicemeeter.Types;
-using VoicemeeterOsdProgram.Interop;
 using static TopmostApp.Interop.NativeMethods;
-using VoicemeeterOsdProgram.Options;
-using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 
 namespace VoicemeeterOsdProgram.Core
 {
