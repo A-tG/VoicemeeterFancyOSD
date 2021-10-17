@@ -88,7 +88,7 @@ namespace VoicemeeterOsdProgram.Core
             {
                 ResetShowTimer();
             }
-            if (IsShown || !m_wpfControl.IsAnyVisibleChild()) return;
+            if (!m_wpfControl.IsAnyVisibleChild()) return;
 
             IsShown = true;
             m_window.Show();
