@@ -18,6 +18,7 @@ namespace VoicemeeterOsdProgram
         void OnAppStartup(object sender, StartupEventArgs e)
         {
             OptionsStorage.Init();
+            ScreenWorkingAreaManager.Init();
             TrayIconManager.Init();
             VoicemeeterApiClient.Init();
             OsdWindowManager.Init();

@@ -153,10 +153,11 @@ namespace VoicemeeterOsdProgram.Core
         {
             foreach (var p in m_vmParams)
             {
+                p.IsEnabled = false;
                 p.ClearEvents();
             }
-            m_wpfControl.MainContent.Children.Clear();
             m_vmParams = Array.Empty<VoicemeeterParameterBase>();
+            m_wpfControl.MainContent.Children.Clear();
         }
 
         private static void RefillOsd(VoicemeeterType type)

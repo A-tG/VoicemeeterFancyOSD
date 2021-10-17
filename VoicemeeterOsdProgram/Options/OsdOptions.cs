@@ -4,10 +4,23 @@ namespace VoicemeeterOsdProgram.Options
 {
     public class OsdOptions
     {
+        private uint m_displayIndex;
         private bool m_isShowOnlyIfVoicemeeterHidden = true;
         private bool m_isInteractable = false;
         private uint m_durationMs = 2000;
         private double m_backgroundOpacity = 0.9;
+
+        public uint DisplayIndex
+        {
+            get => m_displayIndex;
+            set
+            {
+                if (value == m_displayIndex) return;
+
+                m_displayIndex = value;
+                DisplayIndexChanged?.Invoke(this, value);
+            }
+        }
 
         public bool IsShowOnlyIfVoicemeeterHidden 
         {
@@ -57,6 +70,7 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
+        public event EventHandler<uint> DisplayIndexChanged;
         public event EventHandler<bool> IsShowOnlyIfVoicemeeterHiddenChanged;
         public event EventHandler<bool> IsInteractableChanged;
         public event EventHandler<uint> DurationMsChanged;

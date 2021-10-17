@@ -2,17 +2,48 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
+using VoicemeeterOsdProgram.Options;
 
 namespace VoicemeeterOsdProgram.Core
 {
     public static class ScreenWorkingAreaManager
     {
         private static Screen m_mainScreen;
+        private static uint m_mainScreenIndex;
+
+        static ScreenWorkingAreaManager()
+        {
+            MainScreenIndex = OptionsStorage.Osd.DisplayIndex;
+            OptionsStorage.Osd.DisplayIndexChanged += (_, val) => MainScreenIndex = val;
+        }
+
+        public static void Init() { }
 
         public static Screen MainScreen
         {
             get => IsMainScreenConnected() ? m_mainScreen : Screen.PrimaryScreen;
-            set => m_mainScreen = value;
+            set
+            {
+                if (m_mainScreen == value) return;
+
+                m_mainScreen = value;
+                MainScreenChanged?.Invoke(null, value);
+            }
+        }
+
+        public static uint MainScreenIndex
+        {
+            get => m_mainScreenIndex;
+            set
+            {
+                var screens = Screen.AllScreens;
+                var len = screens.Length;
+                if (value < len)
+                {
+                    m_mainScreenIndex = value;
+                    MainScreen = screens[value];
+                }
+            }
         }
 
         public static Rect GetWokringArea()
@@ -50,5 +81,7 @@ namespace VoicemeeterOsdProgram.Core
 
             return Screen.AllScreens.Contains(m_mainScreen);
         }
+
+        public static EventHandler<Screen> MainScreenChanged;
     }
 }

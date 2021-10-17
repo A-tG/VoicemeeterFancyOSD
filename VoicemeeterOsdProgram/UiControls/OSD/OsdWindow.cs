@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using TopmostApp.Interop;
+using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD
@@ -34,6 +35,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             Loaded += OnLoaded;
             SizeChanged += OnSizeChange;
             Shown += OnShow;
+
+            ScreenWorkingAreaManager.MainScreenChanged += (_, _) => UpdateWorkingArea();
 
             // triggered if any setting is changed including taskbar resize, display resolution
             SystemEvents.UserPreferenceChanged += OnSystemSettingsChanged;
@@ -82,7 +85,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         private void UpdateWorkingArea()
         {
             var dpi = VisualTreeHelper.GetDpi(this);
-            m_workingArea = Core.ScreenWorkingAreaManager.GetWokringArea();
+            m_workingArea = ScreenWorkingAreaManager.GetWokringArea();
 
             m_workingArea.Height /= dpi.DpiScaleY;
             m_workingArea.Width /= dpi.DpiScaleX;
