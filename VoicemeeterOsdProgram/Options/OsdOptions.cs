@@ -1,4 +1,5 @@
 ﻿using System;
+using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.Options
 {
@@ -9,6 +10,8 @@ namespace VoicemeeterOsdProgram.Options
         private bool m_isInteractable = false;
         private uint m_durationMs = 2000;
         private double m_backgroundOpacity = 0.9;
+        private HorAlignment m_horizontalAlignment = HorAlignment.Right;
+        private VertAlignment m_verticalAlignment = VertAlignment.Top;
 
         public uint DisplayIndex
         {
@@ -70,10 +73,36 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
+        public HorAlignment HorizontalAlignment
+        {
+            get => m_horizontalAlignment;
+            set
+            {
+                if (value == m_horizontalAlignment) return;
+
+                m_horizontalAlignment = value;
+                HorizontalAlignmentChanged?.Invoke(this, value);
+            }
+        }
+
+        public VertAlignment VerticalAlignment
+        {
+            get => m_verticalAlignment;
+            set
+            {
+                if (value == m_verticalAlignment) return;
+
+                m_verticalAlignment = value;
+                VerticalAlignmentChanged?.Invoke(this, value);
+            }
+        }
+
         public event EventHandler<uint> DisplayIndexChanged;
         public event EventHandler<bool> IsShowOnlyIfVoicemeeterHiddenChanged;
         public event EventHandler<bool> IsInteractableChanged;
         public event EventHandler<uint> DurationMsChanged;
         public event EventHandler<double> BackgroundOpacityChanged;
+        public event EventHandler<HorAlignment> HorizontalAlignmentChanged;
+        public event EventHandler<VertAlignment> VerticalAlignmentChanged;
     }
 }

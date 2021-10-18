@@ -44,14 +44,15 @@ namespace VoicemeeterOsdProgram.Core
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
             Application.Current.Exit += (_, _) => Exit();
 
+            var options = OptionsStorage.Osd;
             OsdControl osd = new();
             m_wpfControl = osd;
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
 
             var win = new OsdWindow()
             {
-                WorkingAreaVertAlignment = VertAlignment.Top,
-                WorkingAreaHorAlignment = HorAlignment.Right,
+                WorkingAreaVertAlignment = options.VerticalAlignment,
+                WorkingAreaHorAlignment = options.HorizontalAlignment,
                 Content = osd,
                 Activatable = false,
                 TopMost = true,
@@ -64,14 +65,15 @@ namespace VoicemeeterOsdProgram.Core
             m_displayDurationTimer.Tick += TimerTick;
             m_WaitForVmStartedTimer.Tick += WaitForVmTimerTick;
             m_WaitForVmTypeTimer.Tick += WaitForVmTypeTimerTick;
-
-            var options = OptionsStorage.Osd;
+            
             IsInteractable = options.IsInteractable;
             BgOpacity = options.BackgroundOpacity;
 
             options.IsInteractableChanged += (_, val) => IsInteractable = val;
             options.DurationMsChanged += (_, val) => DurationMs = val;
             options.BackgroundOpacityChanged += (_, val) => BgOpacity = val;
+            options.VerticalAlignmentChanged += (_, val) => m_window.WorkingAreaVertAlignment = val;
+            options.HorizontalAlignmentChanged += (_, val) => m_window.WorkingAreaHorAlignment = val;
 
             m_wpfControl.CloseBtn.Click += OnCloseButtonClick;
             m_wpfControl.MouseEnter += OnMouseEnter;
