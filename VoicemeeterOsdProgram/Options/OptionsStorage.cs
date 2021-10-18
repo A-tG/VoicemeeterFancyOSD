@@ -180,11 +180,18 @@ namespace VoicemeeterOsdProgram.Options
             {
                 if (!string.IsNullOrEmpty(field))
                 {
-                    var result = Convert.ChangeType(field, optionProp.PropertyType);
+                    object result;
+                    if (optionProp.PropertyType.IsEnum)
+                    {
+                        result = Enum.Parse(optionProp.PropertyType, field);
+                    }
+                    else
+                    {
+                        result = Convert.ChangeType(field, optionProp.PropertyType);
+                    }
                     if (result is not null)
                     {
                         optionProp.SetValue(optionsObj, result);
-                        return;
                     }
                 }
             }
