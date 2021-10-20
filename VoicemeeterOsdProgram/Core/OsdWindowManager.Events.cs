@@ -1,7 +1,6 @@
 ﻿using AtgDev.Voicemeeter.Types;
 using System;
 using System.Windows;
-using VoicemeeterOsdProgram.Core.Types;
 
 namespace VoicemeeterOsdProgram.Core
 {
