@@ -9,19 +9,23 @@
              MinWidth="45" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
     <ContentControl.Resources>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="FaderMainBrush" Color="{StaticResource VmActiveElementMainColor}"/>
-            <SolidColorBrush x:Key="FaderPositiveGainBrush" Color="{StaticResource VmActiveElementRedColor}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Voicemeeter/Fader.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentControl.Resources>
-    <local:ClrChangeSlider x:Name="Fader" Style="{StaticResource FaderStyle}" Focusable="False"
+    <local:ClrChangeSlider x:Name="Fader" Style="{DynamicResource FaderStyle}" Focusable="False"
                            MinHeight="140"
-                           Background="{StaticResource FaderMainBrush}" Foreground="White"
-                           SecondBg="{StaticResource FaderPositiveGainBrush}" GreaterThanValChangeClr="0"
+                           Foreground="White" GreaterThanValChangeClr="0"
                            Minimum="-60" Maximum="12" TickFrequency="0.1" SmallChange="0" LargeChange="0"
                            IsSnapToTickEnabled="True"
                            HorizontalAlignment="Center" VerticalAlignment="Stretch" Orientation="Vertical"
-                           MouseWheel="OnFaderMouseWheel" MouseDoubleClick="OnFaderMouseDoubleClick"/>
+                           MouseWheel="OnFaderMouseWheel" MouseDoubleClick="OnFaderMouseDoubleClick">
+        <local:ClrChangeSlider.Background>
+            <SolidColorBrush Color="{DynamicResource VmActiveElementMainColor}"/>
+        </local:ClrChangeSlider.Background>
+        <local:ClrChangeSlider.SecondBg>
+            <SolidColorBrush Color="{DynamicResource VmActiveElementRedColor}"/>
+        </local:ClrChangeSlider.SecondBg>
+    </local:ClrChangeSlider>
 </ContentControl>
