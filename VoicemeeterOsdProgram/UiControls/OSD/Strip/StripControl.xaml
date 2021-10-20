@@ -10,7 +10,7 @@
              VerticalAlignment="Stretch" HorizontalAlignment="Left"
              Padding="6,0,6,0" Margin="0,8,0,8">
     <UserControl.BorderBrush>
-        <SolidColorBrush Color="{StaticResource VmSepColor}"/>
+        <SolidColorBrush Color="{DynamicResource VmSepColor}"/>
     </UserControl.BorderBrush>
     <DockPanel Name="ContentWrap" LastChildFill="True">
         <TextBlock Name="StripLabel" Text="STRIP_LABEL"
@@ -18,7 +18,7 @@
                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"
                    TextTrimming="CharacterEllipsis" FontSize="16" FontWeight="Bold">
             <TextBlock.Foreground>
-                <SolidColorBrush Color="{StaticResource VmDarkTextColor}"/>
+                <SolidColorBrush Color="{DynamicResource VmDarkTextColor}"/>
             </TextBlock.Foreground>
         </TextBlock>
         

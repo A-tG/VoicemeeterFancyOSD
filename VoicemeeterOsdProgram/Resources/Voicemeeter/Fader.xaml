@@ -19,30 +19,30 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <SolidColorBrush x:Key="SliderThumb.Static.Background" Color="{StaticResource VmDarkElementColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.Static.Background" Color="{DynamicResource VmDarkElementColor}"/>
     <SolidColorBrush x:Key="SliderThumb.Static.Border" Color="#FFACACAC"/>
     <SolidColorBrush x:Key="SliderThumb.Static.Foreground" Color="#FFE5E5E5"/>
-    <SolidColorBrush x:Key="SliderThumb.MouseOver.Background" Color="{StaticResource VmActiveElementMainColor}"/>
-    <SolidColorBrush x:Key="SliderThumb.MouseOver.Border" Color="{StaticResource VmActiveElementMainColor}"/>
-    <SolidColorBrush x:Key="SliderThumb.Pressed.Background" Color="{StaticResource VmActiveElementMainColor}"/>
-    <SolidColorBrush x:Key="SliderThumb.Pressed.Border" Color="{StaticResource VmActiveElementMainColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.MouseOver.Background" Color="{DynamicResource VmActiveElementMainColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.MouseOver.Border" Color="{DynamicResource VmActiveElementMainColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.Pressed.Background" Color="{DynamicResource VmActiveElementMainColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.Pressed.Border" Color="{DynamicResource VmActiveElementMainColor}"/>
     <SolidColorBrush x:Key="SliderThumb.Disabled.Background" Color="Transparent"/>
-    <SolidColorBrush x:Key="SliderThumb.Disabled.Border" Color="{StaticResource VmDarkElementColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.Disabled.Border" Color="{DynamicResource VmDarkElementColor}"/>
     <SolidColorBrush x:Key="SliderThumb.Track.Background" Color="Transparent"/>
-    <SolidColorBrush x:Key="SliderThumb.Track.Border" Color="{StaticResource VmActiveElementMainColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.Track.Border" Color="{DynamicResource VmActiveElementMainColor}"/>
     <ControlTemplate x:Key="SliderThumbHorizontalDefault" TargetType="{x:Type Thumb}">
         <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-            <Path x:Name="grip" Data="M 0,0 C0,0 11,0 11,0 11,0 11,18 11,18 11,18 0,18 0,18 0,18 0,0 0,0 z" Fill="{StaticResource SliderThumb.Static.Background}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}" UseLayoutRounding="True" VerticalAlignment="Center"/>
+            <Path x:Name="grip" Data="M 0,0 C0,0 11,0 11,0 11,0 11,18 11,18 11,18 0,18 0,18 0,18 0,0 0,0 z" Fill="{DynamicResource SliderThumb.Static.Background}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{DynamicResource SliderThumb.Static.Border}" UseLayoutRounding="True" VerticalAlignment="Center"/>
         </Grid>
     </ControlTemplate>
     <ControlTemplate x:Key="SliderThumbHorizontalTop" TargetType="{x:Type Thumb}">
         <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-            <Path x:Name="grip" Data="M 0,6 C0,6 5.5,0 5.5,0 5.5,0 11,6 11,6 11,6 11,18 11,18 11,18 0,18 0,18 0,18 0,6 0,6 z" Fill="{StaticResource SliderThumb.Static.Background}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}" UseLayoutRounding="True" VerticalAlignment="Center"/>
+            <Path x:Name="grip" Data="M 0,6 C0,6 5.5,0 5.5,0 5.5,0 11,6 11,6 11,6 11,18 11,18 11,18 0,18 0,18 0,18 0,6 0,6 z" Fill="{DynamicResource SliderThumb.Static.Background}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{DynamicResource SliderThumb.Static.Border}" UseLayoutRounding="True" VerticalAlignment="Center"/>
         </Grid>
     </ControlTemplate>
     <ControlTemplate x:Key="SliderThumbHorizontalBottom" TargetType="{x:Type Thumb}">
         <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-            <Path x:Name="grip" Data="M 0,12 C0,12 5.5,18 5.5,18 5.5,18 11,12 11,12 11,12 11,0 11,0 11,0 0,0 0,0 0,0 0,12 0,12 z" Fill="{StaticResource SliderThumb.Static.Background}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}" UseLayoutRounding="True" VerticalAlignment="Center"/>
+            <Path x:Name="grip" Data="M 0,12 C0,12 5.5,18 5.5,18 5.5,18 11,12 11,12 11,12 11,0 11,0 11,0 0,0 0,0 0,0 0,12 0,12 z" Fill="{DynamicResource SliderThumb.Static.Background}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{DynamicResource SliderThumb.Static.Border}" UseLayoutRounding="True" VerticalAlignment="Center"/>
         </Grid>
     </ControlTemplate>
     <ControlTemplate x:Key="SliderHorizontal" TargetType="{x:Type Slider}">
@@ -55,7 +55,7 @@
                 </Grid.RowDefinitions>
                 <TickBar x:Name="TopTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,0,0,2" Placement="Top" Grid.Row="0" Visibility="Collapsed"/>
                 <TickBar x:Name="BottomTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,2,0,0" Placement="Bottom" Grid.Row="2" Visibility="Collapsed"/>
-                <Border x:Name="TrackBackground" Background="{StaticResource SliderThumb.Track.Background}" BorderThickness="1" BorderBrush="{StaticResource SliderThumb.Track.Border}" Height="4.0" Margin="5,0" Grid.Row="1" VerticalAlignment="center">
+                <Border x:Name="TrackBackground" Background="{DynamicResource SliderThumb.Track.Background}" BorderThickness="1" BorderBrush="{DynamicResource SliderThumb.Track.Border}" Height="4.0" Margin="5,0" Grid.Row="1" VerticalAlignment="center">
                     <Canvas Margin="-6,-1">
                         <Rectangle x:Name="PART_SelectionRange" Fill="{StaticResource {x:Static SystemColors.HighlightBrushKey}}" Height="4.0" Visibility="Hidden"/>
                     </Canvas>
@@ -129,7 +129,7 @@
                 </Ellipse>
             </Canvas>
             <Ellipse x:Name="grip" Width="42" Height="42" Fill="Transparent" StrokeThickness="2" Stroke="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}"/>
-            <Border Background="{StaticResource SliderThumb.Disabled.Border}" CornerRadius="6" MinWidth="34"
+            <Border Background="{DynamicResource SliderThumb.Disabled.Border}" CornerRadius="6" MinWidth="34"
                     VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13"
                     Text="{Binding Value, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}, StringFormat={}{0:F1}}"/>
@@ -138,12 +138,12 @@
     </ControlTemplate>
     <ControlTemplate x:Key="SliderThumbVerticalLeft" TargetType="{x:Type Thumb}">
         <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-            <Path x:Name="grip" Data="M 6,11 C6,11 0,5.5 0,5.5 0,5.5 6,0 6,0 6,0 18,0 18,0 18,0 18,11 18,11 18,11 6,11 6,11 z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}"/>
+            <Path x:Name="grip" Data="M 6,11 C6,11 0,5.5 0,5.5 0,5.5 6,0 6,0 6,0 18,0 18,0 18,0 18,11 18,11 18,11 6,11 6,11 z" Fill="{DynamicResource SliderThumb.Static.Background}" Stretch="Fill" Stroke="{DynamicResource SliderThumb.Static.Border}"/>
         </Grid>
     </ControlTemplate>
     <ControlTemplate x:Key="SliderThumbVerticalRight" TargetType="{x:Type Thumb}">
         <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-            <Path x:Name="grip" Data="M 12,11 C12,11 18,5.5 18,5.5 18,5.5 12,0 12,0 12,0 0,0 0,0 0,0 0,11 0,11 0,11 12,11 12,11 z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}"/>
+            <Path x:Name="grip" Data="M 12,11 C12,11 18,5.5 18,5.5 18,5.5 12,0 12,0 12,0 0,0 0,0 0,0 0,11 0,11 0,11 12,11 12,11 z" Fill="{DynamicResource SliderThumb.Static.Background}" Stretch="Fill" Stroke="{DynamicResource SliderThumb.Static.Border}"/>
         </Grid>
     </ControlTemplate>
     <ControlTemplate x:Key="SliderVertical" TargetType="{x:Type Slider}">
@@ -217,7 +217,7 @@
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{StaticResource SliderThumb.Static.Foreground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource SliderThumb.Static.Foreground}"/>
         <Setter Property="Template" Value="{StaticResource SliderHorizontal}"/>
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Vertical">

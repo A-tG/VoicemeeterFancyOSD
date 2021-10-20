@@ -8,15 +8,13 @@
              d:DesignHeight="500" d:DesignWidth="500" MinWidth="40">
     <ContentControl.Resources>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="BtnNormalBrush" Color="{StaticResource VmDarkElementColor}"/>
-            <SolidColorBrush x:Key="BtnCyanBrush" Color="{StaticResource VmActiveElementCyanColor}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Voicemeeter/StripButtons.xaml"/>
                 <ResourceDictionary Source="/Resources/Voicemeeter/Icons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentControl.Resources>
-    <local:OutlineTglBtn Style="{StaticResource StripBtnBaseStyle}" x:Name="Btn" Focusable="False"
+    <local:OutlineTglBtn Style="{DynamicResource StripBtnBaseStyle}" x:Name="Btn" Focusable="False"
                          FontSize="14" FontWeight="Medium"
                          Width="35" Height="22"
                          VerticalAlignment="Center" HorizontalAlignment="Center"
