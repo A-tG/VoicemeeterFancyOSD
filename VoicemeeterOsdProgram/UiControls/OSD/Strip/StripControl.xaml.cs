@@ -6,7 +6,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// <summary>
     /// Interaction logic for StripControl.xaml
     /// </summary>
-    public partial class StripControl : ContentControl
+    public partial class StripControl : UserControl
     {
         public StripControl()
         {

@@ -1,4 +1,4 @@
-﻿<ContentControl x:Class="VoicemeeterOsdProgram.UiControls.OSD.Strip.StripControl"
+﻿<UserControl x:Class="VoicemeeterOsdProgram.UiControls.OSD.Strip.StripControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,9 +9,9 @@
              d:DesignHeight="280" d:DesignWidth="120" 
              VerticalAlignment="Stretch" HorizontalAlignment="Left"
              Padding="6,0,6,0" Margin="0,8,0,8">
-    <ContentControl.BorderBrush>
+    <UserControl.BorderBrush>
         <SolidColorBrush Color="{StaticResource VmSepColor}"/>
-    </ContentControl.BorderBrush>
+    </UserControl.BorderBrush>
     <DockPanel Name="ContentWrap" LastChildFill="True">
         <TextBlock Name="StripLabel" Text="STRIP_LABEL"
                    DockPanel.Dock="Top" MaxWidth="75"
@@ -43,4 +43,4 @@
             </Grid>
         </Grid>
     </DockPanel>
-</ContentControl>
+</UserControl>
