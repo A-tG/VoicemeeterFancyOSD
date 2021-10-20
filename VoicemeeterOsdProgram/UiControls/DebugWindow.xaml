@@ -29,5 +29,6 @@
         <StackPanel>
             <CheckBox x:Name="IsInteractableCheckBox" Content="OSD Window interactable" Click="IsInteractable_Click"/>
         </StackPanel>
+        <Button Content="Clear OSD" FontSize="18" Padding="5" Click="ClearBtn_Click"/>
     </WrapPanel>
 </Window>

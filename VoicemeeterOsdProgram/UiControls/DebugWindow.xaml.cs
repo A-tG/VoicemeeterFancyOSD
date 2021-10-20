@@ -50,5 +50,10 @@ namespace VoicemeeterOsdProgram.UiControls
         {
             OsdWindowManager.IsInteractable = (bool)IsInteractableCheckBox.IsChecked;
         }
+
+        private void ClearBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OsdWindowManager.Clear();
+        }
     }
 }

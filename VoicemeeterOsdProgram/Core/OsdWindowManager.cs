@@ -114,6 +114,18 @@ namespace VoicemeeterOsdProgram.Core
             m_window.HideAnimated(fadeOutDuration);
         }
 
+        public static void Clear()
+        {
+            foreach (var p in m_vmParams)
+            {
+                p.IsEnabled = false;
+                p.ClearEvents();
+            }
+            m_vmParams = Array.Empty<VoicemeeterParameterBase>();
+            m_wpfControl.MainContent.Children.Clear();
+            m_wpfControl.UpdateLayout();
+        }
+
         private static void TimerTick(object sender, EventArgs e)
         {
             m_displayDurationTimer.Stop();
@@ -149,17 +161,6 @@ namespace VoicemeeterOsdProgram.Core
             {
                 m_vmParams[i].ReadIsNotifyChanges(isNotifyChanges);
             }
-        }
-
-        private static void Clear()
-        {
-            foreach (var p in m_vmParams)
-            {
-                p.IsEnabled = false;
-                p.ClearEvents();
-            }
-            m_vmParams = Array.Empty<VoicemeeterParameterBase>();
-            m_wpfControl.MainContent.Children.Clear();
         }
 
         private static void RefillOsd(VoicemeeterType type)
