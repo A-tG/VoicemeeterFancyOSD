@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="VoicemeeterOsdProgram.UiControls.OSD.Strip.ButtonContainer"
+﻿<ContentControl x:Class="VoicemeeterOsdProgram.UiControls.OSD.Strip.ButtonContainer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,21 +6,19 @@
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.OSD.Strip"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="500" MinWidth="40">
-    <UserControl.Resources>
+    <ContentControl.Resources>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="BtnNormalBrush" Color="{DynamicResource VmDarkElementColor}"/>
-            <SolidColorBrush x:Key="BtnCyanBrush" Color="{DynamicResource VmActiveElementCyanColor}"/>
+            <SolidColorBrush x:Key="BtnNormalBrush" Color="{StaticResource VmDarkElementColor}"/>
+            <SolidColorBrush x:Key="BtnCyanBrush" Color="{StaticResource VmActiveElementCyanColor}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Voicemeeter/StripButtons.xaml"/>
                 <ResourceDictionary Source="/Resources/Voicemeeter/Icons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </UserControl.Resources>
-    <Grid>
-        <local:OutlineTglBtn Style="{DynamicResource StripBtnBaseStyle}" x:Name="Btn" Focusable="False"
-                             FontSize="14" FontWeight="Medium"
-                             Width="35" Height="22"
-                             VerticalAlignment="Center" HorizontalAlignment="Center"
-                             Padding="0" Margin="1" BorderThickness="1"/>
-    </Grid>
-</UserControl>
+    </ContentControl.Resources>
+    <local:OutlineTglBtn Style="{StaticResource StripBtnBaseStyle}" x:Name="Btn" Focusable="False"
+                         FontSize="14" FontWeight="Medium"
+                         Width="35" Height="22"
+                         VerticalAlignment="Center" HorizontalAlignment="Center"
+                         Padding="0" Margin="1" BorderThickness="1"/>
+</ContentControl>

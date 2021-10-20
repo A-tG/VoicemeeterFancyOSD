@@ -16,7 +16,7 @@
     </UserControl.Resources>
     
     <UserControl.Background>
-        <SolidColorBrush Color="{DynamicResource VmBgMainColor}"/>
+        <SolidColorBrush Color="{StaticResource VmBgMainColor}"/>
     </UserControl.Background>
 
     <Viewbox Name="MainContentWrap" StretchDirection="DownOnly">
@@ -25,7 +25,7 @@
                 <local:WrapPanelExt x:Name="MainContent" 
                                     Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
                                     Margin="0"/>
-                <Button Name="CloseBtn" Style="{DynamicResource PressButton}"
+                <Button Name="CloseBtn" Style="{StaticResource PressButton}"
                         Margin="5" Padding="0" BorderThickness="0"
                         Width="20" Height="20"
                         HorizontalAlignment="Right" VerticalAlignment="Top" 

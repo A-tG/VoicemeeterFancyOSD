@@ -9,7 +9,7 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground">
             <Setter.Value>
-                <SolidColorBrush Color="{DynamicResource VmDarkElementColor}"/>
+                <SolidColorBrush Color="{StaticResource VmDarkElementColor}"/>
             </Setter.Value>
         </Setter>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -29,14 +29,14 @@
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Foreground">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="{DynamicResource VmActiveElementMainColor}"/>
+                                    <SolidColorBrush Color="{StaticResource VmActiveElementMainColor}"/>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Foreground">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="{DynamicResource VmActiveElementCyanColor}"/>
+                                    <SolidColorBrush Color="{StaticResource VmActiveElementCyanColor}"/>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
@@ -50,12 +50,12 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="NormalColor">
             <Setter.Value>
-                <SolidColorBrush Color="{DynamicResource VmDarkElementColor}"/>
+                <SolidColorBrush Color="{StaticResource VmDarkElementColor}"/>
             </Setter.Value>
         </Setter>
         <Setter Property="ToggledColor">
             <Setter.Value>
-                <SolidColorBrush Color="{DynamicResource VmActiveElementMainColor}"/>
+                <SolidColorBrush Color="{StaticResource VmActiveElementMainColor}"/>
             </Setter.Value>
         </Setter>
         <Setter Property="StatesNumber" Value="2"/>
@@ -91,13 +91,13 @@
     <Style x:Key="MonoBtnStyle" TargetType="{x:Type strip:OutlineTglBtn}" BasedOn="{StaticResource StripBtnBaseStyle}">
         <Setter Property="ToggledColor">
             <Setter.Value>
-                <SolidColorBrush x:Name="ToggledBrush" Color="{DynamicResource VmActiveElementCyanColor}"/>
+                <SolidColorBrush x:Name="ToggledBrush" Color="{StaticResource VmActiveElementCyanColor}"/>
             </Setter.Value>
         </Setter>
         <Setter Property="Content" Value="m"/>
         <Style.Resources>
             <SolidColorBrush x:Key="NormalBrush" 
-                             Color="{DynamicResource VmDarkElementColor}"/>
+                             Color="{StaticResource VmDarkElementColor}"/>
         </Style.Resources>
     </Style>
 
@@ -108,7 +108,7 @@
     <Style x:Key="SoloBtnStyle" TargetType="{x:Type strip:OutlineTglBtn}" BasedOn="{StaticResource StripBtnBaseStyle}">
         <Setter Property="ToggledColor">
             <Setter.Value>
-                <SolidColorBrush Color="{DynamicResource VmActiveElementOrangeColor}"/>
+                <SolidColorBrush Color="{StaticResource VmActiveElementOrangeColor}"/>
             </Setter.Value>
         </Setter>
         <Setter Property="Content" Value="S"/>
@@ -117,7 +117,7 @@
     <Style x:Key="MuteBtnStyle" TargetType="{x:Type strip:OutlineTglBtn}" BasedOn="{StaticResource StripBtnBaseStyle}">
         <Setter Property="ToggledColor">
             <Setter.Value>
-                <SolidColorBrush Color="{DynamicResource VmActiveElementRedColor}"/>
+                <SolidColorBrush Color="{StaticResource VmActiveElementRedColor}"/>
             </Setter.Value>
         </Setter>
         <Setter Property="Content" Value="M"/>

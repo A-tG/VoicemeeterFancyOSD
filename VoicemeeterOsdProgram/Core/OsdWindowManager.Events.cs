@@ -60,7 +60,6 @@ namespace VoicemeeterOsdProgram.Core
             // workaround to prevent showing bugged parameters after Voicemeeter shut down
             m_changingOsdContent = true;
 
-            ApplyVisibilityToOsdElements(Visibility.Collapsed);
             Hide(0);
 
             m_changingOsdContent = false;

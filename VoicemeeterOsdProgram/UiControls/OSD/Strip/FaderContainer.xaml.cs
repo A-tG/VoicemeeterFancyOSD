@@ -7,7 +7,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// <summary>
     /// Interaction logic for FaderContainer.xaml
     /// </summary>
-    public partial class FaderContainer : UserControl
+    public partial class FaderContainer : ContentControl
     {
         public FaderContainer()
         {

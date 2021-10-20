@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="VoicemeeterOsdProgram.UiControls.OSD.Strip.FaderContainer"
+﻿<ContentControl x:Class="VoicemeeterOsdProgram.UiControls.OSD.Strip.FaderContainer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,23 +7,21 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="100"
              MinWidth="45" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-    <UserControl.Resources>
+    <ContentControl.Resources>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="FaderMainBrush" Color="{DynamicResource VmActiveElementMainColor}"/>
-            <SolidColorBrush x:Key="FaderPositiveGainBrush" Color="{DynamicResource VmActiveElementRedColor}"/>
+            <SolidColorBrush x:Key="FaderMainBrush" Color="{StaticResource VmActiveElementMainColor}"/>
+            <SolidColorBrush x:Key="FaderPositiveGainBrush" Color="{StaticResource VmActiveElementRedColor}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Voicemeeter/Fader.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </UserControl.Resources>
-    <Grid>
-        <local:ClrChangeSlider x:Name="Fader" Style="{DynamicResource FaderStyle}" Focusable="False"
-                               MinHeight="140"
-                               Background="{DynamicResource FaderMainBrush}" Foreground="White"
-                               SecondBg="{DynamicResource FaderPositiveGainBrush}" GreaterThanValChangeClr="0"
-                               Minimum="-60" Maximum="12" TickFrequency="0.1" SmallChange="0" LargeChange="0"
-                               IsSnapToTickEnabled="True"
-                               HorizontalAlignment="Center" VerticalAlignment="Stretch" Orientation="Vertical"
-                               MouseWheel="OnFaderMouseWheel" MouseDoubleClick="OnFaderMouseDoubleClick"/>
-    </Grid>
-</UserControl>
+    </ContentControl.Resources>
+    <local:ClrChangeSlider x:Name="Fader" Style="{StaticResource FaderStyle}" Focusable="False"
+                           MinHeight="140"
+                           Background="{StaticResource FaderMainBrush}" Foreground="White"
+                           SecondBg="{StaticResource FaderPositiveGainBrush}" GreaterThanValChangeClr="0"
+                           Minimum="-60" Maximum="12" TickFrequency="0.1" SmallChange="0" LargeChange="0"
+                           IsSnapToTickEnabled="True"
+                           HorizontalAlignment="Center" VerticalAlignment="Stretch" Orientation="Vertical"
+                           MouseWheel="OnFaderMouseWheel" MouseDoubleClick="OnFaderMouseDoubleClick"/>
+</ContentControl>

@@ -19,17 +19,17 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <SolidColorBrush x:Key="SliderThumb.Static.Background" Color="{DynamicResource VmDarkElementColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.Static.Background" Color="{StaticResource VmDarkElementColor}"/>
     <SolidColorBrush x:Key="SliderThumb.Static.Border" Color="#FFACACAC"/>
     <SolidColorBrush x:Key="SliderThumb.Static.Foreground" Color="#FFE5E5E5"/>
-    <SolidColorBrush x:Key="SliderThumb.MouseOver.Background" Color="{DynamicResource VmActiveElementMainColor}"/>
-    <SolidColorBrush x:Key="SliderThumb.MouseOver.Border" Color="{DynamicResource VmActiveElementMainColor}"/>
-    <SolidColorBrush x:Key="SliderThumb.Pressed.Background" Color="{DynamicResource VmActiveElementMainColor}"/>
-    <SolidColorBrush x:Key="SliderThumb.Pressed.Border" Color="{DynamicResource VmActiveElementMainColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.MouseOver.Background" Color="{StaticResource VmActiveElementMainColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.MouseOver.Border" Color="{StaticResource VmActiveElementMainColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.Pressed.Background" Color="{StaticResource VmActiveElementMainColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.Pressed.Border" Color="{StaticResource VmActiveElementMainColor}"/>
     <SolidColorBrush x:Key="SliderThumb.Disabled.Background" Color="Transparent"/>
-    <SolidColorBrush x:Key="SliderThumb.Disabled.Border" Color="{DynamicResource VmDarkElementColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.Disabled.Border" Color="{StaticResource VmDarkElementColor}"/>
     <SolidColorBrush x:Key="SliderThumb.Track.Background" Color="Transparent"/>
-    <SolidColorBrush x:Key="SliderThumb.Track.Border" Color="{DynamicResource VmActiveElementMainColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.Track.Border" Color="{StaticResource VmActiveElementMainColor}"/>
     <ControlTemplate x:Key="SliderThumbHorizontalDefault" TargetType="{x:Type Thumb}">
         <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
             <Path x:Name="grip" Data="M 0,0 C0,0 11,0 11,0 11,0 11,18 11,18 11,18 0,18 0,18 0,18 0,0 0,0 z" Fill="{StaticResource SliderThumb.Static.Background}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}" UseLayoutRounding="True" VerticalAlignment="Center"/>
@@ -57,7 +57,7 @@
                 <TickBar x:Name="BottomTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,2,0,0" Placement="Bottom" Grid.Row="2" Visibility="Collapsed"/>
                 <Border x:Name="TrackBackground" Background="{StaticResource SliderThumb.Track.Background}" BorderThickness="1" BorderBrush="{StaticResource SliderThumb.Track.Border}" Height="4.0" Margin="5,0" Grid.Row="1" VerticalAlignment="center">
                     <Canvas Margin="-6,-1">
-                        <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Height="4.0" Visibility="Hidden"/>
+                        <Rectangle x:Name="PART_SelectionRange" Fill="{StaticResource {x:Static SystemColors.HighlightBrushKey}}" Height="4.0" Visibility="Hidden"/>
                     </Canvas>
                 </Border>
                 <Track x:Name="PART_Track" Grid.Row="1">
@@ -129,7 +129,7 @@
                 </Ellipse>
             </Canvas>
             <Ellipse x:Name="grip" Width="42" Height="42" Fill="Transparent" StrokeThickness="2" Stroke="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}"/>
-            <Border Background="{DynamicResource SliderThumb.Disabled.Border}" CornerRadius="6" MinWidth="34"
+            <Border Background="{StaticResource SliderThumb.Disabled.Border}" CornerRadius="6" MinWidth="34"
                     VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13"
                     Text="{Binding Value, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}, StringFormat={}{0:F1}}"/>
