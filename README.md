@@ -36,6 +36,7 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 * [INI File Parser](https://github.com/rickyah/ini-parser)
 * [Extended Voicemeeter Remote API wrapper](https://github.com/A-tG/voicemeeter-remote-api-extended)
 * Partially code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts)
+* [VmrapiDynWrapExt](https://github.com/A-tG/voicemeeter-remote-api-extended)
 
 # Explanation
 * Don't forget app.manifest if you want to modify/make your own program based on this or BandWindow might throw Exception.
