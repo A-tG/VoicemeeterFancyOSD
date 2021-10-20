@@ -38,11 +38,11 @@ namespace VoicemeeterOsdProgram.Factories
 
             VoicemeeterNumParam p = bType switch
             {
-                BtnType.Mono => new (api, Mono(i, sType)),
-                BtnType.Mute => new (api, Mute(i, sType)),
-                BtnType.Solo => new (api, Solo(i, sType)),
-                BtnType.A => new (api, HardBusAssign(i, busIndex)),
-                BtnType.B => new (api, VirtBusAssign(i, busIndex)),
+                BtnType.Mono => new(api, Mono(i, sType)),
+                BtnType.Mute => new(api, Mute(i, sType)),
+                BtnType.Solo => new(api, Solo(i, sType)),
+                BtnType.A => new(api, HardBusAssign(i, busIndex)),
+                BtnType.B => new(api, VirtBusAssign(i, busIndex)),
                 _ => null
             };
             if (p is null) return;
