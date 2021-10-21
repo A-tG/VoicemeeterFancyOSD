@@ -1,12 +1,12 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using TopmostApp.Interop;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Types;
+using WpfScreenHelper;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD
 {
@@ -78,8 +78,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         public Screen OnWhatDisplay()
         {
-            var pointInt = new System.Drawing.Point((int)Left, (int)Top);
-            return Screen.FromPoint(pointInt);
+            return Screen.FromPoint(new Point(Left, Top));
         }
 
         private void UpdateWorkingArea()

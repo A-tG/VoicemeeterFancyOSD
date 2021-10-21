@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Forms;
 using VoicemeeterOsdProgram.Options;
+using WpfScreenHelper;
 
 namespace VoicemeeterOsdProgram.Core
 {
@@ -36,7 +36,7 @@ namespace VoicemeeterOsdProgram.Core
             get => m_mainScreenIndex;
             set
             {
-                var screens = Screen.AllScreens;
+                var screens = Screen.AllScreens.ToArray();
                 var len = screens.Length;
                 if (value < len)
                 {
