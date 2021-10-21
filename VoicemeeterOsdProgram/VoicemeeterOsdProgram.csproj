@@ -68,6 +68,7 @@
   <ItemGroup>
     <PackageReference Include="a-tg.VmrapiDynWrapExt" Version="1.0.2" />
     <PackageReference Include="ini-parser-netstandard" Version="2.5.2" />
+    <PackageReference Include="WpfScreenHelper" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
