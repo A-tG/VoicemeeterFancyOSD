@@ -35,6 +35,7 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 # Uses
 * [INI File Parser](https://github.com/rickyah/ini-parser)
 * [Extended Voicemeeter Remote API wrapper](https://github.com/A-tG/voicemeeter-remote-api-extended)
+* [WpfScreenHelper](https://github.com/micdenny/WpfScreenHelper)
 * Partially code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts)
 
 # Explanation
