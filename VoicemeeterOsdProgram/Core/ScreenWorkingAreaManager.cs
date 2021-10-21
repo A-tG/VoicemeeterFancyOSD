@@ -60,19 +60,12 @@ namespace VoicemeeterOsdProgram.Core
             double marginV = (scr.Bounds.Height >= defHeight) ? defMargin : resolution.Height * defVertPercent;
 
             var wArea = scr.WorkingArea;
-            Rect area = new()
-            { 
-                X = wArea.X, 
-                Y = wArea.Y,
-                Width = wArea.Width,
-                Height = wArea.Height
-            };
-            area.Width -= marginH * 2;
-            area.Height -= marginV * 2;
-            area.X += marginH;
-            area.Y += marginV;
+            wArea.Width -= marginH * 2;
+            wArea.Height -= marginV * 2;
+            wArea.X += marginH;
+            wArea.Y += marginV;
 
-            return area;
+            return wArea;
         }
 
         private static bool IsMainScreenConnected()
