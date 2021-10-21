@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Options;
-using VoicemeeterOsdProgram.Tray;
 
 namespace VoicemeeterOsdProgram
 {
