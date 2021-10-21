@@ -12,7 +12,7 @@
                 TrayMouseDoubleClick="NotifyIcon_TrayMouseDoubleClick">
         <tb:TaskbarIcon.ContextMenu>
             <ContextMenu BorderThickness="0">
-                <MenuItem Header="DEBUG WINDOW" Name="DebugWindowItem" Click="OnDebugWindowClick" Visibility="Collapsed"/>
+                <MenuItem Header="DEBUG WINDOW" Name="DebugWindowItem" Visibility="Collapsed"/>
                 <MenuItem Header="Open Config File" Click="OnOpenConfigClick"/>
                 <MenuItem Header="Paused" Name="PausedItem" Click="OnPausedClick"/>
                 <Separator/>
