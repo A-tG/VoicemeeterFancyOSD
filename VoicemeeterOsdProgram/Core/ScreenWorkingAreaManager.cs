@@ -21,8 +21,20 @@ namespace VoicemeeterOsdProgram.Core
 
         public static Screen MainScreen
         {
-            get => IsMainScreenConnected() ? m_mainScreen : Screen.PrimaryScreen;
-            set
+            get
+            {
+                var screens = Screen.AllScreens.ToArray();
+                var len = screens.Length;
+                if (m_mainScreenIndex < len)
+                {
+                    return screens[m_mainScreenIndex];
+                }
+                else
+                {
+                    return Screen.PrimaryScreen;
+                }
+            }
+            private set
             {
                 if (m_mainScreen == value) return;
 
@@ -57,7 +69,7 @@ namespace VoicemeeterOsdProgram.Core
             var scr = MainScreen;
             var resolution = scr.Bounds;
             double marginH = (resolution.Width >= defWidth) ? defMargin : resolution.Width * defHorPercent;
-            double marginV = (scr.Bounds.Height >= defHeight) ? defMargin : resolution.Height * defVertPercent;
+            double marginV = (resolution.Height >= defHeight) ? defMargin : resolution.Height * defVertPercent;
 
             var wArea = scr.WorkingArea;
             wArea.Width -= marginH * 2;
@@ -66,13 +78,6 @@ namespace VoicemeeterOsdProgram.Core
             wArea.Y += marginV;
 
             return wArea;
-        }
-
-        private static bool IsMainScreenConnected()
-        {
-            if (m_mainScreen is null) return false;
-
-            return Screen.AllScreens.Contains(m_mainScreen);
         }
 
         public static EventHandler<Screen> MainScreenChanged;

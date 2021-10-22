@@ -40,7 +40,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
             // triggered if any setting is changed including taskbar resize, display resolution
             SystemEvents.UserPreferenceChanged += OnSystemSettingsChanged;
-            DpiChanged += OnDisplaySettingsChanged;
         }
 
         public VertAlignment WorkingAreaVertAlignment
@@ -89,35 +88,27 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void UpdatePosAlign()
         {
-            var oldX = Left;
-            var oldY = Top;
-
             var area = m_workingArea;
             var h = ActualHeight;
             var w = ActualWidth;
             if ((area.Height == 0) || (area.Width == 0) || (h == 0) || (w == 0)) 
                 return;
 
-            Left = area.X;
-            Top = area.Y;
+            var scale = 1 / ScreenWorkingAreaManager.MainScreen.ScaleFactor;
 
-            var dpi = VisualTreeHelper.GetDpi(this);
-            double wScale = 1 / dpi.DpiScaleX;
-            double hScale = 1 / dpi.DpiScaleY;
-
-            Left = WorkingAreaHorAlignment switch
+            _ = WorkingAreaHorAlignment switch
             {
-                HorAlignment.Left => area.X,
-                HorAlignment.Center => area.X + (area.Width - w) / 2 / hScale,
-                HorAlignment.Right => area.X + (area.Width - w) / wScale,
-                _ => oldX
+                HorAlignment.Left => Left = area.X,
+                HorAlignment.Center => Left = area.X + (area.Width - w) / 2 / scale,
+                HorAlignment.Right => Left = area.X + (area.Width - w) / scale,
+                _ => 0
             };
-            Top = WorkingAreaVertAlignment switch
+            _ = WorkingAreaVertAlignment switch
             {
-                VertAlignment.Top => area.Y,
-                VertAlignment.Center => area.Y + (area.Height - h) / 2 / hScale,
-                VertAlignment.Bottom => area.Y + (area.Height - h) / wScale,
-                _ => oldY
+                VertAlignment.Top => Top = area.Y,
+                VertAlignment.Center => Top = area.Y + (area.Height - h) / 2 / scale,
+                VertAlignment.Bottom => Top = area.Y + (area.Height - h) / scale,
+                _ => 0
             };
         }
 
