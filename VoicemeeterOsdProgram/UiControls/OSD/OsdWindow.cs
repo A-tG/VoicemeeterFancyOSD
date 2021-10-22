@@ -32,11 +32,11 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             anim.Completed += OnFadeOutComplete;
             m_fadeOutAnim = anim;
 
-            Loaded += OnLoaded;
-            SizeChanged += OnSizeChange;
+            Loaded += (_, _) => UpdatePos();
+            SizeChanged += (_, _) => UpdatePosAlign();
             Shown += OnShow;
 
-            ScreenWorkingAreaManager.MainScreenChanged += (_, _) => UpdateWorkingArea();
+            ScreenWorkingAreaManager.MainScreenChanged += (_, _) => UpdatePos();
 
             // triggered if any setting is changed including taskbar resize, display resolution
             SystemEvents.UserPreferenceChanged += OnSystemSettingsChanged;
@@ -83,6 +83,10 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         private void UpdateWorkingArea()
         {
             m_workingArea = ScreenWorkingAreaManager.GetWokringArea();
+
+            var dpi = GetWorkingAreaDpi();
+            m_workingArea.Width /= dpi.DpiScaleX;
+            m_workingArea.Height /= dpi.DpiScaleY;
             UpdateContMaxSize();
         }
 
@@ -94,20 +98,22 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             if ((area.Height == 0) || (area.Width == 0) || (h == 0) || (w == 0)) 
                 return;
 
-            var scale = 1 / ScreenWorkingAreaManager.MainScreen.ScaleFactor;
+            var dpi = GetWorkingAreaDpi();
+            var scaleX = 1 / dpi.DpiScaleX;
+            var scaleY = 1 / dpi.DpiScaleY;
 
             _ = WorkingAreaHorAlignment switch
             {
                 HorAlignment.Left => Left = area.X,
-                HorAlignment.Center => Left = area.X + (area.Width - w) / 2 / scale,
-                HorAlignment.Right => Left = area.X + (area.Width - w) / scale,
+                HorAlignment.Center => Left = area.X + (area.Width - w) / 2 / scaleX,
+                HorAlignment.Right => Left = area.X + (area.Width - w) / scaleX,
                 _ => 0
             };
             _ = WorkingAreaVertAlignment switch
             {
                 VertAlignment.Top => Top = area.Y,
-                VertAlignment.Center => Top = area.Y + (area.Height - h) / 2 / scale,
-                VertAlignment.Bottom => Top = area.Y + (area.Height - h) / scale,
+                VertAlignment.Center => Top = area.Y + (area.Height - h) / 2 / scaleY,
+                VertAlignment.Bottom => Top = area.Y + (area.Height - h) / scaleY,
                 _ => 0
             };
         }
@@ -121,6 +127,25 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             cont.MainContent.MaxWidth = m_workingArea.Width;
         }
 
+        private DpiScale GetWorkingAreaDpi()
+        {
+            var oldTop = Top;
+            var oldLeft = Left;
+            Left = m_workingArea.Left;
+            Top = m_workingArea.Top;
+            var dpi = VisualTreeHelper.GetDpi(this);
+
+            Left = oldLeft;
+            Top = oldTop;
+            return dpi;
+        }
+
+        private void UpdatePos()
+        {
+            UpdateWorkingArea();
+            UpdatePosAlign();
+        }
+
         private void CancelAnimation()
         {
             m_fadeOutAnim.Completed -= OnFadeOutComplete;
@@ -128,33 +153,16 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             m_fadeOutAnim.Completed += OnFadeOutComplete;
         }
 
-        private void OnLoaded(object sender, EventArgs e)
-        {
-            OnDisplaySettingsChanged(sender, e);
-        }
-
-        private void OnSizeChange(object sender, SizeChangedEventArgs e)
-        {
-            UpdatePosAlign();
-        }
-
-        private void OnDisplaySettingsChanged(object sender, EventArgs e)
-        {
-            UpdateWorkingArea();
-            UpdatePosAlign();
-        }
-
         private void OnSystemSettingsChanged(object sender, UserPreferenceChangedEventArgs e)
         {
             if (e.Category != UserPreferenceCategory.Desktop) return;
 
-            OnDisplaySettingsChanged(sender, e);
+            UpdatePos();
         }
 
         private void OnShow(object sender, EventArgs e)
         {
             CancelAnimation();
-            UpdatePosAlign();
         }
 
         private void OnFadeOutComplete(object sender, EventArgs e)
