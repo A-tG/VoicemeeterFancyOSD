@@ -83,20 +83,14 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void UpdateWorkingArea()
         {
-            var dpi = VisualTreeHelper.GetDpi(this);
             m_workingArea = ScreenWorkingAreaManager.GetWokringArea();
-
-            m_workingArea.Height /= dpi.DpiScaleY;
-            m_workingArea.Width /= dpi.DpiScaleX;
-
             UpdateContMaxSize();
         }
 
         private void UpdatePosAlign()
         {
-            var dpi = VisualTreeHelper.GetDpi(this);
-            double wScale = 1 / dpi.DpiScaleX;
-            double hScale = 1 / dpi.DpiScaleY;
+            var oldX = Left;
+            var oldY = Top;
 
             var area = m_workingArea;
             var h = ActualHeight;
@@ -104,19 +98,26 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             if ((area.Height == 0) || (area.Width == 0) || (h == 0) || (w == 0)) 
                 return;
 
-            _ = WorkingAreaHorAlignment switch
+            Left = area.X;
+            Top = area.Y;
+
+            var dpi = VisualTreeHelper.GetDpi(this);
+            double wScale = 1 / dpi.DpiScaleX;
+            double hScale = 1 / dpi.DpiScaleY;
+
+            Left = WorkingAreaHorAlignment switch
             {
-                HorAlignment.Left => Left = area.X,
-                HorAlignment.Center => Left = area.X + (area.Width - w) / 2 / hScale,
-                HorAlignment.Right => Left = area.X + (area.Width - w) / wScale,
-                _ => 0
+                HorAlignment.Left => area.X,
+                HorAlignment.Center => area.X + (area.Width - w) / 2 / hScale,
+                HorAlignment.Right => area.X + (area.Width - w) / wScale,
+                _ => oldX
             };
-            _ = WorkingAreaVertAlignment switch
+            Top = WorkingAreaVertAlignment switch
             {
-                VertAlignment.Top => Top = area.Y,
-                VertAlignment.Center => Top = area.Y + (area.Height - h) / 2 / hScale,
-                VertAlignment.Bottom => Top = area.Y + (area.Height - h) / wScale,
-                _ => 0
+                VertAlignment.Top => area.Y,
+                VertAlignment.Center => area.Y + (area.Height - h) / 2 / hScale,
+                VertAlignment.Bottom => area.Y + (area.Height - h) / wScale,
+                _ => oldY
             };
         }
 
