@@ -1,5 +1,5 @@
-﻿using IniParser;
-using IniParser.Model;
+﻿using IniParser.Model;
+using IniParser.Parser;
 using System;
 using System.IO;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace VoicemeeterOsdProgram.Options
 
         private static readonly string m_path = @$"{AppDomain.CurrentDomain.BaseDirectory}config\config.ini";
 
-        private static readonly FileIniDataParser m_parser = new();
+        private static readonly IniDataParser m_parser = new();
         private static IniData m_data = new();
         private static FileSystemWatcher m_watcher = new();
         private static DispatcherTimer m_timer = new(DispatcherPriority.Background) { Interval = TimeSpan.FromMilliseconds(1000)};
@@ -94,15 +94,7 @@ namespace VoicemeeterOsdProgram.Options
 
         public static async Task<bool> TrySaveAsync()
         {
-            // Dirty hack to make it async
-            await Task.Delay(1);
-            return TrySave();
-        }
-
-        public static bool TrySave()
-        {
             bool result = false;
-
             IsWatcherPaused = true;
 
             try
@@ -112,34 +104,33 @@ namespace VoicemeeterOsdProgram.Options
                 {
                     Directory.CreateDirectory(directoryPath);
                 }
+
                 ToIniData(Osd);
-                m_parser.WriteFile(m_path, m_data);
+                using StreamWriter sw = new(m_path);
+                await sw.WriteAsync(m_data.ToString());
 
                 result = true;
             }
             catch { }
 
             IsWatcherPaused = false;
-
             return result;
         }
 
         public static async Task<bool> TryReadAsync()
         {
-            // Dirty hack to make it async
-            await Task.Delay(1);
-            return TryRead();
-        }
-
-        public static bool TryRead()
-        {
             bool result = false;
-
             IsWatcherPaused = false;
 
             try
             {
-                m_data = m_parser.ReadFile(m_path);
+                const long MB = 1024 * 1024;
+                if (new FileInfo(m_path).Length > 100 * MB) throw new InvalidOperationException("Config file size is too large");
+
+                using StreamReader sr = new(m_path);
+                string fileData = await sr.ReadToEndAsync();
+
+                m_data = m_parser.Parse(fileData);
                 FromIniData(Osd);
 
                 m_data = new();
@@ -148,7 +139,6 @@ namespace VoicemeeterOsdProgram.Options
             catch { }
 
             IsWatcherPaused = true;
-
             return result;
         }
 
