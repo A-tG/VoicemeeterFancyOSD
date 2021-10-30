@@ -106,8 +106,10 @@ namespace VoicemeeterOsdProgram.Options
                 }
 
                 ToIniData(Osd);
-                using StreamWriter sw = new(m_path);
-                await sw.WriteAsync(m_data.ToString());
+                await using (StreamWriter sw = new(m_path))
+                {
+                    await sw.WriteAsync(m_data.ToString());
+                }
 
                 result = true;
             }
@@ -129,6 +131,7 @@ namespace VoicemeeterOsdProgram.Options
 
                 using StreamReader sr = new(m_path);
                 string fileData = await sr.ReadToEndAsync();
+                sr.Dispose();
 
                 m_data = m_parser.Parse(fileData);
                 FromIniData(Osd);
