@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using TopmostApp.Interop;
 using VoicemeeterOsdProgram.Core;
+using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Types;
 using WpfScreenHelper;
 
@@ -84,7 +85,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         {
             m_workingArea = ScreenWorkingAreaManager.GetWokringArea();
 
-            var dpi = GetWorkingAreaDpi();
+            var dpi = DpiHelper.GetDpiFromPoint(new Point(m_workingArea.X, m_workingArea.Y));
             m_workingArea.Width /= dpi.DpiScaleX;
             m_workingArea.Height /= dpi.DpiScaleY;
             UpdateContMaxSize();
@@ -98,7 +99,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             if ((area.Height == 0) || (area.Width == 0) || (h == 0) || (w == 0)) 
                 return;
 
-            var dpi = GetWorkingAreaDpi();
+            var dpi = DpiHelper.GetDpiFromPoint(new Point(area.X, area.Y));
             var scaleX = 1 / dpi.DpiScaleX;
             var scaleY = 1 / dpi.DpiScaleY;
 
@@ -125,19 +126,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             cont.MainContentWrap.MaxWidth = m_workingArea.Width;
             cont.MainContentWrap.MaxHeight = m_workingArea.Height;
             cont.MainContent.MaxWidth = m_workingArea.Width;
-        }
-
-        private DpiScale GetWorkingAreaDpi()
-        {
-            var oldTop = Top;
-            var oldLeft = Left;
-            Left = m_workingArea.Left;
-            Top = m_workingArea.Top;
-            var dpi = VisualTreeHelper.GetDpi(this);
-
-            Left = oldLeft;
-            Top = oldTop;
-            return dpi;
         }
 
         private void UpdatePos()

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using VoicemeeterOsdProgram.Core;
+using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Options;
 
 namespace VoicemeeterOsdProgram
@@ -17,6 +18,7 @@ namespace VoicemeeterOsdProgram
         void OnAppStartup(object sender, StartupEventArgs e)
         {
             OptionsStorage.Init();
+            DpiHelper.Init();
             ScreenWorkingAreaManager.Init();
             TrayIconManager.Init();
             VoicemeeterApiClient.Init();
