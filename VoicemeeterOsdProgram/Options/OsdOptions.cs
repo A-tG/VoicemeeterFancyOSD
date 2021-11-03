@@ -10,6 +10,7 @@ namespace VoicemeeterOsdProgram.Options
         private bool m_isInteractable = false;
         private uint m_durationMs = 2000;
         private double m_backgroundOpacity = 0.9;
+        private bool m_isBackgroundBlurred = true;
         private HorAlignment m_horizontalAlignment = HorAlignment.Right;
         private VertAlignment m_verticalAlignment = VertAlignment.Top;
 
@@ -73,6 +74,18 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
+        public bool IsBackgroundBlurred
+        {
+            get => m_isBackgroundBlurred;
+            set
+            {
+                if (value == m_isBackgroundBlurred) return;
+
+                m_isBackgroundBlurred = value;
+                IsBackgroundBlurredChanged?.Invoke(this, value);
+            }
+        }
+
         public HorAlignment HorizontalAlignment
         {
             get => m_horizontalAlignment;
@@ -102,6 +115,7 @@ namespace VoicemeeterOsdProgram.Options
         public event EventHandler<bool> IsInteractableChanged;
         public event EventHandler<uint> DurationMsChanged;
         public event EventHandler<double> BackgroundOpacityChanged;
+        public event EventHandler<bool> IsBackgroundBlurredChanged;
         public event EventHandler<HorAlignment> HorizontalAlignmentChanged;
         public event EventHandler<VertAlignment> VerticalAlignmentChanged;
     }
