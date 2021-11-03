@@ -16,85 +16,51 @@ namespace VoicemeeterOsdProgram.Options
         public uint DisplayIndex
         {
             get => m_displayIndex;
-            set
-            {
-                if (value == m_displayIndex) return;
-
-                m_displayIndex = value;
-                DisplayIndexChanged?.Invoke(this, value);
-            }
+            set => HandlePropertyChange(ref m_displayIndex, ref value, DisplayIndexChanged);
         }
 
         public bool IsShowOnlyIfVoicemeeterHidden 
         {
             get => m_isShowOnlyIfVoicemeeterHidden;
-            set
-            {
-                if (value == m_isShowOnlyIfVoicemeeterHidden) return;
-
-                m_isShowOnlyIfVoicemeeterHidden = value;
-                IsShowOnlyIfVoicemeeterHiddenChanged?.Invoke(this, value);
-            }
+            set => HandlePropertyChange(ref m_isShowOnlyIfVoicemeeterHidden, ref value, IsShowOnlyIfVoicemeeterHiddenChanged);
         }
 
         public bool IsInteractable 
         {
             get => m_isInteractable;
-            set
-            {
-                if (value == m_isInteractable) return;
-
-                m_isInteractable = value;
-                IsInteractableChanged?.Invoke(this, value);
-            }
+            set => HandlePropertyChange(ref m_isInteractable, ref value, IsInteractableChanged);
         }
 
         public uint DurationMs
         {
             get => m_durationMs;
-            set
-            {
-                if (value == m_durationMs) return;
-
-                m_durationMs = value;
-                DurationMsChanged?.Invoke(this, value);
-            }
+            set => HandlePropertyChange(ref m_durationMs, ref value, DurationMsChanged);
         }
 
         public double BackgroundOpacity
         {
             get => m_backgroundOpacity;
-            set
-            {
-                if (value == m_backgroundOpacity) return;
-
-                m_backgroundOpacity = value;
-                BackgroundOpacityChanged?.Invoke(this, value);
-            }
+            set => HandlePropertyChange(ref m_backgroundOpacity, ref value, BackgroundOpacityChanged);
         }
 
         public HorAlignment HorizontalAlignment
         {
             get => m_horizontalAlignment;
-            set
-            {
-                if (value == m_horizontalAlignment) return;
-
-                m_horizontalAlignment = value;
-                HorizontalAlignmentChanged?.Invoke(this, value);
-            }
+            set => HandlePropertyChange(ref m_horizontalAlignment, ref value, HorizontalAlignmentChanged);
         }
 
         public VertAlignment VerticalAlignment
         {
             get => m_verticalAlignment;
-            set
-            {
-                if (value == m_verticalAlignment) return;
+            set => HandlePropertyChange(ref m_verticalAlignment, ref value, VerticalAlignmentChanged);
+        }
 
-                m_verticalAlignment = value;
-                VerticalAlignmentChanged?.Invoke(this, value);
-            }
+        private void HandlePropertyChange<T>(ref T oldVal, ref T newVal, EventHandler<T> eventIfNotEqual)
+        {
+            if (oldVal.Equals(newVal)) return;
+
+            oldVal = newVal;
+            eventIfNotEqual?.Invoke(this, newVal);
         }
 
         public event EventHandler<uint> DisplayIndexChanged;
