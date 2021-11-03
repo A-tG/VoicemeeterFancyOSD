@@ -149,6 +149,7 @@ namespace TopmostApp.Interop
             }
             SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)styles);
         }
+
         private void InitCustomProperties(object sender, RoutedEventArgs e)
         {
             if (IsClickThrough) ToggleClickThrough(true);
