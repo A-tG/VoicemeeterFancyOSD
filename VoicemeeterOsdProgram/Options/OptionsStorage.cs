@@ -173,15 +173,9 @@ namespace VoicemeeterOsdProgram.Options
             {
                 if (!string.IsNullOrEmpty(field))
                 {
-                    object result;
-                    if (optionProp.PropertyType.IsEnum)
-                    {
-                        result = Enum.Parse(optionProp.PropertyType, field);
-                    }
-                    else
-                    {
-                        result = Convert.ChangeType(field, optionProp.PropertyType);
-                    }
+                    object result = optionProp.PropertyType.IsEnum ? 
+                        Enum.Parse(optionProp.PropertyType, field) :
+                        Convert.ChangeType(field, optionProp.PropertyType);
                     if (result is not null)
                     {
                         optionProp.SetValue(optionsObj, result);
