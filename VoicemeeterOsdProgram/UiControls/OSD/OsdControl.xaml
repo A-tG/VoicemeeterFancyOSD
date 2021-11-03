@@ -40,4 +40,15 @@
             </StackPanel>
         </Grid>
     </Viewbox>
+    <!-- Used to add rounded corners -->
+    <UserControl.Clip>
+        <RectangleGeometry RadiusX="8" RadiusY="8">
+            <RectangleGeometry.Rect>
+                <MultiBinding Converter="{StaticResource RectConverter}">
+                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                </MultiBinding>
+            </RectangleGeometry.Rect>
+        </RectangleGeometry>
+    </UserControl.Clip>
 </UserControl>

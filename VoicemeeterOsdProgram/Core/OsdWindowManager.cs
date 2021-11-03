@@ -51,7 +51,6 @@ namespace VoicemeeterOsdProgram.Core
 
             var win = new OsdWindow()
             {
-                IsBgBlurred = options.IsBackgroundBlurred,
                 WorkingAreaVertAlignment = options.VerticalAlignment,
                 WorkingAreaHorAlignment = options.HorizontalAlignment,
                 Content = osd,
@@ -73,7 +72,6 @@ namespace VoicemeeterOsdProgram.Core
             options.IsInteractableChanged += (_, val) => IsInteractable = val;
             options.DurationMsChanged += (_, val) => DurationMs = val;
             options.BackgroundOpacityChanged += (_, val) => BgOpacity = val;
-            options.IsBackgroundBlurredChanged += (_, val) => m_window.IsBgBlurred = val;
             options.VerticalAlignmentChanged += (_, val) => m_window.WorkingAreaVertAlignment = val;
             options.HorizontalAlignmentChanged += (_, val) => m_window.WorkingAreaHorAlignment = val;
 
