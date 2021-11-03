@@ -122,4 +122,13 @@
         </Setter>
         <Setter Property="Content" Value="M"/>
     </Style>
+
+    <Style x:Key="SelBtnStyle" TargetType="{x:Type strip:OutlineTglBtn}" BasedOn="{StaticResource StripBtnBaseStyle}">
+        <Setter Property="ToggledColor">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource VmActiveElementOrangeColor}"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Content" Value="SEL"/>
+    </Style>
 </ResourceDictionary>

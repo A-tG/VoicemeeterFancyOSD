@@ -16,6 +16,8 @@ namespace VoicemeeterOsdProgram.Factories
 
         public static string VirtBusAssign(int i, int busIndex) => GetCommandHead(i) + $"B{busIndex}";
 
+        public static string Sel(int i) => GetCommandHead(i, StripType.Output) + "Sel";
+
         private static string GetCommandHead(int i, StripType type = StripType.Input)
         {
             return type switch

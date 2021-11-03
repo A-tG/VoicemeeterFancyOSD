@@ -27,17 +27,21 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            
-            <local:FaderContainer x:Name="FaderCont" Grid.Column="0"/>
-            <Grid Grid.Column="1" 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Name="AdditionalControlBtns" Grid.Row="0" Grid.ColumnSpan="2"/>
+            <local:FaderContainer x:Name="FaderCont" Grid.Column="0" Grid.Row="1"/>
+            <Grid Grid.Column="1" Grid.Row="1"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel Name="BusBtnsContainer" Grid.Row="0" Margin="0,0,0,3"
-                            HorizontalAlignment="Stretch" VerticalAlignment="Top">
-                </StackPanel>
+                            HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
                 <StackPanel Name="ControlBtnsContainer" Grid.Row="1"
                             HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
             </Grid>

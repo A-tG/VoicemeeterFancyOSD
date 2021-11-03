@@ -13,7 +13,8 @@ namespace VoicemeeterOsdProgram.Factories
             Mono,
             Solo,
             A,
-            B
+            B,
+            Sel
         }
 
         private static void MakeLabelParam(StripControl strip, int index, string defaultLabel, StripType type)
@@ -43,6 +44,7 @@ namespace VoicemeeterOsdProgram.Factories
                 BtnType.Solo => new(api, Solo(i, sType)),
                 BtnType.A => new(api, HardBusAssign(i, busIndex)),
                 BtnType.B => new(api, VirtBusAssign(i, busIndex)),
+                BtnType.Sel => new(api, Sel(i)),
                 _ => null
             };
             if (p is null) return;

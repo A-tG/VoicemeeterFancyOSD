@@ -56,6 +56,14 @@ namespace VoicemeeterOsdProgram.Factories
             return btnCont;
         }
 
+        public static ButtonContainer GetSel()
+        {
+            var btnCont = new ButtonContainer();
+            var btn = btnCont.Btn;
+            btn.Style = (Style)btnCont.Resources["SelBtnStyle"];
+            return btnCont;
+        }
+
         public static ButtonContainer GetBusSelect()
         {
             var btnCont = new ButtonContainer();
