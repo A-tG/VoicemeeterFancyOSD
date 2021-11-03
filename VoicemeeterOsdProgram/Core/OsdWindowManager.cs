@@ -51,6 +51,7 @@ namespace VoicemeeterOsdProgram.Core
 
             var win = new OsdWindow()
             {
+                IsBgBlurred = true,
                 WorkingAreaVertAlignment = options.VerticalAlignment,
                 WorkingAreaHorAlignment = options.HorizontalAlignment,
                 Content = osd,
