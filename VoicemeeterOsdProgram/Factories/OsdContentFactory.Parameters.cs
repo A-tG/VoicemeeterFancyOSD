@@ -16,9 +16,9 @@ namespace VoicemeeterOsdProgram.Factories
             B
         }
 
-        private static void MakeStripLabelParam(StripControl strip, int index, string defaultLabel)
+        private static void MakeLabelParam(StripControl strip, int index, string defaultLabel, StripType type)
         {
-            VoicemeeterStrParam p = new(VoicemeeterApiClient.Api, InputLabel(index));
+            VoicemeeterStrParam p = new(VoicemeeterApiClient.Api, Label(index, type));
             strip.defaultLabel = defaultLabel;
             strip.VmParameter = p;
             m_vmParams.Add(p);

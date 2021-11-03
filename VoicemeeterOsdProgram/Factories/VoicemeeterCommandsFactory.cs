@@ -26,6 +26,6 @@ namespace VoicemeeterOsdProgram.Factories
 
         }
 
-        public static string InputLabel(int i) => $"{GetCommandHead(i)}Label";
+        public static string Label(int i, StripType type = StripType.Input) => GetCommandHead(i, type) + "Label";
     }
 }

@@ -25,7 +25,7 @@ namespace VoicemeeterOsdProgram.Factories
             {
                 var strip = GetHardwareInputStrip(i);
 
-                MakeStripLabelParam(strip, i, $"HardIn{i + 1}");
+                MakeLabelParam(strip, i, $"HardIn{i + 1}", StripType.Input);
                 MakeFaderParam(strip, i, StripType.Input);
 
                 osd.MainContent.Children.Add(strip);
@@ -38,7 +38,7 @@ namespace VoicemeeterOsdProgram.Factories
 
                 var strip = GetVirtualInputStrip(stripIndex);
 
-                MakeStripLabelParam(strip, stripIndex, $"VirtIn{i + 1}");
+                MakeLabelParam(strip, stripIndex, $"VirtIn{i + 1}", StripType.Input);
                 MakeFaderParam(strip, stripIndex, StripType.Input);
 
                 osd.MainContent.Children.Add(strip);
@@ -51,6 +51,7 @@ namespace VoicemeeterOsdProgram.Factories
                 var name = (m_vmProperties.hardOutputs == 1) ? "A" : $"A{i + 1}";
                 strip.StripLabel.Text = name;
 
+                MakeLabelParam(strip, i, name, StripType.Output);
                 MakeFaderParam(strip, i, StripType.Output);
 
                 osd.MainContent.Children.Add(strip);
