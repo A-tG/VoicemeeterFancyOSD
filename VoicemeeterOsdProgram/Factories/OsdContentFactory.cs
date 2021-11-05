@@ -11,11 +11,13 @@ namespace VoicemeeterOsdProgram.Factories
     {
         private static List<VoicemeeterParameterBase> m_vmParams;
         private static VoicemeeterProperties m_vmProperties;
+        private static List<ButtonContainer> m_selButtons;
 
         public static void FillOsdWindow(ref OsdControl osd, ref VoicemeeterParameterBase[] vmParams, VoicemeeterType type)
         {
             m_vmProperties = new VoicemeeterProperties(type);
             m_vmParams = new();
+            m_selButtons = new();
             var api = VoicemeeterApiClient.Api;
 
             osd.AllowAutoUpdateSeparators = false;
@@ -83,6 +85,7 @@ namespace VoicemeeterOsdProgram.Factories
             vmParams = m_vmParams.ToArray();
             m_vmParams.Clear();
             m_vmParams = null;
+            m_selButtons = null;
         }
 
         private static StripControl GetOutputStrip(int stripIndex)
@@ -97,9 +100,13 @@ namespace VoicemeeterOsdProgram.Factories
             MakeButtonParam(BtnType.Mute, StripType.Output, btn, stripIndex);
             strip.ControlBtnsContainer.Children.Add(btn);
 
-            btn = StripButtonFactory.GetSel();
-            MakeButtonParam(BtnType.Sel, StripType.Output, btn, stripIndex);
-            strip.AdditionalControlBtns.Children.Add(btn);
+            var type = m_vmProperties.type;
+            if ((type == VoicemeeterType.Potato) || (type == VoicemeeterType.Potato64))
+            {
+                btn = StripButtonFactory.GetSel();
+                MakeButtonParam(BtnType.Sel, StripType.Output, btn, stripIndex);
+                strip.AdditionalControlBtns.Children.Add(btn);
+            }
 
             return strip;
         }

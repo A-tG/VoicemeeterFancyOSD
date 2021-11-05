@@ -32,6 +32,26 @@ namespace VoicemeeterOsdProgram.Factories
             m_vmParams.Add(p);
         }
 
+        private static VoicemeeterNumParam GetSelParam(int i, ButtonContainer btnCtn)
+        {
+            VoicemeeterNumParam p = new(VoicemeeterApiClient.Api, Sel(i));
+            var selBtns = m_selButtons;
+            selBtns.Add(btnCtn);
+
+            // need to set all Sel buttons and parameters to 0 before main click event
+            btnCtn.Btn.Click += (sender, _) =>
+            {
+                foreach (var btnContainer in selBtns)
+                {
+                    btnContainer.Btn.State = 0;
+                    btnContainer.VmParameter?.Write(0);
+                }
+                ((OutlineTglBtn)sender).State = 1;
+            };
+
+            return p;
+        }
+
         private static void MakeButtonParam(BtnType bType, StripType sType, ButtonContainer btnCtn, int i, int busIndex = 0)
         {
             var api = VoicemeeterApiClient.Api;
@@ -44,7 +64,7 @@ namespace VoicemeeterOsdProgram.Factories
                 BtnType.Solo => new(api, Solo(i, sType)),
                 BtnType.A => new(api, HardBusAssign(i, busIndex)),
                 BtnType.B => new(api, VirtBusAssign(i, busIndex)),
-                BtnType.Sel => new(api, Sel(i)),
+                BtnType.Sel => GetSelParam(i, btnCtn),
                 _ => null
             };
             if (p is null) return;
