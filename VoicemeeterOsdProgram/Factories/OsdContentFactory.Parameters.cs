@@ -38,15 +38,17 @@ namespace VoicemeeterOsdProgram.Factories
             var selBtns = m_selButtons;
             selBtns.Add(btnCtn);
 
-            // need to set all Sel buttons and parameters to 0 before main click event
+            // dirty hack to reset all Sel buttons to 0 before main click event, otherwise multiple Sel buttons will be active
             btnCtn.Btn.Click += (sender, _) =>
             {
+                var btn = (OutlineTglBtn)sender;
+                var oldVal = btn.State;
                 foreach (var btnContainer in selBtns)
                 {
                     btnContainer.Btn.State = 0;
                     btnContainer.VmParameter?.Write(0);
                 }
-                ((OutlineTglBtn)sender).State = 1;
+                btn.State = ++oldVal;
             };
 
             return p;
