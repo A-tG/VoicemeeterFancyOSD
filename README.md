@@ -6,7 +6,7 @@ On-Screen display for [Voicemeeter](https://voicemeeter.com/) that works with fu
 Windows 10 or newer is required. 
 May work with older Windows versions (not older than Windows 7) but OSD will work as normal window and will not be displayed on top of fullscreen applications.
 
-Install [.NET Desktop runtime](https://dotnet.microsoft.com/download) so I don't have to upload a "self-contained" version of the program that's about 150 MB in size.
+Install [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/6.0/runtime) so I don't have to upload a "self-contained" version of the program that's about 150 MB in size.
 
 You can change settings in *PROGRAM_LOCATION\config\config.ini* (created on program launch if not exist). And settings are automatically validated and updated on file change, no need to restart.
 
