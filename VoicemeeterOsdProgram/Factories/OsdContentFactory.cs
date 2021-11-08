@@ -100,12 +100,14 @@ namespace VoicemeeterOsdProgram.Factories
             MakeButtonParam(BtnType.Mute, StripType.Output, btn, stripIndex);
             strip.ControlBtnsContainer.Children.Add(btn);
 
-            var type = m_vmProperties.type;
-            if ((type == VoicemeeterType.Potato) || (type == VoicemeeterType.Potato64))
+            switch (m_vmProperties.type)
             {
-                btn = StripButtonFactory.GetSel();
-                MakeButtonParam(BtnType.Sel, StripType.Output, btn, stripIndex);
-                strip.AdditionalControlBtns.Children.Add(btn);
+                case VoicemeeterType.Potato:
+                case VoicemeeterType.Potato64:
+                    btn = StripButtonFactory.GetSel();
+                    MakeButtonParam(BtnType.Sel, StripType.Output, btn, stripIndex);
+                    strip.AdditionalControlBtns.Children.Add(btn);
+                    break;
             }
 
             return strip;
