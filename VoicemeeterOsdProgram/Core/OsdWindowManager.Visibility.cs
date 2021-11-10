@@ -29,6 +29,14 @@ namespace VoicemeeterOsdProgram.Core
                         break;
                     }
                 }
+                foreach (ButtonContainer btnCont in strip.AdditionalControlBtns.Children)
+                {
+                    if (btnCont.Visibility == Visibility.Visible)
+                    {
+                        isAnyVisibleBtn = true;
+                        break;
+                    }
+                }
 
                 bool isVisibleChildren = (strip.FaderCont.Visibility == Visibility.Visible) || isAnyVisibleBtn;
                 if (isVisibleChildren)
@@ -55,6 +63,10 @@ namespace VoicemeeterOsdProgram.Core
                     btnCont.Visibility = vis;
                 }
                 foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
+                {
+                    btnCont.Visibility = vis;
+                }
+                foreach (ButtonContainer btnCont in strip.AdditionalControlBtns.Children)
                 {
                     btnCont.Visibility = vis;
                 }
