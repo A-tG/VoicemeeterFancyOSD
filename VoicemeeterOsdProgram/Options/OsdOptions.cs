@@ -40,7 +40,18 @@ namespace VoicemeeterOsdProgram.Options
         public double BackgroundOpacity
         {
             get => m_backgroundOpacity;
-            set => HandlePropertyChange(ref m_backgroundOpacity, ref value, BackgroundOpacityChanged);
+            set
+            {
+                if (value < 0)
+                {
+                    value = 0;
+                }
+                else if (value > 1)
+                {
+                    value = 1;
+                }
+                HandlePropertyChange(ref m_backgroundOpacity, ref value, BackgroundOpacityChanged);
+            }
         }
 
         public HorAlignment HorizontalAlignment
