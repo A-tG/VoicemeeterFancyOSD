@@ -2,6 +2,7 @@
 using IniParser.Parser;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -153,23 +154,27 @@ namespace VoicemeeterOsdProgram.Options
             foreach (var prop in properties)
             {
                 m_data[sectionName][prop.Name] = prop.GetValue(optionsObj).ToString();
-                var comment = GetPropComment(prop);
-                if (!string.IsNullOrEmpty(comment))
+                var comments = GetPropComments(prop);
+                if (comments.Count > 0)
                 {
-                    m_data[sectionName].GetKeyData(prop.Name).Comments.Add(comment);
+                    m_data[sectionName].GetKeyData(prop.Name).Comments = comments;
                 }
             }
         }
 
-        private static string GetPropComment(PropertyInfo optionProp)
+        private static List<string> GetPropComments(PropertyInfo prop)
         {
-            string comment = string.Empty;
-            if (optionProp.PropertyType.IsEnum)
+            List<string> comments = new();
+            if (prop.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute att)
             {
-                var values = string.Join(", ", optionProp.PropertyType.GetEnumNames());
-                comment = $"Possible values: {values}";
+                comments.Add(att.Description);
             }
-            return comment;
+            if (prop.PropertyType.IsEnum)
+            {
+                var values = string.Join(", ", prop.PropertyType.GetEnumNames());
+                comments.Add($"Possible values: {values}");
+            }
+            return comments;
         }
 
         private static void FromIniData<T>(T optionsObj)
