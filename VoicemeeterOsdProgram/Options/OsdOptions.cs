@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.Options
@@ -37,6 +38,7 @@ namespace VoicemeeterOsdProgram.Options
             set => HandlePropertyChange(ref m_durationMs, ref value, DurationMsChanged);
         }
 
+        [Description("From 0.0 to 1.0. The recommended is 0.8 - 0.95")]
         public double BackgroundOpacity
         {
             get => m_backgroundOpacity;
