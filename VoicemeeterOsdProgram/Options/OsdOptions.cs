@@ -7,7 +7,7 @@ namespace VoicemeeterOsdProgram.Options
     public class OsdOptions
     {
         private uint m_displayIndex;
-        private bool m_isShowOnlyIfVoicemeeterHidden = true;
+        private bool m_dontShowIfVoicemeeterVisible = true;
         private bool m_isInteractable = false;
         private uint m_durationMs = 2000;
         private double m_backgroundOpacity = 0.9;
@@ -20,10 +20,11 @@ namespace VoicemeeterOsdProgram.Options
             set => HandlePropertyChange(ref m_displayIndex, ref value, DisplayIndexChanged);
         }
 
-        public bool IsShowOnlyIfVoicemeeterHidden 
+        [Description("Dont show OSD if Voicemeeter's window is visible (and not obstructed) or is active window")]
+        public bool DontShowIfVoicemeeterVisible 
         {
-            get => m_isShowOnlyIfVoicemeeterHidden;
-            set => HandlePropertyChange(ref m_isShowOnlyIfVoicemeeterHidden, ref value, IsShowOnlyIfVoicemeeterHiddenChanged);
+            get => m_dontShowIfVoicemeeterVisible;
+            set => HandlePropertyChange(ref m_dontShowIfVoicemeeterVisible, ref value, DontShowIfVoicemeeterVisibleChanged);
         }
 
         public bool IsInteractable 
@@ -77,7 +78,7 @@ namespace VoicemeeterOsdProgram.Options
         }
 
         public event EventHandler<uint> DisplayIndexChanged;
-        public event EventHandler<bool> IsShowOnlyIfVoicemeeterHiddenChanged;
+        public event EventHandler<bool> DontShowIfVoicemeeterVisibleChanged;
         public event EventHandler<bool> IsInteractableChanged;
         public event EventHandler<uint> DurationMsChanged;
         public event EventHandler<double> BackgroundOpacityChanged;

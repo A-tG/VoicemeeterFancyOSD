@@ -65,6 +65,6 @@ namespace VoicemeeterOsdProgram.Core
         }
 
         public static bool IsIgnoreVmParameters =>
-            m_isMouseEntered || OptionsStorage.Osd.IsShowOnlyIfVoicemeeterHidden && IsVoicemeeterWindowForeground();
+            m_isMouseEntered || OptionsStorage.Osd.DontShowIfVoicemeeterVisible && IsVoicemeeterWindowForeground();
     }
 }
