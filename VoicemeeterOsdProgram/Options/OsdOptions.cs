@@ -14,6 +14,7 @@ namespace VoicemeeterOsdProgram.Options
         private HorAlignment m_horizontalAlignment = HorAlignment.Right;
         private VertAlignment m_verticalAlignment = VertAlignment.Top;
 
+        [Description("0 - is a primary display, 1 - is a secondary, etc")]
         public uint DisplayIndex
         {
             get => m_displayIndex;
@@ -27,12 +28,14 @@ namespace VoicemeeterOsdProgram.Options
             set => HandlePropertyChange(ref m_dontShowIfVoicemeeterVisible, ref value, DontShowIfVoicemeeterVisibleChanged);
         }
 
+        [Description("User can interact with UI elements in OSD (Gain Fader, Mute, Mono, etc)")]
         public bool IsInteractable 
         {
             get => m_isInteractable;
             set => HandlePropertyChange(ref m_isInteractable, ref value, IsInteractableChanged);
         }
 
+        [Description("How long OSD is displayed (in milliseconds)")]
         public uint DurationMs
         {
             get => m_durationMs;
