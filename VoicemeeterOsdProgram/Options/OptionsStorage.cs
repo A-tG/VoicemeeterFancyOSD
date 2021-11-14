@@ -167,12 +167,12 @@ namespace VoicemeeterOsdProgram.Options
             List<string> comments = new();
             if (prop.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute att)
             {
-                comments.Add(att.Description);
+                comments.Add(' ' + att.Description);
             }
             if (prop.PropertyType.IsEnum)
             {
                 var values = string.Join(", ", prop.PropertyType.GetEnumNames());
-                comments.Add($"Possible values: {values}");
+                comments.Add($" Possible values: {values}");
             }
             return comments;
         }
