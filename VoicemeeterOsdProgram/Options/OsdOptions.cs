@@ -4,7 +4,7 @@ using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.Options
 {
-    public class OsdOptions
+    public class OsdOptions : OptionsBase
     {
         private uint m_displayIndex;
         private bool m_dontShowIfVoicemeeterVisible = true;
@@ -70,14 +70,6 @@ namespace VoicemeeterOsdProgram.Options
         {
             get => m_verticalAlignment;
             set => HandlePropertyChange(ref m_verticalAlignment, ref value, VerticalAlignmentChanged);
-        }
-
-        private void HandlePropertyChange<T>(ref T oldVal, ref T newVal, EventHandler<T> eventIfNotEqual)
-        {
-            if (oldVal.Equals(newVal)) return;
-
-            oldVal = newVal;
-            eventIfNotEqual?.Invoke(this, newVal);
         }
 
         public event EventHandler<uint> DisplayIndexChanged;
