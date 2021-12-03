@@ -23,6 +23,7 @@ namespace VoicemeeterOsdProgram
             TrayIconManager.Init();
             VoicemeeterApiClient.Init();
             OsdWindowManager.Init();
+            _ = UpdateManager.TryCheckForUpdates();
         }
     }
 }
