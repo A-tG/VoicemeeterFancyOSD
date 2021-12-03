@@ -22,8 +22,8 @@ For example in Voicemeeter when you change gain from 0 to -60 you will experienc
 
 So this program should be a good "replacement" of volume pop-up built in Windows, if you use Voicemeeter of course.
 
-# Installation
-Download the latest version from the [Releases](releases) page, unpack and launch VoicemeeterFancyOsdHost.exe
+# Installation and Usage
+The program is portable, not installation required. Download the latest version from the [Releases](https://github.com/A-tG/VoicemeeterFancyOSD/releases) page, unpack and launch VoicemeeterFancyOsdHost.exe
 
 # Build instructions
 [.NET 6.0](https://dotnet.microsoft.com/download) WPF project
