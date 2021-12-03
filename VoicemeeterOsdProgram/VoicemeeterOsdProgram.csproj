@@ -15,12 +15,12 @@
   <PropertyGroup>
       <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
       <ApplicationManifest>app.manifest</ApplicationManifest>
-      <Version>0.9.5.1</Version>
+      <Version>0.9.6.0</Version>
       <PackageId>VoicemeeterFancyOsd</PackageId>
       <Description>On-screen display for Voicemeeter</Description>
       <AssemblyName>VoicemeeterFancyOsd</AssemblyName>
-      <AssemblyVersion>0.9.5.1</AssemblyVersion>
-      <FileVersion>0.9.5.1</FileVersion>
+      <AssemblyVersion>0.9.6.0</AssemblyVersion>
+      <FileVersion>0.9.6.0</FileVersion>
       <NeutralLanguage>en</NeutralLanguage>
       <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
@@ -69,6 +69,7 @@
     <PackageReference Include="a-tg.VmrapiDynWrapExt" Version="1.0.2" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="ini-parser-netstandard" Version="2.5.2" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
     <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
   </ItemGroup>
 
