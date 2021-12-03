@@ -37,6 +37,7 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 * [Extended Voicemeeter Remote API wrapper](https://github.com/A-tG/voicemeeter-remote-api-extended)
 * [WpfScreenHelper](https://github.com/micdenny/WpfScreenHelper)
 * [Hardcodet NotifyIcon for WPF](https://github.com/hardcodet/wpf-notifyicon)
+* [Octokit.net](https://github.com/octokit/octokit.net)
 * Partially code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts)
 
 # Explanation
