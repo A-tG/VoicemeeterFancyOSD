@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using AtgDev.Utils.Extensions;
 
 namespace VoicemeeterOsdProgram.Core
 {
@@ -88,7 +89,7 @@ namespace VoicemeeterOsdProgram.Core
                 try
                 {
                     // delete temprorary folder if update failed
-                    Directory.Delete(Path.GetDirectoryName(path), true);
+                    Directory.Delete(updateFolder, true);
                 }
                 catch { }
             }
@@ -114,7 +115,7 @@ namespace VoicemeeterOsdProgram.Core
                     $"taskkill /IM {programName} & " +
                     "timeout /t 2 /nobreak & " +
                     $@"robocopy ""{copyFrom}"" ""{copyTo}"" /s /im /it /is /move & " +
-                    $@"del /F /Q /S ""{updateFolder}"" & " +
+                    $@"del /F /Q /S ""{updateFolder}"" & " + // TO DO: find a way to delete unused DLLs
                     $@"rmdir /Q /S ""{updateFolder}"" & " +
                     $@"start """" /MIN ""{program}""";
 
@@ -138,8 +139,7 @@ namespace VoicemeeterOsdProgram.Core
             bool result = false;
             try
             {
-                // should find a better way to asynchronously extract archive
-                await Task.Run(() => ZipFile.ExtractToDirectory(path, Path.GetDirectoryName(path)));
+                await ZipFileExntesions.ExtractToDirectoryAsync(path, Path.GetDirectoryName(path));
                 result = true;
             }
             catch { }
