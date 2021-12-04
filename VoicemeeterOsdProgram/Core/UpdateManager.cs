@@ -81,16 +81,18 @@ namespace VoicemeeterOsdProgram.Core
             if (await TryUnzip(path))
             {
                 var updateFolder = Path.GetDirectoryName(path);
-                if (TryRestartAppAndUpdateFiles(updateFolder)) return false;
+                if (TryRestartAppAndUpdateFiles(updateFolder))
+                {
+                    return true;
+                }
+                try
+                {
+                    // delete temprorary folder if update failed
+                    Directory.Delete(Path.GetDirectoryName(path), true);
+                }
+                catch { }
             }
-
-            try
-            {
-                // delete temprorary folder if update failed
-                Directory.Delete(Path.GetDirectoryName(path), true);
-            }
-            catch { }
-            return true;
+            return false;
         }
 
         private static bool TryRestartAppAndUpdateFiles(string updateFolder)
@@ -110,6 +112,7 @@ namespace VoicemeeterOsdProgram.Core
 
                 string argument = "/C " +
                     $"taskkill /IM {programName} & " +
+                    "timeout /t 2 /nobreak & " +
                     $@"robocopy ""{copyFrom}"" ""{copyTo}"" /s /im /it /is /move & " +
                     $@"del /F /Q /S ""{updateFolder}"" & " +
                     $@"rmdir /Q /S ""{updateFolder}"" & " +
@@ -120,7 +123,9 @@ namespace VoicemeeterOsdProgram.Core
                 {
                     FileName = "cmd.exe",
                     Arguments = argument,
-                    WindowStyle = ProcessWindowStyle.Hidden
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true,
+                    UseShellExecute = false
                 };
                 p.Start();
             }
