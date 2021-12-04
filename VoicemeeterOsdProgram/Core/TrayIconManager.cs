@@ -15,6 +15,11 @@ namespace VoicemeeterOsdProgram.Core
 
         public static void Init() { }
 
+        public static void OpenUpdaterWindow()
+        {
+            m_trayIcon?.CheckForUpdate();
+        }
+
         public static void Destroy()
         {
             m_trayIcon?.NotifyIcon?.Dispose();

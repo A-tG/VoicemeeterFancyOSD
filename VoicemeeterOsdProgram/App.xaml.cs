@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Options;
@@ -17,15 +18,20 @@ namespace VoicemeeterOsdProgram
 
         void OnAppStartup(object sender, StartupEventArgs e)
         {
+            _ = Init();
+        }
+
+        private async Task Init()
+        {
             OptionsStorage.Init();
             DpiHelper.Init();
             ScreenWorkingAreaManager.Init();
             TrayIconManager.Init();
             VoicemeeterApiClient.Init();
             OsdWindowManager.Init();
-            if (OptionsStorage.Updater.CheckAutomatically)
+            if (OptionsStorage.Updater.CheckAutomatically && (await UpdateManager.TryCheckForUpdatesAsync()))
             {
-                _ = UpdateManager.TryCheckForUpdatesAsync();
+                TrayIconManager.OpenUpdaterWindow();
             }
         }
     }
