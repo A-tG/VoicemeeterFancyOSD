@@ -15,8 +15,13 @@ namespace AtgDev.Utils.Extensions
             using ZipArchive archive = ZipFile.OpenRead(sourceArchiveFileName);
             foreach (var entry in archive.Entries)
             {
-                string path = Path.GetFullPath(Path.Combine(destinationDirectoryName, entry.FullName));
-                bool isDirectory = string.IsNullOrEmpty(entry.Name);
+                var fullName = entry.FullName;
+                string path = Path.GetFullPath(Path.Combine(destinationDirectoryName, fullName));
+
+                bool isDirectory = string.IsNullOrEmpty(entry.Name) &&
+                    !string.IsNullOrEmpty(fullName) &&
+                    fullName[^1] == '/' ||
+                    fullName[^1] == '\\';
                 if (isDirectory)
                 {
                     Directory.CreateDirectory(path);
