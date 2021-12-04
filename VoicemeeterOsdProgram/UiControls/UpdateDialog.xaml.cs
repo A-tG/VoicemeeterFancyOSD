@@ -27,13 +27,14 @@ namespace VoicemeeterOsdProgram.UiControls
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (UpdateManager.IsNewVersionAvailable || (await UpdateManager.TryCheckForUpdatesAsync()))
+            var msg = $"Current: {UpdateManager.CurrentVersion}\n";
+            if (await UpdateManager.TryCheckForUpdatesAsync())
             {
-                DialogText.Text = $"New version available: {UpdateManager.LatestVersion}";
+                DialogText.Text = msg + $"New version available: {UpdateManager.LatestVersion}";
                 UpdateBtn.IsEnabled = true;
             } else
             {
-                DialogText.Text = "No updates available";
+                DialogText.Text = msg + "No updates available";
             }
         }
 
