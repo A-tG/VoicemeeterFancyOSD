@@ -33,7 +33,10 @@ namespace VoicemeeterOsdProgram.UiControls
 
         private async void UpdateClick(object sender, RoutedEventArgs e)
         {
-            await UpdateManager.TryUpdate();
+            if (!await UpdateManager.TryUpdate())
+            {
+                DialogText.Text = "Update failed";
+            }
         }
     }
 }

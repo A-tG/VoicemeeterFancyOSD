@@ -59,7 +59,9 @@ namespace VoicemeeterOsdProgram.Core
                 m_latestAsset = rel.Assets.First((el) => IsArchitectureMatch(el.Name));
                 result = latestVer > CurrentVersion;
                 LatestVersion = latestVer;
+#if DEBUG
                 return true;
+#endif
             }
             catch 
             {
@@ -69,59 +71,61 @@ namespace VoicemeeterOsdProgram.Core
             return result;
         }
 
-        public static async Task TryUpdate()
+        public static async Task<bool> TryUpdate()
         {
-            if (!await TryCheckForUpdatesAsync()) return;
+            if (!await TryCheckForUpdatesAsync()) return false;
 
             var path = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name);
-            if (string.IsNullOrEmpty(path)) return;
+            if (string.IsNullOrEmpty(path)) return false;
 
             if (await TryUnzip(path))
             {
                 var updateFolder = Path.GetDirectoryName(path);
-                RestartAppAndUpdateFiles(updateFolder);
-                return;
+                if (TryRestartAppAndUpdateFiles(updateFolder)) return false;
             }
 
             try
             {
-                // delete temprorary folder
+                // delete temprorary folder if update failed
                 Directory.Delete(Path.GetDirectoryName(path), true);
             }
             catch { }
+            return true;
         }
 
-        private static void RestartAppAndUpdateFiles(string updateFolder)
+        private static bool TryRestartAppAndUpdateFiles(string updateFolder)
         {
-            string copyTo = Path.TrimEndingDirectorySeparator(AppDomain.CurrentDomain.BaseDirectory);
-            string copyFrom = updateFolder + @$"\{ExtractedFolder}";
-            string program = Environment.ProcessPath;
-
-            // just in case, to avoid deleting wrong files
-            bool isValidPaths = (Directory.GetParent(updateFolder).ToString() == copyTo) && 
-                (Directory.GetParent(program).ToString() == copyTo);
-            if (string.IsNullOrEmpty(program) && isValidPaths) return;
-
-            string programName = Path.GetFileName(program);
-
-            string argument = "/C " +
-                $"taskkill /IM {programName} & " +
-                $@"robocopy ""{copyFrom}"" ""{copyTo}"" /s /im /it /is /move & " +
-                $@"del /F /Q /S ""{updateFolder}"" & " +
-                $@"rmdir /Q /S ""{updateFolder}"" & " +
-                $@"start """" /MIN ""{program}""";
-
             try
             {
+                string copyTo = Path.TrimEndingDirectorySeparator(AppDomain.CurrentDomain.BaseDirectory);
+                string copyFrom = updateFolder + @$"\{ExtractedFolder}";
+                string program = Environment.ProcessPath;
+
+                // just in case, to avoid deleting wrong files
+                bool isValidPaths = (Directory.GetParent(updateFolder).ToString() == copyTo) &&
+                    (Directory.GetParent(program).ToString() == copyTo);
+                if (string.IsNullOrEmpty(program) && isValidPaths) return false;
+
+                string programName = Path.GetFileName(program);
+
+                string argument = "/C " +
+                    $"taskkill /IM {programName} & " +
+                    $@"robocopy ""{copyFrom}"" ""{copyTo}"" /s /im /it /is /move & " +
+                    $@"del /F /Q /S ""{updateFolder}"" & " +
+                    $@"rmdir /Q /S ""{updateFolder}"" & " +
+                    $@"start """" /MIN ""{program}""";
+
                 using Process p = new();
                 p.StartInfo = new ProcessStartInfo()
                 {
                     FileName = "cmd.exe",
-                    Arguments = argument
+                    Arguments = argument,
+                    WindowStyle = ProcessWindowStyle.Hidden
                 };
                 p.Start();
             }
             catch { }
+            return true;
         }
 
         private static async Task<bool> TryUnzip(string path)
@@ -129,6 +133,7 @@ namespace VoicemeeterOsdProgram.Core
             bool result = false;
             try
             {
+                // should find a better way to asynchronously extract archive
                 await Task.Run(() => ZipFile.ExtractToDirectory(path, Path.GetDirectoryName(path)));
                 result = true;
             }
