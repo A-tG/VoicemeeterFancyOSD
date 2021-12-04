@@ -8,7 +8,7 @@
         ResizeMode="NoResize"
         Icon="/Resources/Icons/MainIcon.ico"
         Title="VoicemeeterFancyOSD - Updater"
-        Loaded="OnLoaded" WindowStyle="SingleBorderWindow" SizeToContent="WidthAndHeight"
+        Loaded="OnLoaded" WindowStyle="SingleBorderWindow" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen"
         MinHeight="150" MinWidth="350">
     <Grid>
         <Grid.ColumnDefinitions>
