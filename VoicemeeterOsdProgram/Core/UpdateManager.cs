@@ -59,6 +59,7 @@ namespace VoicemeeterOsdProgram.Core
                 m_latestAsset = rel.Assets.First((el) => IsArchitectureMatch(el.Name));
                 result = latestVer > CurrentVersion;
                 LatestVersion = latestVer;
+                return true;
             }
             catch 
             {
@@ -77,7 +78,8 @@ namespace VoicemeeterOsdProgram.Core
 
             if (await TryUnzip(path))
             {
-                CopyAndUpdate(path);
+                var updateFolder = Path.GetDirectoryName(path);
+                RestartAppAndUpdateFiles(updateFolder);
                 return;
             }
 
@@ -89,20 +91,24 @@ namespace VoicemeeterOsdProgram.Core
             catch { }
         }
 
-        private static void CopyAndUpdate(string path)
+        private static void RestartAppAndUpdateFiles(string updateFolder)
         {
-            string targerPath = Path.TrimEndingDirectorySeparator(AppDomain.CurrentDomain.BaseDirectory);
-            string originPath = Path.GetDirectoryName(path) + @$"\{ExtractedFolder}";
+            string copyTo = Path.TrimEndingDirectorySeparator(AppDomain.CurrentDomain.BaseDirectory);
+            string copyFrom = updateFolder + @$"\{ExtractedFolder}";
             string program = Environment.ProcessPath;
-            if (string.IsNullOrEmpty(program)) return;
+
+            // just in case, to avoid deleting wrong files
+            bool isValidPaths = (Directory.GetParent(updateFolder).ToString() == copyTo) && 
+                (Directory.GetParent(program).ToString() == copyTo);
+            if (string.IsNullOrEmpty(program) && isValidPaths) return;
 
             string programName = Path.GetFileName(program);
 
             string argument = "/C " +
                 $"taskkill /IM {programName} & " +
-                $@"robocopy ""{originPath}"" ""{targerPath}"" /s /im /it /is /move & " +
-                $@"del /F /Q /S ""{Path.GetDirectoryName(path)}"" & " +
-                $@"rmdir /Q /S ""{Path.GetDirectoryName(path)}"" & " +
+                $@"robocopy ""{copyFrom}"" ""{copyTo}"" /s /im /it /is /move & " +
+                $@"del /F /Q /S ""{updateFolder}"" & " +
+                $@"rmdir /Q /S ""{updateFolder}"" & " +
                 $@"start """" /MIN ""{program}""";
 
             try
