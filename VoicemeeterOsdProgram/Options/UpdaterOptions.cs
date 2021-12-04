@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace VoicemeeterOsdProgram.Options
     {
         private bool m_checkOnStartup = true;
 
+        [Description("Check for updates on program startup")]
         public bool CheckOnStartup
         {
             get => m_checkOnStartup;
