@@ -94,6 +94,8 @@ namespace VoicemeeterOsdProgram.Core
             string targerPath = Path.TrimEndingDirectorySeparator(AppDomain.CurrentDomain.BaseDirectory);
             string originPath = Path.GetDirectoryName(path) + @$"\{ExtractedFolder}";
             string program = Environment.ProcessPath;
+            if (string.IsNullOrEmpty(program)) return;
+
             string programName = Path.GetFileName(program);
 
             string argument = "/C " +
