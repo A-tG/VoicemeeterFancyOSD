@@ -14,6 +14,7 @@
             <ContextMenu BorderThickness="0">
                 <MenuItem Header="DEBUG WINDOW" Name="DebugWindowItem" Visibility="Collapsed"/>
                 <MenuItem Header="Open Config File" Click="OnOpenConfigClick"/>
+                <MenuItem Header="Check for Updates" Click="CheckForUpdateClick"/>
                 <MenuItem Header="Paused" Name="PausedItem" Click="OnPausedClick"/>
                 <Separator/>
                 <MenuItem Header="Exit" Click="ExitClick"/>

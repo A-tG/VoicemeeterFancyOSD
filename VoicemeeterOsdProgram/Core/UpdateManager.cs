@@ -22,6 +22,23 @@ namespace VoicemeeterOsdProgram.Core
         private static GitHubClient m_client;
         private static ReleaseAsset m_latestAsset;
 
+        public static bool IsNewVersionAvailable
+        {
+            get;
+            private set;
+        }
+
+        public static Version LatestVersion
+        {
+            get;
+            private set;
+        }
+
+        public static Version CurrentVersion
+        {
+            get => m_assembly.GetName().Version;
+        }
+
         private static GitHubClient Client
         {
             get
@@ -44,54 +61,30 @@ namespace VoicemeeterOsdProgram.Core
                 var rel = releases[0];
 
                 var latestVer = new Version(FilterVersionString(rel.TagName));
-                Version programVer = m_assembly.GetName().Version;
 
                 m_latestAsset = rel.Assets.First((el) => IsArchitectureMatch(el.Name));
-                result = latestVer > programVer;
+                result = latestVer > CurrentVersion;
+                LatestVersion = latestVer;
             }
             catch 
             {
                 m_latestAsset = null;
             }
 
+            IsNewVersionAvailable = result;
             return result;
         }
 
         public static async Task TryUpdate()
         {
-            await TryCheckForUpdatesAsync();
-            //if (!await TryCheckForUpdatesAsync()) return;
+            if (!await TryCheckForUpdatesAsync()) return;
 
             var path = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name);
             if (string.IsNullOrEmpty(path)) return;
 
             if (await TryUnzip(path))
             {
-                // close program and replace original files with extracted
-                string targerPath = Path.TrimEndingDirectorySeparator(AppDomain.CurrentDomain.BaseDirectory);
-                string originPath = Path.GetDirectoryName(path) + @$"\{ExtractedFolder}";
-                string program = Process.GetCurrentProcess().MainModule.FileName;
-                string programName = Path.GetFileName(program);
-
-                string argument = "/C " +
-                    $"taskkill /IM {programName} && " +
-                    $@"robocopy ""{originPath}"" ""{targerPath}"" /s /im /it /is /move && " +
-                    $@"del /F /Q /S ""{Path.GetDirectoryName(path)}"" & " +
-                    $@"rmdir /Q /S ""{Path.GetDirectoryName(path)}"" & " +
-                    $@"start """" /MIN ""{program}"" & pause";
-
-                try
-                {
-                    using Process p = new();
-                    p.StartInfo = new ProcessStartInfo()
-                    {
-                        FileName = "cmd.exe",
-                        Arguments = argument
-                    };
-                    p.Start();
-                }
-                catch { }
-
+                CopyAndUpdate(path);
                 return;
             }
 
@@ -99,6 +92,33 @@ namespace VoicemeeterOsdProgram.Core
             {
                 // delete temprorary folder
                 Directory.Delete(Path.GetDirectoryName(path), true);
+            }
+            catch { }
+        }
+
+        private static void CopyAndUpdate(string path)
+        {
+            string targerPath = Path.TrimEndingDirectorySeparator(AppDomain.CurrentDomain.BaseDirectory);
+            string originPath = Path.GetDirectoryName(path) + @$"\{ExtractedFolder}";
+            string program = Environment.ProcessPath;
+            string programName = Path.GetFileName(program);
+
+            string argument = "/C " +
+                $"taskkill /IM {programName} & " +
+                $@"robocopy ""{originPath}"" ""{targerPath}"" /s /im /it /is /move & " +
+                $@"del /F /Q /S ""{Path.GetDirectoryName(path)}"" & " +
+                $@"rmdir /Q /S ""{Path.GetDirectoryName(path)}"" & " +
+                $@"start """" /MIN ""{program}"" & pause";
+
+            try
+            {
+                using Process p = new();
+                p.StartInfo = new ProcessStartInfo()
+                {
+                    FileName = "cmd.exe",
+                    Arguments = argument
+                };
+                p.Start();
             }
             catch { }
         }

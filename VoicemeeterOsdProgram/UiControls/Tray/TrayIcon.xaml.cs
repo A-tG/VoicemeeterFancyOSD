@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Options;
 
@@ -11,6 +13,8 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
     /// </summary>
     public partial class TrayIcon : Window
     {
+        private UpdateDialog m_updateDialog;
+
         public TrayIcon()
         {
             InitializeComponent();
@@ -18,6 +22,20 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
             DebugWindowItem.Visibility = Visibility.Visible;
             DebugWindowItem.Click += OnDebugWindowClick;
 #endif
+        }
+
+        public void CheckForUpdate()
+        {
+            if (m_updateDialog is null)
+            {
+                m_updateDialog = new();
+                m_updateDialog.Closing += (_, _) =>
+                {
+                    m_updateDialog = null;
+                };
+            }
+            m_updateDialog.Show();
+            m_updateDialog.Activate();
         }
 
         private void TogglePaused()
@@ -48,6 +66,11 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
                 _ = p.Start();
             }
             catch { }
+        }
+
+        private void CheckForUpdateClick(object sender, RoutedEventArgs e)
+        {
+            CheckForUpdate();
         }
 
         private void OnPausedClick(object sender, RoutedEventArgs e)

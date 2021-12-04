@@ -25,7 +25,7 @@ namespace VoicemeeterOsdProgram
             OsdWindowManager.Init();
             if (OptionsStorage.Updater.CheckAutomatically)
             {
-                _ = UpdateManager.TryUpdate();
+                _ = UpdateManager.TryCheckForUpdatesAsync();
             }
         }
     }
