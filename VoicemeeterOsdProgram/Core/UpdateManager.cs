@@ -22,12 +22,6 @@ namespace VoicemeeterOsdProgram.Core
         private static GitHubClient m_client;
         private static ReleaseAsset m_latestAsset;
 
-        public static bool IsNewVersionAvailable
-        {
-            get;
-            private set;
-        }
-
         public static Version LatestVersion
         {
             get;
@@ -71,7 +65,6 @@ namespace VoicemeeterOsdProgram.Core
                 m_latestAsset = null;
             }
 
-            IsNewVersionAvailable = result;
             return result;
         }
 
@@ -108,7 +101,7 @@ namespace VoicemeeterOsdProgram.Core
                 $@"robocopy ""{originPath}"" ""{targerPath}"" /s /im /it /is /move & " +
                 $@"del /F /Q /S ""{Path.GetDirectoryName(path)}"" & " +
                 $@"rmdir /Q /S ""{Path.GetDirectoryName(path)}"" & " +
-                $@"start """" /MIN ""{program}"" & pause";
+                $@"start """" /MIN ""{program}""";
 
             try
             {
