@@ -29,7 +29,7 @@ namespace VoicemeeterOsdProgram
             TrayIconManager.Init();
             VoicemeeterApiClient.Init();
             OsdWindowManager.Init();
-            if (OptionsStorage.Updater.CheckAutomatically && (await UpdateManager.TryCheckForUpdatesAsync()))
+            if (OptionsStorage.Updater.CheckOnStartup && (await UpdateManager.TryCheckForUpdatesAsync()))
             {
                 TrayIconManager.OpenUpdaterWindow();
             }

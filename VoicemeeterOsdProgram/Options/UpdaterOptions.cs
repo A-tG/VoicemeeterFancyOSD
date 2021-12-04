@@ -8,14 +8,14 @@ namespace VoicemeeterOsdProgram.Options
 {
     public class UpdaterOptions : OptionsBase
     {
-        private bool m_checkAutomatically = true;
+        private bool m_checkOnStartup = true;
 
-        public bool CheckAutomatically
+        public bool CheckOnStartup
         {
-            get => m_checkAutomatically;
-            set => HandlePropertyChange(ref m_checkAutomatically, ref value, CheckAutomaticallyChanged);
+            get => m_checkOnStartup;
+            set => HandlePropertyChange(ref m_checkOnStartup, ref value, CheckOnStartupChanged);
         }
 
-        public event EventHandler<bool> CheckAutomaticallyChanged;
+        public event EventHandler<bool> CheckOnStartupChanged;
     }
 }
