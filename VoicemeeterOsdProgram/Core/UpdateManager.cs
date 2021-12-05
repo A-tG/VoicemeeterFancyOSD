@@ -23,6 +23,12 @@ namespace VoicemeeterOsdProgram.Core
         private static GitHubClient m_client;
         private static ReleaseAsset m_latestAsset;
 
+        public static Release LatestRelease
+        {
+            get;
+            private set;
+        }
+
         public static Version LatestVersion
         {
             get;
@@ -59,7 +65,9 @@ namespace VoicemeeterOsdProgram.Core
 
                 m_latestAsset = rel.Assets.First((el) => IsArchitectureMatch(el.Name));
                 result = latestVer > CurrentVersion;
+
                 LatestVersion = latestVer;
+                LatestRelease = rel;
 #if DEBUG
                 return true;
 #endif
@@ -115,7 +123,7 @@ namespace VoicemeeterOsdProgram.Core
                     $"taskkill /IM {programName} & " +
                     "timeout /t 2 /nobreak & " +
                     $@"robocopy ""{copyFrom}"" ""{copyTo}"" /s /im /it /is /move & " +
-                    $@"del /F /Q /S ""{updateFolder}"" & " + // TO DO: find a way to delete unused DLLs
+                    $@"del /F /Q /S ""{updateFolder}"" & " + // TO DO: find a way to delete old unused DLLs
                     $@"rmdir /Q /S ""{updateFolder}"" & " +
                     $@"start """" /MIN ""{program}""";
 
@@ -154,8 +162,7 @@ namespace VoicemeeterOsdProgram.Core
                 using HttpClient client = new();
                 var resp = await client.GetAsync(url);
 
-                var folderName = Guid.NewGuid().ToString().Replace("-", string.Empty);
-                var path = @$"{AppDomain.CurrentDomain.BaseDirectory}{folderName}";
+                var path = @$"{AppDomain.CurrentDomain.BaseDirectory}{GenerateName()}";
                 Directory.CreateDirectory(path);
                 resultPath = $@"{path}\{fileName}";
 
@@ -172,6 +179,24 @@ namespace VoicemeeterOsdProgram.Core
         private static async Task<IReadOnlyList<Release>> GetReleasesAsync()
         {
             return await Client.Repository.Release.GetAll(Owner, RepoName);
+        }
+
+        private static string GenerateName()
+        {
+            Random rand = new();
+            StringBuilder sbIn = new(Guid.NewGuid().ToString());
+            StringBuilder sbOut = new();
+            var len = sbIn.Length;
+            for (int i = 0; i < len; i++)
+            {
+                // randomly remove '-' from guid to obfuscate name
+                if (sbIn[i] == '-')
+                {
+                    if (rand.Next(100) < 60) continue;
+                }
+                sbOut.Append(sbIn[i]);
+            }
+            return sbOut.ToString();
         }
 
         private static bool IsArchitectureMatch(string name)
