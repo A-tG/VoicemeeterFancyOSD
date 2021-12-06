@@ -18,11 +18,7 @@ namespace AtgDev.Utils.Extensions
                 var fullName = entry.FullName;
                 string path = Path.GetFullPath(Path.Combine(destinationDirectoryName, fullName));
 
-                bool isDirectory = string.IsNullOrEmpty(entry.Name) &&
-                    !string.IsNullOrEmpty(fullName) &&
-                    fullName[^1] == '/' ||
-                    fullName[^1] == '\\';
-                if (isDirectory)
+                if (IsDirectory(entry))
                 {
                     Directory.CreateDirectory(path);
                 }
@@ -38,12 +34,19 @@ namespace AtgDev.Utils.Extensions
         private static async Task ProcessStreams(Stream input, Stream output)
         {
             byte[] buffer = new byte[4096];
-            int bytesRead = 0;
-            do
+            for (int bytesRead = 1; bytesRead > 0;)
             {
                 bytesRead = await input.ReadAsync(buffer, 0, buffer.Length);
                 await output.WriteAsync(buffer, 0, bytesRead);
-            } while (bytesRead > 0);
+            }
+        }
+
+        private static bool IsDirectory(ZipArchiveEntry entry)
+        {
+            return string.IsNullOrEmpty(entry.Name) &&
+                !string.IsNullOrEmpty(entry.FullName) &&
+                entry.FullName[^1] == '/' ||
+                entry.FullName[^1] == '\\';
         }
     }
 }
