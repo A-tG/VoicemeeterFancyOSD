@@ -15,8 +15,9 @@ namespace VoicemeeterOsdProgram.Core
 {
     public static class UpdateManager
     {
-        private const string Owner = "A-tG";
-        private const string RepoName = "VoicemeeterFancyOSD";
+        public const string Owner = "A-tG";
+        public const string RepoName = "VoicemeeterFancyOSD";
+
         private const string ExtractedFolder = "VoicemeeterFancyOSD";
 
         private static Assembly m_assembly = Assembly.GetEntryAssembly();

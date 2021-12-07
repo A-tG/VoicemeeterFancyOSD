@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using VoicemeeterOsdProgram.Core;
+using AtgDev.Utils;
 
 namespace VoicemeeterOsdProgram.UiControls
 {
@@ -26,16 +27,24 @@ namespace VoicemeeterOsdProgram.UiControls
         private async Task CheckVersion()
         {
             var msg = $"Current: {UpdateManager.CurrentVersion}\n";
+            string url;
             if (await UpdateManager.TryCheckForUpdatesAsync())
             {
                 DialogText.Text = msg + $"New version available: ";
                 DialogText.Inlines.Add(GetVersionLink());
+                url = UpdateManager.LatestRelease.HtmlUrl;
                 UpdateBtn.IsEnabled = true;
             }
             else
             {
                 DialogText.Text = msg + "No updates available";
+                url = $"www.github.com/{UpdateManager.Owner}/{UpdateManager.RepoName}/releases";
             }
+
+            var link = GetWebLink();
+            link.Click += (_, _) => OpenInOs.TryOpen(url);
+            DialogText.Inlines.Add("\n");
+            DialogText.Inlines.Add(link);
         }
 
         private Hyperlink GetVersionLink()
@@ -43,10 +52,20 @@ namespace VoicemeeterOsdProgram.UiControls
             var ver = UpdateManager.LatestVersion.ToString();
             Hyperlink link = new(new Run(ver))
             {
-                ToolTip = "Read release notes",
-                NavigateUri = new Uri(UpdateManager.LatestRelease.HtmlUrl)
+                ToolTip = "Read release notes"
             };
             link.Click += OnVersionClick;
+            return link;
+        }
+
+        private Hyperlink GetWebLink()
+        {
+            string url = UpdateManager.LatestRelease.HtmlUrl;
+            Hyperlink link = new(new Run("GitHub Link"))
+            {
+                ToolTip = "Open GitHub webpage"
+            };
+            link.Click += (_, _) => OpenInOs.TryOpen(url);
             return link;
         }
 
