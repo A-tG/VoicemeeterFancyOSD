@@ -121,7 +121,7 @@ namespace VoicemeeterOsdProgram.Core
 
                 string argument = "/C " +
                     $"taskkill /IM {programName} & " +
-                    "timeout /t 2 /nobreak & " +
+                    "timeout /t 2 /nobreak & " + // wait 2 seconds because in some cases Robocopy failes if it tries to copy right away 
                     $@"robocopy ""{copyFrom}"" ""{copyTo}"" /s /im /it /is /move & " +
                     $@"rmdir /Q /S ""{updateFolder}"" & " + // TO DO: find a way to delete old unused DLLs
                     $@"start """" /MIN ""{program}""";
