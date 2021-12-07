@@ -29,10 +29,7 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
             if (m_updateDialog is null)
             {
                 m_updateDialog = new();
-                m_updateDialog.Closing += (_, _) =>
-                {
-                    m_updateDialog = null;
-                };
+                m_updateDialog.Closing += (_, _) => m_updateDialog = null;
             }
             m_updateDialog.Show();
             m_updateDialog.Activate();

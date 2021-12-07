@@ -1,0 +1,24 @@
+﻿<Window x:Class="VoicemeeterOsdProgram.UiControls.UpdateReleaseNotes"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls"
+        mc:Ignorable="d"
+        Title="Release Notes" Icon="/Resources/Icons/MainIcon.ico" 
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Loaded="Window_Loaded"
+        MinWidth="250" MinHeight="100">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBox Name="TextBox" Grid.Row="0"
+                 BorderThickness="0" Margin="15" IsReadOnly="True" VerticalAlignment="Top"/>
+        <Button Content="Ok" Grid.Row="1" FontSize="14"
+                Padding="10,4,10,4" Margin="10"
+                IsCancel="True" IsDefault="True" Click="OkClick" 
+                Width="Auto" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+    </Grid>
+</Window>

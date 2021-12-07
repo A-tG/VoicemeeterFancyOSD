@@ -9,23 +9,23 @@
         Icon="/Resources/Icons/MainIcon.ico"
         Title="VoicemeeterFancyOSD - Updater"
         Loaded="OnLoaded" WindowStyle="SingleBorderWindow" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen"
-        MinHeight="160" MinWidth="350" FontSize="16">
+        MinHeight="140" MinWidth="350" FontSize="14">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60*"/>
-            <RowDefinition Height="40*"/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Name="DialogText" Grid.Row="0" Grid.ColumnSpan="2" 
                    Text="Loading..." TextWrapping="NoWrap" TextTrimming="None"
-                   HorizontalAlignment="Center" Margin="15"/>
-        <Button Name="UpdateBtn" Grid.Row="1" Grid.Column="0" 
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Margin="15"/>
+        <Button Name="UpdateBtn" Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom"
                 Content="Update" Click="UpdateClick"
-                IsEnabled="False" Margin="15,10,15,10"/>
-        <Button Grid.Row="1" Grid.Column="1" 
+                IsEnabled="False" IsDefault="True" Margin="15,10,15,10"/>
+        <Button Grid.Row="1" Grid.Column="1" IsCancel="True" VerticalAlignment="Bottom"
                 Content="Close" Margin="15,10,15,10" Click="CloseClick"/>
     </Grid>
 </Window>
