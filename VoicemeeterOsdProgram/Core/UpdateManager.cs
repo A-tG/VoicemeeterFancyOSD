@@ -162,7 +162,7 @@ namespace VoicemeeterOsdProgram.Core
                 using HttpClient client = new();
                 var resp = await client.GetAsync(url);
 
-                var path = @$"{AppDomain.CurrentDomain.BaseDirectory}{GenerateName()}";
+                var path = $"{AppDomain.CurrentDomain.BaseDirectory}{GenerateName()}";
                 Directory.CreateDirectory(path);
                 resultPath = $@"{path}\{fileName}";
 

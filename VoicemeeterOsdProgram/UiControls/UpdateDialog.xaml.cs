@@ -29,7 +29,6 @@ namespace VoicemeeterOsdProgram.UiControls
             if (await UpdateManager.TryCheckForUpdatesAsync())
             {
                 DialogText.Text = msg + $"New version available: ";
-                var ver = UpdateManager.LatestVersion.ToString();
                 DialogText.Inlines.Add(GetVersionLink());
                 UpdateBtn.IsEnabled = true;
             }
@@ -65,10 +64,7 @@ namespace VoicemeeterOsdProgram.UiControls
             m_relNotesWin.Activate();
         }
 
-        private void CloseClick(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+        private void CloseClick(object sender, RoutedEventArgs e) => Close();
 
         private async void UpdateClick(object sender, RoutedEventArgs e)
         {

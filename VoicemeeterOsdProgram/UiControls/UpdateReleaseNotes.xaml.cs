@@ -16,30 +16,21 @@ namespace VoicemeeterOsdProgram.UiControls
 
         public void GetReleaseNotes()
         {
-            string text;
-            string title;
+            string title = "Release Notes";
             if (string.IsNullOrEmpty(UpdateManager.LatestRelease?.Body))
             {
-                text = "No release notes available";
-                title = "Release Notes";
+                NotesBox.Text = "No release notes available";
             }
             else
             {
-                text = UpdateManager.LatestRelease.Body;
-                title = $"{UpdateManager.LatestVersion} Release Notes";
+                NotesBox.Text = UpdateManager.LatestRelease.Body;
+                title = $"{UpdateManager.LatestVersion} {title}";
             }
-            NotesBox.Text = text;
             Title = title;
         }
 
-        private void OkClick(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+        private void OkClick(object sender, RoutedEventArgs e) => Close();
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            GetReleaseNotes();
-        }
+        private void Window_Loaded(object sender, RoutedEventArgs e) => GetReleaseNotes();
     }
 }
