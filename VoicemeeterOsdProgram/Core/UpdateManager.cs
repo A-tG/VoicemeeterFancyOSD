@@ -68,7 +68,7 @@ namespace VoicemeeterOsdProgram.Core
 
                 LatestVersion = latestVer;
                 LatestRelease = rel;
-#if DEBUG
+#if DEBUG // to be able download older version when debugging
                 return true;
 #endif
             }
@@ -123,8 +123,7 @@ namespace VoicemeeterOsdProgram.Core
                     $"taskkill /IM {programName} & " +
                     "timeout /t 2 /nobreak & " +
                     $@"robocopy ""{copyFrom}"" ""{copyTo}"" /s /im /it /is /move & " +
-                    $@"del /F /Q /S ""{updateFolder}"" & " + // TO DO: find a way to delete old unused DLLs
-                    $@"rmdir /Q /S ""{updateFolder}"" & " +
+                    $@"rmdir /Q /S ""{updateFolder}"" & " + // TO DO: find a way to delete old unused DLLs
                     $@"start """" /MIN ""{program}""";
 
                 using Process p = new();
