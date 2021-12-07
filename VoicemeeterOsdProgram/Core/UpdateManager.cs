@@ -115,7 +115,7 @@ namespace VoicemeeterOsdProgram.Core
                 // just in case, to avoid deleting wrong files
                 bool isValidPaths = (Directory.GetParent(updateFolder).ToString() == copyTo) &&
                     (Directory.GetParent(program).ToString() == copyTo);
-                if (string.IsNullOrEmpty(program) && isValidPaths) return false;
+                if (string.IsNullOrEmpty(program) || !isValidPaths) return false;
 
                 string programName = Path.GetFileName(program);
 
@@ -131,6 +131,7 @@ namespace VoicemeeterOsdProgram.Core
                 {
                     FileName = "cmd.exe",
                     Arguments = argument,
+                    // Hides command promt completely
                     WindowStyle = ProcessWindowStyle.Hidden,
                     CreateNoWindow = true,
                     UseShellExecute = false
