@@ -38,7 +38,7 @@ namespace VoicemeeterOsdProgram.UiControls
             else
             {
                 DialogText.Text = msg + "No updates available";
-                url = $"www.github.com/{UpdateManager.Owner}/{UpdateManager.RepoName}/releases";
+                url = $"{UpdateManager.RepoUrl}/releases";
             }
 
             var link = GetWebLink();

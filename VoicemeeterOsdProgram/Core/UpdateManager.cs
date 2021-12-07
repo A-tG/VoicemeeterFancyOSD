@@ -15,9 +15,8 @@ namespace VoicemeeterOsdProgram.Core
 {
     public static class UpdateManager
     {
-        public const string Owner = "A-tG";
-        public const string RepoName = "VoicemeeterFancyOSD";
-
+        private const string Owner = "A-tG";
+        private const string RepoName = "VoicemeeterFancyOSD";
         private const string ExtractedFolder = "VoicemeeterFancyOSD";
 
         private static Assembly m_assembly = Assembly.GetEntryAssembly();
@@ -39,6 +38,11 @@ namespace VoicemeeterOsdProgram.Core
         public static Version CurrentVersion
         {
             get => m_assembly.GetName().Version;
+        }
+
+        public static string RepoUrl
+        {
+            get => $"www.github.com/{Owner}/{RepoName}";
         }
 
         private static GitHubClient Client
