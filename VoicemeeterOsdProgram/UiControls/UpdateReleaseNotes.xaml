@@ -15,7 +15,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBox Name="NotesBox" Grid.Row="0"
-                 BorderThickness="0" Margin="15" IsReadOnly="True" VerticalAlignment="Top"/>
+                 BorderThickness="0" Margin="10" IsReadOnly="True" VerticalAlignment="Top"/>
         <Button Content="Ok" Grid.Row="1" FontSize="14"
                 Padding="10,4,10,4" Margin="10"
                 IsCancel="True" IsDefault="True" Click="OkClick" 

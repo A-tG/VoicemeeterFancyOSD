@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
         <TextBlock Name="DialogText" Grid.Row="0" Grid.ColumnSpan="2" 
                    Text="Loading..." TextWrapping="NoWrap" TextTrimming="None"
-                   HorizontalAlignment="Center" VerticalAlignment="Top" Margin="15"/>
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10"/>
         <Button Name="UpdateBtn" Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom"
                 Content="Update" Click="UpdateClick"
                 IsEnabled="False" IsDefault="True" Margin="15,10,15,10"/>
