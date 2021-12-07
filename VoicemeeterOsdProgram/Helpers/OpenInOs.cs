@@ -18,25 +18,12 @@ namespace AtgDev.Utils
                     UseShellExecute = true
                 };
                 p.StartInfo = info;
-                //p.StartInfo.Arguments = $@"""{path}""";
                 _ = p.Start();
 
                 result = true;
             }
             catch { }
             return result;
-        }
-
-        private static string GetProcName()
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return "explorer.exe";
-            }
-            else
-            {
-                throw new PlatformNotSupportedException();
-            }
         }
     }
 }
