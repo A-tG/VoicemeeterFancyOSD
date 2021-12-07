@@ -6,9 +6,9 @@ On-Screen display for [Voicemeeter](https://voicemeeter.com/) that works with fu
 Windows 10 or newer is required. 
 May work with older Windows versions (not older than Windows 7) but OSD will work as normal window and will not be displayed on top of fullscreen applications.
 
-Install [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/6.0/runtime) so I don't have to upload a "self-contained" version of the program that's about 150 MB in size.
-
-You can change settings in *PROGRAM_LOCATION\config\config.ini* (created on program launch if not exist). And settings are automatically validated and updated on file change, no need to restart.
+# Installation and Usage
+The program is portable, no installation required, but you need [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/6.0/runtime). Download the latest version from the [Releases](https://github.com/A-tG/VoicemeeterFancyOSD/releases) page, unpack and launch VoicemeeterFancyOsdHost.exe (on Windows 8.1 or newer), or VoicemeeterFancyOsd.exe if VoicemeeterFancyOsdHost.exe doesnэt work for some reason or you are using older version of Windows.
+Settings are stored in *PROGRAM_LOCATION\config\config.ini* (created on program launch if not exist). And are automatically validated and updated on file change, no need to restart.
 
 # What's the point?
 When you change gain/routing by using Voicemeeter Macro Buttons (or maybe some other way), for example if some of your Button's configuration looks like this
@@ -22,8 +22,6 @@ For example in Voicemeeter when you change gain from 0 to -60 you will experienc
 
 So this program should be a good "replacement" of volume pop-up built in Windows, if you use Voicemeeter of course.
 
-# Installation and Usage
-The program is portable, no installation required. Download the latest version from the [Releases](https://github.com/A-tG/VoicemeeterFancyOSD/releases) page, unpack and launch VoicemeeterFancyOsdHost.exe
 
 # Build instructions
 [.NET 6.0](https://dotnet.microsoft.com/download) WPF project
