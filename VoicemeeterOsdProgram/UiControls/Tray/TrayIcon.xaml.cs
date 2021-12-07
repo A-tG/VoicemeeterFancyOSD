@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Options;
+using AtgDev.Utils;
 
 namespace VoicemeeterOsdProgram.UiControls.Tray
 {
@@ -55,14 +53,7 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
 
         private void OnOpenConfigClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                using Process p = new();
-                p.StartInfo.FileName = "explorer.exe";
-                p.StartInfo.Arguments = $@"""{OptionsStorage.ConfigFilePath}""";
-                _ = p.Start();
-            }
-            catch { }
+            OpenInOs.TryOpen(OptionsStorage.ConfigFilePath);
         }
 
         private void CheckForUpdateClick(object sender, RoutedEventArgs e)
