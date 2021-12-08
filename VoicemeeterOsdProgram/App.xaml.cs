@@ -3,6 +3,8 @@ using System.Windows;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Options;
+using VoicemeeterOsdProgram.Updater;
+using VoicemeeterOsdProgram.Updater.Types;
 
 namespace VoicemeeterOsdProgram
 {
@@ -29,7 +31,9 @@ namespace VoicemeeterOsdProgram
             TrayIconManager.Init();
             VoicemeeterApiClient.Init();
             OsdWindowManager.Init();
-            if (OptionsStorage.Updater.CheckOnStartup && (await UpdateManager.TryCheckForUpdatesAsync()))
+
+            var updaterRes = await UpdateManager.TryCheckForUpdatesAsync();
+            if (OptionsStorage.Updater.CheckOnStartup && (updaterRes == UpdaterResult.NewVersionFound))
             {
                 TrayIconManager.OpenUpdaterWindow();
             }

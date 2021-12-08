@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AtgDev.Utils;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
-using VoicemeeterOsdProgram.Core;
-using AtgDev.Utils;
+using VoicemeeterOsdProgram.Updater;
+using VoicemeeterOsdProgram.Updater.Types;
 
 namespace VoicemeeterOsdProgram.UiControls
 {
@@ -26,25 +26,7 @@ namespace VoicemeeterOsdProgram.UiControls
 
         private async Task CheckVersion()
         {
-            var msg = $"Current: {UpdateManager.CurrentVersion}\n";
-            string url;
-            if (await UpdateManager.TryCheckForUpdatesAsync())
-            {
-                DialogText.Text = msg + $"New version available: ";
-                DialogText.Inlines.Add(GetVersionLink());
-                url = UpdateManager.LatestRelease.HtmlUrl;
-                UpdateBtn.IsEnabled = true;
-            }
-            else
-            {
-                DialogText.Text = msg + "No updates available";
-                url = $"{UpdateManager.RepoUrl}/releases";
-            }
-
-            var link = GetWebLink();
-            link.Click += (_, _) => OpenInOs.TryOpen(url);
-            DialogText.Inlines.Add("\n");
-            DialogText.Inlines.Add(link);
+            ProrcessUpdaterResult(await UpdateManager.TryCheckForUpdatesAsync());
         }
 
         private Hyperlink GetVersionLink()
@@ -58,15 +40,61 @@ namespace VoicemeeterOsdProgram.UiControls
             return link;
         }
 
-        private Hyperlink GetWebLink()
+        private Hyperlink GetWebLink(string url)
         {
-            string url = UpdateManager.LatestRelease.HtmlUrl;
             Hyperlink link = new(new Run("GitHub Link"))
             {
                 ToolTip = "Open GitHub webpage"
             };
             link.Click += (_, _) => OpenInOs.TryOpen(url);
             return link;
+        }
+
+        private void ProrcessUpdaterResult(UpdaterResult res)
+        {
+            var msg = $"Current: {UpdateManager.CurrentVersion}\n";
+            var url = $"{UpdateManager.RepoUrl}/releases";
+
+            switch (res)
+            {
+                case UpdaterResult.Error:
+                    DialogText.Text = msg + "Unknown error";
+                    break;
+                case UpdaterResult.Updated:
+                    DialogText.Text = msg + "Updated, restarting the program...";
+                    break;
+                case UpdaterResult.NewVersionFound:
+                    DialogText.Text = msg + $"New version available: ";
+                    DialogText.Inlines.Add(GetVersionLink());
+                    url = UpdateManager.LatestRelease.HtmlUrl;
+                    UpdateBtn.IsEnabled = true;
+                    break;
+                case UpdaterResult.VersionUpToDate:
+                    DialogText.Text = msg + "You're running the latest version";
+                    break;
+                case UpdaterResult.ConnectionError:
+                    DialogText.Text = msg + "Error: unable to connect to the server";
+                    break;
+                case UpdaterResult.ArchitectureNotFound:
+                    DialogText.Text = msg + "Error: no suitable architecture found";
+                    break;
+                case UpdaterResult.ReleasesNotFound:
+                    break;
+                case UpdaterResult.UpdateFailed:
+                    DialogText.Text = msg + "Error: update failed";
+                    break;
+                case UpdaterResult.DownloadFailed:
+                    DialogText.Text = msg + "Error: download failed";
+                    break;
+                case UpdaterResult.ArchiveExtractionFailed:
+                    break;
+                default:
+                    break;
+            }
+
+            var link = GetWebLink(url);
+            DialogText.Inlines.Add("\n");
+            DialogText.Inlines.Add(link);
         }
 
         private void OnVersionClick(object sender, RoutedEventArgs e)
@@ -89,11 +117,7 @@ namespace VoicemeeterOsdProgram.UiControls
         {
             UpdateBtn.IsEnabled = false;
             DialogText.Text = "Updating...";
-            if (!await UpdateManager.TryUpdate())
-            {
-                DialogText.Text = "Update failed";
-            }
-            UpdateBtn.IsEnabled = true;
+            ProrcessUpdaterResult(await UpdateManager.TryUpdate());
         }
     }
 }

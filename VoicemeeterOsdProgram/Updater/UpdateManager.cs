@@ -1,17 +1,17 @@
-﻿using Octokit;
+﻿using AtgDev.Utils.Extensions;
+using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using AtgDev.Utils.Extensions;
+using VoicemeeterOsdProgram.Updater.Types;
 
-namespace VoicemeeterOsdProgram.Core
+namespace VoicemeeterOsdProgram.Updater
 {
     public static class UpdateManager
     {
@@ -57,27 +57,41 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
-        public static async Task<bool> TryCheckForUpdatesAsync()
+        public static async Task<UpdaterResult> TryCheckForUpdatesAsync()
         {
-            bool result = false;
+            UpdaterResult result = default;
 
             try
             {
                 var releases = await GetReleasesAsync();
+                if (releases.Count == 0) return UpdaterResult.ReleasesNotFound;
+
                 var rel = releases[0];
 
                 var latestVer = new Version(FilterVersionString(rel.TagName));
-
                 m_latestAsset = rel.Assets.First((el) => IsArchitectureMatch(el.Name));
-                result = latestVer > CurrentVersion;
+
+                result = latestVer > CurrentVersion ? UpdaterResult.NewVersionFound : UpdaterResult.VersionUpToDate;
 
                 LatestVersion = latestVer;
                 LatestRelease = rel;
 #if DEBUG // to be able download older version when debugging
-                return true;
+                return UpdaterResult.NewVersionFound;
 #endif
             }
-            catch 
+            catch (ApiException)
+            {
+                result = UpdaterResult.ConnectionError;
+            }
+            catch (HttpRequestException)
+            {
+                result = UpdaterResult.ConnectionError;
+            }
+            catch (InvalidOperationException)
+            {
+                result = UpdaterResult.ArchitectureNotFound;
+            }
+            catch
             {
                 m_latestAsset = null;
             }
@@ -85,19 +99,20 @@ namespace VoicemeeterOsdProgram.Core
             return result;
         }
 
-        public static async Task<bool> TryUpdate()
+        public static async Task<UpdaterResult> TryUpdate()
         {
-            if (!await TryCheckForUpdatesAsync()) return false;
+            var result = await TryCheckForUpdatesAsync();
+            if (result != UpdaterResult.NewVersionFound) return result;
 
             var path = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name);
-            if (string.IsNullOrEmpty(path)) return false;
+            if (string.IsNullOrEmpty(path)) return UpdaterResult.DownloadFailed;
 
             if (await TryUnzip(path))
             {
                 var updateFolder = Path.GetDirectoryName(path);
                 if (TryRestartAppAndUpdateFiles(updateFolder))
                 {
-                    return true;
+                    return UpdaterResult.Updated;
                 }
                 try
                 {
@@ -106,7 +121,11 @@ namespace VoicemeeterOsdProgram.Core
                 }
                 catch { }
             }
-            return false;
+            else
+            {
+                return UpdaterResult.ArchiveExtractionFailed;
+            }
+            return UpdaterResult.UpdateFailed;
         }
 
         private static bool TryRestartAppAndUpdateFiles(string updateFolder)
@@ -142,9 +161,11 @@ namespace VoicemeeterOsdProgram.Core
                     UseShellExecute = false
                 };
                 p.Start();
+
+                return true;
             }
             catch { }
-            return true;
+            return false;
         }
 
         private static async Task<bool> TryUnzip(string path)

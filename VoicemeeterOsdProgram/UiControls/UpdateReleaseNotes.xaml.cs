@@ -1,6 +1,5 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
-using VoicemeeterOsdProgram.Core;
+using VoicemeeterOsdProgram.Updater;
 
 namespace VoicemeeterOsdProgram.UiControls
 {
