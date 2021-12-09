@@ -4,6 +4,8 @@
     {
         Error,
         Updated,
+        Downloaded,
+        Unpacked,
         NewVersionFound,
         VersionUpToDate,
         ConnectionError,

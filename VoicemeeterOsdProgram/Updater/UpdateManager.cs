@@ -103,36 +103,30 @@ namespace VoicemeeterOsdProgram.Updater
 
         public static async Task<UpdaterResult> TryUpdate(IProgress<double> progress = null)
         {
-            try
+            var result = await TryCheckForUpdatesAsync();
+            if (result != UpdaterResult.NewVersionFound) return result;
+
+            var downloadRes = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name, progress);
+            if ((downloadRes.Res != UpdaterResult.Downloaded) || string.IsNullOrEmpty(downloadRes.Path)) return UpdaterResult.DownloadFailed;
+
+            var path = downloadRes.Path;
+            var updateFolder = Path.GetDirectoryName(path);
+            result = await TryUnzip(path, progress);
+            if (result == UpdaterResult.Unpacked)
             {
-                var result = await TryCheckForUpdatesAsync();
-                if (result != UpdaterResult.NewVersionFound) return result;
-
-                var downloadRes = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name, progress);
-                if (!downloadRes.IsSuccess || string.IsNullOrEmpty(downloadRes.Path)) return UpdaterResult.DownloadFailed;
-
-                var path = downloadRes.Path;
-                var updateFolder = Path.GetDirectoryName(path);
-                if (await TryUnzip(path, progress))
+                if (TryRestartAppAndUpdateFiles(updateFolder))
                 {
-                    if (TryRestartAppAndUpdateFiles(updateFolder))
-                    {
-                        return UpdaterResult.Updated;
-                    }
-                    else
-                    {
-                        return UpdaterResult.UpdateFailed;
-                    }
+                    return UpdaterResult.Updated;
                 }
                 else
                 {
-                    TryDeleteFolder(updateFolder);
-                    return UpdaterResult.ArchiveExtractionFailed;
+                    return UpdaterResult.UpdateFailed;
                 }
             }
-            catch (TaskCanceledException)
+            else
             {
-                return UpdaterResult.Canceled;
+                TryDeleteFolder(updateFolder);
+                return result;
             }
         }
 
@@ -181,21 +175,25 @@ namespace VoicemeeterOsdProgram.Updater
             return false;
         }
 
-        private static async Task<bool> TryUnzip(string path, IProgress<double> progress = null)
+        private static async Task<UpdaterResult> TryUnzip(string path, IProgress<double> progress = null)
         {
-            bool result = false;
+            var result = UpdaterResult.ArchiveExtractionFailed;
             try
             {
                 await ZipFileExtensions.ExtractToDirectoryAsync(path, Path.GetDirectoryName(path), totalProg: progress, cancellationToken: m_cancelToken.Token);
-                result = true;
+                result = UpdaterResult.Unpacked;
+            }
+            catch (TaskCanceledException)
+            {
+                result = UpdaterResult.Canceled;
             }
             catch { }
             return result;
         }
 
-        private static async Task<(bool IsSuccess, string Path)> TryDownloadAsync(string url, string fileName, IProgress<double> progress = null)
+        private static async Task<(UpdaterResult Res, string Path)> TryDownloadAsync(string url, string fileName, IProgress<double> progress = null)
         {
-            var result = (IsSuccess: false, Path: string.Empty);
+            var result = (Res: UpdaterResult.DownloadFailed, Path: string.Empty);
             try
             {
                 using HttpClient client = new();
@@ -219,7 +217,11 @@ namespace VoicemeeterOsdProgram.Updater
                     // PROBLEM: doesn't change UI values for some reason
                     await download.CopyToAsync(fs, relProgress, m_cancelToken.Token);
                 }
-                result.IsSuccess = true;
+                result.Res = UpdaterResult.Downloaded;
+            }
+            catch (TaskCanceledException)
+            {
+                result.Res = UpdaterResult.Canceled;
             }
             catch 
             {

@@ -105,6 +105,7 @@ namespace VoicemeeterOsdProgram.UiControls
                     break;
                 case UpdaterResult.Canceled:
                     DialogText.Text = msg + "Canceled";
+                    UpdateBtn.IsEnabled = true;
                     break;
                 default:
                     break;

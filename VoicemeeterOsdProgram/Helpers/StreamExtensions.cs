@@ -14,9 +14,9 @@ namespace AtgDev.Utils.Extensions
             var buffer = new byte[bufferSize];
             long totalBytesRead = 0;
             int bytesRead;
-            while ((bytesRead = await input.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) > 0)
+            while ((bytesRead = await input.ReadAsync(buffer, cancellationToken)) > 0)
             {
-                await output.WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken).ConfigureAwait(false);
+                await output.WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken);
 
                 totalBytesRead += bytesRead;
                 progress?.Report(totalBytesRead);
