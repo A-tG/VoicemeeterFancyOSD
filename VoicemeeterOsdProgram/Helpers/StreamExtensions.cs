@@ -8,7 +8,7 @@ namespace AtgDev.Utils.Extensions
     public static class StreamExtensions
     {
         public static async Task CopyToAsync(this Stream input, Stream output,
-            int bufferSize, IProgress<double> progress = null,
+            int bufferSize, IProgress<long> progress = null,
             CancellationToken cancellationToken = default)
         {
             var buffer = new byte[bufferSize];
@@ -24,7 +24,7 @@ namespace AtgDev.Utils.Extensions
         }
 
         public static async Task CopyToAsync(this Stream input, Stream output,
-            IProgress<double> progress = null,
+            IProgress<long> progress = null,
             CancellationToken cancellationToken = default)
         {
             await CopyToAsync(input, output, 4096, progress, cancellationToken);

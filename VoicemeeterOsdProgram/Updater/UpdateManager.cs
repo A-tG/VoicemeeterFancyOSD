@@ -101,17 +101,17 @@ namespace VoicemeeterOsdProgram.Updater
             return result;
         }
 
-        public static async Task<UpdaterResult> TryUpdateAsync(IProgress<double> progress = null)
+        public static async Task<UpdaterResult> TryUpdateAsync(IProgress<double> downloadProgress = null, IProgress<double> extractionProgress = null)
         {
             var result = await TryCheckForUpdatesAsync();
             if (result != UpdaterResult.NewVersionFound) return result;
 
-            var downloadRes = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name, progress);
+            var downloadRes = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name, downloadProgress);
             if ((downloadRes.Res != UpdaterResult.Downloaded) || string.IsNullOrEmpty(downloadRes.Path)) return UpdaterResult.DownloadFailed;
 
             var path = downloadRes.Path;
             var updateFolder = Path.GetDirectoryName(path);
-            result = await TryUnzipAsync(path, progress);
+            result = await TryUnzipAsync(path, extractionProgress);
             if (result == UpdaterResult.Unpacked)
             {
                 if (TryRestartAppAndUpdateFiles(updateFolder))
@@ -133,6 +133,7 @@ namespace VoicemeeterOsdProgram.Updater
         public static void CancelUpdate()
         {
             m_cancelToken.Cancel();
+            m_cancelToken = new();
         }
 
         private static bool TryRestartAppAndUpdateFiles(string updateFolder)
@@ -194,13 +195,14 @@ namespace VoicemeeterOsdProgram.Updater
         private static async Task<(UpdaterResult Res, string Path)> TryDownloadAsync(string url, string fileName, IProgress<double> progress = null)
         {
             var result = (Res: UpdaterResult.DownloadFailed, Path: string.Empty);
+            string path = "";
             try
             {
                 using HttpClient client = new();
-                var resp = await client.GetAsync(url, m_cancelToken.Token);
+                using var resp = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, m_cancelToken.Token);
                 var contentLen = resp.Content.Headers.ContentLength;
 
-                var path = $"{AppDomain.CurrentDomain.BaseDirectory}{GenerateName()}";
+                path = $"{AppDomain.CurrentDomain.BaseDirectory}{GenerateName()}";
                 Directory.CreateDirectory(path);
                 result.Path = $@"{path}\{fileName}";
 
@@ -213,8 +215,7 @@ namespace VoicemeeterOsdProgram.Updater
                 else
                 {
                     var len = contentLen.Value;
-                    var relProgress = new Progress<double>(total => progress.Report(total * 100.0 / len));
-                    // PROBLEM: doesn't change UI values for some reason
+                    var relProgress = new Progress<long>(readBytes => progress.Report(readBytes * 100.0 / len));
                     await download.CopyToAsync(fs, relProgress, m_cancelToken.Token);
                 }
                 result.Res = UpdaterResult.Downloaded;
@@ -226,6 +227,7 @@ namespace VoicemeeterOsdProgram.Updater
             catch 
             {
                 result.Path = string.Empty;
+                TryDeleteFolder(path);
             }
             return result;
         }
@@ -257,7 +259,10 @@ namespace VoicemeeterOsdProgram.Updater
         {
             try
             {
-                Directory.Delete(path, true);
+                if (!string.IsNullOrEmpty(path))
+                {
+                    Directory.Delete(path, true);
+                }
                 return true;
             }
             catch { }
