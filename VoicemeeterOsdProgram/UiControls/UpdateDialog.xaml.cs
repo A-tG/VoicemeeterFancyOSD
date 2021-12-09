@@ -1,4 +1,5 @@
 ﻿using AtgDev.Utils;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
@@ -13,6 +14,17 @@ namespace VoicemeeterOsdProgram.UiControls
     public partial class UpdateDialog : Window
     {
         private UpdateReleaseNotes m_relNotesWin;
+        private bool m_isDownloaded = false;
+        private bool m_isUpdating = false;
+        private bool IsUpdating
+        {
+            get => m_isUpdating;
+            set
+            {
+                m_isUpdating = value;
+                CloseBtn.Content = value ? "Cancel" : "Close";
+            }
+        }
 
         public UpdateDialog()
         {
@@ -26,7 +38,7 @@ namespace VoicemeeterOsdProgram.UiControls
 
         private async Task CheckVersion()
         {
-            ProrcessUpdaterResult(await UpdateManager.TryCheckForUpdatesAsync());
+            ProcessUpdaterResult(await UpdateManager.TryCheckForUpdatesAsync());
         }
 
         private Hyperlink GetVersionLink()
@@ -50,11 +62,12 @@ namespace VoicemeeterOsdProgram.UiControls
             return link;
         }
 
-        private void ProrcessUpdaterResult(UpdaterResult res)
+        private void ProcessUpdaterResult(UpdaterResult res)
         {
             var msg = $"Current: {UpdateManager.CurrentVersion}\n";
             var url = $"{UpdateManager.RepoUrl}/releases";
 
+            ProgrBar.Visibility = Visibility.Collapsed;
             switch (res)
             {
                 case UpdaterResult.Error:
@@ -79,6 +92,7 @@ namespace VoicemeeterOsdProgram.UiControls
                     DialogText.Text = msg + "Error: no suitable architecture found";
                     break;
                 case UpdaterResult.ReleasesNotFound:
+                    DialogText.Text = msg + "Error: no releases found";
                     break;
                 case UpdaterResult.UpdateFailed:
                     DialogText.Text = msg + "Error: update failed";
@@ -87,6 +101,10 @@ namespace VoicemeeterOsdProgram.UiControls
                     DialogText.Text = msg + "Error: download failed";
                     break;
                 case UpdaterResult.ArchiveExtractionFailed:
+                    DialogText.Text = msg + "Error: unpacking failed";
+                    break;
+                case UpdaterResult.Canceled:
+                    DialogText.Text = msg + "Canceled";
                     break;
                 default:
                     break;
@@ -111,13 +129,44 @@ namespace VoicemeeterOsdProgram.UiControls
             m_relNotesWin.Activate();
         }
 
-        private void CloseClick(object sender, RoutedEventArgs e) => Close();
+        private void CloseClick(object sender, RoutedEventArgs e)
+        {
+            if (IsUpdating)
+            {
+                UpdateManager.CancelUpdate();
+                IsUpdating = false;
+            }
+            else
+            {
+                Close();
+            }
+        }
 
         private async void UpdateClick(object sender, RoutedEventArgs e)
         {
             UpdateBtn.IsEnabled = false;
-            DialogText.Text = "Updating...";
-            ProrcessUpdaterResult(await UpdateManager.TryUpdate());
+            IsUpdating = true;
+            DialogText.Text = "Downloading...";
+
+            var p = new Progress<double>(ProgressChanged);
+            ProgrBar.Visibility = Visibility.Visible;
+
+            ProcessUpdaterResult(await UpdateManager.TryUpdate(p));
+            IsUpdating = false;
+        }
+
+        private void ProgressChanged(double val)
+        {
+            System.Diagnostics.Debug.WriteLine($"progress: {val}");
+            ProgrBar.Value = val;
+            if (val == 100)
+            {
+                if (!m_isDownloaded)
+                {
+                    m_isDownloaded = true;
+                    DialogText.Text = "Extracting...";
+                }
+            }
         }
     }
 }

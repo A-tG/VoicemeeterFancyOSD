@@ -1,18 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AtgDev.Utils.Extensions
 {
-    public static class ZipFileExntesions
+    public static class ZipFileExtensions
     {
-        public static async Task ExtractToDirectoryAsync(string sourceArchiveFileName, string destinationDirectoryName)
+        public static async Task ExtractToDirectoryAsync(string sourceArchiveFileName, string destinationDirectoryName,
+            IProgress<double> fileProg = null, IProgress<double> totalProg = null,
+            CancellationToken cancellationToken = default)
         {
             using ZipArchive archive = ZipFile.OpenRead(sourceArchiveFileName);
+
+            long totalBytes = archive.Entries.Sum(el => el.Length);
+            long currentBytes = 0;
+
             foreach (var entry in archive.Entries)
             {
                 var fullName = entry.FullName;
@@ -26,19 +31,32 @@ namespace AtgDev.Utils.Extensions
                 {
                     await using Stream inStream = entry.Open();
                     await using Stream outStream = File.Create(path);
-                    await ProcessStreams(inStream, outStream);
+                    currentBytes = await ProcessStreams(inStream, outStream, 
+                        entry.Length, currentBytes, totalBytes, 
+                        fileProg, totalProg, cancellationToken);
                 }
             }
         }
 
-        private static async Task ProcessStreams(Stream input, Stream output)
+        private static async Task<long> ProcessStreams(Stream input, Stream output, 
+            long inputLength, long currentBytes, long totalBytes,
+            IProgress<double> fileProg = null, IProgress<double> totalProg = null, 
+            CancellationToken cancellationToken = default)
         {
-            byte[] buffer = new byte[4096];
-            for (int bytesRead = 1; bytesRead > 0;)
+            var buffer = new byte[4096];
+            long streamBytesRead = 0;
+            int bytesRead;
+            fileProg?.Report(0);
+            while ((bytesRead = await input.ReadAsync(buffer, cancellationToken)) > 0)
             {
-                bytesRead = await input.ReadAsync(buffer, 0, buffer.Length);
-                await output.WriteAsync(buffer, 0, bytesRead);
+                await output.WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken);
+
+                streamBytesRead += bytesRead;
+                currentBytes += bytesRead;
+                fileProg?.Report(streamBytesRead * 100.0 / inputLength);
+                totalProg?.Report(currentBytes * 100.0 / totalBytes);
             }
+            return currentBytes;
         }
 
         private static bool IsDirectory(ZipArchiveEntry entry)

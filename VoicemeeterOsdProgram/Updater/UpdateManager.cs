@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using VoicemeeterOsdProgram.Updater.Types;
 
@@ -22,6 +23,7 @@ namespace VoicemeeterOsdProgram.Updater
         private static Assembly m_assembly = Assembly.GetEntryAssembly();
         private static GitHubClient m_client;
         private static ReleaseAsset m_latestAsset;
+        private static CancellationTokenSource m_cancelToken = new();
 
         public static Release LatestRelease
         {
@@ -99,33 +101,44 @@ namespace VoicemeeterOsdProgram.Updater
             return result;
         }
 
-        public static async Task<UpdaterResult> TryUpdate()
+        public static async Task<UpdaterResult> TryUpdate(IProgress<double> progress = null)
         {
-            var result = await TryCheckForUpdatesAsync();
-            if (result != UpdaterResult.NewVersionFound) return result;
-
-            var path = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name);
-            if (string.IsNullOrEmpty(path)) return UpdaterResult.DownloadFailed;
-
-            if (await TryUnzip(path))
+            try
             {
+                var result = await TryCheckForUpdatesAsync();
+                if (result != UpdaterResult.NewVersionFound) return result;
+
+                var downloadRes = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name, progress);
+                if (!downloadRes.IsSuccess || string.IsNullOrEmpty(downloadRes.Path)) return UpdaterResult.DownloadFailed;
+
+                var path = downloadRes.Path;
                 var updateFolder = Path.GetDirectoryName(path);
-                if (TryRestartAppAndUpdateFiles(updateFolder))
+                if (await TryUnzip(path, progress))
                 {
-                    return UpdaterResult.Updated;
+                    if (TryRestartAppAndUpdateFiles(updateFolder))
+                    {
+                        return UpdaterResult.Updated;
+                    }
+                    else
+                    {
+                        return UpdaterResult.UpdateFailed;
+                    }
                 }
-                try
+                else
                 {
-                    // delete temprorary folder if update failed
-                    Directory.Delete(updateFolder, true);
+                    TryDeleteFolder(updateFolder);
+                    return UpdaterResult.ArchiveExtractionFailed;
                 }
-                catch { }
             }
-            else
+            catch (TaskCanceledException)
             {
-                return UpdaterResult.ArchiveExtractionFailed;
+                return UpdaterResult.Canceled;
             }
-            return UpdaterResult.UpdateFailed;
+        }
+
+        public static void CancelUpdate()
+        {
+            m_cancelToken.Cancel();
         }
 
         private static bool TryRestartAppAndUpdateFiles(string updateFolder)
@@ -168,38 +181,51 @@ namespace VoicemeeterOsdProgram.Updater
             return false;
         }
 
-        private static async Task<bool> TryUnzip(string path)
+        private static async Task<bool> TryUnzip(string path, IProgress<double> progress = null)
         {
             bool result = false;
             try
             {
-                await ZipFileExntesions.ExtractToDirectoryAsync(path, Path.GetDirectoryName(path));
+                await ZipFileExtensions.ExtractToDirectoryAsync(path, Path.GetDirectoryName(path), totalProg: progress, cancellationToken: m_cancelToken.Token);
                 result = true;
             }
             catch { }
             return result;
         }
 
-        private static async Task<string> TryDownloadAsync(string url, string fileName)
+        private static async Task<(bool IsSuccess, string Path)> TryDownloadAsync(string url, string fileName, IProgress<double> progress = null)
         {
-            var resultPath = string.Empty;
+            var result = (IsSuccess: false, Path: string.Empty);
             try
             {
                 using HttpClient client = new();
-                var resp = await client.GetAsync(url);
+                var resp = await client.GetAsync(url, m_cancelToken.Token);
+                var contentLen = resp.Content.Headers.ContentLength;
 
                 var path = $"{AppDomain.CurrentDomain.BaseDirectory}{GenerateName()}";
                 Directory.CreateDirectory(path);
-                resultPath = $@"{path}\{fileName}";
+                result.Path = $@"{path}\{fileName}";
 
-                using FileStream fs = File.Create(resultPath);
-                await resp.Content.CopyToAsync(fs);
+                await using FileStream fs = File.Create(result.Path);
+                await using var download = await resp.Content.ReadAsStreamAsync(m_cancelToken.Token);
+                if ((contentLen is null) || (progress is null))
+                {
+                    await download.CopyToAsync(fs, m_cancelToken.Token);
+                }
+                else
+                {
+                    var len = contentLen.Value;
+                    var relProgress = new Progress<double>(total => progress.Report(total * 100.0 / len));
+                    // PROBLEM: doesn't change UI values for some reason
+                    await download.CopyToAsync(fs, relProgress, m_cancelToken.Token);
+                }
+                result.IsSuccess = true;
             }
             catch 
             {
-                resultPath = string.Empty;
+                result.Path = string.Empty;
             }
-            return resultPath;
+            return result;
         }
 
         private static async Task<IReadOnlyList<Release>> GetReleasesAsync()
@@ -223,6 +249,17 @@ namespace VoicemeeterOsdProgram.Updater
                 sbOut.Append(sbIn[i]);
             }
             return sbOut.ToString();
+        }
+
+        private static bool TryDeleteFolder(string path)
+        {
+            try
+            {
+                Directory.Delete(path, true);
+                return true;
+            }
+            catch { }
+            return false;
         }
 
         private static bool IsArchitectureMatch(string name)

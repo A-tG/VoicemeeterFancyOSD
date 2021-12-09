@@ -11,6 +11,7 @@
         ReleasesNotFound,
         UpdateFailed,
         DownloadFailed,
-        ArchiveExtractionFailed
+        ArchiveExtractionFailed,
+        Canceled
     }
 }
