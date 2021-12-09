@@ -136,6 +136,7 @@ namespace VoicemeeterOsdProgram.UiControls
             if (IsUpdating)
             {
                 UpdateManager.CancelUpdate();
+                ProgrBar.Value = 0;
                 IsUpdating = false;
             }
             else
