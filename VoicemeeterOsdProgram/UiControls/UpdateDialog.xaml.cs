@@ -14,7 +14,6 @@ namespace VoicemeeterOsdProgram.UiControls
     public partial class UpdateDialog : Window
     {
         private UpdateReleaseNotes m_relNotesWin;
-        private bool m_isDownloaded = false;
         private bool m_isUpdating = false;
         private bool IsUpdating
         {
@@ -23,6 +22,7 @@ namespace VoicemeeterOsdProgram.UiControls
             {
                 m_isUpdating = value;
                 CloseBtn.Content = value ? "Cancel" : "Close";
+                UpdateBtn.IsEnabled = !value;
             }
         }
 
@@ -66,6 +66,7 @@ namespace VoicemeeterOsdProgram.UiControls
         {
             var msg = $"Current: {UpdateManager.CurrentVersion}\n";
             var url = $"{UpdateManager.RepoUrl}/releases";
+            bool isUpdating = false;
 
             ProgrBar.Visibility = Visibility.Collapsed;
             switch (res)
@@ -75,12 +76,12 @@ namespace VoicemeeterOsdProgram.UiControls
                     break;
                 case UpdaterResult.Updated:
                     DialogText.Text = msg + "Updated, restarting the program...";
+                    isUpdating = true;
                     break;
                 case UpdaterResult.NewVersionFound:
                     DialogText.Text = msg + $"New version available: ";
                     DialogText.Inlines.Add(GetVersionLink());
                     url = UpdateManager.LatestRelease.HtmlUrl;
-                    UpdateBtn.IsEnabled = true;
                     break;
                 case UpdaterResult.VersionUpToDate:
                     DialogText.Text = msg + "You're running the latest version";
@@ -105,7 +106,6 @@ namespace VoicemeeterOsdProgram.UiControls
                     break;
                 case UpdaterResult.Canceled:
                     DialogText.Text = msg + "Canceled";
-                    UpdateBtn.IsEnabled = true;
                     break;
                 default:
                     break;
@@ -114,6 +114,7 @@ namespace VoicemeeterOsdProgram.UiControls
             var link = GetWebLink(url);
             DialogText.Inlines.Add("\n");
             DialogText.Inlines.Add(link);
+            IsUpdating = isUpdating;
         }
 
         private void OnVersionClick(object sender, RoutedEventArgs e)
@@ -145,29 +146,26 @@ namespace VoicemeeterOsdProgram.UiControls
 
         private async void UpdateClick(object sender, RoutedEventArgs e)
         {
-            UpdateBtn.IsEnabled = false;
             IsUpdating = true;
-            DialogText.Text = "Downloading...";
 
-            var p = new Progress<double>(ProgressChanged);
+            var downloadP = new Progress<double>(DownProgrChanged);
+            var extractP = new Progress<double>(ExtrProgrChanged);
             ProgrBar.Visibility = Visibility.Visible;
 
-            ProcessUpdaterResult(await UpdateManager.TryUpdateAsync(p));
+            ProcessUpdaterResult(await UpdateManager.TryUpdateAsync(downloadP, extractP));
             IsUpdating = false;
         }
 
-        private void ProgressChanged(double val)
+        private void DownProgrChanged(double val)
         {
-            System.Diagnostics.Debug.WriteLine($"progress: {val}");
             ProgrBar.Value = val;
-            if (val == 100)
-            {
-                if (!m_isDownloaded)
-                {
-                    m_isDownloaded = true;
-                    DialogText.Text = "Extracting...";
-                }
-            }
+            DialogText.Text = "Downloading...";
+        }
+
+        private void ExtrProgrChanged(double val)
+        {
+            ProgrBar.Value = val;
+            DialogText.Text = "Extracting...";
         }
     }
 }
