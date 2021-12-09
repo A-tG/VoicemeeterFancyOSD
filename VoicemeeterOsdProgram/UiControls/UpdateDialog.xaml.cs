@@ -152,7 +152,7 @@ namespace VoicemeeterOsdProgram.UiControls
             var p = new Progress<double>(ProgressChanged);
             ProgrBar.Visibility = Visibility.Visible;
 
-            ProcessUpdaterResult(await UpdateManager.TryUpdate(p));
+            ProcessUpdaterResult(await UpdateManager.TryUpdateAsync(p));
             IsUpdating = false;
         }
 

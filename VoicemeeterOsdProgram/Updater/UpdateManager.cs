@@ -101,7 +101,7 @@ namespace VoicemeeterOsdProgram.Updater
             return result;
         }
 
-        public static async Task<UpdaterResult> TryUpdate(IProgress<double> progress = null)
+        public static async Task<UpdaterResult> TryUpdateAsync(IProgress<double> progress = null)
         {
             var result = await TryCheckForUpdatesAsync();
             if (result != UpdaterResult.NewVersionFound) return result;
@@ -111,7 +111,7 @@ namespace VoicemeeterOsdProgram.Updater
 
             var path = downloadRes.Path;
             var updateFolder = Path.GetDirectoryName(path);
-            result = await TryUnzip(path, progress);
+            result = await TryUnzipAsync(path, progress);
             if (result == UpdaterResult.Unpacked)
             {
                 if (TryRestartAppAndUpdateFiles(updateFolder))
@@ -175,7 +175,7 @@ namespace VoicemeeterOsdProgram.Updater
             return false;
         }
 
-        private static async Task<UpdaterResult> TryUnzip(string path, IProgress<double> progress = null)
+        private static async Task<UpdaterResult> TryUnzipAsync(string path, IProgress<double> progress = null)
         {
             var result = UpdaterResult.ArchiveExtractionFailed;
             try
