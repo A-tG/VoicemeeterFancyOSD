@@ -23,8 +23,12 @@
         <TextBlock Name="DialogText" Grid.Row="0" Grid.ColumnSpan="2" 
                    Text="Loading..." TextWrapping="NoWrap" TextTrimming="None"
                    HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10"/>
-        <ProgressBar Name="ProgrBar" Visibility="Collapsed" Orientation="Horizontal"
-                     Grid.ColumnSpan="2" Grid.Row="1" Margin="10" Height="20"/>
+        <Grid Grid.ColumnSpan="2" Grid.Row="1">
+            <ProgressBar Name="ProgrBar" Visibility="Collapsed" Orientation="Horizontal"
+                     Margin="10" Height="20"/>
+            <TextBlock Name="ProgrBarText" FontWeight="SemiBold" Visibility="{Binding Visibility, ElementName=ProgrBar}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
         <Button Name="UpdateBtn" Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom"
                 Content="Update" Click="UpdateClick"
                 IsEnabled="False" IsDefault="True" Margin="15,10,15,10"/>

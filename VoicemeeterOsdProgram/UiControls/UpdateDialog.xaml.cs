@@ -65,6 +65,7 @@ namespace VoicemeeterOsdProgram.UiControls
         private void ProcessUpdaterResult(UpdaterResult res)
         {
             var arch = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString();
+            var updateBtnText = "Try Update";
             var msg = $"Current version: {arch} {UpdateManager.CurrentVersion}\n";
             var url = $"{UpdateManager.RepoUrl}/releases";
             bool isUpdating = false;
@@ -88,6 +89,7 @@ namespace VoicemeeterOsdProgram.UiControls
                     DialogText.Text = msg + updateMsg;
                     DialogText.Inlines.Add(GetVersionLink());
                     url = UpdateManager.LatestRelease.HtmlUrl;
+                    updateBtnText = "Update";
                     break;
                 case UpdaterResult.VersionUpToDate:
                     DialogText.Text = msg + "You're running the latest version";
@@ -121,6 +123,7 @@ namespace VoicemeeterOsdProgram.UiControls
             DialogText.Inlines.Add("\n");
             DialogText.Inlines.Add(link);
             IsUpdating = isUpdating;
+            UpdateBtn.Content = updateBtnText;
         }
 
         private void OnVersionClick(object sender, RoutedEventArgs e)
@@ -155,23 +158,30 @@ namespace VoicemeeterOsdProgram.UiControls
         {
             IsUpdating = true;
 
-            var downloadP = new Progress<double>(DownProgrChanged);
+            var downloadP = new Progress<CurrentTotalBytes>(DownProgrChanged);
             var extractP = new Progress<double>(ExtrProgrChanged);
-            ProgrBar.Visibility = Visibility.Visible;
 
             ProcessUpdaterResult(await UpdateManager.TryUpdateAsync(downloadP, extractP));
             IsUpdating = false;
         }
 
-        private void DownProgrChanged(double val)
+        private void DownProgrChanged(CurrentTotalBytes val)
         {
-            ProgrBar.Value = val;
+            ProgrBar.Visibility = Visibility.Visible;
+
+            var currentKb = val.Current / 1024;
+            var totalKb = val.Total / 1024;
+            ProgrBar.Value = val.ProgressPercent;
+            ProgrBarText.Text = $"{currentKb} / {totalKb} KB";
+
             DialogText.Text = "Downloading...";
         }
 
         private void ExtrProgrChanged(double val)
         {
+            ProgrBar.Visibility = Visibility.Visible;
             ProgrBar.Value = val;
+            ProgrBarText.Text = "";
             DialogText.Text = "Extracting...";
         }
     }
