@@ -1,7 +1,6 @@
 ﻿using AtgDev.Utils.Extensions;
 using Octokit;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -11,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using VoicemeeterOsdProgram.Updater.Types;
+using System.Runtime.InteropServices;
 
 namespace VoicemeeterOsdProgram.Updater
 {
@@ -21,7 +21,8 @@ namespace VoicemeeterOsdProgram.Updater
         private const string ExtractedFolder = "VoicemeeterFancyOSD";
 
         private static Assembly m_assembly = Assembly.GetEntryAssembly();
-        private static GitHubClient m_client;
+        private static HttpClient m_httpClient = new();
+        private static GitHubClient m_ghClient = new(new ProductHeaderValue(m_assembly.GetName().Name));
         private static ReleaseAsset m_latestAsset;
         private static CancellationTokenSource m_cancelToken = new();
 
@@ -47,25 +48,13 @@ namespace VoicemeeterOsdProgram.Updater
             get => $"www.github.com/{Owner}/{RepoName}";
         }
 
-        private static GitHubClient Client
-        {
-            get
-            {
-                if (m_client is null)
-                {
-                    m_client = new(new ProductHeaderValue(m_assembly.GetName().Name));
-                }
-                return m_client;
-            }
-        }
-
         public static async Task<UpdaterResult> TryCheckForUpdatesAsync()
         {
             UpdaterResult result = default;
 
             try
             {
-                var releases = await GetReleasesAsync();
+                var releases = await m_ghClient.Repository.Release.GetAll(Owner, RepoName);
                 if (releases.Count == 0) return UpdaterResult.ReleasesNotFound;
 
                 var rel = releases[0];
@@ -198,8 +187,9 @@ namespace VoicemeeterOsdProgram.Updater
             string path = "";
             try
             {
-                using HttpClient client = new();
-                using var resp = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, m_cancelToken.Token);
+                using var resp = await m_httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, m_cancelToken.Token);
+                resp.EnsureSuccessStatusCode();
+
                 var contentLen = resp.Content.Headers.ContentLength;
 
                 path = $"{AppDomain.CurrentDomain.BaseDirectory}{GenerateName()}";
@@ -230,11 +220,6 @@ namespace VoicemeeterOsdProgram.Updater
                 TryDeleteFolder(path);
             }
             return result;
-        }
-
-        private static async Task<IReadOnlyList<Release>> GetReleasesAsync()
-        {
-            return await Client.Repository.Release.GetAll(Owner, RepoName);
         }
 
         private static string GenerateName()
@@ -271,16 +256,17 @@ namespace VoicemeeterOsdProgram.Updater
 
         private static bool IsArchitectureMatch(string name)
         {
-            bool result = false;
-            if (Environment.Is64BitProcess)
+            var arch = RuntimeInformation.ProcessArchitecture;
+            switch (arch)
             {
-                result = name.Contains("x64");
+                case Architecture.X86:
+                case Architecture.X64:
+                case Architecture.Arm:
+                case Architecture.Arm64:
+                    return name.Contains(arch.ToString(), StringComparison.OrdinalIgnoreCase);
+                default:
+                    return false;
             }
-            else
-            {
-                result = name.Contains("x86");
-            }
-            return result;
         }
 
         private static string FilterVersionString(string ver)
