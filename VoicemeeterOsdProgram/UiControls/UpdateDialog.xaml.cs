@@ -64,7 +64,8 @@ namespace VoicemeeterOsdProgram.UiControls
 
         private void ProcessUpdaterResult(UpdaterResult res)
         {
-            var msg = $"Current: {UpdateManager.CurrentVersion}\n";
+            var arch = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString();
+            var msg = $"Current version: {arch} {UpdateManager.CurrentVersion}\n";
             var url = $"{UpdateManager.RepoUrl}/releases";
             bool isUpdating = false;
 
