@@ -70,33 +70,25 @@ namespace VoicemeeterOsdProgram.Updater
                 return UpdaterResult.NewVersionFound;
 #endif
             }
-            catch (ApiException)
+            catch (Exception e)
             {
-                result = UpdaterResult.ConnectionError;
-            }
-            catch (HttpRequestException)
-            {
-                result = UpdaterResult.ConnectionError;
-            }
-            catch (InvalidOperationException)
-            {
-                result = UpdaterResult.ArchitectureNotFound;
-            }
-            catch
-            {
+                if (e is ApiException) result = UpdaterResult.ConnectionError;
+                if (e is HttpRequestException) result = UpdaterResult.ConnectionError;
+                if (e is InvalidOperationException) result = UpdaterResult.ArchitectureNotFound;
+
                 m_latestAsset = null;
             }
 
             return result;
         }
 
-        public static async Task<UpdaterResult> TryUpdateAsync(IProgress<double> downloadProgress = null, IProgress<double> extractionProgress = null)
+        public static async Task<UpdaterResult> TryUpdateAsync(IProgress<CurrentTotalBytes> downloadProgress = null, IProgress<double> extractionProgress = null)
         {
             var result = await TryCheckForUpdatesAsync();
             if (result != UpdaterResult.NewVersionFound) return result;
 
             var downloadRes = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name, downloadProgress);
-            if ((downloadRes.Res != UpdaterResult.Downloaded) || string.IsNullOrEmpty(downloadRes.Path)) return UpdaterResult.DownloadFailed;
+            if ((downloadRes.Res != UpdaterResult.Downloaded) || string.IsNullOrEmpty(downloadRes.Path)) return downloadRes.Res;
 
             var path = downloadRes.Path;
             var updateFolder = Path.GetDirectoryName(path);
@@ -173,15 +165,14 @@ namespace VoicemeeterOsdProgram.Updater
                 await ZipFileExtensions.ExtractToDirectoryAsync(path, Path.GetDirectoryName(path), totalProg: progress, cancellationToken: m_cancelToken.Token);
                 result = UpdaterResult.Unpacked;
             }
-            catch (TaskCanceledException)
-            {
-                result = UpdaterResult.Canceled;
+            catch (Exception e)
+            { 
+                if (e is TaskCanceledException) result = UpdaterResult.Canceled;
             }
-            catch { }
             return result;
         }
 
-        private static async Task<(UpdaterResult Res, string Path)> TryDownloadAsync(string url, string fileName, IProgress<double> progress = null)
+        private static async Task<(UpdaterResult Res, string Path)> TryDownloadAsync(string url, string fileName, IProgress<CurrentTotalBytes> progress = null)
         {
             var result = (Res: UpdaterResult.DownloadFailed, Path: string.Empty);
             string path = "";
@@ -204,18 +195,20 @@ namespace VoicemeeterOsdProgram.Updater
                 }
                 else
                 {
-                    var len = contentLen.Value;
-                    var relProgress = new Progress<long>(readBytes => progress.Report(readBytes * 100.0 / len));
+                    CurrentTotalBytes bytes = new(contentLen.Value);
+                    var relProgress = new Progress<long>(readBytes =>
+                    {
+                        bytes.Current = readBytes;
+                        progress.Report(bytes);
+                    });
                     await download.CopyToAsync(fs, relProgress, m_cancelToken.Token);
                 }
                 result.Res = UpdaterResult.Downloaded;
             }
-            catch (TaskCanceledException)
+            catch (Exception e)
             {
-                result.Res = UpdaterResult.Canceled;
-            }
-            catch 
-            {
+                if (e is TaskCanceledException) result.Res = UpdaterResult.Canceled;
+
                 result.Path = string.Empty;
                 TryDeleteFolder(path);
             }
