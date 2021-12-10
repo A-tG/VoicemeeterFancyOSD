@@ -80,7 +80,12 @@ namespace VoicemeeterOsdProgram.UiControls
                     isUpdating = true;
                     break;
                 case UpdaterResult.NewVersionFound:
-                    DialogText.Text = msg + $"New version available: ";
+#if DEBUG
+                    var updateMsg = "Version available: ";
+#else
+                    var updateMsg = "New version available: ";
+#endif
+                    DialogText.Text = msg + updateMsg;
                     DialogText.Inlines.Add(GetVersionLink());
                     url = UpdateManager.LatestRelease.HtmlUrl;
                     break;
