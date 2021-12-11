@@ -24,7 +24,7 @@ namespace VoicemeeterOsdProgram.Updater
         private static HttpClient m_httpClient = new();
         private static GitHubClient m_ghClient = new(new ProductHeaderValue(m_assembly.GetName().Name));
         private static ReleaseAsset m_latestAsset;
-        private static CancellationTokenSource m_cancelToken = new();
+        private static CancellationTokenSource m_cts = new();
 
         public static Release LatestRelease
         {
@@ -113,8 +113,8 @@ namespace VoicemeeterOsdProgram.Updater
 
         public static void CancelUpdate()
         {
-            m_cancelToken.Cancel();
-            m_cancelToken = new();
+            m_cts.Cancel();
+            m_cts = new();
         }
 
         private static bool TryRestartAppAndUpdateFiles(string updateFolder)
@@ -162,7 +162,7 @@ namespace VoicemeeterOsdProgram.Updater
             var result = UpdaterResult.ArchiveExtractionFailed;
             try
             {
-                await ZipFileExtensions.ExtractToDirectoryAsync(path, Path.GetDirectoryName(path), totalProg: progress, cancellationToken: m_cancelToken.Token);
+                await ZipFileExtensions.ExtractToDirectoryAsync(path, Path.GetDirectoryName(path), totalProg: progress, cancellationToken: m_cts.Token);
                 result = UpdaterResult.Unpacked;
             }
             catch (Exception e)
@@ -178,7 +178,7 @@ namespace VoicemeeterOsdProgram.Updater
             string path = "";
             try
             {
-                using var resp = await m_httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, m_cancelToken.Token);
+                using var resp = await m_httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, m_cts.Token);
                 resp.EnsureSuccessStatusCode();
 
                 var contentLen = resp.Content.Headers.ContentLength;
@@ -188,10 +188,10 @@ namespace VoicemeeterOsdProgram.Updater
                 result.Path = $@"{path}\{fileName}";
 
                 await using FileStream fs = File.Create(result.Path);
-                await using var download = await resp.Content.ReadAsStreamAsync(m_cancelToken.Token);
+                await using var download = await resp.Content.ReadAsStreamAsync(m_cts.Token);
                 if ((contentLen is null) || (progress is null))
                 {
-                    await download.CopyToAsync(fs, m_cancelToken.Token);
+                    await download.CopyToAsync(fs, m_cts.Token);
                 }
                 else
                 {
@@ -201,7 +201,7 @@ namespace VoicemeeterOsdProgram.Updater
                         bytes.Current = readBytes;
                         progress.Report(bytes);
                     });
-                    await download.CopyToAsync(fs, relProgress, m_cancelToken.Token);
+                    await download.CopyToAsync(fs, relProgress, m_cts.Token);
                 }
                 result.Res = UpdaterResult.Downloaded;
             }
