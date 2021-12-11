@@ -7,7 +7,7 @@ Windows 10 or newer is required.
 May work with older Windows versions (not older than Windows 7) but OSD will work as normal window and will not be displayed on top of fullscreen applications.
 
 # Installation and Usage
-The program is portable, no installation required, but you need [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/6.0/runtime). Download the latest version from the [Releases](https://github.com/A-tG/VoicemeeterFancyOSD/releases) page, unpack and launch VoicemeeterFancyOsdHost.exe (on Windows 8.1 or newer), or VoicemeeterFancyOsd.exe if VoicemeeterFancyOsdHost.exe doesnэt work for some reason or you are using older version of Windows.
+The program is portable, no installation required, but you need [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/6.0/runtime). Download the latest version from the [Releases](https://github.com/A-tG/VoicemeeterFancyOSD/releases) page, unpack and launch VoicemeeterFancyOsdHost.exe (on Windows 8.1 or newer), or VoicemeeterFancyOsd.exe if VoicemeeterFancyOsdHost.exe doesn't work for some reason or you are using older version of Windows.
 
 Settings are stored in *PROGRAM_LOCATION\config\config.ini* (created on program launch if not exist). And are automatically validated and updated on file change, no need to restart.
 
