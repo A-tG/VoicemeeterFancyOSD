@@ -114,6 +114,7 @@ namespace VoicemeeterOsdProgram.Updater
         public static void CancelUpdate()
         {
             m_cts.Cancel();
+            m_cts.Dispose();
             m_cts = new();
         }
 
