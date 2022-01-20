@@ -6,6 +6,9 @@ namespace TopmostApp.Interop
 {
     public static partial class NativeMethods
     {
+        [DllImport("user32.dll")]
+        public static extern int PostThreadMessage(int idThread, uint msg, int wParam, int lParam);
+
         public static bool IsBandWindowSupported()
         {
             bool result = NativeLibrary.TryLoad("user32.dll", out IntPtr libHandle);

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using AtgDev.Utils.Extensions;
+using System;
 using System.Diagnostics;
-using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
@@ -23,6 +23,8 @@ namespace VoicemeeterOsdProgram
 #endif
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+
+            ArgsHandler.Handle(args);
 
             if (!m_mutex.WaitOne(0, false))
             {
@@ -47,7 +49,7 @@ namespace VoicemeeterOsdProgram
             if ((msg.message == (int)WindowMessage.WM_CLOSE) || (msg.message == (int)WindowMessage.WM_QUIT))
             {
                 Debug.WriteLine("TERMINATION SIGNAL RECEIVED");
-                m_app.Dispatcher.Invoke(() =>
+                m_app?.Dispatcher.Invoke(() =>
                 {
                     m_app.Shutdown();
                 });
@@ -56,21 +58,25 @@ namespace VoicemeeterOsdProgram
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Debug.WriteLine("UNHANDLED EXCEPTION");
+            try
+            {
+                Debug.WriteLine("UNHANDLED EXCEPTION");
 
-            var ex = e.ExceptionObject as Exception;
+                var ex = e.ExceptionObject as Exception;
 
-            string trace = ex?.StackTrace ?? string.Empty;
+                string trace = ex?.StackTrace ?? string.Empty;
 #if !DEBUG
-            using var reader = new StringReader(trace);
-            trace = reader.ReadLine();
+                using var reader = new StringReader(trace);
+                trace = reader.ReadLine();
 #endif
 
-            string msg = "PRESS Ctrl + C TO COPY THIS TEXT\n" +
-                "Unhandled exception:\n" + 
-                $"{ex?.Message}\n" + 
-                trace;
-            MessageBox.Show(msg, name, MessageBoxButton.OK, MessageBoxImage.Error);
+                string msg = "PRESS Ctrl + C TO COPY THIS TEXT\n" +
+                    "Unhandled exception:\n" +
+                    $"{ex?.Message}\n" +
+                    trace;
+                MessageBox.Show(msg, name, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch {}
         }
 
         private static void OnProcessExit(object sender, EventArgs e)

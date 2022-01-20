@@ -160,8 +160,9 @@ namespace VoicemeeterOsdProgram.UiControls
 
             var downloadP = new Progress<CurrentTotalBytes>(DownProgrChanged);
             var extractP = new Progress<double>(ExtrProgrChanged);
+            var copyP = new Progress<double>(CopyProgrChanged);
 
-            ProcessUpdaterResult(await UpdateManager.TryUpdateAsync(downloadP, extractP));
+            ProcessUpdaterResult(await UpdateManager.TryUpdateAsync(downloadP, extractP, copyP));
             IsUpdating = false;
         }
 
@@ -183,6 +184,14 @@ namespace VoicemeeterOsdProgram.UiControls
             ProgrBar.Value = val;
             ProgrBarText.Text = "";
             DialogText.Text = "Extracting...";
+        }
+
+        private void CopyProgrChanged(double val)
+        {
+            ProgrBar.Visibility = Visibility.Visible;
+            ProgrBar.Value = val;
+            ProgrBarText.Text = "";
+            DialogText.Text = "Copying...";
         }
     }
 }

@@ -4,20 +4,20 @@ namespace VoicemeeterOsdProgram.Updater.Types
 {
     public struct CurrentTotalBytes
     {
-        private long m_current = 0;
-        private long m_total = 0;
+        private ulong m_current = 0;
+        private ulong m_total = 0;
 
-        public CurrentTotalBytes(long total)
+        public CurrentTotalBytes(ulong total)
         {
             Total = total;
         }
 
-        public long Current
+        public ulong Current
         {
             get => m_current;
             set
             {
-                var val = Math.Abs(value);
+                var val = value;
                 if (val > Total)
                 {
                     val = Total;
@@ -26,12 +26,12 @@ namespace VoicemeeterOsdProgram.Updater.Types
             }
         }
 
-        public long Total
+        public ulong Total
         { 
             get => m_total;
             set
             {
-                m_total = Math.Abs(value);
+                m_total = value;
             }
         }
 

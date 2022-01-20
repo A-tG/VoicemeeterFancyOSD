@@ -19,6 +19,7 @@ namespace VoicemeeterOsdProgram.Updater
         private const string Owner = "A-tG";
         private const string RepoName = "VoicemeeterFancyOSD";
         private const string ExtractedFolder = "VoicemeeterFancyOSD";
+        private const string BackupFolderName = $".{RepoName}UpdBak";
 
         private static Assembly m_assembly = Assembly.GetEntryAssembly();
         private static HttpClient m_httpClient = new();
@@ -82,7 +83,10 @@ namespace VoicemeeterOsdProgram.Updater
             return result;
         }
 
-        public static async Task<UpdaterResult> TryUpdateAsync(IProgress<CurrentTotalBytes> downloadProgress = null, IProgress<double> extractionProgress = null)
+        public static async Task<UpdaterResult> TryUpdateAsync(
+            IProgress<CurrentTotalBytes> downloadProgress = null, 
+            IProgress<double> extractionProgress = null, 
+            IProgress<double> copyProgress = null)
         {
             var result = await TryCheckForUpdatesAsync();
             if (result != UpdaterResult.NewVersionFound) return result;
@@ -95,7 +99,7 @@ namespace VoicemeeterOsdProgram.Updater
             result = await TryUnzipAsync(path, extractionProgress);
             if (result == UpdaterResult.Unpacked)
             {
-                if (TryRestartAppAndUpdateFiles(updateFolder))
+                if (TryCopyAndRestart(updateFolder, copyProgress))
                 {
                     return UpdaterResult.Updated;
                 }
@@ -111,6 +115,11 @@ namespace VoicemeeterOsdProgram.Updater
             }
         }
 
+        public static bool TryDeleteBackup()
+        {
+            return TryDeleteFolder(BackupFolderName);
+        }
+
         public static void CancelUpdate()
         {
             m_cts.Cancel();
@@ -118,7 +127,7 @@ namespace VoicemeeterOsdProgram.Updater
             m_cts = new();
         }
 
-        private static bool TryRestartAppAndUpdateFiles(string updateFolder)
+        private static bool TryCopyAndRestart(string updateFolder, IProgress<double> copyProgress = null)
         {
             try
             {
@@ -126,36 +135,63 @@ namespace VoicemeeterOsdProgram.Updater
                 string copyFrom = updateFolder + @$"\{ExtractedFolder}";
                 string program = Environment.ProcessPath;
 
-                // just in case, to avoid deleting wrong files
+                // just in case
                 bool isValidPaths = (Directory.GetParent(updateFolder).ToString() == copyTo) &&
                     (Directory.GetParent(program).ToString() == copyTo);
                 if (string.IsNullOrEmpty(program) || !isValidPaths) return false;
 
-                string programName = Path.GetFileName(program);
+                if (!TryOvewriteFiles(copyFrom, copyTo, copyProgress)) return false;
 
-                string argument = "/C " +
-                    $"taskkill /IM {programName} & " +
-                    "timeout /t 2 /nobreak & " + // wait 2 seconds because in some cases Robocopy failes if it tries to copy right away 
-                    $@"robocopy ""{copyFrom}"" ""{copyTo}"" /s /im /it /is /move & " +
-                    $@"rmdir /Q /S ""{updateFolder}"" & " + // TO DO: find a way to delete old unused DLLs
-                    $@"start """" /MIN ""{program}""";
+                TryDeleteFolder(updateFolder);
 
-                using Process p = new();
-                p.StartInfo = new ProcessStartInfo()
-                {
-                    FileName = "cmd.exe",
-                    Arguments = argument,
-                    // Hides command promt completely
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    CreateNoWindow = true,
-                    UseShellExecute = false
-                };
-                p.Start();
+                Process.Start(program, ArgsHandler.AfterUpdateArg);
 
                 return true;
             }
             catch { }
             return false;
+        }
+
+        private static bool TryOvewriteFiles(string fromFolder, string toFolder, IProgress<double> copyProgress = null)
+        {
+            bool result = false;
+            try
+            {
+                DirectoryInfo fromDir, toDir, bakDir;
+                fromDir = new(fromFolder);
+                toDir = new(toFolder);
+                bakDir = Directory.CreateDirectory(Path.Combine(toDir.ToString(), BackupFolderName));
+
+                ulong totalSize, readSize = 0;
+                totalSize = fromDir.GetSize();
+
+                foreach (var file in fromDir.GetFiles())
+                {
+                    FileInfo targetFile = new(Path.Combine(toFolder, file.Name));
+                    if (targetFile.Exists)
+                    {
+                        string bakPath = Path.Combine(bakDir.ToString(), targetFile.Name);
+                        targetFile.MoveTo(bakPath, true);
+                    }
+                    file.MoveTo(Path.Combine(toFolder, file.Name));
+
+                    readSize += (ulong)file.Length;
+                    if (totalSize != 0) copyProgress.Report(readSize / totalSize);
+                    
+                }
+
+                foreach (var dir in fromDir.GetDirectories())
+                {
+                    dir.MoveTo(Path.Combine(bakDir.ToString(), dir.Name));
+
+                    readSize += dir.GetSize();
+                    if (totalSize != 0) copyProgress.Report(readSize / totalSize);
+                }
+
+                result = true;
+            }
+            catch {}
+            return result;
         }
 
         private static async Task<UpdaterResult> TryUnzipAsync(string path, IProgress<double> progress = null)
@@ -196,10 +232,10 @@ namespace VoicemeeterOsdProgram.Updater
                 }
                 else
                 {
-                    CurrentTotalBytes bytes = new(contentLen.Value);
+                    CurrentTotalBytes bytes = new((ulong)contentLen.Value);
                     var relProgress = new Progress<long>(readBytes =>
                     {
-                        bytes.Current = readBytes;
+                        bytes.Current = (ulong)readBytes;
                         progress.Report(bytes);
                     });
                     await download.CopyToAsync(fs, relProgress, m_cts.Token);
