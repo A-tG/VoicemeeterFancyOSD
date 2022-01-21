@@ -16,17 +16,32 @@ namespace VoicemeeterOsdProgram
             {
                 if (args[0].ToLower() == AfterUpdateArg.ToLower())
                 {
-                    string programName = Path.GetFileNameWithoutExtension(Environment.ProcessPath);
-                    var procs = Process.GetProcessesByName(programName);
-                    foreach (var p in procs)
-                    {
-                        if (Environment.ProcessId == p.Id) continue;
-
-                        ProcessExtensions.RequestKill(p);
-                        p.WaitForExit(1000);
-                    }
+                    KillDuplicates();
                     UpdateManager.TryDeleteBackup();
                 }
+            }
+        }
+
+        private static void KillDuplicates()
+        {
+            DirectoryInfo programDir = new(AppDomain.CurrentDomain.BaseDirectory);
+            // iterating over all exe files because program can be launched by multiple executables
+            foreach (var exeFile in programDir.GetFiles("*.exe"))
+            {
+                string programName = Path.GetFileNameWithoutExtension(exeFile.Name);
+                var procs = Process.GetProcessesByName(programName);
+                RequestKillDuplicateProcesses(procs);
+            }
+        }
+
+        private static void RequestKillDuplicateProcesses(Process[] procs)
+        {
+            foreach (var p in procs)
+            {
+                if (Environment.ProcessId == p.Id) continue;
+
+                ProcessExtensions.RequestKill(p);
+                p.WaitForExit(1000);
             }
         }
     }
