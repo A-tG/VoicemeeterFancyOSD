@@ -40,7 +40,7 @@ namespace VoicemeeterOsdProgram
             {
                 if (Environment.ProcessId == p.Id) continue;
 
-                ProcessExtensions.RequestKill(p);
+                p.RequestKill();
                 p.WaitForExit(1000);
             }
         }
