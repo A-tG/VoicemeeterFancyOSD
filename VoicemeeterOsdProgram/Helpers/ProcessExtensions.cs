@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using TopmostApp.Interop;
 
-namespace AtgDev.Utils.Extensions
+namespace AtgDev.Utils.ProcessExtensions
 {
-    public static class ProcessExtensions
+    public static class ProcessExtension
     {
         public static void RequestKill(this Process p)
         {

@@ -5,11 +5,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AtgDev.Utils.Extensions
+namespace AtgDev.Utils.ZipFileExtensions
 {
-    public static class ZipFileExtensions
+    public static class ZipFileExtension
     {
-        public static async Task ExtractToDirectoryAsync(string sourceArchiveFileName, string destinationDirectoryName,
+        public static async Task ExtractToDirectoryAsync(
+            string sourceArchiveFileName, string destinationDirectoryName,
             IProgress<double> fileProg = null, IProgress<double> totalProg = null,
             CancellationToken cancellationToken = default)
         {
@@ -38,7 +39,8 @@ namespace AtgDev.Utils.Extensions
             }
         }
 
-        private static async Task<long> ProcessStreams(Stream input, Stream output, 
+        private static async Task<long> ProcessStreams(
+            Stream input, Stream output, 
             long inputLength, long currentBytes, long totalBytes,
             IProgress<double> fileProg = null, IProgress<double> totalProg = null, 
             CancellationToken cancellationToken = default)

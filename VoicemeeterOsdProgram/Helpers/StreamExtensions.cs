@@ -3,9 +3,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AtgDev.Utils.Extensions
+namespace AtgDev.Utils.StreamExtensions
 {
-    public static class StreamExtensions
+    public static class StreamExtension
     {
         public static async Task CopyToAsync(this Stream input, Stream output,
             int bufferSize, IProgress<long> progress = null,

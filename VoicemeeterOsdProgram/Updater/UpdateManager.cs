@@ -1,5 +1,4 @@
-﻿using AtgDev.Utils.Extensions;
-using Octokit;
+﻿using Octokit;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -11,6 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using VoicemeeterOsdProgram.Updater.Types;
 using System.Runtime.InteropServices;
+using AtgDev.Utils.DirectoryInfoExtensions;
+using AtgDev.Utils.StreamExtensions;
+using AtgDev.Utils.ZipFileExtensions;
 
 namespace VoicemeeterOsdProgram.Updater
 {
@@ -115,10 +117,7 @@ namespace VoicemeeterOsdProgram.Updater
             }
         }
 
-        public static bool TryDeleteBackup()
-        {
-            return TryDeleteFolder(BackupFolderName);
-        }
+        public static bool TryDeleteBackup() => TryDeleteFolder(BackupFolderName);
 
         public static void CancelUpdate()
         {
@@ -140,7 +139,11 @@ namespace VoicemeeterOsdProgram.Updater
                     (Directory.GetParent(program).ToString() == copyTo);
                 if (string.IsNullOrEmpty(program) || !isValidPaths) return false;
 
-                if (!TryOvewriteFiles(copyFrom, copyTo, copyProgress)) return false;
+                if (!TryOvewriteFiles(copyFrom, copyTo, copyProgress))
+                {
+                    TryDeleteBackup();
+                    return false;
+                }
 
                 TryDeleteFolder(updateFolder);
 
@@ -199,7 +202,7 @@ namespace VoicemeeterOsdProgram.Updater
             var result = UpdaterResult.ArchiveExtractionFailed;
             try
             {
-                await ZipFileExtensions.ExtractToDirectoryAsync(path, Path.GetDirectoryName(path), totalProg: progress, cancellationToken: m_cts.Token);
+                await ZipFileExtension.ExtractToDirectoryAsync(path, Path.GetDirectoryName(path), totalProg: progress, cancellationToken: m_cts.Token);
                 result = UpdaterResult.Unpacked;
             }
             catch (Exception e)
