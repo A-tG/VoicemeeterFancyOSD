@@ -41,6 +41,8 @@ namespace VoicemeeterOsdProgram.Updater
             private set;
         }
 
+        public static OSPlatform DefaultOS { get; set; }
+
         public static Version CurrentVersion
         {
             get => m_assembly.GetName().Version;
@@ -300,6 +302,25 @@ namespace VoicemeeterOsdProgram.Updater
                 default:
                     return false;
             }
+        }
+
+        private static bool IsOsMatch(string name)
+        {
+            bool result = false;
+            string strToCheck = "";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                strToCheck = "win";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                strToCheck = "linux";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                strToCheck = "macos";
+            }
+            return result = name.Contains(strToCheck, StringComparison.OrdinalIgnoreCase);
         }
 
         private static string FilterVersionString(string ver)

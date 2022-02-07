@@ -25,6 +25,7 @@ namespace VoicemeeterOsdProgram
 
         private async Task Init()
         {
+            UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
             OptionsStorage.Init();
             DpiHelper.Init();
             ScreenWorkingAreaManager.Init();
