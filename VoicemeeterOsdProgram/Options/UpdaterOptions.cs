@@ -5,7 +5,7 @@ namespace VoicemeeterOsdProgram.Options
 {
     public class UpdaterOptions : OptionsBase
     {
-        private bool m_checkOnStartup = true;
+        private bool m_checkOnStartup = false;
 
         [Description("Check for updates on program startup")]
         public bool CheckOnStartup
