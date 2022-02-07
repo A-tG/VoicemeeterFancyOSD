@@ -10,6 +10,7 @@
         VersionUpToDate,
         ConnectionError,
         ArchitectureNotFound,
+        OsNotFound,
         ReleasesNotFound,
         UpdateFailed,
         DownloadFailed,
