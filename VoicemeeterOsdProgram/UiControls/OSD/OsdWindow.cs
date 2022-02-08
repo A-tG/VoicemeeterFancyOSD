@@ -1,11 +1,12 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
+using TopmostApp.Helpers;
 using TopmostApp.Interop;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Helpers;
+using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Types;
 using WpfScreenHelper;
 
@@ -45,7 +46,14 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         public VertAlignment WorkingAreaVertAlignment
         {
-            get => m_vertAlign;
+            get
+            {
+                if (OptionsStorage.AltOptionsForFullscreenApps.Enabled && FullscreenAppsWatcher.IsDetected)
+                {
+                    return OptionsStorage.AltOptionsForFullscreenApps.VerticalAlignment;
+                }
+                return m_vertAlign;
+            }
             set
             {
                 m_vertAlign = value;
@@ -55,7 +63,14 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         public HorAlignment WorkingAreaHorAlignment
         {
-            get => m_horAlign;
+            get
+            {
+                if (OptionsStorage.AltOptionsForFullscreenApps.Enabled && FullscreenAppsWatcher.IsDetected)
+                {
+                    return OptionsStorage.AltOptionsForFullscreenApps.HorizontalAlignment;
+                }
+                return m_horAlign;
+            }
             set
             {
                 m_horAlign = value;
@@ -151,6 +166,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         private void OnShow(object sender, EventArgs e)
         {
             CancelAnimation();
+            UpdatePos();
         }
 
         private void OnFadeOutComplete(object sender, EventArgs e)

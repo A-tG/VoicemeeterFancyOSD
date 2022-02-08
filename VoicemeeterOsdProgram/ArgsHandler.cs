@@ -1,5 +1,4 @@
-﻿using AtgDev.Utils.Extensions;
-using AtgDev.Utils.Extensions.Process;
+﻿using AtgDev.Utils.ProcessExtensions;
 using System;
 using System.Diagnostics;
 using System.IO;

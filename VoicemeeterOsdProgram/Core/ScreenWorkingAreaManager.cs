@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using TopmostApp.Helpers;
 using VoicemeeterOsdProgram.Options;
 using WpfScreenHelper;
 
@@ -25,14 +26,7 @@ namespace VoicemeeterOsdProgram.Core
             {
                 var screens = Screen.AllScreens.ToArray();
                 var len = screens.Length;
-                if (m_mainScreenIndex < len)
-                {
-                    return screens[m_mainScreenIndex];
-                }
-                else
-                {
-                    return Screen.PrimaryScreen;
-                }
+                return m_mainScreenIndex < len ? screens[m_mainScreenIndex] : Screen.PrimaryScreen;
             }
             private set
             {
@@ -58,6 +52,25 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
+        public static Screen AltScreen
+        {
+            get
+            {
+                var screens = Screen.AllScreens.ToArray();
+                var len = screens.Length;
+                var index = OptionsStorage.AltOptionsForFullscreenApps.DisplayIndex;
+                if (index < len)
+                {
+                    return screens[index];
+                }
+                else if (len > 1)
+                {
+                    return screens[^1];
+                }
+                return Screen.PrimaryScreen;
+            }
+        }
+
         public static Rect GetWokringArea()
         {
             const double defMargin = 45;
@@ -66,7 +79,8 @@ namespace VoicemeeterOsdProgram.Core
             const double defHorPercent = defMargin / defWidth;
             const double defVertPercent = defMargin / defHeight;
 
-            var scr = MainScreen;
+            var isAltScreen = OptionsStorage.AltOptionsForFullscreenApps.Enabled;
+            var scr = (isAltScreen && FullscreenAppsWatcher.IsDetected) ? AltScreen : MainScreen;
             var resolution = scr.Bounds;
             double marginH = (resolution.Width >= defWidth) ? defMargin : resolution.Width * defHorPercent;
             double marginV = (resolution.Height >= defHeight) ? defMargin : resolution.Height * defVertPercent;

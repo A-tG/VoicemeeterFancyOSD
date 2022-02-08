@@ -6,9 +6,9 @@ namespace VoicemeeterOsdProgram.Options
 {
     public class OsdOptionsBase : OptionsBase
     {
-        private uint m_displayIndex;
-        private HorAlignment m_horizontalAlignment = HorAlignment.Right;
-        private VertAlignment m_verticalAlignment = VertAlignment.Top;
+        protected uint m_displayIndex;
+        protected HorAlignment m_horizontalAlignment = HorAlignment.Right;
+        protected VertAlignment m_verticalAlignment = VertAlignment.Top;
 
         [Description("0 - is a primary display, 1 - is a secondary, etc")]
         public uint DisplayIndex

@@ -7,6 +7,11 @@ namespace VoicemeeterOsdProgram.Options
     {
         private bool m_enabled = false;
 
+        public AltOptionsFullcreenApps()
+        {
+            m_displayIndex = 1;
+        }
+
         [Description("Use alternative settings (like display and alignment) for fullscreen apps specified in detect_apps.txt. Useful for for some OpenGL games where OSD is unable to work")]
         public bool Enabled
         {

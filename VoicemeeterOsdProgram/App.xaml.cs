@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using Atg.Utils;
+using System;
+using System.Threading.Tasks;
 using System.Windows;
+using TopmostApp.Helpers;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Options;
@@ -26,6 +29,11 @@ namespace VoicemeeterOsdProgram
         private async Task Init()
         {
             UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
+            try
+            {
+                FullscreenAppsWatcher.appsToDetect = new ListInFile(@$"{AppDomain.CurrentDomain.BaseDirectory}config\detect_apps.txt");
+            }
+            catch { }
             OptionsStorage.Init();
             DpiHelper.Init();
             ScreenWorkingAreaManager.Init();

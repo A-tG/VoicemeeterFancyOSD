@@ -1,5 +1,4 @@
-﻿using AtgDev.Utils.Extensions;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows;
