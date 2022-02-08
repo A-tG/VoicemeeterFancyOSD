@@ -16,6 +16,7 @@ namespace VoicemeeterOsdProgram.Options
         // field name will be used as INI file Section name
         public static readonly OsdOptions Osd = new();
         public static readonly UpdaterOptions Updater = new();
+        public static readonly AltOptionsFullcreenApps AltOptionsForFullscreenApps = new();
 
         private static readonly string m_path = @$"{AppDomain.CurrentDomain.BaseDirectory}config\config.ini";
 
@@ -110,6 +111,7 @@ namespace VoicemeeterOsdProgram.Options
 
                 ToIniData(Osd);
                 ToIniData(Updater);
+                ToIniData(AltOptionsForFullscreenApps);
                 await using (StreamWriter sw = new(m_path))
                 {
                     await sw.WriteAsync(m_data.ToString());
@@ -140,6 +142,7 @@ namespace VoicemeeterOsdProgram.Options
                 m_data = m_parser.Parse(fileData);
                 FromIniData(Osd);
                 FromIniData(Updater);
+                FromIniData(AltOptionsForFullscreenApps);
 
                 m_data = new();
                 result = true;

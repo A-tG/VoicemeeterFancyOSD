@@ -4,22 +4,13 @@ using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.Options
 {
-    public class OsdOptions : OptionsBase
+    public class OsdOptions : OsdOptionsBase
     {
-        private uint m_displayIndex;
         private bool m_dontShowIfVoicemeeterVisible = true;
         private bool m_isInteractable = false;
         private uint m_durationMs = 2000;
         private double m_backgroundOpacity = 0.9;
-        private HorAlignment m_horizontalAlignment = HorAlignment.Right;
-        private VertAlignment m_verticalAlignment = VertAlignment.Top;
 
-        [Description("0 - is a primary display, 1 - is a secondary, etc")]
-        public uint DisplayIndex
-        {
-            get => m_displayIndex;
-            set => HandlePropertyChange(ref m_displayIndex, ref value, DisplayIndexChanged);
-        }
 
         [Description("Dont show OSD if Voicemeeter's window is visible (and not obstructed) or is active window")]
         public bool DontShowIfVoicemeeterVisible 
@@ -60,24 +51,9 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
-        public HorAlignment HorizontalAlignment
-        {
-            get => m_horizontalAlignment;
-            set => HandlePropertyChange(ref m_horizontalAlignment, ref value, HorizontalAlignmentChanged);
-        }
-
-        public VertAlignment VerticalAlignment
-        {
-            get => m_verticalAlignment;
-            set => HandlePropertyChange(ref m_verticalAlignment, ref value, VerticalAlignmentChanged);
-        }
-
-        public event EventHandler<uint> DisplayIndexChanged;
         public event EventHandler<bool> DontShowIfVoicemeeterVisibleChanged;
         public event EventHandler<bool> IsInteractableChanged;
         public event EventHandler<uint> DurationMsChanged;
         public event EventHandler<double> BackgroundOpacityChanged;
-        public event EventHandler<HorAlignment> HorizontalAlignmentChanged;
-        public event EventHandler<VertAlignment> VerticalAlignmentChanged;
     }
 }
