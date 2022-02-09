@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using TopmostApp.Interop;
 using System.Linq;
-using static TopmostApp.Interop.NativeMethods;
 using WpfScreenHelper;
+using static TopmostApp.Interop.NativeMethods;
 
 namespace TopmostApp.Helpers
 {
@@ -35,13 +34,6 @@ namespace TopmostApp.Helpers
                 catch {}
                 return result;
             }
-        }
-
-        private static Process GetForegroundProcess()
-        {
-            IntPtr hWnd = GetForegroundWindow();
-            GetWindowThreadProcessId(hWnd, out int ID);
-            return Process.GetProcessById(ID);
         }
     }
 }
