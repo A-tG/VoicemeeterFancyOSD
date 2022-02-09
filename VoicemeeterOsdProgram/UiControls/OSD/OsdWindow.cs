@@ -36,7 +36,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
             Loaded += (_, _) => UpdatePos();
             SizeChanged += (_, _) => UpdatePosAlign();
-            Shown += OnShow;
 
             ScreenWorkingAreaManager.MainScreenChanged += (_, _) => UpdatePos();
 
@@ -94,6 +93,13 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         public Screen OnWhatDisplay()
         {
             return Screen.FromPoint(new Point(Left, Top));
+        }
+
+        public new void Show()
+        {
+            CancelAnimation();
+            UpdatePos();
+            base.Show();
         }
 
         private void UpdateWorkingArea()
@@ -160,12 +166,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         {
             if (e.Category != UserPreferenceCategory.Desktop) return;
 
-            UpdatePos();
-        }
-
-        private void OnShow(object sender, EventArgs e)
-        {
-            CancelAnimation();
             UpdatePos();
         }
 
