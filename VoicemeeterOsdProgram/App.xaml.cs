@@ -36,7 +36,6 @@ namespace VoicemeeterOsdProgram
             catch { }
             OptionsStorage.Init();
             DpiHelper.Init();
-            ScreenWorkingAreaManager.Init();
             TrayIconManager.Init();
             VoicemeeterApiClient.Init();
             OsdWindowManager.Init();
