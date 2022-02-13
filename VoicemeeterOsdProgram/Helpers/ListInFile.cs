@@ -9,7 +9,7 @@ namespace Atg.Utils
 {
     public class ListInFile : IEnumerable<string>
     {
-        private List<string> m_list = new();
+        private HashSet<string> m_list = new();
         private FileSystemWatcher m_watcher;
         private Timer m_timer = new(1000);
 
@@ -20,7 +20,7 @@ namespace Atg.Utils
             FilePath = filePath;
             if (File.Exists(filePath))
             {
-                _ = ReadAsync();
+                _ = TryReadAsync();
             }
             else
             {
@@ -73,6 +73,7 @@ namespace Atg.Utils
         private void OnTimerTick(object sender, EventArgs e)
         {
             m_timer.Stop();
+            m_list.Clear();
             _ = TryReadAsync();
         }
 
