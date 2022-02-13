@@ -106,7 +106,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void UpdateWorkingArea()
         {
-            m_workingArea = WorkingAreaProvider.GetWokringArea();
+            m_workingArea = ScrWorkingAreaProvider.GetWokringArea();
 
             var dpi = DpiHelper.GetDpiFromPoint(new Point(m_workingArea.X, m_workingArea.Y));
             m_workingArea.Width /= dpi.DpiScaleX;
