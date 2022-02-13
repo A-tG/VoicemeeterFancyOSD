@@ -37,7 +37,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             Loaded += (_, _) => UpdatePos();
             SizeChanged += (_, _) => UpdatePosAlign();
 
-            ScreenWorkingAreaManager.MainScreenChanged += (_, _) => UpdatePos();
+            ScreenProvider.MainScreenChanged += (_, _) => UpdatePos();
 
             // triggered if any setting is changed including taskbar resize, display resolution
             SystemEvents.UserPreferenceChanged += OnSystemSettingsChanged;
@@ -104,7 +104,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void UpdateWorkingArea()
         {
-            m_workingArea = ScreenWorkingAreaManager.GetWokringArea();
+            m_workingArea = WorkingAreaProvider.GetWokringArea();
 
             var dpi = DpiHelper.GetDpiFromPoint(new Point(m_workingArea.X, m_workingArea.Y));
             m_workingArea.Width /= dpi.DpiScaleX;
