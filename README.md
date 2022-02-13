@@ -6,7 +6,7 @@ On-Screen display for [Voicemeeter](https://voicemeeter.com/) that works with fu
 Windows 10 or newer is required. 
 May work with older Windows versions (not older than Windows 7) but OSD will work as normal window and will not be displayed on top of fullscreen applications.
 
-It might not work with some OpenGL games, even in borderless mode, basically if "Xbox Game Bar" or standard Volume/Media pop-up is not showing on top of the game, this OSD will not show either.
+It might not work with some OpenGL games, even in borderless mode. Basically if "Xbox Game Bar" or standard Volume/Media pop-up is not showing on top of the game, neither will this OSD.
 *There will be feature in 0.9.6.0+ to show OSD on another display if any app specified in the file is running*
 
 # Installation and Usage
