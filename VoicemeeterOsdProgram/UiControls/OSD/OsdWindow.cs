@@ -38,6 +38,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             SizeChanged += (_, _) => UpdatePosAlign();
 
             ScreenProvider.MainScreenChanged += (_, _) => UpdatePos();
+            ScreenProvider.AltScreenChanged += (_, _) => UpdatePos();
 
             // triggered if any setting is changed including taskbar resize, display resolution
             SystemEvents.UserPreferenceChanged += OnSystemSettingsChanged;
@@ -98,7 +99,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         public new void Show()
         {
             CancelAnimation();
-            UpdatePos();
+            // better to update position on each Show, because events not always triggered
+            UpdatePos(); 
             base.Show();
         }
 

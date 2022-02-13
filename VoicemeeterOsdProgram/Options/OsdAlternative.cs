@@ -3,11 +3,11 @@ using System.ComponentModel;
 
 namespace VoicemeeterOsdProgram.Options
 {
-    public class AltOptionsFullcreenApps : OsdOptionsBase
+    public class OsdAlternative : OsdOptionsBase
     {
         private bool m_enabled = false;
 
-        public AltOptionsFullcreenApps()
+        public OsdAlternative()
         {
             m_displayIndex = 1;
         }

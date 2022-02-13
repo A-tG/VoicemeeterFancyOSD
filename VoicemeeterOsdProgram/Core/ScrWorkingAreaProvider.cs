@@ -9,7 +9,7 @@ using VoicemeeterOsdProgram.Options;
 
 namespace VoicemeeterOsdProgram.Core
 {
-    public static class WorkingAreaProvider
+    public static class ScrWorkingAreaProvider
     {
         public static Rect GetWokringArea()
         {

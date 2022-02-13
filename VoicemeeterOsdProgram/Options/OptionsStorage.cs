@@ -16,7 +16,7 @@ namespace VoicemeeterOsdProgram.Options
         // field name will be used as INI file Section name
         public static readonly OsdOptions Osd = new();
         public static readonly UpdaterOptions Updater = new();
-        public static readonly AltOptionsFullcreenApps AltOptionsForFullscreenApps = new();
+        public static readonly OsdAlternative AltOptionsForFullscreenApps = new();
 
         private static readonly string m_path = @$"{AppDomain.CurrentDomain.BaseDirectory}config\config.ini";
 
