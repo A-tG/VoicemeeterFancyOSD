@@ -31,7 +31,11 @@ namespace VoicemeeterOsdProgram
             UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
             try
             {
-                FullscreenAppsWatcher.appsToDetect = new ListInFile(@$"{AppDomain.CurrentDomain.BaseDirectory}config\detect_apps.txt");
+                FullscreenAppsWatcher.appsToDetect = new ListInFile(@$"{AppDomain.CurrentDomain.BaseDirectory}config\detect_apps.txt")
+                {
+                    AllowDuplicates = false,
+                    IsCaseSensetive = false,
+                };
             }
             catch { }
             OptionsStorage.Init();

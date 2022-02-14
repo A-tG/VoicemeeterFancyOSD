@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Linq;
 
 namespace Atg.Utils
 {
     public class ListInFile : IEnumerable<string>
     {
-        private HashSet<string> m_list = new();
+        private List<string> m_list = new();
         private FileSystemWatcher m_watcher;
         private Timer m_timer = new(1000);
 
-        public string FilePath { get; private set; }
 
         public ListInFile(string filePath)
         {
@@ -37,9 +37,30 @@ namespace Atg.Utils
             m_watcher.EnableRaisingEvents = true;
         }
 
-        private async Task<bool> TryReadAsync()
+        public string FilePath { get; private set; }
+
+        public bool AllowDuplicates { get; set; } = true;
+
+        public bool IsCaseSensetive { get; set; } = true;
+
+        public async Task<bool> TryWriteAsync()
         {
             bool result = false;
+            m_watcher.EnableRaisingEvents = false;
+            try
+            {
+                await WriteAsync();
+                result = true;
+            }
+            catch { }
+            m_watcher.EnableRaisingEvents = true;
+            return result;
+        }
+
+        public async Task<bool> TryReadAsync()
+        {
+            bool result = false;
+            Clear();
             try
             {
                 await ReadAsync();
@@ -47,7 +68,19 @@ namespace Atg.Utils
             }
             catch { }
             return result;
+        }
 
+        public void Remove(string item) => m_list.Remove(item);
+
+        public void Clear() => m_list.Clear();
+
+        private async Task WriteAsync()
+        {
+            using StreamWriter sw = File.CreateText(FilePath);
+            foreach (var item in m_list)
+            {
+                await sw.WriteLineAsync(item);
+            }
         }
 
         private async Task ReadAsync()
@@ -59,7 +92,23 @@ namespace Atg.Utils
             {
                 if (!string.IsNullOrEmpty(line))
                 {
-                    m_list.Add(Path.GetFileNameWithoutExtension(line));
+                    Add(line);
+                }
+            }
+        }
+
+        public void Add(string element)
+        {
+            if (AllowDuplicates)
+            {
+                m_list.Add(element);
+            }
+            else
+            {
+                bool hasElement = m_list.Any(el => IsCaseSensetive ? element == el : element.ToLower() == el.ToLower());
+                if (!hasElement)
+                {
+                    m_list.Add(element);
                 }
             }
         }
@@ -73,7 +122,6 @@ namespace Atg.Utils
         private void OnTimerTick(object sender, EventArgs e)
         {
             m_timer.Stop();
-            m_list.Clear();
             _ = TryReadAsync();
         }
 

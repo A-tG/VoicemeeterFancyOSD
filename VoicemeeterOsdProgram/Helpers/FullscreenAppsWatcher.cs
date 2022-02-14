@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using WpfScreenHelper;
 using static TopmostApp.Interop.NativeMethods;
@@ -28,8 +29,8 @@ namespace TopmostApp.Helpers
                     if (!isFullscreen) return false;
 
                     GetWindowThreadProcessId(hWnd, out int ID);
-                    var name = Process.GetProcessById(ID).ProcessName;
-                    result = appsToDetect.Contains(name);
+                    var name = Process.GetProcessById(ID).ProcessName.ToLower();
+                    result = appsToDetect.Any(el => Path.GetFileNameWithoutExtension(el).ToLower() == name);
                 }
                 catch {}
                 return result;
