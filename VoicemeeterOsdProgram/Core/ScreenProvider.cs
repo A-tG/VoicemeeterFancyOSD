@@ -15,9 +15,9 @@ namespace VoicemeeterOsdProgram.Core
         static ScreenProvider()
         {
             MainScreenIndex = OptionsStorage.Osd.DisplayIndex;
-            AltScreenIndex = OptionsStorage.AltOptionsForFullscreenApps.DisplayIndex;
+            AltScreenIndex = OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndex;
             OptionsStorage.Osd.DisplayIndexChanged += (_, val) => MainScreenIndex = val;
-            OptionsStorage.AltOptionsForFullscreenApps.DisplayIndexChanged += (_, val) => AltScreenIndex = val;
+            OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndexChanged += (_, val) => AltScreenIndex = val;
         }
 
         public static Screen MainScreen

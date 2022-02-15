@@ -39,6 +39,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
             ScreenProvider.MainScreenChanged += (_, _) => UpdatePos();
             ScreenProvider.AltScreenChanged += (_, _) => UpdatePos();
+            FullscreenAppsWatcher.IsDetectedChanged += (_, _) => UpdatePos();
 
             // triggered if any setting is changed including taskbar resize, display resolution
             SystemEvents.UserPreferenceChanged += OnSystemSettingsChanged;
@@ -48,9 +49,9 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         {
             get
             {
-                if (OptionsStorage.AltOptionsForFullscreenApps.Enabled && FullscreenAppsWatcher.IsDetected)
+                if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled && FullscreenAppsWatcher.IsDetected)
                 {
-                    return OptionsStorage.AltOptionsForFullscreenApps.VerticalAlignment;
+                    return OptionsStorage.AltOsdOptionsFullscreenApps.VerticalAlignment;
                 }
                 return m_vertAlign;
             }
@@ -65,9 +66,9 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         {
             get
             {
-                if (OptionsStorage.AltOptionsForFullscreenApps.Enabled && FullscreenAppsWatcher.IsDetected)
+                if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled && FullscreenAppsWatcher.IsDetected)
                 {
-                    return OptionsStorage.AltOptionsForFullscreenApps.HorizontalAlignment;
+                    return OptionsStorage.AltOsdOptionsFullscreenApps.HorizontalAlignment;
                 }
                 return m_horAlign;
             }
@@ -99,8 +100,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         public new void Show()
         {
             CancelAnimation();
-            // better to update position on each Show, because events not always triggered
-            UpdatePos(); 
             base.Show();
         }
 
@@ -166,8 +165,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void OnSystemSettingsChanged(object sender, UserPreferenceChangedEventArgs e)
         {
-            if (e.Category != UserPreferenceCategory.Desktop) return;
-
             UpdatePos();
         }
 
