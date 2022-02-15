@@ -15,6 +15,8 @@ namespace VoicemeeterOsdProgram.UiControls
     {
         private UpdateReleaseNotes m_relNotesWin;
         private bool m_isUpdating = false;
+        private bool m_isCopying = false;
+
         private bool IsUpdating
         {
             get => m_isUpdating;
@@ -26,9 +28,20 @@ namespace VoicemeeterOsdProgram.UiControls
             }
         }
 
+        private bool IsCopying
+        {
+            get => m_isCopying;
+            set
+            {
+                m_isCopying = value;
+                CloseBtn.IsEnabled = !value;
+            }
+        }
+
         public UpdateDialog()
         {
             InitializeComponent();
+            Closing += UpdateDialog_Closing;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -140,10 +153,21 @@ namespace VoicemeeterOsdProgram.UiControls
             m_relNotesWin.Activate();
         }
 
+        private void UpdateDialog_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            UpdateManager.CancelUpdate();
+            if (IsCopying)
+            {
+                e.Cancel = true;
+            }
+        }
+
         private void CloseClick(object sender, RoutedEventArgs e)
         {
             if (IsUpdating)
             {
+                if (IsCopying) return;
+
                 UpdateManager.CancelUpdate();
                 ProgrBar.Value = 0;
                 IsUpdating = false;
@@ -164,6 +188,7 @@ namespace VoicemeeterOsdProgram.UiControls
 
             ProcessUpdaterResult(await UpdateManager.TryUpdateAsync(downloadP, extractP, copyP));
             IsUpdating = false;
+            IsCopying = false;
         }
 
         private void DownProgrChanged(CurrentTotalBytes val)
@@ -188,6 +213,7 @@ namespace VoicemeeterOsdProgram.UiControls
 
         private void CopyProgrChanged(double val)
         {
+            IsCopying = true;
             ProgrBar.Visibility = Visibility.Visible;
             ProgrBar.Value = val;
             ProgrBarText.Text = "";
