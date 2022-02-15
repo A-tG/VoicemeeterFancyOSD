@@ -34,7 +34,7 @@ namespace TopmostApp.Helpers
                 else
                 {
                     Unhook();
-                    IsEnabled = false;
+                    IsDetected = false;
                 }
             }
         }
