@@ -36,6 +36,9 @@ namespace VoicemeeterOsdProgram
                     AllowDuplicates = false,
                     IsCaseSensetive = false,
                 };
+                var AltOsdOpt = OptionsStorage.AltOsdOptionsFullscreenApps;
+                FullscreenAppsWatcher.IsEnabled = AltOsdOpt.Enabled;
+                AltOsdOpt.EnabledChanged += (_, val) => FullscreenAppsWatcher.IsEnabled = val;
             }
             catch { }
             OptionsStorage.Init();

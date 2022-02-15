@@ -16,11 +16,27 @@ namespace TopmostApp.Helpers
         private static WinEventDelegate m_winEventDel = new(WinEventProc);
         private static IntPtr m_hWinEventHook;
         private static bool m_isDetected = false;
+        private static bool m_isEnabled = false;
 
-        static FullscreenAppsWatcher()
+        public static bool IsEnabled
         {
-            CheckWindow(GetForegroundWindow());
-            InitHook();
+            get => m_isEnabled;
+            set
+            {
+                if (m_isEnabled == value) return;
+
+                m_isEnabled = value;
+                if (value)
+                {
+                    CheckWindow(GetForegroundWindow());
+                    InitHook();
+                }
+                else
+                {
+                    Unhook();
+                    IsEnabled = false;
+                }
+            }
         }
 
         public static bool IsDetected
@@ -60,12 +76,10 @@ namespace TopmostApp.Helpers
             switch (eventType)
             {
                 case (uint)Events.EVENT_SYSTEM_FOREGROUND:
-                    Debug.WriteLine("EVENT_FOREGROUND");
                     HandleWinEvent(hWnd);
                     break;
                 // EVENT_SYSTEM_FOREGROUND is not activated if window is "un-minimized" from the taskbar
                 case (uint)Events.EVENT_SYSTEM_MINIMIZEEND:
-                    Debug.WriteLine("EVENT_SYSTEM_MINIMIZEEND");
                     HandleWinEvent(hWnd);
                     break;
                 default:
