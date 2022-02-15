@@ -76,11 +76,11 @@ namespace TopmostApp.Helpers
             switch (eventType)
             {
                 case (uint)Events.EVENT_SYSTEM_FOREGROUND:
-                    HandleWinEvent(hWnd);
+                    CheckWindow(hWnd);
                     break;
                 // EVENT_SYSTEM_FOREGROUND is not activated if window is "un-minimized" from the taskbar
                 case (uint)Events.EVENT_SYSTEM_MINIMIZEEND:
-                    HandleWinEvent(hWnd);
+                    CheckWindow(hWnd);
                     break;
                 default:
                     break;
@@ -99,14 +99,6 @@ namespace TopmostApp.Helpers
             }
             catch { }
             return name;
-        }
-
-        private static void HandleWinEvent(IntPtr hWnd)
-        {
-            if (IsFullscreenWindow(hWnd)) Debug.WriteLine("Fullscreen app detected");
-            if (IsAppToDetect(GetProcessNameFromHwnd(hWnd))) Debug.WriteLine("Correct app");
-            CheckWindow(hWnd);
-
         }
 
         private static bool IsAppToDetect(string name)
