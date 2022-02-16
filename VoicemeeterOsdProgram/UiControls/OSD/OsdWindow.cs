@@ -20,6 +20,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         private VertAlignment m_vertAlign = VertAlignment.Top;
         private HorAlignment m_horAlign = HorAlignment.Left;
         private DoubleAnimation m_fadeOutAnim;
+        private ScreenProvider m_screenProvider;
+        private ScrWorkingAreaProvider m_scrAreaProvider;
 
         public OsdWindow() : base()
         {
@@ -33,12 +35,14 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             };
             anim.Completed += OnFadeOutComplete;
             m_fadeOutAnim = anim;
+            m_screenProvider = Factories.UtilsFactory.GetOsdScreenProvider();
+            m_scrAreaProvider = new(m_screenProvider);
 
             Loaded += (_, _) => UpdatePos();
             SizeChanged += (_, _) => UpdatePosAlign();
 
-            ScreenProvider.MainScreenChanged += (_, _) => UpdatePos();
-            FullscreenAppsWatcher.IsDetectedChanged += (_, _) => UpdatePos();
+            m_screenProvider.MainScreenChanged += (_, _) => UpdatePos();
+            Globals.fullscreenAppsWatcher.IsDetectedChanged += (_, _) => UpdatePos();
 
             // triggered if any setting is changed including taskbar resize, display resolution
             SystemEvents.UserPreferenceChanged += OnSystemSettingsChanged;
@@ -48,7 +52,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         {
             get
             {
-                if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled && FullscreenAppsWatcher.IsDetected)
+                if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled && Globals.fullscreenAppsWatcher.IsDetected)
                 {
                     return OptionsStorage.AltOsdOptionsFullscreenApps.VerticalAlignment;
                 }
@@ -56,6 +60,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             }
             set
             {
+                if (m_vertAlign == value) return;
+
                 m_vertAlign = value;
                 UpdatePosAlign();
             }
@@ -65,7 +71,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         {
             get
             {
-                if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled && FullscreenAppsWatcher.IsDetected)
+                if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled && Globals.fullscreenAppsWatcher.IsDetected)
                 {
                     return OptionsStorage.AltOsdOptionsFullscreenApps.HorizontalAlignment;
                 }
@@ -73,6 +79,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             }
             set
             {
+                if (m_horAlign == value) return;
+
                 m_horAlign = value;
                 UpdatePosAlign();
             }
@@ -104,7 +112,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void UpdateWorkingArea()
         {
-            m_workingArea = ScrWorkingAreaProvider.GetWokringArea();
+            m_workingArea = m_scrAreaProvider.GetWokringArea();
 
             var dpi = DpiHelper.GetDpiFromPoint(new Point(m_workingArea.X, m_workingArea.Y));
             m_workingArea.Width /= dpi.DpiScaleX;

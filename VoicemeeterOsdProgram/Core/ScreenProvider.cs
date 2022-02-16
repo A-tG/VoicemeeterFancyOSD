@@ -6,35 +6,12 @@ using WpfScreenHelper;
 
 namespace VoicemeeterOsdProgram.Core
 {
-    public static class ScreenProvider
+    public class ScreenProvider
     {
-        private static Screen m_mainScreen;
-        private static uint m_mainScreenIndex;
+        private Screen m_mainScreen;
+        private uint m_mainScreenIndex;
 
-        static ScreenProvider()
-        {
-            MainScreenIndex = OptionsStorage.AltOsdOptionsFullscreenApps.Enabled ?
-                OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndex : 
-                OptionsStorage.Osd.DisplayIndex;
-            OptionsStorage.Osd.DisplayIndexChanged += (_, val) =>
-            {
-                if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled) return;
-
-                MainScreenIndex = val;
-            };
-            OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndexChanged += (_, val) =>
-            {
-                if (!OptionsStorage.AltOsdOptionsFullscreenApps.Enabled) return;
-
-                MainScreenIndex = val;
-            };
-            FullscreenAppsWatcher.IsDetectedChanged += (_, val) =>
-            {
-                MainScreenIndex = val ? OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndex : OptionsStorage.Osd.DisplayIndex;
-            };
-        }
-
-        public static Screen MainScreen
+        public Screen MainScreen
         {
             get
             {
@@ -50,7 +27,7 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
-        public static uint MainScreenIndex
+        public uint MainScreenIndex
         {
             get => m_mainScreenIndex;
             set
@@ -64,6 +41,6 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
-        public static EventHandler<Screen> MainScreenChanged;
+        public EventHandler<Screen> MainScreenChanged;
     }
 }

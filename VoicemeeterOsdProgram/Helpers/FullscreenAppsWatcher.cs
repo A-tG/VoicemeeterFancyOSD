@@ -8,16 +8,21 @@ using static TopmostApp.Interop.NativeMethods;
 
 namespace TopmostApp.Helpers
 {
-    public static class FullscreenAppsWatcher
+    public class FullscreenAppsWatcher
     {
-        public static IEnumerable<string> appsToDetect;
+        public IEnumerable<string> appsToDetect;
 
-        private static WinEventDelegate m_winEventDel = new(WinEventProc);
-        private static IntPtr m_hWinEventHook;
-        private static bool m_isDetected = false;
-        private static bool m_isEnabled = false;
+        private WinEventDelegate m_winEventDel;
+        private IntPtr m_hWinEventHook;
+        private bool m_isDetected = false;
+        private bool m_isEnabled = false;
 
-        public static bool IsEnabled
+        public FullscreenAppsWatcher()
+        {
+            m_winEventDel = new(WinEventProc);
+        }
+
+        public bool IsEnabled
         {
             get => m_isEnabled;
             set
@@ -38,7 +43,7 @@ namespace TopmostApp.Helpers
             }
         }
 
-        public static bool IsDetected
+        public bool IsDetected
         {
             get => m_isDetected;
             private set
@@ -50,27 +55,27 @@ namespace TopmostApp.Helpers
             }
         }
 
-        private static void CheckWindow(IntPtr hWnd)
+        private void CheckWindow(IntPtr hWnd)
         {
             IsDetected = IsFullscreenWindow(hWnd) && IsAppToDetect(GetProcessNameFromHwnd(hWnd));
         }
 
 
-        private static void InitHook()
+        private void InitHook()
         {
             m_hWinEventHook = SetWinEventHook((uint)Events.EVENT_SYSTEM_FOREGROUND, (uint)Events.EVENT_SYSTEM_MINIMIZEEND, 
                 IntPtr.Zero, m_winEventDel, 0, 0, 
                 (uint)WinEvents.WINEVENT_OUTOFCONTEXT);
         }
 
-        private static void Unhook()
+        private void Unhook()
         {
             if (m_hWinEventHook == IntPtr.Zero) return;
 
             UnhookWinEvent(m_hWinEventHook);
         }
 
-        private static void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hWnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+        private void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hWnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             switch (eventType)
             {
@@ -86,7 +91,7 @@ namespace TopmostApp.Helpers
             }
         }
 
-        private static string GetProcessNameFromHwnd(IntPtr hWnd)
+        private string GetProcessNameFromHwnd(IntPtr hWnd)
         {
             string name = "";
             if (hWnd == IntPtr.Zero) return name;
@@ -100,7 +105,7 @@ namespace TopmostApp.Helpers
             return name;
         }
 
-        private static bool IsAppToDetect(string name)
+        private bool IsAppToDetect(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -112,7 +117,7 @@ namespace TopmostApp.Helpers
             }
         }
 
-        private static bool IsFullscreenWindow(IntPtr hWnd)
+        private bool IsFullscreenWindow(IntPtr hWnd)
         {
             bool rectRes = GetWindowRect(hWnd, out RECT rect);
             if (!rectRes) return false;
@@ -121,6 +126,6 @@ namespace TopmostApp.Helpers
             return isFullscreen;
         }
 
-        public static EventHandler<bool> IsDetectedChanged;
+        public EventHandler<bool> IsDetectedChanged;
     }
 }

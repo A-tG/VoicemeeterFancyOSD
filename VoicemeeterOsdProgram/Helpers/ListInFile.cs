@@ -17,18 +17,16 @@ namespace Atg.Utils
         public ListInFile(string filePath)
         {
             FilePath = filePath;
-            if (File.Exists(filePath))
-            {
-                _ = TryReadAsync();
-            }
-            else
-            {
-                File.Create(filePath);
-            }
+            _ = Init();
+        }
+
+       private async Task Init()
+        {
+            await TryReadCreateFileAsync();
             m_watcher = new()
             {
-                Path = Path.GetDirectoryName(filePath),
-                Filter = Path.GetFileName(filePath),
+                Path = Path.GetDirectoryName(FilePath),
+                Filter = Path.GetFileName(FilePath),
                 NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size,
             };
             m_watcher.Changed += OnFileChange;
@@ -59,6 +57,8 @@ namespace Atg.Utils
         public async Task<bool> TryReadAsync()
         {
             bool result = false;
+            if (!File.Exists(FilePath)) return result;
+
             Clear();
             try
             {
@@ -67,6 +67,19 @@ namespace Atg.Utils
             }
             catch { }
             return result;
+        }
+
+        public async Task<bool> TryReadCreateFileAsync()
+        {
+            try
+            {
+                if (!File.Exists(FilePath))
+                {
+                    File.Create(FilePath);
+                }
+            }
+            catch { }
+            return await TryReadAsync();
         }
 
         public void Remove(string item) => m_list.Remove(item);
@@ -98,13 +111,18 @@ namespace Atg.Utils
 
         public void Add(string element)
         {
+            if (string.IsNullOrEmpty(element) || string.IsNullOrWhiteSpace(element)) return;
+
             if (AllowDuplicates)
             {
                 m_list.Add(element);
             }
             else
             {
-                bool hasElement = m_list.Any(el => IsCaseSensetive ? element == el : element.ToLower() == el.ToLower());
+                bool hasElement = m_list.Any(
+                    el => IsCaseSensetive ? 
+                    element == el : 
+                    element.ToLower() == el.ToLower());
                 if (!hasElement)
                 {
                     m_list.Add(element);

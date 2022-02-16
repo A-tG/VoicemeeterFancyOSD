@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using TopmostApp.Helpers;
 using VoicemeeterOsdProgram.Core;
+using VoicemeeterOsdProgram.Factories;
 using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Updater;
@@ -29,18 +30,7 @@ namespace VoicemeeterOsdProgram
         private async Task Init()
         {
             UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
-            try
-            {
-                FullscreenAppsWatcher.appsToDetect = new ListInFile(@$"{AppDomain.CurrentDomain.BaseDirectory}config\detect_apps.txt")
-                {
-                    AllowDuplicates = false,
-                    IsCaseSensetive = false,
-                };
-                var AltOsdOpt = OptionsStorage.AltOsdOptionsFullscreenApps;
-                FullscreenAppsWatcher.IsEnabled = AltOsdOpt.Enabled;
-                AltOsdOpt.EnabledChanged += (_, val) => FullscreenAppsWatcher.IsEnabled = val;
-            }
-            catch { }
+            Globals.fullscreenAppsWatcher = UtilsFactory.GetFullscreenAppsWatcher();
             OptionsStorage.Init();
             DpiHelper.Init();
             TrayIconManager.Init();
