@@ -14,8 +14,7 @@ namespace VoicemeeterOsdProgram.Core
             const double defHorPercent = defMargin / defWidth;
             const double defVertPercent = defMargin / defHeight;
 
-            var isAltScreen = OptionsStorage.AltOsdOptionsFullscreenApps.Enabled;
-            var scr = (isAltScreen && FullscreenAppsWatcher.IsDetected) ? ScreenProvider.AltScreen : ScreenProvider.MainScreen;
+            var scr = ScreenProvider.MainScreen;
             var resolution = scr.Bounds;
             double marginH = (resolution.Width >= defWidth) ? defMargin : resolution.Width * defHorPercent;
             double marginV = (resolution.Height >= defHeight) ? defMargin : resolution.Height * defVertPercent;

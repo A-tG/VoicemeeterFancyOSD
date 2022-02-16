@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using TopmostApp.Helpers;
 using VoicemeeterOsdProgram.Options;
 using WpfScreenHelper;
 
@@ -8,16 +9,29 @@ namespace VoicemeeterOsdProgram.Core
     public static class ScreenProvider
     {
         private static Screen m_mainScreen;
-        private static Screen m_altScreen;
         private static uint m_mainScreenIndex;
-        private static uint m_altScreenIndex;
 
         static ScreenProvider()
         {
-            MainScreenIndex = OptionsStorage.Osd.DisplayIndex;
-            AltScreenIndex = OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndex;
-            OptionsStorage.Osd.DisplayIndexChanged += (_, val) => MainScreenIndex = val;
-            OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndexChanged += (_, val) => AltScreenIndex = val;
+            MainScreenIndex = OptionsStorage.AltOsdOptionsFullscreenApps.Enabled ?
+                OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndex : 
+                OptionsStorage.Osd.DisplayIndex;
+            OptionsStorage.Osd.DisplayIndexChanged += (_, val) =>
+            {
+                if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled) return;
+
+                MainScreenIndex = val;
+            };
+            OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndexChanged += (_, val) =>
+            {
+                if (!OptionsStorage.AltOsdOptionsFullscreenApps.Enabled) return;
+
+                MainScreenIndex = val;
+            };
+            FullscreenAppsWatcher.IsDetectedChanged += (_, val) =>
+            {
+                MainScreenIndex = val ? OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndex : OptionsStorage.Osd.DisplayIndex;
+            };
         }
 
         public static Screen MainScreen
@@ -36,22 +50,6 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
-        public static Screen AltScreen
-        {
-            get
-            {
-                var screens = Screen.AllScreens.ToArray();
-                return m_altScreenIndex < screens.Length ? screens[m_altScreenIndex] : screens[^1];
-            }
-            private set
-            {
-                if (m_altScreen == value) return;
-
-                m_altScreen = value;
-                AltScreenChanged?.Invoke(null, value);
-            }
-        }
-
         public static uint MainScreenIndex
         {
             get => m_mainScreenIndex;
@@ -66,21 +64,6 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
-        public static uint AltScreenIndex
-        {
-            get => m_altScreenIndex;
-            set
-            {
-                var screens = Screen.AllScreens.ToArray();
-                if (value < screens.Length)
-                {
-                    m_altScreenIndex = value;
-                    AltScreen = screens[value];
-                }
-            }
-        }
-
         public static EventHandler<Screen> MainScreenChanged;
-        public static EventHandler<Screen> AltScreenChanged;
     }
 }
