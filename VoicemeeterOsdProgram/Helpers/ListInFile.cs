@@ -14,7 +14,6 @@ namespace Atg.Utils
         private FileSystemWatcher m_watcher;
         private Timer m_timer = new(1000);
 
-
         public ListInFile(string filePath)
         {
             FilePath = filePath;

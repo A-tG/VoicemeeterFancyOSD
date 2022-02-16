@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using VoicemeeterOsdProgram.Options;
 using WpfScreenHelper;
 using static TopmostApp.Interop.NativeMethods;
 
@@ -109,7 +108,7 @@ namespace TopmostApp.Helpers
             }
             else
             {
-                return appsToDetect.Any(el => Path.GetFileNameWithoutExtension(el).ToLower() == name.ToLower());
+                return appsToDetect?.Any(el => Path.GetFileNameWithoutExtension(el).ToLower() == name.ToLower()) ?? false;
             }
         }
 
