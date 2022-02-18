@@ -7,8 +7,6 @@ namespace VoicemeeterOsdProgram.Core
 {
     public class ScrWorkingAreaProvider
     {
-        private ScreenProvider m_scrProv;
-
         public ScrWorkingAreaProvider(ScreenProvider scrProv)
         {
             ScreenProvider = scrProv;

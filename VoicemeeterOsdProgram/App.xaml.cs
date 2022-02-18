@@ -30,7 +30,6 @@ namespace VoicemeeterOsdProgram
         private async Task Init()
         {
             UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
-            Globals.fullscreenAppsWatcher = UtilsFactory.GetFullscreenAppsWatcher();
             OptionsStorage.Init();
             DpiHelper.Init();
             TrayIconManager.Init();

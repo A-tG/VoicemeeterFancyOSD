@@ -32,6 +32,7 @@ public static class UtilsFactory
         scrProv.MainScreenIndex = OptionsStorage.AltOsdOptionsFullscreenApps.Enabled ?
                 OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndex :
                 OptionsStorage.Osd.DisplayIndex;
+        // potential memory leaks
         OptionsStorage.Osd.DisplayIndexChanged += (_, val) =>
         {
             if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled) return;
@@ -44,7 +45,7 @@ public static class UtilsFactory
 
             scrProv.MainScreenIndex = val;
         };
-        Globals.fullscreenAppsWatcher.IsDetectedChanged += (_, val) =>
+        Globals.Osd.fullscreenAppsWatcher.IsDetectedChanged += (_, val) =>
         {
             scrProv.MainScreenIndex = val ? OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndex : OptionsStorage.Osd.DisplayIndex;
         };

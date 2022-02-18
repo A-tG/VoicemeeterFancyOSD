@@ -17,11 +17,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         private const int FadeOutTimeMs = 200;
 
         private Rect m_workingArea;
-        private VertAlignment m_vertAlign = VertAlignment.Top;
-        private HorAlignment m_horAlign = HorAlignment.Left;
         private DoubleAnimation m_fadeOutAnim;
-        private ScreenProvider m_screenProvider;
-        private ScrWorkingAreaProvider m_scrAreaProvider;
 
         public OsdWindow() : base()
         {
@@ -35,56 +31,36 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             };
             anim.Completed += OnFadeOutComplete;
             m_fadeOutAnim = anim;
-            m_screenProvider = Factories.UtilsFactory.GetOsdScreenProvider();
-            m_scrAreaProvider = new(m_screenProvider);
 
             Loaded += (_, _) => UpdatePos();
             SizeChanged += (_, _) => UpdatePosAlign();
-
-            m_screenProvider.MainScreenChanged += (_, _) => UpdatePos();
-            Globals.fullscreenAppsWatcher.IsDetectedChanged += (_, _) => UpdatePos();
+            Globals.Osd.screenProvider.MainScreenChanged += OnEventUpdatePos;
+            Globals.Osd.fullscreenAppsWatcher.IsDetectedChanged += OnEventUpdatePos;
+            InitAlignEvents();
 
             // triggered if any setting is changed including taskbar resize, display resolution
-            SystemEvents.UserPreferenceChanged += OnSystemSettingsChanged;
+            SystemEvents.UserPreferenceChanged += OnEventUpdatePos;
+
+            Unloaded += OsdWindow_Unloaded;
         }
 
-        public VertAlignment WorkingAreaVertAlignment
+        private void InitAlignEvents()
         {
-            get
-            {
-                if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled && Globals.fullscreenAppsWatcher.IsDetected)
-                {
-                    return OptionsStorage.AltOsdOptionsFullscreenApps.VerticalAlignment;
-                }
-                return m_vertAlign;
-            }
-            set
-            {
-                if (m_vertAlign == value) return;
-
-                m_vertAlign = value;
-                UpdatePosAlign();
-            }
+            var osdMainOpts = OptionsStorage.Osd;
+            var osdAltOpts = OptionsStorage.AltOsdOptionsFullscreenApps;
+            osdMainOpts.HorizontalAlignmentChanged += OnEventUpdatePosAlign;
+            osdMainOpts.VerticalAlignmentChanged += OnEventUpdatePosAlign;
+            osdAltOpts.HorizontalAlignmentChanged += OnEventUpdatePosAlign;
+            osdAltOpts.VerticalAlignmentChanged += OnEventUpdatePosAlign;
         }
 
-        public HorAlignment WorkingAreaHorAlignment
-        {
-            get
-            {
-                if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled && Globals.fullscreenAppsWatcher.IsDetected)
-                {
-                    return OptionsStorage.AltOsdOptionsFullscreenApps.HorizontalAlignment;
-                }
-                return m_horAlign;
-            }
-            set
-            {
-                if (m_horAlign == value) return;
+        public VertAlignment WorkingAreaVertAlignment => Globals.Osd.fullscreenAppsWatcher.IsDetected ?
+            OptionsStorage.AltOsdOptionsFullscreenApps.VerticalAlignment :
+            OptionsStorage.Osd.VerticalAlignment;
 
-                m_horAlign = value;
-                UpdatePosAlign();
-            }
-        }
+        public HorAlignment WorkingAreaHorAlignment => Globals.Osd.fullscreenAppsWatcher.IsDetected ?
+            OptionsStorage.AltOsdOptionsFullscreenApps.HorizontalAlignment :
+            OptionsStorage.Osd.HorizontalAlignment;
 
         public void HideAnimated(uint duration = FadeOutTimeMs)
         {
@@ -99,10 +75,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             }
         }
 
-        public Screen OnWhatDisplay()
-        {
-            return Screen.FromPoint(new Point(Left, Top));
-        }
+        public Screen OnWhatDisplay() => Screen.FromPoint(new Point(Left, Top));
 
         public new void Show()
         {
@@ -112,7 +85,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void UpdateWorkingArea()
         {
-            m_workingArea = m_scrAreaProvider.GetWokringArea();
+            m_workingArea = Globals.Osd.workingAreaProvider.GetWokringArea();
 
             var dpi = DpiHelper.GetDpiFromPoint(new Point(m_workingArea.X, m_workingArea.Y));
             m_workingArea.Width /= dpi.DpiScaleX;
@@ -170,14 +143,26 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             m_fadeOutAnim.Completed += OnFadeOutComplete;
         }
 
+        // do unsubcribing really works?
+        private void OnEventUpdatePos<T>(object sender, T e) => UpdatePos();
+        private void OnEventUpdatePosAlign<T>(object sender, T e) => UpdatePosAlign();
+
         private void OnSystemSettingsChanged(object sender, UserPreferenceChangedEventArgs e)
         {
             UpdatePos();
         }
 
-        private void OnFadeOutComplete(object sender, EventArgs e)
+        private void OnFadeOutComplete(object sender, EventArgs e) => Hide();
+
+        private void OsdWindow_Unloaded(object sender, RoutedEventArgs e)
         {
-            Hide();
+            Globals.Osd.fullscreenAppsWatcher.IsDetectedChanged -= OnEventUpdatePos;
+            Globals.Osd.screenProvider.MainScreenChanged -= OnEventUpdatePos;
+            OptionsStorage.Osd.HorizontalAlignmentChanged -= OnEventUpdatePosAlign;
+            OptionsStorage.Osd.VerticalAlignmentChanged -= OnEventUpdatePosAlign;
+            OptionsStorage.AltOsdOptionsFullscreenApps.HorizontalAlignmentChanged -= OnEventUpdatePosAlign;
+            OptionsStorage.AltOsdOptionsFullscreenApps.VerticalAlignmentChanged -= OnEventUpdatePosAlign;
+            SystemEvents.UserPreferenceChanged -= OnEventUpdatePos;
         }
     }
 }

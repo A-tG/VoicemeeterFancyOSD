@@ -51,8 +51,6 @@ namespace VoicemeeterOsdProgram.Core
 
             var win = new OsdWindow()
             {
-                WorkingAreaVertAlignment = options.VerticalAlignment,
-                WorkingAreaHorAlignment = options.HorizontalAlignment,
                 Content = osd,
                 Activatable = false,
                 TopMost = true,
@@ -72,8 +70,6 @@ namespace VoicemeeterOsdProgram.Core
             options.IsInteractableChanged += (_, val) => IsInteractable = val;
             options.DurationMsChanged += (_, val) => DurationMs = val;
             options.BackgroundOpacityChanged += (_, val) => BgOpacity = val;
-            options.VerticalAlignmentChanged += (_, val) => m_window.WorkingAreaVertAlignment = val;
-            options.HorizontalAlignmentChanged += (_, val) => m_window.WorkingAreaHorAlignment = val;
 
             m_wpfControl.CloseBtn.Click += OnCloseButtonClick;
             m_wpfControl.MouseEnter += OnMouseEnter;
