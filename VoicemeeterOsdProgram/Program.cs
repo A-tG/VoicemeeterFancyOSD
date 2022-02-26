@@ -9,10 +9,10 @@ namespace VoicemeeterOsdProgram
 {
     public class Program
     {
-        public const string name = "VoicemeeterFancyOSD";
+        public const string Name = "VoicemeeterFancyOSD";
+        public const string UniqueName = "AtgDev_VoicemeeterFancyOSD";
 
         private static App m_app;
-        private static Mutex m_mutex = new(true, "Atg_VoicemeeterFancyOSD");
 
         [STAThread]
         static void Main(string[] args)
@@ -23,19 +23,18 @@ namespace VoicemeeterOsdProgram
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
-            ArgsHandler.Handle(args);
+            ArgsHandler.HandleSpecial(args);
 
-            if (!m_mutex.WaitOne(0, false))
+            if (AppLifeManager.IsAlreadyRunning && (args.Length == 0))
             {
-                MessageBox.Show("The program is already running", name, MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("The program is already running", Name, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             Thread thread = new(() =>
             {
                 ComponentDispatcher.ThreadFilterMessage += OnTerminationSignal;
-                m_app = new App();
-                m_app.Run();
+                m_app = AppLifeManager.Start(args);
             });
 
             //If you launch directly from the host bridge it won't be STA.
@@ -73,7 +72,7 @@ namespace VoicemeeterOsdProgram
                     "Unhandled exception:\n" +
                     $"{ex?.Message}\n" +
                     trace;
-                MessageBox.Show(msg, name, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(msg, Name, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch {}
         }

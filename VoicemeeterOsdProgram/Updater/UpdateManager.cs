@@ -149,7 +149,7 @@ namespace VoicemeeterOsdProgram.Updater
 
                 TryDeleteFolder(updateFolder);
 
-                Process.Start(program, ArgsHandler.AfterUpdateArg);
+                Process.Start(program, ArgsHandler.Args.AfterUpdateArg);
 
                 return true;
             }
