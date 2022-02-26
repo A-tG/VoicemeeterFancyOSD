@@ -1,7 +1,4 @@
-﻿using AtgDev.Utils.ProcessExtensions;
-using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System;
 using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Updater;
 
@@ -19,40 +16,51 @@ namespace VoicemeeterOsdProgram
 
         public static string[] SplitRawArgs(string rawArgs)
         {
-            string[] args = Array.Empty<string>();
-            args = rawArgs.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-            return args;
+            return rawArgs.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);;
         }
 
         public static void HandleSpecial(string[] args)
         {
-            if ((args.Length == 0) || (args.Length > 1)) return;
+            var len = args.Length;
+            if (len == 0) return;
 
-            if (args[0].ToLower() == Args.AfterUpdateArg.ToLower())
+            for (int i = 0; i < len; i++)
             {
-                AppLifeManager.CloseDuplicates();
-                UpdateManager.TryDeleteBackup();
+                if (args[i].ToLower() == Args.AfterUpdateArg.ToLower())
+                {
+                    AppLifeManager.CloseDuplicates();
+                    UpdateManager.TryDeleteBackup();
+                    break;
+                }
             }
         }
 
         public static void Handle(string[] args)
         {
-            if ((args.Length == 0) || (args.Length > 1)) return;
+            var len = args.Length;
+            if (len == 0) return;
 
-            var arg = args[0];
+            for (int i = 0; i < len; i++)
+            {
+                if (HandleArg(args[i])) break;
+            }
+        }
+
+        private static bool HandleArg(string arg)
+        {
             switch (arg)
             {
                 case Args.Pause:
                     OptionsStorage.Other.Paused = true;
-                    break;
+                    return true;
                 case Args.Unpause:
                     OptionsStorage.Other.Paused = false;
-                    break;
+                    return true;
                 case Args.TogglePause:
                     OptionsStorage.Other.Paused ^= true; // invert bool
-                    break;
+                    return true;
                 default:
-                    break;
+                    return false;
             }
         }
 

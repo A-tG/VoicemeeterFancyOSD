@@ -15,7 +15,7 @@ namespace VoicemeeterOsdProgram
         private static App m_app;
 
         [STAThread]
-        static void Main(string[] args)
+        static void Main(string[] args) // if *Host.exe is launched "*Host.exe" may be the args[0]
         {
 #if DEBUG
             //if (!Debugger.IsAttached) Debugger.Launch();
