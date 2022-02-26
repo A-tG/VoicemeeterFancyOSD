@@ -22,12 +22,6 @@ namespace VoicemeeterOsdProgram
 
         async void OnAppStartup(object sender, StartupEventArgs e)
         {
-            await InitAsync();
-        }
-
-        private async Task InitAsync()
-        {
-            throw new Exception("test");
             List<Task> tasks = new();
 
             var OptionsInitTask = OptionsStorage.InitAsync();
