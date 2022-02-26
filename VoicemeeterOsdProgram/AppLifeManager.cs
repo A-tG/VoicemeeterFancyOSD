@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace VoicemeeterOsdProgram
 {
@@ -12,6 +12,7 @@ namespace VoicemeeterOsdProgram
     {
         private static Mutex m_mutex = new(true, Program.UniqueName);
         private static bool? m_isLareadyRunning;
+        private static Dispatcher m_dispatcher;
 
         public static bool IsAlreadyRunning
         {
@@ -33,8 +34,16 @@ namespace VoicemeeterOsdProgram
                 Environment.Exit(0);
             }
 
+            m_dispatcher = Dispatcher.CurrentDispatcher;
+
             ArgsHandler.Handle(args);
-            _ = CreatePipeServerAsync();
+            Thread pipeServerThread = new(CreatePipeServer)
+            {
+                IsBackground = true,
+            };
+            pipeServerThread.SetApartmentState(ApartmentState.STA);
+            pipeServerThread.Start();
+
             action();
         }
 
@@ -78,17 +87,17 @@ namespace VoicemeeterOsdProgram
             }
         }
 
-        private static async Task CreatePipeServerAsync()
+        private static void CreatePipeServer()
         {
             using NamedPipeServerStream server = new(Program.UniqueName, PipeDirection.In);
             using StreamReader reader = new(server);
             while (true)
             {
-                await server.WaitForConnectionAsync().ConfigureAwait(false);
+                server.WaitForConnection();
                 try
                 {
-                    string rawArgs = await reader.ReadToEndAsync();
-                    ArgsHandler.Handle(rawArgs);
+                    string rawArgs = reader.ReadToEnd();
+                    m_dispatcher.Invoke(() => ArgsHandler.Handle(rawArgs));
                 }
                 catch { }
                 server.Disconnect();
