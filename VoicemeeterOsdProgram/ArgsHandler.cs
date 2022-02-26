@@ -17,6 +17,13 @@ namespace VoicemeeterOsdProgram
             public const string TogglePause = "-toggle-pause";
         }
 
+        public static string[] SplitRawArgs(string rawArgs)
+        {
+            string[] args = Array.Empty<string>();
+            args = rawArgs.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            return args;
+        }
+
         public static void HandleSpecial(string[] args)
         {
             if ((args.Length == 0) || (args.Length > 1)) return;
@@ -49,9 +56,6 @@ namespace VoicemeeterOsdProgram
             }
         }
 
-        public static void Handle(string rawArgs)
-        {
-            Debug.WriteLine(rawArgs);
-        }
+        public static void Handle(string rawArgs) => Handle(SplitRawArgs(rawArgs));
     }
 }

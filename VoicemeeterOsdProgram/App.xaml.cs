@@ -1,10 +1,7 @@
-﻿using Atg.Utils;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
-using TopmostApp.Helpers;
 using VoicemeeterOsdProgram.Core;
-using VoicemeeterOsdProgram.Factories;
 using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Updater;
@@ -24,7 +21,7 @@ namespace VoicemeeterOsdProgram
 
         void OnAppStartup(object sender, StartupEventArgs e)
         {
-            _ = Init();
+            Init().Wait();
         }
 
         private async Task Init()

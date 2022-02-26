@@ -34,12 +34,35 @@ namespace VoicemeeterOsdProgram
             Thread thread = new(() =>
             {
                 ComponentDispatcher.ThreadFilterMessage += OnTerminationSignal;
-                m_app = AppLifeManager.Start(args);
+                AppLifeManager.Start(args, () =>
+                {
+                    m_app = new();
+                    m_app.Run();
+                });
             });
 
             //If you launch directly from the host bridge it won't be STA.
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
+        }
+
+        private static void ShowExceptionMsgBox(Exception ex)
+        {
+            try
+            {
+                string trace = ex?.StackTrace ?? string.Empty;
+#if !DEBUG
+                using var reader = new StringReader(trace);
+                trace = reader.ReadLine();
+#endif
+
+                string msg = "PRESS Ctrl + C TO COPY THIS TEXT\n" +
+                    "Unhandled exception:\n" +
+                    $"{ex?.Message}\n" +
+                    trace;
+                MessageBox.Show(msg, Name, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch { }
         }
 
         private static void OnTerminationSignal(ref MSG msg, ref bool handled)
@@ -56,25 +79,11 @@ namespace VoicemeeterOsdProgram
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            try
-            {
-                Debug.WriteLine("UNHANDLED EXCEPTION");
+            Debug.WriteLine("UNHANDLED EXCEPTION");
 
-                var ex = e.ExceptionObject as Exception;
+            var ex = e.ExceptionObject as Exception;
 
-                string trace = ex?.StackTrace ?? string.Empty;
-#if !DEBUG
-                using var reader = new StringReader(trace);
-                trace = reader.ReadLine();
-#endif
-
-                string msg = "PRESS Ctrl + C TO COPY THIS TEXT\n" +
-                    "Unhandled exception:\n" +
-                    $"{ex?.Message}\n" +
-                    trace;
-                MessageBox.Show(msg, Name, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch {}
+            ShowExceptionMsgBox(ex);
         }
 
         private static void OnProcessExit(object sender, EventArgs e)

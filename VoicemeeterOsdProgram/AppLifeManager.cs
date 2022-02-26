@@ -10,7 +10,6 @@ namespace VoicemeeterOsdProgram
 {
     public static class AppLifeManager
     {
-        private static App m_app;
         private static Mutex m_mutex = new(true, Program.UniqueName);
         private static bool? m_isLareadyRunning;
 
@@ -26,7 +25,7 @@ namespace VoicemeeterOsdProgram
             }
         }
 
-        public static App Start(string[] args)
+        public static void Start(string[] args, Action action)
         {
             if (IsAlreadyRunning)
             {
@@ -36,9 +35,7 @@ namespace VoicemeeterOsdProgram
 
             ArgsHandler.Handle(args);
             _ = CreatePipeServerAsync();
-            m_app = new();
-            m_app.Run();
-            return m_app;
+            action();
         }
 
         public static void CloseDuplicates()
