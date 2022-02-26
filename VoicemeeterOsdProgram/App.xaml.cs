@@ -29,17 +29,21 @@ namespace VoicemeeterOsdProgram
 
         private async Task Init()
         {
-            UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
             OptionsStorage.Init();
             DpiHelper.Init();
             TrayIconManager.Init();
             VoicemeeterApiClient.Init();
             OsdWindowManager.Init();
 
-            var updaterRes = await UpdateManager.TryCheckForUpdatesAsync();
-            if (OptionsStorage.Updater.CheckOnStartup && (updaterRes == UpdaterResult.NewVersionFound))
+            UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
+            await OptionsStorage.WaitForInitAsync();
+            if (OptionsStorage.Updater.CheckOnStartup)
             {
-                TrayIconManager.OpenUpdaterWindow();
+                var updaterRes = await UpdateManager.TryCheckForUpdatesAsync();
+                if (updaterRes == UpdaterResult.NewVersionFound)
+                {
+                    TrayIconManager.OpenUpdaterWindow();
+                }
             }
         }
     }

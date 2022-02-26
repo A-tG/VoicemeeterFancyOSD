@@ -26,6 +26,7 @@ namespace VoicemeeterOsdProgram.Options
         private static DispatcherTimer m_timer = new(DispatcherPriority.Background) { Interval = TimeSpan.FromMilliseconds(1000)};
         private static bool m_isWatcherEnabled;
         private static bool m_isWatcherPaused;
+        private static bool m_isInit = false;
 
         static OptionsStorage()
         {
@@ -94,6 +95,15 @@ namespace VoicemeeterOsdProgram.Options
                     }
                 }
             }
+        }
+
+        public static async Task<bool> WaitForInitAsync()
+        {
+            while (!m_isInit)
+            {
+                await Task.Delay(16);
+            }
+            return true;
         }
 
         public static async Task<bool> TrySaveAsync()
@@ -224,6 +234,7 @@ namespace VoicemeeterOsdProgram.Options
         {
             bool readRes = await TryReadAsync();
             bool writeRes = await TrySaveAsync();
+            m_isInit = true;
         }
 
         private static void Exit()
