@@ -84,7 +84,7 @@ namespace VoicemeeterOsdProgram
             using StreamReader reader = new(server);
             while (true)
             {
-                await server.WaitForConnectionAsync();
+                await server.WaitForConnectionAsync().ConfigureAwait(false);
                 try
                 {
                     string rawArgs = await reader.ReadToEndAsync();

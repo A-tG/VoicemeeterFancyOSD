@@ -6,7 +6,6 @@ using VoicemeeterOsdProgram.Core.Types;
 using VoicemeeterOsdProgram.Factories;
 using VoicemeeterOsdProgram.Interop;
 using VoicemeeterOsdProgram.Options;
-using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.OSD;
 using static TopmostApp.Interop.NativeMethods;
 

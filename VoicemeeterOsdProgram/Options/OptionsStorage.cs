@@ -33,14 +33,14 @@ namespace VoicemeeterOsdProgram.Options
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
             System.Windows.Application.Current.Exit += (_, _) => Exit();
-
-            _ = InitAsync();
         }
 
         public static string ConfigFilePath => m_path;
 
-        private static async Task InitAsync()
+        public static async Task InitAsync()
         {
+            if (m_isInit) return;
+
             await ValidateConfigFileAsync();
 
             m_timer.Tick += OnTimerTick;
@@ -50,9 +50,9 @@ namespace VoicemeeterOsdProgram.Options
             m_watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
             m_watcher.Changed += OnConfigFileChanged;
             IsWatcherEnabled = true;
-        }
 
-        public static void Init() { }
+            m_isInit = true;
+        }
 
         public static bool IsWatcherEnabled
         {
@@ -98,15 +98,6 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
-        public static async Task<bool> WaitForInitAsync()
-        {
-            while (!m_isInit)
-            {
-                await Task.Delay(16);
-            }
-            return true;
-        }
-
         public static async Task<bool> TrySaveAsync()
         {
             bool result = false;
@@ -148,7 +139,6 @@ namespace VoicemeeterOsdProgram.Options
 
                 using StreamReader sr = new(m_path);
                 string fileData = await sr.ReadToEndAsync();
-                sr.Dispose();
 
                 m_data = m_parser.Parse(fileData);
                 FromIniData(Osd);

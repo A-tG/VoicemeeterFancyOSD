@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using VoicemeeterOsdProgram.Core;
@@ -19,21 +20,26 @@ namespace VoicemeeterOsdProgram
             InitializeComponent();
         }
 
-        void OnAppStartup(object sender, StartupEventArgs e)
+        async void OnAppStartup(object sender, StartupEventArgs e)
         {
-            Init().Wait();
+            await InitAsync();
         }
 
-        private async Task Init()
+        private async Task InitAsync()
         {
-            OptionsStorage.Init();
+            throw new Exception("test");
+            List<Task> tasks = new();
+
+            var OptionsInitTask = OptionsStorage.InitAsync();
+            tasks.Add(OptionsInitTask);
+            tasks.Add(VoicemeeterApiClient.InitAsync());
+
             DpiHelper.Init();
             TrayIconManager.Init();
-            VoicemeeterApiClient.Init();
             OsdWindowManager.Init();
-
             UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
-            await OptionsStorage.WaitForInitAsync();
+
+            await OptionsInitTask;
             if (OptionsStorage.Updater.CheckOnStartup)
             {
                 var updaterRes = await UpdateManager.TryCheckForUpdatesAsync();
@@ -42,6 +48,7 @@ namespace VoicemeeterOsdProgram
                     TrayIconManager.OpenUpdaterWindow();
                 }
             }
+            await Task.WhenAll(tasks);
         }
     }
 }

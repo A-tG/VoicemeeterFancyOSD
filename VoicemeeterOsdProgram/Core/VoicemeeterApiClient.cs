@@ -24,16 +24,22 @@ namespace VoicemeeterOsdProgram.Core
         private static bool m_isTypeChanging;
         private static bool m_isVmRunning;
         private static bool m_isVmTurningOn;
+        private static bool m_isInit = false;
 
         static VoicemeeterApiClient()
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
             Application.Current.Exit += (_, _) => Exit();
-
-            _ = LoadAsync();
         }
 
-        public static void Init() { }
+        public static async Task InitAsync()
+        {
+            if (m_isInit) return;
+
+            await LoadAsync();
+
+            m_isInit = true;
+        }
 
         public static RemoteApiExtender Api { get; private set; }
 
