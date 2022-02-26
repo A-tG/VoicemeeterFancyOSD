@@ -15,12 +15,12 @@
   <PropertyGroup>
       <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
       <ApplicationManifest>app.manifest</ApplicationManifest>
-      <Version>0.9.7.0</Version>
+      <Version>0.9.8.0</Version>
       <PackageId>VoicemeeterFancyOsd</PackageId>
       <Description>On-screen display for Voicemeeter</Description>
       <AssemblyName>VoicemeeterFancyOsd</AssemblyName>
-      <AssemblyVersion>0.9.7.0</AssemblyVersion>
-      <FileVersion>0.9.6.0</FileVersion>
+      <AssemblyVersion></AssemblyVersion>
+      <FileVersion></FileVersion>
       <NeutralLanguage>en</NeutralLanguage>
       <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
