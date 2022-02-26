@@ -17,6 +17,7 @@ namespace VoicemeeterOsdProgram.Options
         public static readonly OsdOptions Osd = new();
         public static readonly OsdAlternative AltOsdOptionsFullscreenApps = new();
         public static readonly UpdaterOptions Updater = new();
+        public static readonly OtherOptions Other = new();
 
         private static readonly string m_path = @$"{AppDomain.CurrentDomain.BaseDirectory}config\config.ini";
 
