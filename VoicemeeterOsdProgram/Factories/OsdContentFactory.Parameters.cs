@@ -28,7 +28,7 @@ namespace VoicemeeterOsdProgram.Factories
         private static void MakeFaderParam(StripControl strip, int i, StripType type)
         {
             var p = new VoicemeeterNumParam(VoicemeeterApiClient.Api, Gain(i, type));
-            strip.FaderCont.VmParameter = p;
+            strip.VmFaderParameter = p;
             m_vmParams.Add(p);
         }
 

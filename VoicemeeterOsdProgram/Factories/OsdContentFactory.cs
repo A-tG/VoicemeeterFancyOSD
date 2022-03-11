@@ -97,6 +97,7 @@ namespace VoicemeeterOsdProgram.Factories
             strip.ControlBtnsContainer.Children.Add(btn);
 
             btn = StripButtonFactory.GetMute();
+            strip.MuteButton = btn;
             MakeButtonParam(BtnType.Mute, StripType.Output, btn, stripIndex);
             strip.AdditionalControlBtns.Children.Add(btn);
 
@@ -122,6 +123,7 @@ namespace VoicemeeterOsdProgram.Factories
             strip.ControlBtnsContainer.Children.Add(btn);
 
             btn = StripButtonFactory.GetMute();
+            strip.MuteButton = btn;
             MakeButtonParam(BtnType.Mute, StripType.Input, btn, stripIndex);
             strip.AdditionalControlBtns.Children.Add(btn);
 

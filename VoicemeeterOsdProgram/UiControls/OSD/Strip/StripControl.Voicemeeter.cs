@@ -8,6 +8,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private VoicemeeterStrParam m_vmParam;
 
+        public ButtonContainer MuteButton { get; set; }
+
         public VoicemeeterStrParam VmParameter
         {
             get => m_vmParam;
@@ -29,6 +31,26 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             }
         }
 
+        public VoicemeeterNumParam VmFaderParameter
+        {
+            get => FaderCont.VmParameter;
+            set
+            {
+                if (value is null)
+                {
+                    if (FaderCont.VmParameter is not null)
+                    {
+                        FaderCont.VmParameter.ReadValueChanged -= OnVmGainChanged;
+                        FaderCont.VmParameter = null;
+                    }
+                    return;
+                }
+
+                FaderCont.VmParameter = value;
+                FaderCont.VmParameter.ReadValueChanged += OnVmGainChanged;
+            }
+        }
+
         private void OnVmValueRead(object sender, ValOldNew<string> e)
         {
             string name = e.newVal;
@@ -36,6 +58,14 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             if (StripLabel.Text == newName) return;
 
             StripLabel.Text = newName;
+        }
+
+        private void OnVmGainChanged(object sender, ValOldNew<float> e)
+        {
+            if (MuteButton != null)
+            {
+                MuteButton.Visibility = System.Windows.Visibility.Visible;
+            }
         }
     }
 }
