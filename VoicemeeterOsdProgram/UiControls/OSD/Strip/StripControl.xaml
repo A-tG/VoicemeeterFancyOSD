@@ -27,15 +27,14 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <local:FaderContainer x:Name="FaderCont"/>
-                <StackPanel Name="AdditionalControlBtns" Grid.Row="1"/>
-            </Grid>
-            <Grid Grid.Column="1"
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Name="AdditionalControlBtns" Grid.Row="0" Grid.ColumnSpan="2"/>
+            <local:FaderContainer x:Name="FaderCont" Grid.Column="0" Grid.Row="1"/>
+            <Grid Grid.Column="1" Grid.Row="1"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
