@@ -19,7 +19,7 @@ namespace AtgDev.Utils
 
         public void Stop()
         {
-            m_timer.Dispose();
+            m_timer?.Dispose();
             m_timer = null;
         }
 
