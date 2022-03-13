@@ -1,10 +1,10 @@
-﻿using System;
+﻿using AtgDev.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Atg.Utils
 {
@@ -12,7 +12,7 @@ namespace Atg.Utils
     {
         private List<string> m_list = new();
         private FileSystemWatcher m_watcher;
-        private Timer m_timer = new(1000);
+        private PeriodicTimerExt m_timer = new(TimeSpan.FromSeconds(1));
 
         public ListInFile(string filePath)
         {
@@ -30,7 +30,6 @@ namespace Atg.Utils
                 NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size,
             };
             m_watcher.Changed += OnFileChange;
-            m_timer.Elapsed += OnTimerTick;
             m_watcher.EnableRaisingEvents = true;
         }
 
@@ -130,16 +129,14 @@ namespace Atg.Utils
             }
         }
 
-        private void OnFileChange(object sender, FileSystemEventArgs e)
+        private async void OnFileChange(object sender, FileSystemEventArgs e)
         {
-            m_timer.Stop();
             m_timer.Start();
-        }
-
-        private void OnTimerTick(object sender, EventArgs e)
-        {
-            m_timer.Stop();
-            _ = TryReadAsync();
+            if (await m_timer.WaitForNextTickAsync())
+            {
+                m_timer.Stop();
+                await TryReadAsync();
+            }
         }
 
         public IEnumerator GetEnumerator() => m_list.GetEnumerator();
