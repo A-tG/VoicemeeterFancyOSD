@@ -1,4 +1,5 @@
-﻿using IniParser.Model;
+﻿using AtgDev.Utils;
+using IniParser.Model;
 using IniParser.Parser;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace VoicemeeterOsdProgram.Options
         private static readonly IniDataParser m_parser = new();
         private static IniData m_data = new();
         private static FileSystemWatcher m_watcher = new();
-        private static DispatcherTimer m_timer = new(DispatcherPriority.Background) { Interval = TimeSpan.FromMilliseconds(1000)};
+        private static PeriodicTimerExt m_timer = new(TimeSpan.FromSeconds(1));
         private static bool m_isWatcherEnabled;
         private static bool m_isWatcherPaused;
         private static bool m_isInit = false;
@@ -42,8 +43,6 @@ namespace VoicemeeterOsdProgram.Options
             if (m_isInit) return;
 
             await ValidateConfigFileAsync();
-
-            m_timer.Tick += OnTimerTick;
 
             m_watcher.Path = Path.GetDirectoryName(m_path);
             m_watcher.Filter = Path.GetFileName(m_path);
@@ -233,10 +232,14 @@ namespace VoicemeeterOsdProgram.Options
             m_timer?.Stop();
         }
 
-        private static void OnConfigFileChanged(object sender, FileSystemEventArgs e)
+        private static async void OnConfigFileChanged(object sender, FileSystemEventArgs e)
         {
-            m_timer.Stop();
             m_timer.Start();
+            if (await m_timer.WaitForNextTickAsync())
+            {
+                m_timer.Stop();
+                await ValidateConfigFileAsync();
+            }
         }
 
         private static void OnTimerTick(object sender, EventArgs e)
