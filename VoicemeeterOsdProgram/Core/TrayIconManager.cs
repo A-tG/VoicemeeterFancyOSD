@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 
 namespace VoicemeeterOsdProgram.Core
 {
@@ -8,7 +9,7 @@ namespace VoicemeeterOsdProgram.Core
 
         static TrayIconManager()
         {
-            AppDomain.CurrentDomain.UnhandledException += (_, _) => Destroy();
+            AppDomain.CurrentDomain.UnhandledException += (_, _) => Application.Current.Dispatcher.Invoke(() => Destroy());
 
             m_trayIcon = new();
         }
