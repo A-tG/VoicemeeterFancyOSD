@@ -14,15 +14,20 @@ namespace AtgDev.Utils
 
         public void Start()
         {
+            Stop();
             m_timer = new(period);
         }
 
         public void Stop()
         {
             m_timer?.Dispose();
-            m_timer = null;
         }
 
-        public async ValueTask<bool> WaitForNextTickAsync() => await m_timer.WaitForNextTickAsync();
+        public async ValueTask<bool> WaitForNextTickAsync(CancellationToken token = default)
+        {
+            if (m_timer is null) return false;
+
+            return await m_timer.WaitForNextTickAsync(token);
+        }
     }
 }
