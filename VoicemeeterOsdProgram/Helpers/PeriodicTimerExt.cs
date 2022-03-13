@@ -10,6 +10,8 @@ namespace AtgDev.Utils
 
         public TimeSpan period;
 
+        public PeriodicTimerExt(TimeSpan period) => this.period = period;
+
         public void Start()
         {
             m_timer = new(period);
