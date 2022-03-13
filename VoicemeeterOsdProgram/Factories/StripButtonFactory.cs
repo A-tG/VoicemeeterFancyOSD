@@ -11,7 +11,7 @@ namespace VoicemeeterOsdProgram.Factories
         {
             var btnCont = new ButtonContainer();
             var btn = btnCont.Btn;
-            btnCont.Btn.Style = (Style)btnCont.Resources["MonoBtnStyle"];
+            btnCont.Btn.Style = GetMonoStyle(btnCont);
             var icon = new Icon()
             {
                 Style = (Style)btnCont.Resources["MonoIcon"],
@@ -25,7 +25,7 @@ namespace VoicemeeterOsdProgram.Factories
         {
             var btnCont = new ButtonContainer();
             var btn = btnCont.Btn;
-            btn.Style = (Style)btnCont.Resources["MonoReverseBtnStyle"];
+            btn.Style = GetMonoWithReverseStyle(btnCont);
             var icon = new Icon()
             {
                 Style = (Style)btnCont.Resources["MonoReverseIcon"],
@@ -38,7 +38,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetSolo()
         {
             var btnCont = new ButtonContainer();
-            btnCont.Btn.Style = (Style)btnCont.Resources["SoloBtnStyle"];
+            btnCont.Btn.Style = GetSoloStyle(btnCont);
             return btnCont;
         }
 
@@ -46,7 +46,7 @@ namespace VoicemeeterOsdProgram.Factories
         {
             var btnCont = new ButtonContainer();
             var btn = btnCont.Btn;
-            btn.Style = (Style)btnCont.Resources["MuteBtnStyle"];
+            btn.Style = GetMuteStyle(btnCont);
             var icon = new Icon()
             {
                 Style = (Style)btnCont.Resources["MuteIcon"],
@@ -60,9 +60,19 @@ namespace VoicemeeterOsdProgram.Factories
         {
             var btnCont = new ButtonContainer();
             var btn = btnCont.Btn;
-            btn.Style = (Style)btnCont.Resources["SelBtnStyle"];
+            btn.Style = GetSelStyle(btnCont);
             return btnCont;
         }
+
+        public static Style GetMonoStyle(ButtonContainer btnCont) => (Style)btnCont.Resources["MonoBtnStyle"];
+
+        public static Style GetMonoWithReverseStyle(ButtonContainer btnCont) => (Style)btnCont.Resources["MonoReverseBtnStyle"];
+
+        public static Style GetSoloStyle(ButtonContainer btnCont) => (Style)btnCont.Resources["SoloBtnStyle"];
+
+        public static Style GetMuteStyle(ButtonContainer btnCont) => (Style)btnCont.Resources["MuteBtnStyle"];
+
+        public static Style GetSelStyle(ButtonContainer btnCont) => (Style)btnCont.Resources["SelBtnStyle"];
 
         public static ButtonContainer GetBusSelect()
         {

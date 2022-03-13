@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
+using VoicemeeterOsdProgram.Factories;
 
 namespace VoicemeeterOsdProgram.Core
 {
@@ -42,11 +44,46 @@ namespace VoicemeeterOsdProgram.Core
                 if (isVisibleChildren)
                 {
                     strip.Visibility = Visibility.Visible;
+                    UpdateConstantVisibleElements(strip);
                 }
             }
 
             m_wpfControl.UpdateSeparators();
             m_wpfControl.AllowAutoUpdateSeparators = true;
+        }
+
+        private static void UpdateConstantVisibleElements(StripControl strip)
+        {
+            var options = Options.OptionsStorage.Osd;
+            foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
+            {
+                if (!options.AlwaysShowBusBtns) break;
+
+                btnCont.Visibility = Visibility.Visible;
+            }
+            foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
+            {
+                bool hasConstantVisibleBtns = options.AlwaysShowMonoBtn || options.AlwaysShowMuteBtn || options.AlwaysShowSoloBtn;
+                if (!hasConstantVisibleBtns) break;
+
+                var style = btnCont.Btn.Style;
+                if (options.AlwaysShowMuteBtn && style.Equals(StripButtonFactory.GetMuteStyle(btnCont)))
+                {
+                    btnCont.Visibility = Visibility.Visible;
+                }
+                else if (options.AlwaysShowSoloBtn && style.Equals(StripButtonFactory.GetSoloStyle(btnCont)))
+                {
+                    btnCont.Visibility = Visibility.Visible;
+                }
+                else if (options.AlwaysShowMonoBtn && style.Equals(StripButtonFactory.GetMonoStyle(btnCont)))
+                {
+                    btnCont.Visibility = Visibility.Visible;
+                }
+                else if (options.AlwaysShowMonoBtn && style.Equals(StripButtonFactory.GetMonoWithReverseStyle(btnCont)))
+                {
+                    btnCont.Visibility = Visibility.Visible;
+                }
+            }
         }
 
         private static void ApplyVisibilityToOsdElements(Visibility vis)
