@@ -1,7 +1,5 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
-using VoicemeeterOsdProgram.Factories;
 
 namespace VoicemeeterOsdProgram.Core
 {
