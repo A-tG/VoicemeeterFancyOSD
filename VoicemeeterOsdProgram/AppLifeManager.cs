@@ -70,7 +70,7 @@ namespace VoicemeeterOsdProgram
             try
             {
                 client.Connect(1000);
-                using StreamWriter writer = new StreamWriter(client);
+                using StreamWriter writer = new(client);
                 writer.Write(rawArgs);
             }
             catch { }
