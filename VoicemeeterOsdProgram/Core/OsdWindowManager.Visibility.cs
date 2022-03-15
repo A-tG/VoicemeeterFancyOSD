@@ -59,11 +59,9 @@ namespace VoicemeeterOsdProgram.Core
 
                 btnCont.Visibility = Visibility.Visible;
             }
+
             foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
             {
-                bool hasAlwaysVisibleBtns = options.AlwaysShowMonoBtn || options.AlwaysShowMuteBtn || options.AlwaysShowSoloBtn;
-                if (!hasAlwaysVisibleBtns) break;
-
                 if (btnCont.IsAlwaysVisible?.Invoke() ?? false)
                 {
                     btnCont.Visibility = Visibility.Visible;
