@@ -12,12 +12,13 @@ namespace VoicemeeterOsdProgram.Core
             var children = m_wpfControl.MainContent.Children;
             foreach (StripControl strip in children)
             {
-                bool isAnyVisibleBtn = false;
+                // Element become visible if it's Voicemeeter Parameter is changed
+                bool hasVisibleBtn = false;
                 foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
                 {
                     if (btnCont.Visibility == Visibility.Visible)
                     {
-                        isAnyVisibleBtn = true;
+                        hasVisibleBtn = true;
                         break;
                     }
                 }
@@ -25,7 +26,7 @@ namespace VoicemeeterOsdProgram.Core
                 {
                     if (btnCont.Visibility == Visibility.Visible)
                     {
-                        isAnyVisibleBtn = true;
+                        hasVisibleBtn = true;
                         break;
                     }
                 }
@@ -33,13 +34,13 @@ namespace VoicemeeterOsdProgram.Core
                 {
                     if (btnCont.Visibility == Visibility.Visible)
                     {
-                        isAnyVisibleBtn = true;
+                        hasVisibleBtn = true;
                         break;
                     }
                 }
 
-                bool isVisibleChildren = (strip.FaderCont.Visibility == Visibility.Visible) || isAnyVisibleBtn;
-                if (isVisibleChildren)
+                bool hasVisibleChildren = (strip.FaderCont.Visibility == Visibility.Visible) || hasVisibleBtn;
+                if (hasVisibleChildren)
                 {
                     strip.Visibility = Visibility.Visible;
                     UpdateAlwaysVisibleElements(strip);
