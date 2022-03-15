@@ -44,7 +44,7 @@ namespace VoicemeeterOsdProgram.Core
                 if (isVisibleChildren)
                 {
                     strip.Visibility = Visibility.Visible;
-                    UpdateConstantVisibleElements(strip);
+                    UpdateAlwaysVisibleElements(strip);
                 }
             }
 
@@ -52,7 +52,7 @@ namespace VoicemeeterOsdProgram.Core
             m_wpfControl.AllowAutoUpdateSeparators = true;
         }
 
-        private static void UpdateConstantVisibleElements(StripControl strip)
+        private static void UpdateAlwaysVisibleElements(StripControl strip)
         {
             var options = Options.OptionsStorage.Osd;
             foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
@@ -63,23 +63,10 @@ namespace VoicemeeterOsdProgram.Core
             }
             foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
             {
-                bool hasConstantVisibleBtns = options.AlwaysShowMonoBtn || options.AlwaysShowMuteBtn || options.AlwaysShowSoloBtn;
-                if (!hasConstantVisibleBtns) break;
+                bool hasAlwaysVisibleBtns = options.AlwaysShowMonoBtn || options.AlwaysShowMuteBtn || options.AlwaysShowSoloBtn;
+                if (!hasAlwaysVisibleBtns) break;
 
-                var style = btnCont.Btn.Style;
-                if (options.AlwaysShowMuteBtn && style.Equals(StripButtonFactory.GetMuteStyle(btnCont)))
-                {
-                    btnCont.Visibility = Visibility.Visible;
-                }
-                else if (options.AlwaysShowSoloBtn && style.Equals(StripButtonFactory.GetSoloStyle(btnCont)))
-                {
-                    btnCont.Visibility = Visibility.Visible;
-                }
-                else if (options.AlwaysShowMonoBtn && style.Equals(StripButtonFactory.GetMonoStyle(btnCont)))
-                {
-                    btnCont.Visibility = Visibility.Visible;
-                }
-                else if (options.AlwaysShowMonoBtn && style.Equals(StripButtonFactory.GetMonoWithReverseStyle(btnCont)))
+                if (btnCont.IsAlwaysVisible?.Invoke() ?? false)
                 {
                     btnCont.Visibility = Visibility.Visible;
                 }
