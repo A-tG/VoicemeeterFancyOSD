@@ -23,7 +23,9 @@ namespace VoicemeeterOsdProgram.Options
         public override IEnumerable<KeyValuePair<string, string>> ToDict()
         {
             Dictionary<string, string> list = new();
+            // this should put "Enabled" first in the config file
             list.Add(nameof(Enabled), Enabled.ToString());
+
             var oldList = base.ToDict();
             foreach (var kpv in oldList)
             {
