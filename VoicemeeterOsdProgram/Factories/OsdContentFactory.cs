@@ -96,6 +96,10 @@ namespace VoicemeeterOsdProgram.Factories
             MakeButtonParam(BtnType.Mono, StripType.Output, btn, stripIndex);
             strip.ControlBtnsContainer.Children.Add(btn);
 
+            btn = StripButtonFactory.GetEqOn();
+            MakeButtonParam(BtnType.EqOn, StripType.Output, btn, stripIndex);
+            strip.ControlBtnsContainer.Children.Add(btn);
+
             btn = StripButtonFactory.GetMute();
             MakeButtonParam(BtnType.Mute, StripType.Output, btn, stripIndex);
             strip.ControlBtnsContainer.Children.Add(btn);
