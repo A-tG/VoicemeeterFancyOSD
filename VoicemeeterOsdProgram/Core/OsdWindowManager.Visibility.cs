@@ -69,6 +69,11 @@ namespace VoicemeeterOsdProgram.Core
                     btnCont.Visibility = Visibility.Visible;
                 }
             }
+
+            if (options.AlwaysShowElements.Contains(StripElements.Fader))
+            {
+                strip.FaderCont.Visibility = Visibility.Visible;
+            }
         }
 
         private static void ApplyVisibilityToOsdElements(Visibility vis)
