@@ -18,6 +18,8 @@ namespace VoicemeeterOsdProgram.Factories
 
         public static string Sel(int i) => GetCommandHead(i, StripType.Output) + "Sel";
 
+        public static string EqOn(int i) => GetCommandHead(i, StripType.Output) + "EQ.on";
+
         private static string GetCommandHead(int i, StripType type = StripType.Input)
         {
             return type switch
