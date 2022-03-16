@@ -29,12 +29,12 @@ namespace VoicemeeterOsdProgram.Options
 
         public override void FromDict(Dictionary<string, string> list)
         {
-            base.FromDict(list);
             var name = nameof(Enabled);
             if (list.ContainsKey(name))
             {
                 TryParseFrom(name, list[name]);
             }
+            base.FromDict(list);
         }
 
         public event EventHandler<bool> EnabledChanged;
