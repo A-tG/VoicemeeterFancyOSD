@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AtgDev.Utils;
+using System;
+using System.IO;
 using System.Windows;
-using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Options;
-using AtgDev.Utils;
 
 namespace VoicemeeterOsdProgram.UiControls.Tray
 {
@@ -68,6 +68,12 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
         private void OnOpenConfigClick(object sender, RoutedEventArgs e)
         {
             OpenInOs.TryOpen(OptionsStorage.ConfigFilePath);
+        }
+
+        private void OnOpenConfigFolderClick(object sender, RoutedEventArgs e)
+        {
+            string folder = Path.GetDirectoryName(OptionsStorage.ConfigFilePath);
+            OpenInOs.TryOpen(folder);
         }
 
         private void CheckForUpdateClick(object sender, RoutedEventArgs e)
