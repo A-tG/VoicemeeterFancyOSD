@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using VoicemeeterOsdProgram.Options;
+using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 
@@ -11,7 +12,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetMono()
         {
             var btnCont = new ButtonContainer();
-            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowMonoBtn;
+            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mono);
 
             var btn = btnCont.Btn;
             btnCont.Btn.Style = (Style)btnCont.Resources["MonoBtnStyle"];
@@ -28,7 +29,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetMonoWithReverse()
         {
             var btnCont = new ButtonContainer();
-            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowMonoBtn;
+            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mono);
 
             var btn = btnCont.Btn;
             btn.Style = (Style)btnCont.Resources["MonoReverseBtnStyle"];
@@ -45,7 +46,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetSolo()
         {
             var btnCont = new ButtonContainer();
-            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowSoloBtn;
+            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Solo);
             btnCont.Btn.Style = (Style)btnCont.Resources["SoloBtnStyle"];
             return btnCont;
         }
@@ -53,7 +54,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetMute()
         {
             var btnCont = new ButtonContainer();
-            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowMuteBtn;
+            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mute);
 
             var btn = btnCont.Btn;
             btn.Style = (Style)btnCont.Resources["MuteBtnStyle"];

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 
 namespace VoicemeeterOsdProgram.Core
@@ -56,7 +57,7 @@ namespace VoicemeeterOsdProgram.Core
             var options = Options.OptionsStorage.Osd;
             foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
             {
-                if (!options.AlwaysShowBusBtns) break;
+                if (!options.AlwaysShowElements.Contains(StripElements.Buses)) break;
 
                 btnCont.Visibility = Visibility.Visible;
             }

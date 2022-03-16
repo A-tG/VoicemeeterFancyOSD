@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace VoicemeeterOsdProgram.Options
@@ -17,6 +18,23 @@ namespace VoicemeeterOsdProgram.Options
         {
             get => m_enabled;
             set => HandlePropertyChange(ref m_enabled, ref value, EnabledChanged);
+        }
+
+        public override IEnumerable<KeyValuePair<string, string>> ToDict()
+        {
+            Dictionary<string, string> list = new(base.ToDict());
+            list.Add(nameof(Enabled), Enabled.ToString());
+            return list;
+        }
+
+        public override void FromDict(Dictionary<string, string> list)
+        {
+            base.FromDict(list);
+            var name = nameof(Enabled);
+            if (list.ContainsKey(name))
+            {
+                TryParseFrom(name, list[name]);
+            }
         }
 
         public event EventHandler<bool> EnabledChanged;

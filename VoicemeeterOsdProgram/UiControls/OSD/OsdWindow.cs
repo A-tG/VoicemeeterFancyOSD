@@ -144,7 +144,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         }
 
         // do unsubcribing really works?
-        private void OnEventUpdatePos<T>(object sender, T e) => UpdatePos();
+        private void OnEventUpdatePos<T>(object sender, T e) => App.Current.Dispatcher.Invoke(() => UpdatePos());
         private void OnEventUpdatePosAlign<T>(object sender, T e) => UpdatePosAlign();
 
         private void OnSystemSettingsChanged(object sender, UserPreferenceChangedEventArgs e)

@@ -110,9 +110,9 @@ namespace VoicemeeterOsdProgram.Options
                     Directory.CreateDirectory(directoryPath);
                 }
 
-                ToIniData(Osd);
-                ToIniData(AltOsdOptionsFullscreenApps);
-                ToIniData(Updater);
+                OptionsToIniData(Osd, nameof(Osd));
+                OptionsToIniData(Updater, nameof(Updater));
+                OptionsToIniData(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
                 await using (StreamWriter sw = new(m_path))
                 {
                     await sw.WriteAsync(m_data.ToString());
@@ -140,9 +140,9 @@ namespace VoicemeeterOsdProgram.Options
                 string fileData = await sr.ReadToEndAsync();
 
                 m_data = m_parser.Parse(fileData);
-                FromIniData(Osd);
-                FromIniData(Updater);
-                FromIniData(AltOsdOptionsFullscreenApps);
+                IniDataToOptions(Osd, nameof(Osd));
+                IniDataToOptions(Updater, nameof(Updater));
+                IniDataToOptions(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
 
                 m_data = new();
                 result = true;
@@ -153,77 +153,35 @@ namespace VoicemeeterOsdProgram.Options
             return result;
         }
 
-        private static void ToIniData<T>(T optionsObj)
+        private static void OptionsToIniData(OptionsBase opt, string sectionName)
         {
-            var sectionName = GetSectionName(optionsObj);
-            var properties = optionsObj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (var prop in properties)
+            foreach (var item in opt.ToDict())
             {
-                m_data[sectionName][prop.Name] = prop.GetValue(optionsObj).ToString();
-                var comments = GetPropComments(prop);
+                var optName = item.Key;
+                m_data[sectionName][optName] = item.Value;
+
+                var comments = opt.GetOptionDescription(optName);
                 if (comments.Count > 0)
                 {
-                    m_data[sectionName].GetKeyData(prop.Name).Comments = comments;
+                    m_data[sectionName].GetKeyData(optName).Comments = comments;
                 }
             }
         }
 
-        private static List<string> GetPropComments(PropertyInfo prop)
+        private static void IniDataToOptions(OptionsBase opt, string sectionName)
         {
-            List<string> comments = new();
-            if (prop.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute att)
+            Dictionary<string, string> dict = new();
+            foreach (var item in m_data[sectionName])
             {
-                comments.Add(' ' + att.Description);
+                dict.Add(item.KeyName, item.Value);
             }
-            if (prop.PropertyType.IsEnum)
-            {
-                var values = string.Join(", ", prop.PropertyType.GetEnumNames());
-                comments.Add($" Possible values: {values}");
-            }
-            return comments;
-        }
-
-        private static void FromIniData<T>(T optionsObj)
-        {
-            var properties = optionsObj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (var prop in properties)
-            {
-                ValidateOption(optionsObj, prop);
-            }
-        }
-
-        private static void ValidateOption<T>(T optionsObj, PropertyInfo optionProp)
-        {
-            var sectionName = GetSectionName(optionsObj);
-            var name = optionProp.Name;
-            var field = m_data[sectionName][name];
-            try
-            {
-                if (!string.IsNullOrEmpty(field))
-                {
-                    object result = optionProp.PropertyType.IsEnum ? 
-                        Enum.Parse(optionProp.PropertyType, field) :
-                        Convert.ChangeType(field, optionProp.PropertyType);
-                    if (result is not null)
-                    {
-                        optionProp.SetValue(optionsObj, result);
-                    }
-                }
-            }
-            catch { }
-            m_data[sectionName][name] = optionProp.GetValue(optionsObj).ToString();
-        }
-
-        private static string GetSectionName<T>(T optionsObj)
-        {
-            var members = typeof(OptionsStorage).GetFields(BindingFlags.Static | BindingFlags.Public);
-            return members.First(m => m.FieldType.Name == optionsObj.GetType().Name).Name;
+            opt.FromDict(dict);
         }
 
         private static async Task ValidateConfigFileAsync()
         {
-            bool readRes = await TryReadAsync();
-            bool writeRes = await TrySaveAsync();
+            _ = await TryReadAsync();
+            _ = await TrySaveAsync();
             m_isInit = true;
         }
 
@@ -240,12 +198,6 @@ namespace VoicemeeterOsdProgram.Options
                 m_timer.Stop();
                 await ValidateConfigFileAsync();
             }
-        }
-
-        private static void OnTimerTick(object sender, EventArgs e)
-        {
-            m_timer.Stop();
-            _ = ValidateConfigFileAsync();
         }
     }
 }

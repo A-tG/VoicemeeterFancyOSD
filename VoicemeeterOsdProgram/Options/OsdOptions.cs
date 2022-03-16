@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using VoicemeeterOsdProgram.Types;
 
@@ -10,11 +11,12 @@ namespace VoicemeeterOsdProgram.Options
         private bool m_isInteractable = false;
         private uint m_durationMs = 2000;
         private double m_backgroundOpacity = 0.9;
-        private bool m_alwaysShowMuteBtn = false;
-        private bool m_alwaysShowSoloBtn = false;
-        private bool m_alwaysShowMonoBtn = false;
-        private bool m_alwaysShowBusBtns = false;
+        private HashSet<StripElements> m_alwaysShowElements = new();
 
+        public OsdOptions()
+        {
+            m_alwaysShowElements.Add(StripElements.None);
+        }
 
         [Description("Dont show OSD if Voicemeeter's window is visible (and not obstructed) or is active window")]
         public bool DontShowIfVoicemeeterVisible 
@@ -55,41 +57,66 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
-        [Description("Always show Mute button on any Strip change")]
-        public bool AlwaysShowMuteBtn
+        [Description("Always show these elements on any Strip change. Values can be combined by using comma")]
+        public HashSet<StripElements> AlwaysShowElements
         {
-            get => m_alwaysShowMuteBtn;
-            set => HandlePropertyChange(ref m_alwaysShowMuteBtn, ref value, AlwaysShowMuteBtnChanged);
+            get => m_alwaysShowElements;
+            set
+            {
+                if ((value.Count > 1) && value.Contains(StripElements.None))
+                {
+                    value.Remove(StripElements.None);
+                }
+                if (value.Count == 0)
+                {
+                    value.Add(StripElements.None);
+                }
+
+                HandlePropertyChange(ref m_alwaysShowElements, ref value, AlwaysShowElementsChanged);
+            }
         }
 
-        [Description("Always show Solo button on any Strip change")]
-        public bool AlwaysShowSoloBtn
+        public override IEnumerable<KeyValuePair<string, string>> ToDict()
         {
-            get => m_alwaysShowSoloBtn;
-            set => HandlePropertyChange(ref m_alwaysShowSoloBtn, ref value, AlwaysShowSoloBtnChanged);
+            Dictionary<string, string> list = new(base.ToDict());
+            list.Add(nameof(DontShowIfVoicemeeterVisible), DontShowIfVoicemeeterVisible.ToString());
+            list.Add(nameof(IsInteractable), IsInteractable.ToString());
+            list.Add(nameof(DurationMs), DurationMs.ToString());
+            list.Add(nameof(BackgroundOpacity), BackgroundOpacity.ToString());
+
+            string showElements = string.Join(", ", AlwaysShowElements);
+            list.Add(nameof(AlwaysShowElements), showElements);
+            return list;
         }
 
-        [Description("Always show Mono button on any Strip change")]
-        public bool AlwaysShowMonoBtn
+        public override void FromDict(Dictionary<string, string> list)
         {
-            get => m_alwaysShowSoloBtn;
-            set => HandlePropertyChange(ref m_alwaysShowMonoBtn, ref value, AlwaysShowMonoBtnChanged);
-        }
+            base.FromDict(list);
+            List<string> names = new();
+            names.Add(nameof(DontShowIfVoicemeeterVisible));
+            names.Add(nameof(HorizontalAlignment));
+            names.Add(nameof(HorizontalAlignment));
+            names.Add(nameof(BackgroundOpacity));
+            foreach (var n in names)
+            {
+                if (list.ContainsKey(n))
+                {
+                    TryParseFrom(n, list[n]);
+                }
+            }
 
-        [Description("Always show Hardware Outputs button (A1, A2, B1, B2, etc) on any Strip change")]
-        public bool AlwaysShowBusBtns
-        {
-            get => m_alwaysShowBusBtns;
-            set => HandlePropertyChange(ref m_alwaysShowBusBtns, ref value, AlwaysShowBusBtnsChanged);
+            var name = nameof(AlwaysShowElements);
+            if (list.ContainsKey(name))
+            {
+                HashSet<StripElements> alwaysShow = new(ParseEnumerableFrom<StripElements>(list[name]));
+                AlwaysShowElements = alwaysShow;
+            }
         }
 
         public event EventHandler<bool> DontShowIfVoicemeeterVisibleChanged;
         public event EventHandler<bool> IsInteractableChanged;
         public event EventHandler<uint> DurationMsChanged;
         public event EventHandler<double> BackgroundOpacityChanged;
-        public event EventHandler<bool> AlwaysShowMuteBtnChanged;
-        public event EventHandler<bool> AlwaysShowMonoBtnChanged;
-        public event EventHandler<bool> AlwaysShowSoloBtnChanged;
-        public event EventHandler<bool> AlwaysShowBusBtnsChanged;
+        public event EventHandler<HashSet<StripElements>> AlwaysShowElementsChanged;
     }
 }
