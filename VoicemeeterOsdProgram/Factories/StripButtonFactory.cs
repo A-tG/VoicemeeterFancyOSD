@@ -85,7 +85,9 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetEqOn()
         {
             var btnCont = new ButtonContainer();
-            btnCont.Btn.Content = "EQ";
+            var btn = btnCont.Btn;
+            btn.Content = "EQ";
+            btn.Style = (Style)btnCont.Resources["EqOnBtnStyle"];
             return btnCont;
         }
     }
