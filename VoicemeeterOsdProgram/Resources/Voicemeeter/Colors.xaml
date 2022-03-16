@@ -12,4 +12,5 @@
     <Color x:Key="VmActiveElementRedColor">#F8634D</Color>
     <Color x:Key="VmActiveElementOrangeColor">#E8B15F</Color>
     <Color x:Key="VmActiveElementCyanColor">#68E6F8</Color>
+    <Color x:Key="VmActiveElementBlueColor">#296FFD</Color>
 </ResourceDictionary>
