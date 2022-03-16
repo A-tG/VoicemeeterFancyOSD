@@ -108,7 +108,7 @@ namespace VoicemeeterOsdProgram.Options
             var name = nameof(AlwaysShowElements);
             if (list.ContainsKey(name))
             {
-                HashSet<StripElements> alwaysShow = new(ParseEnumerableFrom<StripElements>(list[name]));
+                HashSet<StripElements> alwaysShow = new(ParseEnumerableFrom<StripElements>(list[name], ","));
                 AlwaysShowElements = alwaysShow;
             }
         }

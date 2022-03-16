@@ -110,10 +110,10 @@ namespace VoicemeeterOsdProgram.Options
             return res;
         }
 
-        protected IEnumerable<T> ParseEnumerableFrom<T>(string val)
+        protected IEnumerable<T> ParseEnumerableFrom<T>(string val, string separator)
         {
             List<T> resList = new();
-            var values = val.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var values = val.Split(separator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             foreach (string v in values)
             {
                 try
