@@ -94,7 +94,7 @@ namespace VoicemeeterOsdProgram.Options
             object res;
             if (toType.IsEnum)
             {
-                res = Enum.Parse(toType, value);
+                res = Enum.Parse(toType, value, true);
             }
             else
             {
