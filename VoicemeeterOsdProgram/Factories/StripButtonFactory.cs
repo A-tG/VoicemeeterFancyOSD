@@ -85,6 +85,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetEqOn()
         {
             var btnCont = new ButtonContainer();
+            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.EQ);
             var btn = btnCont.Btn;
             btn.Content = "EQ";
             btn.Style = (Style)btnCont.Resources["EqOnBtnStyle"];

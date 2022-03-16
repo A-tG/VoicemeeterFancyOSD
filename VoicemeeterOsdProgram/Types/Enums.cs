@@ -22,6 +22,7 @@
         Fader,
         Mono,
         Mute,
+        EQ,
         Solo,
         Buses
     }
