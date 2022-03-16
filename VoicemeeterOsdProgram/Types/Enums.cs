@@ -15,4 +15,14 @@
         Center,
         Bottom
     }
+
+    public enum StripElements
+    {
+        None,
+        Fader,
+        Mono,
+        Mute,
+        Solo,
+        Buses
+    }
 }
