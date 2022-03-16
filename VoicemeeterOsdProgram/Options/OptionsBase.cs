@@ -24,29 +24,36 @@ namespace VoicemeeterOsdProgram.Options
 
             if (m.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute att)
             {
-                comments.Add(' ' + att.Description);
+                comments.Add(att.Description);
             }
             if (type.IsEnum)
             {
                 comments.Add(GetEnumValuesDescription(type));
             } else if (isEnumerable)
             {
-                var tParams = type.GetGenericArguments();
-                if (tParams.Length == 1)
+                string desc = GetEnumerableDescription(type);
+                if (!string.IsNullOrEmpty(desc))
                 {
-                    var desc = GetEnumValuesDescription(tParams[0]);
-                    if (!string.IsNullOrEmpty(desc))
-                    {
-                        comments.Add(desc);
-                    }
+                    comments.Add(desc);
                 }
             }
             return comments;
         }
 
+        protected string GetEnumerableDescription(Type t)
+        {
+            string desc = "";
+            var tParams = t.GetGenericArguments();
+            if (tParams.Length == 1)
+            {
+                desc = GetEnumValuesDescription(tParams[0]);
+            }
+            return desc;
+        }
+
         protected string GetEnumValuesDescription(Type t)
         {
-            return t.IsEnum ? " Possible values: " + string.Join(", ", t.GetEnumNames()) : string.Empty;
+            return t.IsEnum ? "Possible values: " + string.Join(", ", t.GetEnumNames()) : string.Empty;
         }
 
         protected void HandlePropertyChange<T>(ref T oldVal, ref T newVal, EventHandler<T> eventIfNotEqual)

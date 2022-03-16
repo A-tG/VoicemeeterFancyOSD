@@ -159,10 +159,11 @@ namespace VoicemeeterOsdProgram.Options
                 var optName = item.Key;
                 m_data[sectionName][optName] = item.Value;
 
-                var comments = opt.GetOptionDescription(optName);
-                if (comments.Count > 0)
+                var description = opt.GetOptionDescription(optName);
+                description.ForEach(str => str = " " + str);
+                if (description.Count > 0)
                 {
-                    m_data[sectionName].GetKeyData(optName).Comments = comments;
+                    m_data[sectionName].GetKeyData(optName).Comments = description;
                 }
             }
         }
