@@ -14,7 +14,6 @@ namespace VoicemeeterOsdProgram.Options
 {
     public static class OptionsStorage
     {
-        // field name will be used as INI file Section name
         public static readonly OsdOptions Osd = new();
         public static readonly OsdAlternative AltOsdOptionsFullscreenApps = new();
         public static readonly UpdaterOptions Updater = new();
