@@ -22,19 +22,24 @@ namespace VoicemeeterOsdProgram.Options
 
         public override IEnumerable<KeyValuePair<string, string>> ToDict()
         {
-            Dictionary<string, string> list = new(base.ToDict());
+            Dictionary<string, string> list = new();
             list.Add(nameof(Enabled), Enabled.ToString());
+            var oldList = base.ToDict();
+            foreach (var kpv in oldList)
+            {
+                list.Add(kpv.Key, kpv.Value);
+            }
             return list;
         }
 
         public override void FromDict(Dictionary<string, string> list)
         {
+            base.FromDict(list);
             var name = nameof(Enabled);
             if (list.ContainsKey(name))
             {
                 TryParseFrom(name, list[name]);
             }
-            base.FromDict(list);
         }
 
         public event EventHandler<bool> EnabledChanged;

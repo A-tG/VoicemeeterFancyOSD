@@ -160,7 +160,10 @@ namespace VoicemeeterOsdProgram.Options
                 m_data[sectionName][optName] = item.Value;
 
                 var description = opt.GetOptionDescription(optName);
-                description.ForEach(str => str = " " + str);
+                for (int i = 0; i < description.Count; i++) // preped space
+                {
+                    description[i] = " " + description[i];
+                }
                 if (description.Count > 0)
                 {
                     m_data[sectionName].GetKeyData(optName).Comments = description;
