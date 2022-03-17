@@ -3,10 +3,7 @@ using IniParser.Model;
 using IniParser.Parser;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
@@ -28,6 +25,7 @@ namespace VoicemeeterOsdProgram.Options
         private static bool m_isWatcherEnabled;
         private static bool m_isWatcherPaused;
         private static bool m_isInit = false;
+        private static readonly Dispatcher m_disp = Dispatcher.CurrentDispatcher;
 
         static OptionsStorage()
         {
@@ -195,12 +193,16 @@ namespace VoicemeeterOsdProgram.Options
 
         private static async void OnConfigFileChanged(object sender, FileSystemEventArgs e)
         {
-            m_timer.Start();
-            if (await m_timer.WaitForNextTickAsync())
+            // need to to use Dispatcher or this code will run on another thread
+            await m_disp.Invoke(async () =>
             {
-                m_timer.Stop();
-                await ValidateConfigFileAsync();
-            }
+                m_timer.Start();
+                if (await m_timer.WaitForNextTickAsync())
+                {
+                    m_timer.Stop();
+                    await ValidateConfigFileAsync();
+                }
+            });
         }
     }
 }

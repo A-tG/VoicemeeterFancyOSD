@@ -67,12 +67,11 @@ namespace VoicemeeterOsdProgram.Core
             BgOpacity = options.BackgroundOpacity;
             IsEnabled = !OptionsStorage.Other.Paused;
 
-            var disp = Application.Current.Dispatcher;
 
-            options.IsInteractableChanged += (_, val) => disp.Invoke(() => IsInteractable = val);
+            options.IsInteractableChanged += (_, val) => IsInteractable = val;
             options.DurationMsChanged += (_, val) => DurationMs = val;
-            options.BackgroundOpacityChanged += (_, val) => disp.Invoke(() => BgOpacity = val);
-            OptionsStorage.Other.PausedChanged += (_, val) => disp.Invoke(() => IsEnabled = !val);
+            options.BackgroundOpacityChanged += (_, val) => BgOpacity = val;
+            OptionsStorage.Other.PausedChanged += (_, val) => IsEnabled = !val;
 
             m_wpfControl.CloseBtn.Click += OnCloseButtonClick;
             m_wpfControl.MouseEnter += OnMouseEnter;

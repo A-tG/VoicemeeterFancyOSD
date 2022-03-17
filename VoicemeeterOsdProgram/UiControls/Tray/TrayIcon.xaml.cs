@@ -18,7 +18,7 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
         {
             InitializeComponent();
             IsPaused = OptionsStorage.Other.Paused;
-            OptionsStorage.Other.PausedChanged += (_, val) => Application.Current.Dispatcher.Invoke(() => IsPaused = val);
+            OptionsStorage.Other.PausedChanged += (_, val) => IsPaused = val;
 
 #if DEBUG
             DebugWindowItem.Visibility = Visibility.Visible;

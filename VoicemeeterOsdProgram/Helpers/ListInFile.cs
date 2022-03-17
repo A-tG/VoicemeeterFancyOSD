@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace Atg.Utils
 {
@@ -13,6 +14,7 @@ namespace Atg.Utils
         private List<string> m_list = new();
         private FileSystemWatcher m_watcher;
         private PeriodicTimerExt m_timer = new(TimeSpan.FromSeconds(1));
+        private Dispatcher m_disp = Dispatcher.CurrentDispatcher;
 
         public ListInFile(string filePath)
         {
@@ -131,12 +133,15 @@ namespace Atg.Utils
 
         private async void OnFileChange(object sender, FileSystemEventArgs e)
         {
-            m_timer.Start();
-            if (await m_timer.WaitForNextTickAsync())
+            await m_disp.Invoke(async () =>
             {
-                m_timer.Stop();
-                await TryReadAsync();
-            }
+                m_timer.Start();
+                if (await m_timer.WaitForNextTickAsync())
+                {
+                    m_timer.Stop();
+                    await TryReadAsync();
+                }
+            });
         }
 
         public IEnumerator GetEnumerator() => m_list.GetEnumerator();
