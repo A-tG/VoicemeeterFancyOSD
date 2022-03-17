@@ -14,9 +14,8 @@ The program is portable, no installation required, but you need [.NET Desktop ru
 Settings are stored in *PROGRAM_LOCATION\config\config.ini* (created on program launch if not exist). And are automatically validated and updated on file change, no need to restart.
 
 # Upcoming features
-* Autoupdater
-* Show OSD on another display if any app specified in the config file is running (helps with OpenGL games)
-* Always show Strip's Solo, Mono, Mute, Bus buttons on any change
+* Option to ignore specified Strips' updates
+* Change settings through commandline arguments
 
 # What's the point?
 When you change gain/routing by using Voicemeeter Macro Buttons (or maybe some other way), for example if some of your Button's configuration looks like this
