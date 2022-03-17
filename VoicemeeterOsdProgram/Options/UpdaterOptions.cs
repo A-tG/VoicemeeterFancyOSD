@@ -15,19 +15,6 @@ namespace VoicemeeterOsdProgram.Options
             set => HandlePropertyChange(ref m_checkOnStartup, ref value, CheckOnStartupChanged);
         }
 
-        public override IEnumerable<KeyValuePair<string, string>> ToDict()
-        {
-            Dictionary<string, string> list = new();
-            list.Add(nameof(CheckOnStartup), CheckOnStartup.ToString());
-            return list;
-        }
-
-        public override void FromDict(Dictionary<string, string> list)
-        {
-            var name = nameof(CheckOnStartup);
-            if (list.ContainsKey(name)) TryParseFrom(name, list[name]);
-        }
-
         public event EventHandler<bool> CheckOnStartupChanged;
     }
 }

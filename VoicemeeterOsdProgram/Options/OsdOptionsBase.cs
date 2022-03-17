@@ -30,29 +30,7 @@ namespace VoicemeeterOsdProgram.Options
             set => HandlePropertyChange(ref m_verticalAlignment, ref value, VerticalAlignmentChanged);
         }
 
-        public override IEnumerable<KeyValuePair<string, string>> ToDict()
-        {
-            Dictionary<string, string> list = new(base.ToDict());
-            list.Add(nameof(DisplayIndex), DisplayIndex.ToString());
-            list.Add(nameof(HorizontalAlignment), HorizontalAlignment.ToString());
-            list.Add(nameof(VerticalAlignment), VerticalAlignment.ToString());
-            return list;
-        }
-
-        public override void FromDict(Dictionary<string, string> list)
-        {
-            List<string> names = new();
-            names.Add(nameof(DisplayIndex));
-            names.Add(nameof(HorizontalAlignment));
-            names.Add(nameof(VerticalAlignment));
-            foreach (var n in names)
-            {
-                if (list.ContainsKey(n))
-                {
-                    TryParseFrom(n, list[n]);
-                }
-            }
-        }
+        public override IEnumerable<KeyValuePair<string, string>> ToDict() => ToDictSimpleTypesAuto();
 
         public event EventHandler<uint> DisplayIndexChanged;
         public event EventHandler<HorAlignment> HorizontalAlignmentChanged;

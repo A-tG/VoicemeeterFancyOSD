@@ -160,7 +160,7 @@ namespace VoicemeeterOsdProgram.Options
                 m_data[sectionName][optName] = item.Value;
 
                 var description = opt.GetOptionDescription(optName);
-                for (int i = 0; i < description.Count; i++) // preped space
+                for (int i = 0; i < description.Count; i++) // prepend space
                 {
                     description[i] = " " + description[i];
                 }

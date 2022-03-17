@@ -9,36 +9,54 @@ namespace VoicemeeterOsdProgram.Options
 {
     public abstract class OptionsBase
     {
-        public virtual IEnumerable<KeyValuePair<string, string>> ToDict() => new Dictionary<string, string>();
+        private PropertyInfo[] m_Properties;
 
-        public virtual void FromDict(Dictionary<string, string> list) { }
-
-        public List<string> GetOptionDescription(string memberName)
+        private PropertyInfo[] Properties
         {
-            List<string> comments = new();
-            var m = GetType().GetProperty(memberName);
-            if (m is null) return comments;
-
-            var type = m.PropertyType;
-            bool isEnumerable = type.IsGenericType && (m.GetValue(this) is IEnumerable);
-
-            if (m.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute att)
+            get
             {
-                comments.Add(att.Description);
-            }
-            if (type.IsEnum)
-            {
-                comments.Add(GetEnumValuesDescription(type));
-            } else if (isEnumerable)
-            {
-                string desc = GetEnumerableDescription(type);
-                if (!string.IsNullOrEmpty(desc))
+                if (m_Properties is null)
                 {
-                    comments.Add(desc);
+                    m_Properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                }
+                return m_Properties;
+            }
+        }
+
+        public virtual IEnumerable<KeyValuePair<string, string>> ToDict() => ToDictSimpleTypesAuto();
+
+        public virtual void FromDict(Dictionary<string, string> dict) => FromDictSimpleTypesAuto(dict);
+
+        public IEnumerable<KeyValuePair<string, string>> ToDictSimpleTypesAuto()
+        {
+            Dictionary<string, string> dict = new();
+            foreach (var p in Properties)
+            {
+                if (!IsSimppleType(p.PropertyType)) continue;
+
+                dict.Add(p.Name, p.GetValue(this).ToString());
+            }
+            return dict;
+        }
+
+        public void FromDictSimpleTypesAuto(Dictionary<string, string> dict)
+        {
+            foreach (var p in Properties)
+            {
+                if (!IsSimppleType(p.PropertyType)) continue;
+
+                string name = p.Name;
+                if (dict.ContainsKey(name))
+                {
+                    TryParseFrom(name, dict[name]);
                 }
             }
-            return comments;
         }
+
+        public List<string> GetOptionDescription(string memberName) => GetOptionDescription(GetType().GetProperty(memberName));
+
+        protected bool IsSimppleType(Type t) => t.IsPrimitive || t.IsEnum || 
+            (t == typeof(string)) || (t == typeof(decimal));
 
         protected string GetEnumerableDescription(Type t)
         {
@@ -72,48 +90,41 @@ namespace VoicemeeterOsdProgram.Options
             eventIfNotEqual?.Invoke(this, newVal);
         }
 
-        protected bool TryParseFrom(string toMemberName, string value)
+        protected bool TryParseFrom(string toPropertyName, string fromVal)
         {
             try
             {
-                ParseFrom(toMemberName, value);
+                ParseFrom(toPropertyName, fromVal);
                 return true;
             }
             catch { }
             return false;
         }
 
-        protected void ParseFrom(string toMemberName, string value)
+        protected void ParseFrom(string toPropertyName, string fromVal)
         {
-            var prop = GetType().GetProperty(toMemberName);
-
-            var type = prop.PropertyType;
-            object convRes = ParseFrom(type, value);
-
-            if (convRes is not null)
-            {
-                prop.SetValue(this, convRes);
-            }
+            var prop = GetType().GetProperty(toPropertyName);
+            ParseFrom(prop, fromVal);
         }
 
-        protected object ParseFrom(Type toType, string value)
+        protected object ParseFrom(Type toType, string fromVal)
         {
             object res;
             if (toType.IsEnum)
             {
-                res = Enum.Parse(toType, value, true);
+                res = Enum.Parse(toType, fromVal, true);
             }
             else
             {
-                res = Convert.ChangeType(value, toType);
+                res = Convert.ChangeType(fromVal, toType);
             }
             return res;
         }
 
-        protected IEnumerable<T> ParseEnumerableFrom<T>(string val, string separator)
+        protected IEnumerable<T> ParseEnumerableFrom<T>(string fromVal, string separator)
         {
             List<T> resList = new();
-            var values = val.Split(separator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var values = fromVal.Split(separator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             foreach (string v in values)
             {
                 try
@@ -123,6 +134,44 @@ namespace VoicemeeterOsdProgram.Options
                 catch { }
             }
             return resList;
+        }
+
+        private void ParseFrom(PropertyInfo toProp, string fromVal)
+        {
+            var type = toProp.PropertyType;
+            object convRes = ParseFrom(type, fromVal);
+
+            if (convRes is not null)
+            {
+                toProp.SetValue(this, convRes);
+            }
+        }
+
+        private List<string> GetOptionDescription(PropertyInfo p)
+        {
+            List<string> comments = new();
+            if (p is null) return comments;
+
+            var type = p.PropertyType;
+            bool isEnumerable = type.IsGenericType && (p.GetValue(this) is IEnumerable);
+
+            if (p.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute att)
+            {
+                comments.Add(att.Description);
+            }
+            if (type.IsEnum)
+            {
+                comments.Add(GetEnumValuesDescription(type));
+            }
+            else if (isEnumerable)
+            {
+                string desc = GetEnumerableDescription(type);
+                if (!string.IsNullOrEmpty(desc))
+                {
+                    comments.Add(desc);
+                }
+            }
+            return comments;
         }
     }
 }

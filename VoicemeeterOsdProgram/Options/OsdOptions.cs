@@ -78,37 +78,21 @@ namespace VoicemeeterOsdProgram.Options
 
         public override IEnumerable<KeyValuePair<string, string>> ToDict()
         {
-            Dictionary<string, string> list = new(base.ToDict());
-            list.Add(nameof(DontShowIfVoicemeeterVisible), DontShowIfVoicemeeterVisible.ToString());
-            list.Add(nameof(IsInteractable), IsInteractable.ToString());
-            list.Add(nameof(DurationMs), DurationMs.ToString());
-            list.Add(nameof(BackgroundOpacity), BackgroundOpacity.ToString());
+            Dictionary<string, string> list = new(ToDictSimpleTypesAuto());
 
             string showElements = string.Join(", ", AlwaysShowElements);
             list.Add(nameof(AlwaysShowElements), showElements);
             return list;
         }
 
-        public override void FromDict(Dictionary<string, string> list)
+        public override void FromDict(Dictionary<string, string> dict)
         {
-            base.FromDict(list);
-            List<string> names = new();
-            names.Add(nameof(DontShowIfVoicemeeterVisible));
-            names.Add(nameof(HorizontalAlignment));
-            names.Add(nameof(HorizontalAlignment));
-            names.Add(nameof(BackgroundOpacity));
-            foreach (var n in names)
-            {
-                if (list.ContainsKey(n))
-                {
-                    TryParseFrom(n, list[n]);
-                }
-            }
+            base.FromDict(dict);
 
             var name = nameof(AlwaysShowElements);
-            if (list.ContainsKey(name))
+            if (dict.ContainsKey(name))
             {
-                HashSet<StripElements> alwaysShow = new(ParseEnumerableFrom<StripElements>(list[name], ","));
+                HashSet<StripElements> alwaysShow = new(ParseEnumerableFrom<StripElements>(dict[name], ","));
                 AlwaysShowElements = alwaysShow;
             }
         }
