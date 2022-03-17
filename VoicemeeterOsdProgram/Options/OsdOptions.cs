@@ -57,7 +57,7 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
-        [Description("Always show these elements on any Strip change. Values can be combined by using comma")]
+        [Description("Always show these elements on any Strip change. Multiple values separated by commas")]
         public HashSet<StripElements> AlwaysShowElements
         {
             get => m_alwaysShowElements;
