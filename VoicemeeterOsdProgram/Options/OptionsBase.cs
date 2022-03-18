@@ -32,7 +32,7 @@ namespace VoicemeeterOsdProgram.Options
             Dictionary<string, string> dict = new();
             foreach (var p in Properties)
             {
-                if (!IsSimppleType(p.PropertyType)) continue;
+                if (!IsSimpleType(p.PropertyType)) continue;
 
                 dict.Add(p.Name, p.GetValue(this).ToString());
             }
@@ -43,7 +43,7 @@ namespace VoicemeeterOsdProgram.Options
         {
             foreach (var p in Properties)
             {
-                if (!IsSimppleType(p.PropertyType)) continue;
+                if (!IsSimpleType(p.PropertyType)) continue;
 
                 string name = p.Name;
                 if (dict.ContainsKey(name))
@@ -55,7 +55,7 @@ namespace VoicemeeterOsdProgram.Options
 
         public List<string> GetOptionDescription(string memberName) => GetOptionDescription(GetType().GetProperty(memberName));
 
-        protected bool IsSimppleType(Type t) => t.IsPrimitive || t.IsEnum || 
+        protected bool IsSimpleType(Type t) => t.IsPrimitive || t.IsEnum || 
             (t == typeof(string)) || (t == typeof(decimal));
 
         protected string GetEnumerableDescription(Type t)
