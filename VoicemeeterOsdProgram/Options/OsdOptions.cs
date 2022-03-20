@@ -58,7 +58,7 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
-        [Description("Always show these elements on any Strip change. Multiple values separated by commas")]
+        [Description("Always show these elements on any Strip change. Multiple values separated by commas. Example: AlwaysShowElements = Mute, Buses")]
         public HashSet<StripElements> AlwaysShowElements
         {
             get => m_alwaysShowElements;
@@ -77,7 +77,7 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
-        [Description("Dont show changes from Inputs or Outputs with these indexes. Numbering is zero-based. Multiple value separated by commas")]
+        [Description("Dont show changes from Inputs or Outputs with these indexes. Numbering is zero-based. Multiple value separated by commas. Example: IgnoreStripsIndexes = 0, 5, 12")]
         public HashSet<uint> IgnoreStripsIndexes
         {
             get => m_ignoreStripsIndexes;
