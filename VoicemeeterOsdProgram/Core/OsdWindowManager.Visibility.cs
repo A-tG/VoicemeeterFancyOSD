@@ -6,10 +6,11 @@ namespace VoicemeeterOsdProgram.Core
 {
     partial class OsdWindowManager
     {
-        private static void UpdateOsdElementsVis()
+        private static bool UpdateOsdElementsVis()
         {
             m_wpfControl.AllowAutoUpdateSeparators = false;
 
+            bool hasAnyChildVisible = false;
             var children = m_wpfControl.MainContent.Children;
             foreach (StripControl strip in children)
             {
@@ -40,16 +41,19 @@ namespace VoicemeeterOsdProgram.Core
                     }
                 }
 
-                bool hasVisibleChildren = (strip.FaderCont.Visibility == Visibility.Visible) || hasVisibleBtn;
-                if (hasVisibleChildren)
+                bool hasAnyVisibleElements = (strip.FaderCont.Visibility == Visibility.Visible) || hasVisibleBtn;
+                if (hasAnyVisibleElements)
                 {
                     strip.Visibility = Visibility.Visible;
                     UpdateAlwaysVisibleElements(strip);
+                    hasAnyChildVisible = true;
                 }
             }
 
             m_wpfControl.UpdateSeparators();
             m_wpfControl.AllowAutoUpdateSeparators = true;
+
+            return hasAnyChildVisible;
         }
 
         private static void UpdateAlwaysVisibleElements(StripControl strip)

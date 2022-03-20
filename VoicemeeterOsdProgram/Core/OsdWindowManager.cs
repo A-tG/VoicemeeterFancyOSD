@@ -88,8 +88,6 @@ namespace VoicemeeterOsdProgram.Core
             {
                 ResetShowTimer();
             }
-            if (!m_wpfControl.IsAnyVisibleChild()) return;
-
             IsShown = true;
             m_window.Show();
         }
@@ -148,8 +146,10 @@ namespace VoicemeeterOsdProgram.Core
             UpdateVmParams(isNotifyChanges);
             if (!isNotifyChanges) return;
 
-            UpdateOsdElementsVis();
-            Show();
+            if (UpdateOsdElementsVis())
+            {
+                Show();
+            }
         }
 
         private static void UpdateVmParams(bool isNotifyChanges)
