@@ -12,6 +12,7 @@ namespace VoicemeeterOsdProgram.Options
         private uint m_durationMs = 2000;
         private double m_backgroundOpacity = 0.9;
         private HashSet<StripElements> m_alwaysShowElements = new();
+        private HashSet<uint> m_ignoreStripsIndexes = new();
 
         public OsdOptions()
         {
@@ -76,12 +77,18 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
+        public HashSet<uint> IgnoreStripsIndexes
+        {
+            get => m_ignoreStripsIndexes;
+            set => HandlePropertyChange(ref m_ignoreStripsIndexes, ref value, IgnoreStripsIndexesChanged);
+        }
+
         public override IEnumerable<KeyValuePair<string, string>> ToDict()
         {
             Dictionary<string, string> list = new(ToDictSimpleTypesAuto());
 
-            string showElements = string.Join(", ", AlwaysShowElements);
-            list.Add(nameof(AlwaysShowElements), showElements);
+            list.Add(nameof(AlwaysShowElements), string.Join(", ", AlwaysShowElements));
+            list.Add(nameof(IgnoreStripsIndexes), string.Join(", ", IgnoreStripsIndexes));
             return list;
         }
 
@@ -89,11 +96,14 @@ namespace VoicemeeterOsdProgram.Options
         {
             base.FromDict(dict);
 
-            var name = nameof(AlwaysShowElements);
-            if (dict.ContainsKey(name))
+            if (dict.TryGetValue(nameof(AlwaysShowElements), out string val))
             {
-                HashSet<StripElements> alwaysShow = new(ParseEnumerableFrom<StripElements>(dict[name], ","));
-                AlwaysShowElements = alwaysShow;
+                AlwaysShowElements = new(ParseEnumerableFrom<StripElements>(val, ","));
+            }
+
+            if (dict.TryGetValue(nameof(IgnoreStripsIndexes), out val))
+            {
+                IgnoreStripsIndexes = new(ParseEnumerableFrom<uint>(val, ","));
             }
         }
 
@@ -102,5 +112,6 @@ namespace VoicemeeterOsdProgram.Options
         public event EventHandler<uint> DurationMsChanged;
         public event EventHandler<double> BackgroundOpacityChanged;
         public event EventHandler<HashSet<StripElements>> AlwaysShowElementsChanged;
+        public event EventHandler<HashSet<uint>> IgnoreStripsIndexesChanged;
     }
 }
