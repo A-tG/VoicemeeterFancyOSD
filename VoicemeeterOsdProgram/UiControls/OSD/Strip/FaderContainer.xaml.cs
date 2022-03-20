@@ -8,6 +8,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// </summary>
     public partial class FaderContainer : ContentControl
     {
+        public StripControl ParentStrip;
+
         public FaderContainer()
         {
             InitializeComponent();
