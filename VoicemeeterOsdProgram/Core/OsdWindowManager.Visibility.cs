@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 
@@ -10,10 +11,17 @@ namespace VoicemeeterOsdProgram.Core
         {
             m_wpfControl.AllowAutoUpdateSeparators = false;
 
+            uint i = 0;
             bool hasAnyChildVisible = false;
             var children = m_wpfControl.MainContent.Children;
             foreach (StripControl strip in children)
             {
+                bool isIgnore = OptionsStorage.Osd.IgnoreStripsIndexes.Contains(i++);
+                if (isIgnore || !strip.HasChangesFlag)
+                {
+                    continue;
+                }
+
                 // Element become visible if it's Voicemeeter Parameter is changed
                 bool hasVisibleBtn = false;
                 foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
