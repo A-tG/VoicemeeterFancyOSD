@@ -18,48 +18,35 @@ namespace VoicemeeterOsdProgram.Factories
             m_vmProperties = new VoicemeeterProperties(type);
             m_vmParams = new();
             m_selButtons = new();
-            var api = VoicemeeterApiClient.Api;
 
             osd.AllowAutoUpdateSeparators = false;
 
-            // adding Hardware Inputs
-            for (int i = 0; i < m_vmProperties.hardInputs; i++)
+            AddHardwareInputs(osd);
+            AddVirtualInputs(osd);
+            AddPhysicalOutputs(osd);
+            AddVirtualOutputs(osd);
+
+            osd.UpdateSeparators();
+            osd.AllowAutoUpdateSeparators = true;
+
+            InitVmParameters();
+
+            vmParams = m_vmParams.ToArray();
+            m_vmParams.Clear();
+            m_vmParams = null;
+            m_selButtons = null;
+        }
+
+        private static void InitVmParameters()
+        {
+            foreach (var p in m_vmParams)
             {
-                var strip = GetHardwareInputStrip(i);
-
-                MakeLabelParam(strip, i, $"HardIn{i + 1}", StripType.Input);
-                MakeFaderParam(strip, i, StripType.Input);
-
-                osd.MainContent.Children.Add(strip);
+                p.Read();
             }
+        }
 
-            // adding Virtual Inputs
-            for (int i = 0; i < m_vmProperties.virtInputs; i++)
-            {
-                var stripIndex = m_vmProperties.hardInputs + i;
-
-                var strip = GetVirtualInputStrip(stripIndex);
-
-                MakeLabelParam(strip, stripIndex, $"VirtIn{i + 1}", StripType.Input);
-                MakeFaderParam(strip, stripIndex, StripType.Input);
-
-                osd.MainContent.Children.Add(strip);
-            }
-
-            // adding Physical Outputs
-            for (int i = 0; i < m_vmProperties.hardOutputs; i++)
-            {
-                var strip = GetOutputStrip(i);
-                var name = (m_vmProperties.hardOutputs == 1) ? "A" : $"A{i + 1}";
-                strip.StripLabel.Text = name;
-
-                MakeLabelParam(strip, i, name, StripType.Output);
-                MakeFaderParam(strip, i, StripType.Output);
-
-                osd.MainContent.Children.Add(strip);
-            }
-
-            // adding Virtual Outputs
+        private static void AddVirtualOutputs(OsdControl osd)
+        {
             for (int i = 0; i < m_vmProperties.virtOutputs; i++)
             {
                 var stripIndex = m_vmProperties.hardOutputs + i;
@@ -72,20 +59,49 @@ namespace VoicemeeterOsdProgram.Factories
 
                 osd.MainContent.Children.Add(strip);
             }
+        }
 
-            osd.UpdateSeparators();
-            osd.AllowAutoUpdateSeparators = true;
-
-            // read first time to initialize values
-            foreach (var p in m_vmParams)
+        private static void AddPhysicalOutputs(OsdControl osd)
+        {
+            for (int i = 0; i < m_vmProperties.hardOutputs; i++)
             {
-                p.Read();
-            }
+                var strip = GetOutputStrip(i);
+                var name = (m_vmProperties.hardOutputs == 1) ? "A" : $"A{i + 1}";
+                strip.StripLabel.Text = name;
 
-            vmParams = m_vmParams.ToArray();
-            m_vmParams.Clear();
-            m_vmParams = null;
-            m_selButtons = null;
+                MakeLabelParam(strip, i, name, StripType.Output);
+                MakeFaderParam(strip, i, StripType.Output);
+
+                osd.MainContent.Children.Add(strip);
+            }
+        }
+
+        private static void AddVirtualInputs(OsdControl osd)
+        {
+            for (int i = 0; i < m_vmProperties.virtInputs; i++)
+            {
+                var stripIndex = m_vmProperties.hardInputs + i;
+
+                var strip = GetVirtualInputStrip(stripIndex);
+
+                MakeLabelParam(strip, stripIndex, $"VirtIn{i + 1}", StripType.Input);
+                MakeFaderParam(strip, stripIndex, StripType.Input);
+
+                osd.MainContent.Children.Add(strip);
+            }
+        }
+
+        private static void AddHardwareInputs(OsdControl osd)
+        {
+            for (int i = 0; i < m_vmProperties.hardInputs; i++)
+            {
+                var strip = GetHardwareInputStrip(i);
+
+                MakeLabelParam(strip, i, $"HardIn{i + 1}", StripType.Input);
+                MakeFaderParam(strip, i, StripType.Input);
+
+                osd.MainContent.Children.Add(strip);
+            }
         }
 
         private static StripControl GetOutputStrip(int stripIndex)
