@@ -23,6 +23,8 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
+        // It's easier to parse simple types automatically,
+        // then more complex types like Array, List can be parsed manually in overload method 
         public virtual IEnumerable<KeyValuePair<string, string>> ToDict() => ToDictSimpleTypesAuto();
 
         public virtual void FromDict(Dictionary<string, string> dict) => FromDictSimpleTypesAuto(dict);
