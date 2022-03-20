@@ -16,6 +16,7 @@ namespace VoicemeeterOsdProgram.Core
             var children = m_wpfControl.MainContent.Children;
             foreach (StripControl strip in children)
             {
+                // 2 checks to imitate "lazy" evaluation
                 bool hasChanges = strip.HasChangesFlag;
                 if (!hasChanges) continue;
 
