@@ -10,6 +10,9 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     {
         private bool m_hasChanges = false;
 
+        /// <summary>
+        /// Resets itself on when read
+        /// </summary>
         public bool HasChangesFlag
         {
             get
