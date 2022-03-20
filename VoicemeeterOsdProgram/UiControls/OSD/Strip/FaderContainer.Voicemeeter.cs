@@ -30,8 +30,14 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private void OnVmValueChanged(object sender, ValOldNew<float> e)
         {
+            if (ParentStrip is not null)
+            {
+                ParentStrip.HasChangesFlag = true;
+            }
+
             Visibility = System.Windows.Visibility.Visible;
 
+            // To prevent triggering OnFaderValueChanged
             Fader.isIgnoreValueChanged = true;
             Fader.Value = e.newVal;
             Fader.isIgnoreValueChanged = false;

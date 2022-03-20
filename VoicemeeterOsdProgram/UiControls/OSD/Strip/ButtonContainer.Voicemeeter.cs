@@ -33,6 +33,11 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private void OnVmValueChanged(object sender, ValOldNew<float> e)
         {
+            if (ParentStrip is not null)
+            {
+                ParentStrip.HasChangesFlag = true;
+            }
+
             Visibility = System.Windows.Visibility.Visible;
             Btn.State = (uint)e.newVal;
         }
