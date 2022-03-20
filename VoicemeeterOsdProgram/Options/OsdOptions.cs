@@ -77,6 +77,7 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
+        [Description("Dont show changes from Inputs or Outputs with these indexes. Numbering is zero-based. Multiple value separated by commas")]
         public HashSet<uint> IgnoreStripsIndexes
         {
             get => m_ignoreStripsIndexes;
