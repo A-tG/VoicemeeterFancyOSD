@@ -16,46 +16,15 @@ namespace VoicemeeterOsdProgram.Core
             var children = m_wpfControl.MainContent.Children;
             foreach (StripControl strip in children)
             {
+                bool hasChanges = strip.HasChangesFlag;
+                if (!hasChanges) continue;
+
                 bool isIgnore = OptionsStorage.Osd.IgnoreStripsIndexes.Contains(i++);
-                if (isIgnore || !strip.HasChangesFlag)
-                {
-                    continue;
-                }
+                if (isIgnore) continue;
 
-                // Element become visible if it's Voicemeeter Parameter is changed
-                bool hasVisibleBtn = false;
-                foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
-                {
-                    if (btnCont.Visibility == Visibility.Visible)
-                    {
-                        hasVisibleBtn = true;
-                        break;
-                    }
-                }
-                foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
-                {
-                    if (btnCont.Visibility == Visibility.Visible)
-                    {
-                        hasVisibleBtn = true;
-                        break;
-                    }
-                }
-                foreach (ButtonContainer btnCont in strip.AdditionalControlBtns.Children)
-                {
-                    if (btnCont.Visibility == Visibility.Visible)
-                    {
-                        hasVisibleBtn = true;
-                        break;
-                    }
-                }
-
-                bool hasAnyVisibleElements = (strip.FaderCont.Visibility == Visibility.Visible) || hasVisibleBtn;
-                if (hasAnyVisibleElements)
-                {
-                    strip.Visibility = Visibility.Visible;
-                    UpdateAlwaysVisibleElements(strip);
-                    hasAnyChildVisible = true;
-                }
+                strip.Visibility = Visibility.Visible;
+                UpdateAlwaysVisibleElements(strip);
+                hasAnyChildVisible = true;
             }
 
             m_wpfControl.UpdateSeparators();
@@ -66,7 +35,7 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void UpdateAlwaysVisibleElements(StripControl strip)
         {
-            var options = Options.OptionsStorage.Osd;
+            var options = OptionsStorage.Osd;
             foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
             {
                 if (!options.AlwaysShowElements.Contains(StripElements.Buses)) break;
