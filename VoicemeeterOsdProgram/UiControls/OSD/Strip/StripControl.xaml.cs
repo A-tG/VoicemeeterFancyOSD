@@ -8,6 +8,22 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// </summary>
     public partial class StripControl : UserControl
     {
+        private bool m_hasChanges = false;
+
+        public bool HasChangesFlag
+        {
+            get
+            {
+                if (m_hasChanges)
+                {
+                    m_hasChanges = false;
+                    return true;
+                }
+                return m_hasChanges;
+            }
+            set => m_hasChanges = value;
+        }
+
         public StripControl()
         {
             InitializeComponent();
