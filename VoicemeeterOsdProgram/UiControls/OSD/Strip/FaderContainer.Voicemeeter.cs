@@ -30,9 +30,9 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private void OnVmValueChanged(object sender, ValOldNew<float> e)
         {
-            if (ParentStrip is not null)
+            if (OsdParent is not null)
             {
-                ParentStrip.HasChangesFlag = true;
+                OsdParent.HasChangesFlag = true;
             }
 
             Visibility = System.Windows.Visibility.Visible;

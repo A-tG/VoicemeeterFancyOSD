@@ -1,17 +1,18 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
     /// <summary>
     /// Interaction logic for StripControl.xaml
     /// </summary>
-    public partial class StripControl : UserControl
+    public partial class StripControl : UserControl, IOsdRootElement
     {
         private bool m_hasChanges = false;
 
         /// <summary>
-        /// Resets itself on when read
+        /// Resets itself when read
         /// </summary>
         public bool HasChangesFlag
         {

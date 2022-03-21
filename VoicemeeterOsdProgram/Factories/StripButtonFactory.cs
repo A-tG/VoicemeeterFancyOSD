@@ -96,7 +96,7 @@ namespace VoicemeeterOsdProgram.Factories
         private static ButtonContainer GetCommonBtnCont(StripControl parent)
         {
             ButtonContainer btnCont = new();
-            btnCont.ParentStrip = parent;
+            btnCont.OsdParent = parent;
             return btnCont;
         }
     }

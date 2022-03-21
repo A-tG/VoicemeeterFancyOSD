@@ -56,7 +56,7 @@ namespace VoicemeeterOsdProgram.Factories
                 strip.StripLabel.Text = name;
 
                 MakeFaderParam(strip, stripIndex, StripType.Output);
-                strip.FaderCont.ParentStrip = strip;
+                strip.FaderCont.OsdParent = strip;
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -72,7 +72,7 @@ namespace VoicemeeterOsdProgram.Factories
 
                 MakeLabelParam(strip, i, name, StripType.Output);
                 MakeFaderParam(strip, i, StripType.Output);
-                strip.FaderCont.ParentStrip = strip;
+                strip.FaderCont.OsdParent = strip;
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -88,7 +88,7 @@ namespace VoicemeeterOsdProgram.Factories
 
                 MakeLabelParam(strip, stripIndex, $"VirtIn{i + 1}", StripType.Input);
                 MakeFaderParam(strip, stripIndex, StripType.Input);
-                strip.FaderCont.ParentStrip = strip;
+                strip.FaderCont.OsdParent = strip;
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -102,7 +102,7 @@ namespace VoicemeeterOsdProgram.Factories
 
                 MakeLabelParam(strip, i, $"HardIn{i + 1}", StripType.Input);
                 MakeFaderParam(strip, i, StripType.Input);
-                strip.FaderCont.ParentStrip = strip;
+                strip.FaderCont.OsdParent = strip;
 
                 osd.MainContent.Children.Add(strip);
             }

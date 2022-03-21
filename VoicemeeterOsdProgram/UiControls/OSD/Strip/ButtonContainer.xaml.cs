@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
@@ -7,7 +8,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// </summary>
     public partial class ButtonContainer : ContentControl
     {
-        public StripControl ParentStrip;
+        public IOsdRootElement OsdParent;
 
         public ButtonContainer()
         {
