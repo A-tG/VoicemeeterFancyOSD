@@ -12,6 +12,7 @@ namespace VoicemeeterOsdProgram
             public const string Pause = "-pause";
             public const string Unpause = "-unpause";
             public const string TogglePause = "-toggle-pause";
+            public const string SetOption = "-set-option";
         }
 
         public static string[] SplitRawArgs(string rawArgs)
@@ -26,10 +27,15 @@ namespace VoicemeeterOsdProgram
 
             for (int i = 0; i < len; i++)
             {
-                if (args[i].ToLower() == Args.AfterUpdateArg.ToLower())
+                var arg = args[i].ToLower();
+                if (arg == Args.AfterUpdateArg.ToLower())
                 {
                     AppLifeManager.CloseDuplicates();
                     UpdateManager.TryDeleteBackup();
+                    break;
+                } else if (arg == Args.SetOption.ToLower())
+                {
+                    // set Option
                     break;
                 }
             }
