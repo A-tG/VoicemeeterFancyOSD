@@ -11,16 +11,17 @@ namespace VoicemeeterOsdProgram.Core
         {
             m_wpfControl.AllowAutoUpdateSeparators = false;
 
-            uint i = 0;
             bool hasAnyChildVisible = false;
             var children = m_wpfControl.MainContent.Children;
-            foreach (StripControl strip in children)
+            var len = children.Count;
+            for (int i = 0; i < len; i++)
             {
+                var strip = (StripControl)children[i];
                 // 2 checks to imitate "lazy" evaluation
                 bool hasChanges = strip.HasChangesFlag;
                 if (!hasChanges) continue;
 
-                bool isIgnore = OptionsStorage.Osd.IgnoreStripsIndexes.Contains(i++);
+                bool isIgnore = OptionsStorage.Osd.IgnoreStripsIndexes.Contains((uint)i);
                 if (isIgnore) continue;
 
                 strip.Visibility = Visibility.Visible;
