@@ -9,7 +9,7 @@ namespace VoicemeeterOsdProgram.Factories
     public static class StripButtonFactory
     {
 
-        public static ButtonContainer GetMono(StripControl parent)
+        public static ButtonContainer GetMono(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
             btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mono);
@@ -26,7 +26,7 @@ namespace VoicemeeterOsdProgram.Factories
             return btnCont;
         }
 
-        public static ButtonContainer GetMonoWithReverse(StripControl parent)
+        public static ButtonContainer GetMonoWithReverse(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
             btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mono);
@@ -43,7 +43,7 @@ namespace VoicemeeterOsdProgram.Factories
             return btnCont;
         }
 
-        public static ButtonContainer GetSolo(StripControl parent)
+        public static ButtonContainer GetSolo(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
             btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Solo);
@@ -51,7 +51,7 @@ namespace VoicemeeterOsdProgram.Factories
             return btnCont;
         }
 
-        public static ButtonContainer GetMute(StripControl parent)
+        public static ButtonContainer GetMute(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
             btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mute);
@@ -68,7 +68,7 @@ namespace VoicemeeterOsdProgram.Factories
             return btnCont;
         }
 
-        public static ButtonContainer GetSel(StripControl parent)
+        public static ButtonContainer GetSel(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
             var btn = btnCont.Btn;
@@ -76,14 +76,14 @@ namespace VoicemeeterOsdProgram.Factories
             return btnCont;
         }
 
-        public static ButtonContainer GetBusSelect(StripControl parent, string name)
+        public static ButtonContainer GetBusSelect(IOsdRootElement parent, string name)
         {
             var btnCont = GetCommonBtnCont(parent);
             btnCont.Btn.Content = name;
             return btnCont;
         }
 
-        public static ButtonContainer GetEqOn(StripControl parent)
+        public static ButtonContainer GetEqOn(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
             btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.EQ);
@@ -93,7 +93,7 @@ namespace VoicemeeterOsdProgram.Factories
             return btnCont;
         }
 
-        private static ButtonContainer GetCommonBtnCont(StripControl parent)
+        private static ButtonContainer GetCommonBtnCont(IOsdRootElement parent)
         {
             ButtonContainer btnCont = new();
             btnCont.OsdParent = parent;
