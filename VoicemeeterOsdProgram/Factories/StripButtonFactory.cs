@@ -9,9 +9,9 @@ namespace VoicemeeterOsdProgram.Factories
     public static class StripButtonFactory
     {
 
-        public static ButtonContainer GetMono()
+        public static ButtonContainer GetMono(StripControl parent)
         {
-            var btnCont = new ButtonContainer();
+            var btnCont = GetCommonBtnCont(parent);
             btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mono);
 
             var btn = btnCont.Btn;
@@ -26,9 +26,9 @@ namespace VoicemeeterOsdProgram.Factories
             return btnCont;
         }
 
-        public static ButtonContainer GetMonoWithReverse()
+        public static ButtonContainer GetMonoWithReverse(StripControl parent)
         {
-            var btnCont = new ButtonContainer();
+            var btnCont = GetCommonBtnCont(parent);
             btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mono);
 
             var btn = btnCont.Btn;
@@ -43,17 +43,17 @@ namespace VoicemeeterOsdProgram.Factories
             return btnCont;
         }
 
-        public static ButtonContainer GetSolo()
+        public static ButtonContainer GetSolo(StripControl parent)
         {
-            var btnCont = new ButtonContainer();
+            var btnCont = GetCommonBtnCont(parent);
             btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Solo);
             btnCont.Btn.Style = (Style)btnCont.Resources["SoloBtnStyle"];
             return btnCont;
         }
 
-        public static ButtonContainer GetMute()
+        public static ButtonContainer GetMute(StripControl parent)
         {
-            var btnCont = new ButtonContainer();
+            var btnCont = GetCommonBtnCont(parent);
             btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mute);
 
             var btn = btnCont.Btn;
@@ -68,27 +68,35 @@ namespace VoicemeeterOsdProgram.Factories
             return btnCont;
         }
 
-        public static ButtonContainer GetSel()
+        public static ButtonContainer GetSel(StripControl parent)
         {
-            var btnCont = new ButtonContainer();
+            var btnCont = GetCommonBtnCont(parent);
             var btn = btnCont.Btn;
             btn.Style = (Style)btnCont.Resources["SelBtnStyle"];
             return btnCont;
         }
 
-        public static ButtonContainer GetBusSelect()
+        public static ButtonContainer GetBusSelect(StripControl parent, string name)
         {
-            var btnCont = new ButtonContainer();
+            var btnCont = GetCommonBtnCont(parent);
+            btnCont.Btn.Content = name;
             return btnCont;
         }
 
-        public static ButtonContainer GetEqOn()
+        public static ButtonContainer GetEqOn(StripControl parent)
         {
-            var btnCont = new ButtonContainer();
+            var btnCont = GetCommonBtnCont(parent);
             btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.EQ);
             var btn = btnCont.Btn;
             btn.Content = "EQ";
             btn.Style = (Style)btnCont.Resources["EqOnBtnStyle"];
+            return btnCont;
+        }
+
+        private static ButtonContainer GetCommonBtnCont(StripControl parent)
+        {
+            ButtonContainer btnCont = new();
+            btnCont.ParentStrip = parent;
             return btnCont;
         }
     }

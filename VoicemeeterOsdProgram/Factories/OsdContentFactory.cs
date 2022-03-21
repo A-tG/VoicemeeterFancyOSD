@@ -112,29 +112,24 @@ namespace VoicemeeterOsdProgram.Factories
         {
             var strip = new StripControl();
 
-            var btn = StripButtonFactory.GetMonoWithReverse();
-            btn.ParentStrip = strip;
+            var btn = StripButtonFactory.GetMonoWithReverse(strip);
             MakeButtonParam(BtnType.Mono, StripType.Output, btn, stripIndex);
             strip.ControlBtnsContainer.Children.Add(btn);
 
-            btn = StripButtonFactory.GetEqOn();
+            btn = StripButtonFactory.GetEqOn(strip);
             MakeButtonParam(BtnType.EqOn, StripType.Output, btn, stripIndex);
-            btn.ParentStrip = strip;
             strip.ControlBtnsContainer.Children.Add(btn);
 
-            btn = StripButtonFactory.GetMute();
+            btn = StripButtonFactory.GetMute(strip);
             MakeButtonParam(BtnType.Mute, StripType.Output, btn, stripIndex);
-            btn.ParentStrip = strip;
             strip.ControlBtnsContainer.Children.Add(btn);
 
             switch (m_vmProperties.type)
             {
                 case VoicemeeterType.Potato:
                 case VoicemeeterType.Potato64:
-                    btn = StripButtonFactory.GetSel();
+                    btn = StripButtonFactory.GetSel(strip);
                     MakeButtonParam(BtnType.Sel, StripType.Output, btn, stripIndex);
-
-                    btn.ParentStrip = strip;
                     strip.AdditionalControlBtns.Children.Add(btn);
                     break;
             }
@@ -146,39 +141,31 @@ namespace VoicemeeterOsdProgram.Factories
         {
             var strip = new StripControl();
 
-            var btn = StripButtonFactory.GetSolo();
+            var btn = StripButtonFactory.GetSolo(strip);
             MakeButtonParam(BtnType.Solo, StripType.Input, btn, stripIndex);
-            btn.ParentStrip = strip;
             strip.ControlBtnsContainer.Children.Add(btn);
 
-            btn = StripButtonFactory.GetMute();
+            btn = StripButtonFactory.GetMute(strip);
             MakeButtonParam(BtnType.Mute, StripType.Input, btn, stripIndex);
-            btn.ParentStrip = strip;
             strip.ControlBtnsContainer.Children.Add(btn);
 
             // adding A1, A2, ... buttons
             for (int i = 0; i < m_vmProperties.hardOutputs; i++)
             {
-                var btnCont = StripButtonFactory.GetBusSelect();
                 var busIndex = i + 1;
                 var name = (m_vmProperties.hardOutputs == 1) ? $"A" : $"A{busIndex}";
-                btnCont.Btn.Content = name;
+                var btnCont = StripButtonFactory.GetBusSelect(strip, name);
                 MakeButtonParam(BtnType.A, StripType.Input, btnCont, stripIndex, busIndex);
-
-                btnCont.ParentStrip = strip;
                 strip.BusBtnsContainer.Children.Add(btnCont);
             }
 
             // adding B1, B2, ... buttons
             for (int i = 0; i < m_vmProperties.virtOutputs; i++)
             {
-                var btnCont = StripButtonFactory.GetBusSelect();
                 var busIndex = i + 1;
                 var name = (m_vmProperties.virtOutputs == 1) ? $"B" : $"B{busIndex}";
-                btnCont.Btn.Content = name;
+                var btnCont = StripButtonFactory.GetBusSelect(strip, name);
                 MakeButtonParam(BtnType.B, StripType.Input, btnCont, stripIndex, busIndex);
-
-                btnCont.ParentStrip = strip;
                 strip.BusBtnsContainer.Children.Add(btnCont);
             }
 
@@ -193,10 +180,8 @@ namespace VoicemeeterOsdProgram.Factories
         private static StripControl GetHardwareInputStrip(int stripIndex)
         {
             var strip = GetInput(stripIndex);
-            var btn = StripButtonFactory.GetMono();
+            var btn = StripButtonFactory.GetMono(strip);
             MakeButtonParam(BtnType.Mono, StripType.Input, btn, stripIndex);
-
-            btn.ParentStrip = strip;
             strip.ControlBtnsContainer.Children.Insert(0, btn);
             return strip;
         }
