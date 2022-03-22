@@ -1,5 +1,4 @@
-﻿using System;
-using VoicemeeterOsdProgram.Options;
+﻿using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Updater;
 
 namespace VoicemeeterOsdProgram
@@ -14,6 +13,14 @@ namespace VoicemeeterOsdProgram
             public const string TogglePause = "-toggle-pause";
             public const string SetOption = "-set-option";
         }
+
+        public static class OptionsCategory
+        {
+            public const string Osd = "osd";
+            public const string AltOsd = "altosd";
+            public const string Updater = "updater";
+        }
+
 
         public static void HandleSpecial(string[] args)
         {
@@ -74,13 +81,13 @@ namespace VoicemeeterOsdProgram
             var val = args[++i];
             switch (category.ToLower())
             {
-                case "osd":
+                case OptionsCategory.Osd:
                     if (!OptionsStorage.Osd.TryParseFrom(option, val)) return false;
                     break;
-                case "altosd":
+                case OptionsCategory.AltOsd:
                     if (!OptionsStorage.AltOsdOptionsFullscreenApps.TryParseFrom(option, val)) return false;
                     break;
-                case "updater":
+                case OptionsCategory.Updater:
                     if (!OptionsStorage.Updater.TryParseFrom(option, val)) return false;
                     break;
                 default:
