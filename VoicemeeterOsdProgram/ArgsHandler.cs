@@ -15,11 +15,6 @@ namespace VoicemeeterOsdProgram
             public const string SetOption = "-set-option";
         }
 
-        public static string[] SplitRawArgs(string rawArgs)
-        {
-            return rawArgs.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);;
-        }
-
         public static void HandleSpecial(string[] args)
         {
             var len = args.Length;
@@ -33,10 +28,6 @@ namespace VoicemeeterOsdProgram
                     AppLifeManager.CloseDuplicates();
                     UpdateManager.TryDeleteBackup();
                     break;
-                } else if (arg == Args.SetOption.ToLower())
-                {
-                    // set Option
-                    break;
                 }
             }
         }
@@ -48,13 +39,14 @@ namespace VoicemeeterOsdProgram
 
             for (int i = 0; i < len; i++)
             {
+                // handle only first valid argument
                 if (HandleArg(args[i])) break;
             }
         }
 
         private static bool HandleArg(string arg)
         {
-            switch (arg)
+            switch (arg.ToLower())
             {
                 case Args.Pause:
                     OptionsStorage.Other.Paused = true;
@@ -65,11 +57,12 @@ namespace VoicemeeterOsdProgram
                 case Args.TogglePause:
                     OptionsStorage.Other.Paused ^= true; // invert bool
                     return true;
+                case Args.SetOption:
+                    // set options
+                    return true;
                 default:
                     return false;
             }
         }
-
-        public static void Handle(string rawArgs) => Handle(SplitRawArgs(rawArgs));
     }
 }
