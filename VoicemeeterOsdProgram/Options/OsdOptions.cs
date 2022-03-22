@@ -86,6 +86,8 @@ namespace VoicemeeterOsdProgram.Options
 
         public override IEnumerable<KeyValuePair<string, string>> ToDict() => ToDictAllTypes();
 
+        public override void FromDict(Dictionary<string, string> dict) => FromDictAllTypes(dict);
+
         public override bool TryParseFrom(string toPropertyName, string fromVal)
         {
             switch (toPropertyName)
@@ -115,8 +117,6 @@ namespace VoicemeeterOsdProgram.Options
                     return base.TryParseTo(fromPropertyName, out toVal);
             }
         }
-
-        public override void FromDict(Dictionary<string, string> dict) => FromDictAllTypes(dict);
 
         public event EventHandler<bool> DontShowIfVoicemeeterVisibleChanged;
         public event EventHandler<bool> IsInteractableChanged;
