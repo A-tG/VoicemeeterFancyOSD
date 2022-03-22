@@ -1,4 +1,5 @@
-﻿using VoicemeeterOsdProgram.Options;
+﻿using System.Threading.Tasks;
+using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Updater;
 
 namespace VoicemeeterOsdProgram
@@ -39,7 +40,7 @@ namespace VoicemeeterOsdProgram
             }
         }
 
-        public static void Handle(string[] args)
+        public static async Task HandleAsync(string[] args)
         {
             var len = args.Length;
             if (len == 0) return;
@@ -47,11 +48,11 @@ namespace VoicemeeterOsdProgram
             for (int i = 0; i < len; i++)
             {
                 // handle only first valid argument
-                if (HandleArg(args, i)) break;
+                if (await HandleArgAsync(args, i)) break;
             }
         }
 
-        private static bool HandleArg(string[] args, int i)
+        private static async Task<bool> HandleArgAsync(string[] args, int i)
         {
             var arg = args[i].ToLower();
             switch (arg.ToLower())
@@ -66,13 +67,13 @@ namespace VoicemeeterOsdProgram
                     OptionsStorage.Other.Paused ^= true; // invert bool
                     return true;
                 case Args.SetOption:
-                    return SetOption(args, i);
+                    return await SetOptionAsync(args, i);
                 default:
                     return false;
             }
         }
 
-        private static bool SetOption(string[] args, int i)
+        private static async Task<bool> SetOptionAsync(string[] args, int i)
         {
             var len = args.Length;
             if ((i + 3) >= len) return false;
@@ -83,7 +84,7 @@ namespace VoicemeeterOsdProgram
             bool isSaveToConfig = false;
             if (i < len)
             {
-                bool.TryParse(args[i], out isSaveToConfig);
+                bool.TryParse(args[++i], out isSaveToConfig);
             }
 
             switch (category.ToLower())
@@ -103,7 +104,7 @@ namespace VoicemeeterOsdProgram
 
             if (isSaveToConfig)
             {
-                _ = OptionsStorage.TrySaveAsync();
+                await OptionsStorage.TrySaveAsync();
             }
 
             return true;

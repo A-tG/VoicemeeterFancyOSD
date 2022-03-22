@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace VoicemeeterOsdProgram
@@ -27,7 +28,7 @@ namespace VoicemeeterOsdProgram
             }
         }
 
-        public static void Start(string[] args, Action action)
+        public static async Task StartAsyn(string[] args, Action action)
         {
             if (IsAlreadyRunning)
             {
@@ -37,7 +38,7 @@ namespace VoicemeeterOsdProgram
 
             m_dispatcher = Dispatcher.CurrentDispatcher;
 
-            ArgsHandler.Handle(args);
+            await ArgsHandler.HandleAsync(args);
             Thread pipeServerThread = new(CreatePipeServer)
             {
                 IsBackground = true,
@@ -103,7 +104,7 @@ namespace VoicemeeterOsdProgram
                     {
                         args.Add(arg);
                     }
-                    m_dispatcher.Invoke(() => ArgsHandler.Handle(args.ToArray()));
+                    m_dispatcher.Invoke(async () => await ArgsHandler.HandleAsync(args.ToArray()));
                 }
                 catch { }
                 server.Disconnect();

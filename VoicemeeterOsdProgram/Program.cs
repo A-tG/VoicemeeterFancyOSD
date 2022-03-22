@@ -32,10 +32,10 @@ namespace VoicemeeterOsdProgram
                 return;
             }
 
-            Thread thread = new(() =>
+            Thread thread = new(async () =>
             {
                 ComponentDispatcher.ThreadFilterMessage += OnTerminationSignal;
-                AppLifeManager.Start(args, () =>
+                await AppLifeManager.StartAsyn(args, () =>
                 {
                     m_app = new();
                     m_app.Run();
