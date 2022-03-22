@@ -40,12 +40,13 @@ namespace VoicemeeterOsdProgram
             for (int i = 0; i < len; i++)
             {
                 // handle only first valid argument
-                if (HandleArg(args[i])) break;
+                if (HandleArg(args, i)) break;
             }
         }
 
-        private static bool HandleArg(string arg)
+        private static bool HandleArg(string[] args, int i)
         {
+            var arg = args[i].ToLower();
             switch (arg.ToLower())
             {
                 case Args.Pause:
@@ -58,11 +59,34 @@ namespace VoicemeeterOsdProgram
                     OptionsStorage.Other.Paused ^= true; // invert bool
                     return true;
                 case Args.SetOption:
-                    // set options
-                    return true;
+                    return SetOption(args, i);
                 default:
                     return false;
             }
+        }
+
+        private static bool SetOption(string[] args, int i)
+        {
+            if ((i + 3) >= args.Length) return false;
+
+            var category = args[++i];
+            var option = args[++i];
+            var val = args[++i];
+            switch (category.ToLower())
+            {
+                case "osd":
+                    if (!OptionsStorage.Osd.TryParseFrom(option, val)) return false;
+                    break;
+                case "altosd":
+                    if (!OptionsStorage.AltOsdOptionsFullscreenApps.TryParseFrom(option, val)) return false;
+                    break;
+                case "updater":
+                    if (!OptionsStorage.Updater.TryParseFrom(option, val)) return false;
+                    break;
+                default:
+                    break;
+            }
+            return true;
         }
     }
 }
