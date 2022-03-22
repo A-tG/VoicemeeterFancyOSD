@@ -74,11 +74,18 @@ namespace VoicemeeterOsdProgram
 
         private static bool SetOption(string[] args, int i)
         {
-            if ((i + 3) >= args.Length) return false;
+            var len = args.Length;
+            if ((i + 3) >= len) return false;
 
-            var category = args[++i];
-            var option = args[++i];
-            var val = args[++i];
+            string category = args[++i];
+            string option = args[++i];
+            string val = args[++i];
+            bool isSaveToConfig = false;
+            if (i < len)
+            {
+                bool.TryParse(args[i], out isSaveToConfig);
+            }
+
             switch (category.ToLower())
             {
                 case OptionsCategory.Osd:
@@ -93,6 +100,12 @@ namespace VoicemeeterOsdProgram
                 default:
                     break;
             }
+
+            if (isSaveToConfig)
+            {
+                _ = OptionsStorage.TrySaveAsync();
+            }
+
             return true;
         }
     }
