@@ -24,38 +24,12 @@ namespace VoicemeeterOsdProgram.Options
         }
 
         // It's easier to parse simple types automatically,
-        // then more complex types like Array, List can be parsed manually in overload method 
+        // then more complex types like Array, List can be parsed manually in overriden method 
         public virtual IEnumerable<KeyValuePair<string, string>> ToDict() => ToDictSimpleTypesAuto();
 
         public virtual void FromDict(Dictionary<string, string> dict) => FromDictSimpleTypesAuto(dict);
 
-        public IEnumerable<KeyValuePair<string, string>> ToDictSimpleTypesAuto()
-        {
-            Dictionary<string, string> dict = new();
-            foreach (var p in Properties)
-            {
-                if (!IsSimpleType(p.PropertyType)) continue;
-
-                dict.Add(p.Name, p.GetValue(this).ToString());
-            }
-            return dict;
-        }
-
-        public void FromDictSimpleTypesAuto(Dictionary<string, string> dict)
-        {
-            foreach (var p in Properties)
-            {
-                if (!IsSimpleType(p.PropertyType)) continue;
-
-                string name = p.Name;
-                if (dict.ContainsKey(name))
-                {
-                    TryParseFrom(name, dict[name]);
-                }
-            }
-        }
-
-        public bool TryParseFrom(string toPropertyName, string fromVal)
+        public virtual bool TryParseFrom(string toPropertyName, string fromVal)
         {
             try
             {
@@ -66,10 +40,59 @@ namespace VoicemeeterOsdProgram.Options
             return false;
         }
 
+        public virtual bool TryParseTo(string fromPropertyName, out string toVal)
+        {
+            try
+            {
+                toVal = Parse(fromPropertyName);
+                return true;
+            }
+            catch { }
+            toVal = "";
+            return false;
+        }
+
+        public IEnumerable<KeyValuePair<string, string>> ToDictSimpleTypesAuto() => ToDictSkipComplexTypesAuto(true);
+
+        public void FromDictSimpleTypesAuto(Dictionary<string, string> dict) => FromDictSkipComplexTypesAuto(dict, true);
+
         public List<string> GetOptionDescription(string memberName) => GetOptionDescription(GetType().GetProperty(memberName));
+
+        protected IEnumerable<KeyValuePair<string, string>> ToDictAllTypes() => ToDictSkipComplexTypesAuto(false);
+
+        protected void FromDictAllTypes(Dictionary<string, string> dict) => FromDictSkipComplexTypesAuto(dict, false);
 
         protected bool IsSimpleType(Type t) => t.IsPrimitive || t.IsEnum || 
             (t == typeof(string)) || (t == typeof(decimal));
+
+        protected void FromDictSkipComplexTypesAuto(Dictionary<string, string> dict, bool isSkip)
+        {
+            foreach (var p in Properties)
+            {
+                if (isSkip && !IsSimpleType(p.PropertyType)) continue;
+
+                string name = p.Name;
+                if (dict.ContainsKey(name))
+                {
+                    TryParseFrom(name, dict[name]);
+                }
+            }
+        }
+
+        public IEnumerable<KeyValuePair<string, string>> ToDictSkipComplexTypesAuto(bool isSkip)
+        {
+            Dictionary<string, string> dict = new();
+            foreach (var p in Properties)
+            {
+                if (isSkip && !IsSimpleType(p.PropertyType)) continue;
+
+                if (TryParseTo(p.Name, out string val))
+                {
+                    dict.Add(p.Name, val);
+                }
+            }
+            return dict;
+        }
 
         protected string GetEnumerableDescription(Type t)
         {
@@ -121,6 +144,12 @@ namespace VoicemeeterOsdProgram.Options
                 res = Convert.ChangeType(fromVal, toType);
             }
             return res;
+        }
+
+        protected string Parse(string fromPropertyName)
+        {
+            var prop = GetType().GetProperty(fromPropertyName, BindingFlags.Public | BindingFlags.Instance);
+            return prop.GetValue(this).ToString();
         }
 
         protected IEnumerable<T> ParseEnumerableFrom<T>(string fromVal, string separator)

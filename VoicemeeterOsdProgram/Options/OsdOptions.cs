@@ -84,29 +84,39 @@ namespace VoicemeeterOsdProgram.Options
             set => HandlePropertyChange(ref m_ignoreStripsIndexes, ref value, IgnoreStripsIndexesChanged);
         }
 
-        public override IEnumerable<KeyValuePair<string, string>> ToDict()
+        public override IEnumerable<KeyValuePair<string, string>> ToDict() => ToDictAllTypes();
+
+        public override bool TryParseFrom(string toPropertyName, string fromVal)
         {
-            Dictionary<string, string> list = new(ToDictSimpleTypesAuto());
-
-            list.Add(nameof(AlwaysShowElements), string.Join(", ", AlwaysShowElements));
-            list.Add(nameof(IgnoreStripsIndexes), string.Join(", ", IgnoreStripsIndexes));
-            return list;
-        }
-
-        public override void FromDict(Dictionary<string, string> dict)
-        {
-            base.FromDict(dict);
-
-            if (dict.TryGetValue(nameof(AlwaysShowElements), out string val))
+            switch (toPropertyName)
             {
-                AlwaysShowElements = new(ParseEnumerableFrom<StripElements>(val, ","));
-            }
-
-            if (dict.TryGetValue(nameof(IgnoreStripsIndexes), out val))
-            {
-                IgnoreStripsIndexes = new(ParseEnumerableFrom<uint>(val, ","));
+                case nameof(AlwaysShowElements):
+                    AlwaysShowElements = new(ParseEnumerableFrom<StripElements>(fromVal, ","));
+                    return true;
+                case nameof(IgnoreStripsIndexes):
+                    IgnoreStripsIndexes = new(ParseEnumerableFrom<uint>(fromVal, ","));
+                    return true;
+                default:
+                    return base.TryParseFrom(toPropertyName, fromVal);
             }
         }
+
+        public override bool TryParseTo(string fromPropertyName, out string toVal)
+        {
+            switch (fromPropertyName)
+            {
+                case nameof(AlwaysShowElements):
+                    toVal = string.Join(", ", AlwaysShowElements);
+                    return true;
+                case nameof(IgnoreStripsIndexes):
+                    toVal = string.Join(", ", IgnoreStripsIndexes);
+                    return true;
+                default:
+                    return base.TryParseTo(fromPropertyName, out toVal);
+            }
+        }
+
+        public override void FromDict(Dictionary<string, string> dict) => FromDictAllTypes(dict);
 
         public event EventHandler<bool> DontShowIfVoicemeeterVisibleChanged;
         public event EventHandler<bool> IsInteractableChanged;
