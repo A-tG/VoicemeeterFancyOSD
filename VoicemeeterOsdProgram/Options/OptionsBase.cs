@@ -105,7 +105,7 @@ namespace VoicemeeterOsdProgram.Options
 
         protected void ParseFrom(string toPropertyName, string fromVal)
         {
-            var prop = GetType().GetProperty(toPropertyName, BindingFlags.Public);
+            var prop = GetType().GetProperty(toPropertyName, BindingFlags.Public | BindingFlags.Instance);
             ParseFrom(prop, fromVal);
         }
 
