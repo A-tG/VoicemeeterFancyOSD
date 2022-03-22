@@ -12,6 +12,14 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             Click += OnClick;
         }
 
+        public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register(
+            nameof(CornerRadius), typeof(CornerRadius), typeof(OutlineTglBtn));
+        public CornerRadius CornerRadius
+        {
+            get => (CornerRadius)GetValue(CornerRadiusProperty);
+            set => SetValue(CornerRadiusProperty, value);
+        }
+
         public static readonly DependencyProperty NormalColorProperty = DependencyProperty.Register(
             "NormalColor", typeof(Brush), typeof(OutlineTglBtn));
         public Brush NormalColor
