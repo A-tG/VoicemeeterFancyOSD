@@ -194,15 +194,15 @@ namespace VoicemeeterOsdProgram.Options
         private static async void OnConfigFileChanged(object sender, FileSystemEventArgs e)
         {
             // need to to use Dispatcher or this code will run on another thread
-            await m_disp.Invoke(async () =>
-            {
-                m_timer.Start();
-                if (await m_timer.WaitForNextTickAsync())
-                {
-                    m_timer.Stop();
-                    await ValidateConfigFileAsync();
-                }
-            });
+            _ = await m_disp.InvokeAsync(async () =>
+              {
+                  m_timer.Start();
+                  if (await m_timer.WaitForNextTickAsync())
+                  {
+                      m_timer.Stop();
+                      await ValidateConfigFileAsync();
+                  }
+              });
         }
     }
 }
