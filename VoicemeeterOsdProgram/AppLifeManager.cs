@@ -1,5 +1,6 @@
 ﻿using AtgDev.Utils.ProcessExtensions;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
@@ -63,15 +64,15 @@ namespace VoicemeeterOsdProgram
         {
             if (args.Length == 0) return;
 
-            var rawArgs = string.Join(' ', args);
-            if (string.IsNullOrWhiteSpace(rawArgs)) return;
-
             using NamedPipeClientStream client = new(".", Program.UniqueName, PipeDirection.Out); // "." is for Local Computer
             try
             {
                 client.Connect(1000);
                 using StreamWriter writer = new(client);
-                writer.Write(rawArgs);
+                foreach (var arg in args)
+                {
+                    writer.WriteLine(arg);
+                }
             }
             catch { }
         }
@@ -96,8 +97,13 @@ namespace VoicemeeterOsdProgram
                 server.WaitForConnection();
                 try
                 {
-                    string rawArgs = reader.ReadToEnd();
-                    m_dispatcher.Invoke(() => ArgsHandler.Handle(rawArgs));
+                    List<string> args = new();
+                    string arg;
+                    while (!string.IsNullOrEmpty(arg = reader.ReadLine()))
+                    {
+                        args.Add(arg);
+                    }
+                    m_dispatcher.Invoke(() => ArgsHandler.Handle(args.ToArray()));
                 }
                 catch { }
                 server.Disconnect();
