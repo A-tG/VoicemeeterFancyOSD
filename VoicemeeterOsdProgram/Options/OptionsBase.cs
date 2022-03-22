@@ -55,6 +55,17 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
+        public bool TryParseFrom(string toPropertyName, string fromVal)
+        {
+            try
+            {
+                ParseFrom(toPropertyName, fromVal);
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
         public List<string> GetOptionDescription(string memberName) => GetOptionDescription(GetType().GetProperty(memberName));
 
         protected bool IsSimpleType(Type t) => t.IsPrimitive || t.IsEnum || 
@@ -92,20 +103,9 @@ namespace VoicemeeterOsdProgram.Options
             eventIfNotEqual?.Invoke(this, newVal);
         }
 
-        protected bool TryParseFrom(string toPropertyName, string fromVal)
-        {
-            try
-            {
-                ParseFrom(toPropertyName, fromVal);
-                return true;
-            }
-            catch { }
-            return false;
-        }
-
         protected void ParseFrom(string toPropertyName, string fromVal)
         {
-            var prop = GetType().GetProperty(toPropertyName);
+            var prop = GetType().GetProperty(toPropertyName, BindingFlags.Public);
             ParseFrom(prop, fromVal);
         }
 
