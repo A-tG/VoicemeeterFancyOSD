@@ -9,8 +9,8 @@ namespace VoicemeeterOsdProgram.Core
 
         static TrayIconManager()
         {
-            AppDomain.CurrentDomain.UnhandledException += (_, _) => Application.Current.Dispatcher.Invoke(() => Destroy());
-
+            Application.Current.DispatcherUnhandledException += (_, _) => Destroy();
+            AppDomain.CurrentDomain.UnhandledException += (_, _) => Destroy();
             m_trayIcon = new();
         }
 

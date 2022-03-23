@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using TopmostApp.Interop;
@@ -21,8 +22,8 @@ namespace VoicemeeterOsdProgram
 #if DEBUG
             //if (!Debugger.IsAttached) Debugger.Launch();
 #endif
-            AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+            AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
             ArgsHandler.HandleSpecial(args);
 
@@ -32,10 +33,10 @@ namespace VoicemeeterOsdProgram
                 return;
             }
 
-            Thread thread = new(async () =>
+            Thread thread = new(() =>
             {
                 ComponentDispatcher.ThreadFilterMessage += OnTerminationSignal;
-                await AppLifeManager.StartAsyn(args, () =>
+                AppLifeManager.Start(args, () =>
                 {
                     m_app = new();
                     m_app.Run();
@@ -49,21 +50,10 @@ namespace VoicemeeterOsdProgram
 
         private static void ShowExceptionMsgBox(Exception ex)
         {
-            try
-            {
-                string trace = ex?.StackTrace ?? string.Empty;
-#if !DEBUG
-                using var reader = new StringReader(trace);
-                trace = reader.ReadLine();
-#endif
+            const string message = "PRESS Ctrl + C TO COPY THIS TEXT\n" + "Unhandled exception:\n";
 
-                string msg = "PRESS Ctrl + C TO COPY THIS TEXT\n" +
-                    "Unhandled exception:\n" +
-                    $"{ex?.Message}\n" +
-                    trace;
-                MessageBox.Show(msg, Name, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch { }
+            MessageBox.Show($"{message} {ex.Message} {ex.StackTrace}", Name, MessageBoxButton.OK, MessageBoxImage.Error);
+            Environment.Exit(1);
         }
 
         private static void OnTerminationSignal(ref MSG msg, ref bool handled)

@@ -28,7 +28,7 @@ namespace VoicemeeterOsdProgram
             }
         }
 
-        public static async Task StartAsyn(string[] args, Action action)
+        public static void Start(string[] args, Action action)
         {
             if (IsAlreadyRunning)
             {
@@ -38,7 +38,6 @@ namespace VoicemeeterOsdProgram
 
             m_dispatcher = Dispatcher.CurrentDispatcher;
 
-            await ArgsHandler.HandleAsync(args);
             Thread pipeServerThread = new(CreatePipeServer)
             {
                 IsBackground = true,

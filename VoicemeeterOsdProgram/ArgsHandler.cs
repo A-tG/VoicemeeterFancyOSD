@@ -82,9 +82,9 @@ namespace VoicemeeterOsdProgram
             string option = args[++i];
             string val = args[++i];
             bool isSaveToConfig = false;
-            if (i < len)
+            if (++i < len)
             {
-                bool.TryParse(args[++i], out isSaveToConfig);
+                bool.TryParse(args[i], out isSaveToConfig);
             }
 
             switch (category.ToLower())

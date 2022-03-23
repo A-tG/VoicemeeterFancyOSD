@@ -25,7 +25,7 @@ namespace VoicemeeterOsdProgram.Options
         private static bool m_isWatcherEnabled;
         private static bool m_isWatcherPaused;
         private static bool m_isInit = false;
-        private static readonly Dispatcher m_disp = Dispatcher.CurrentDispatcher;
+        private static Dispatcher m_disp;
 
         static OptionsStorage()
         {
@@ -39,15 +39,17 @@ namespace VoicemeeterOsdProgram.Options
         {
             if (m_isInit) return;
 
+            m_isInit = true;
+
             await ValidateConfigFileAsync();
 
+            m_disp = Dispatcher.CurrentDispatcher;
             m_watcher.Path = Path.GetDirectoryName(m_path);
             m_watcher.Filter = Path.GetFileName(m_path);
             m_watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
             m_watcher.Changed += OnConfigFileChanged;
             IsWatcherEnabled = true;
 
-            m_isInit = true;
         }
 
         public static bool IsWatcherEnabled
@@ -97,6 +99,8 @@ namespace VoicemeeterOsdProgram.Options
         public static async Task<bool> TrySaveAsync()
         {
             bool result = false;
+            if (!m_isInit) return result;
+
             IsWatcherPaused = true;
 
             try
@@ -126,6 +130,8 @@ namespace VoicemeeterOsdProgram.Options
         public static async Task<bool> TryReadAsync()
         {
             bool result = false;
+            if (!m_isInit) return result;
+
             IsWatcherPaused = false;
 
             try
