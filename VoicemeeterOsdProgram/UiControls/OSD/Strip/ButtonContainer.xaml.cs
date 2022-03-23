@@ -13,7 +13,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     public partial class ButtonContainer : ContentControl
     {
         public IOsdRootElement OsdParent;
-        private const int HighlightAnimFadeOutTimeMs = 150;
+
+        private const int HighlightAnimFadeOutTimeMs = 125;
 
         private DoubleAnimation m_highlightAnim;
 
