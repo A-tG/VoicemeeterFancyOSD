@@ -14,21 +14,17 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     {
         public IOsdRootElement OsdParent;
 
-        private const int HighlightAnimFadeOutTimeMs = 125;
-
-        private DoubleAnimation m_highlightAnim;
+        private DoubleAnimation m_highlightAnim = new()
+        {
+            From = 0.0,
+            To = 1.2,
+            Duration = new Duration(TimeSpan.FromMilliseconds(125)),
+            FillBehavior = FillBehavior.Stop
+        };
 
         public ButtonContainer()
         {
             InitializeComponent();
-
-            m_highlightAnim = new()
-            {
-                From = 0.0,
-                To = 1.2,
-                Duration = new Duration(TimeSpan.FromMilliseconds(HighlightAnimFadeOutTimeMs)),
-                FillBehavior = FillBehavior.Stop
-            };
         }
 
         public void Highlight()

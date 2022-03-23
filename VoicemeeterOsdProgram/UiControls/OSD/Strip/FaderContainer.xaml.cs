@@ -15,22 +15,18 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     {
         public IOsdRootElement OsdParent;
 
-        private const int HighlightAnimFadeOutTimeMs = 250;
-
-        private DoubleAnimation m_highlightAnim;
+        private DoubleAnimation m_highlightAnim = new()
+        {
+            From = 0.9,
+            To = 0.0,
+            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut },
+            Duration = new Duration(TimeSpan.FromMilliseconds(250)),
+            FillBehavior = FillBehavior.Stop
+        };
 
         public FaderContainer()
         {
             InitializeComponent();
-
-            m_highlightAnim = new()
-            {
-                From = 0.9,
-                To = 0.0,
-                EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut },
-                Duration = new Duration(TimeSpan.FromMilliseconds(HighlightAnimFadeOutTimeMs)),
-                FillBehavior = FillBehavior.Stop
-            };
         }
 
         private void OnFaderMouseWheel(object sender, MouseWheelEventArgs e)
