@@ -1,5 +1,9 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
@@ -11,9 +15,22 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     {
         public IOsdRootElement OsdParent;
 
+        private const int HighlightAnimFadeOutTimeMs = 250;
+
+        private DoubleAnimation m_highlightAnim;
+
         public FaderContainer()
         {
             InitializeComponent();
+
+            m_highlightAnim = new()
+            {
+                From = 0.9,
+                To = 0.0,
+                EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut },
+                Duration = new Duration(TimeSpan.FromMilliseconds(HighlightAnimFadeOutTimeMs)),
+                FillBehavior = FillBehavior.Stop
+            };
         }
 
         private void OnFaderMouseWheel(object sender, MouseWheelEventArgs e)
@@ -39,6 +56,11 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             if (sender is not Slider slider) return;
 
             slider.Value = 0;
+        }
+
+        public void Highlight()
+        {
+            HighlightWrap.BeginAnimation(Border.OpacityProperty, m_highlightAnim);
         }
     }
 }

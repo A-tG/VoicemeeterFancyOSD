@@ -14,18 +14,30 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentControl.Resources>
-    <local:ClrChangeSlider x:Name="Fader" Style="{DynamicResource FaderStyle}" Focusable="False"
+    <Grid>
+        <Border x:Name="HighlightWrap"
+                Width="20"
+                Height="{Binding ActualHeight, ElementName=Fader, Mode=OneWay}"
+                BorderBrush="{Binding Background, ElementName=Fader, Mode=OneWay}"
+                CornerRadius="10" BorderThickness="1"
+                Opacity="0">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" BlurRadius="20" Color="{Binding Foreground.Color, ElementName=Fader}"/>
+            </Border.Effect>
+        </Border>
+        <local:ClrChangeSlider x:Name="Fader" Style="{DynamicResource FaderStyle}" Focusable="False"
                            MinHeight="140"
                            Foreground="White" GreaterThanValChangeClr="0"
                            Minimum="-60" Maximum="12" TickFrequency="0.1" SmallChange="0" LargeChange="0"
                            IsSnapToTickEnabled="True"
                            HorizontalAlignment="Center" VerticalAlignment="Stretch" Orientation="Vertical"
                            MouseWheel="OnFaderMouseWheel" MouseDoubleClick="OnFaderMouseDoubleClick">
-        <local:ClrChangeSlider.Background>
-            <SolidColorBrush Color="{DynamicResource VmActiveElementMainColor}"/>
-        </local:ClrChangeSlider.Background>
-        <local:ClrChangeSlider.SecondBg>
-            <SolidColorBrush Color="{DynamicResource VmActiveElementRedColor}"/>
-        </local:ClrChangeSlider.SecondBg>
-    </local:ClrChangeSlider>
+            <local:ClrChangeSlider.Background>
+                <SolidColorBrush Color="{DynamicResource VmActiveElementMainColor}"/>
+            </local:ClrChangeSlider.Background>
+            <local:ClrChangeSlider.SecondBg>
+                <SolidColorBrush Color="{DynamicResource VmActiveElementRedColor}"/>
+            </local:ClrChangeSlider.SecondBg>
+        </local:ClrChangeSlider>
+    </Grid>
 </ContentControl>

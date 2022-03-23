@@ -36,6 +36,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             }
 
             Visibility = System.Windows.Visibility.Visible;
+            Highlight();
 
             // To prevent triggering OnFaderValueChanged
             Fader.isIgnoreValueChanged = true;
