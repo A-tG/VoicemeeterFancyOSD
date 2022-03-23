@@ -14,10 +14,8 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentControl.Resources>
-    <Grid>
+    <Grid Margin="1">
         <Border x:Name="HighlightWrap" Opacity="0"
-                Width="{Binding ActualWidth, ElementName=Btn, Mode=OneWay}"
-                Height="{Binding ActualHeight, ElementName=Btn, Mode=OneWay}"
                 BorderBrush="{Binding Foreground, ElementName=Btn, Mode=OneWay}"
                 CornerRadius="{Binding CornerRadius, ElementName=Btn, Mode=OneWay}"
                 BorderThickness="4" RenderTransformOrigin="0.5,0.5">
@@ -31,7 +29,7 @@
                          FontSize="14" FontWeight="Medium"
                          Width="35" Height="22"
                          VerticalAlignment="Center" HorizontalAlignment="Center"
-                         Padding="0" Margin="1" BorderThickness="1">
+                         Padding="0" BorderThickness="1">
         </local:OutlineTglBtn>
     </Grid>
 </ContentControl>
