@@ -38,6 +38,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                 OsdParent.HasChangesFlag = true;
             }
 
+            Highlight();
             Visibility = System.Windows.Visibility.Visible;
             Btn.State = (uint)e.newVal;
         }

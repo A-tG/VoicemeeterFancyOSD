@@ -14,9 +14,22 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentControl.Resources>
-    <local:OutlineTglBtn Style="{DynamicResource StripBtnBaseStyle}" x:Name="Btn" Focusable="False"
+    <Grid>
+        <Border x:Name="HighlightWrap"
+                Width="{Binding ActualWidth, ElementName=Btn, Mode=OneWay}"
+                Height="{Binding ActualHeight, ElementName=Btn, Mode=OneWay}"
+                BorderBrush="{Binding Foreground, ElementName=Btn, Mode=OneWay}"
+                CornerRadius="{Binding CornerRadius, ElementName=Btn, Mode=OneWay}"
+                BorderThickness="4">
+            <Border.Effect>
+                <BlurEffect Radius="4"/>
+            </Border.Effect>
+        </Border>
+        <local:OutlineTglBtn Style="{DynamicResource StripBtnBaseStyle}" x:Name="Btn" Focusable="False"
                          FontSize="14" FontWeight="Medium"
                          Width="35" Height="22"
                          VerticalAlignment="Center" HorizontalAlignment="Center"
-                         Padding="0" Margin="1" BorderThickness="1"/>
+                         Padding="0" Margin="1" BorderThickness="1">
+        </local:OutlineTglBtn>
+    </Grid>
 </ContentControl>
