@@ -22,7 +22,6 @@ namespace VoicemeeterOsdProgram
             public const string Updater = "updater";
         }
 
-
         public static void HandleSpecial(string[] args)
         {
             var len = args.Length;

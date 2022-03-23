@@ -11,6 +11,7 @@ namespace VoicemeeterOsdProgram.Options
         private bool m_isInteractable = false;
         private uint m_durationMs = 2000;
         private double m_backgroundOpacity = 0.9;
+        private bool m_animationsEnabled = true;
         private HashSet<StripElements> m_alwaysShowElements = new();
         private HashSet<uint> m_ignoreStripsIndexes = new();
 
@@ -56,6 +57,13 @@ namespace VoicemeeterOsdProgram.Options
                 }
                 HandlePropertyChange(ref m_backgroundOpacity, ref value, BackgroundOpacityChanged);
             }
+        }
+
+        [Description("Enable animations for elements of OSD (Buttons, Faders)")]
+        public bool AnimationsEnabled
+        {
+            get => m_animationsEnabled;
+            set => HandlePropertyChange(ref m_animationsEnabled, ref value, AnimationsEnabledChanged);
         }
 
         [Description("Always show these elements on any Strip change. Multiple values separated by commas. Example: AlwaysShowElements = Mute, Buses")]
@@ -122,6 +130,7 @@ namespace VoicemeeterOsdProgram.Options
         public event EventHandler<bool> IsInteractableChanged;
         public event EventHandler<uint> DurationMsChanged;
         public event EventHandler<double> BackgroundOpacityChanged;
+        public event EventHandler<bool> AnimationsEnabledChanged;
         public event EventHandler<HashSet<StripElements>> AlwaysShowElementsChanged;
         public event EventHandler<HashSet<uint>> IgnoreStripsIndexesChanged;
     }
