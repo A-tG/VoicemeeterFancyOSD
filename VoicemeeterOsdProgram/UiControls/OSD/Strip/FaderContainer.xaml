@@ -17,7 +17,6 @@
     <Grid>
         <Border x:Name="HighlightWrap"
                 Width="20"
-                Height="{Binding ActualHeight, ElementName=Fader, Mode=OneWay}"
                 BorderBrush="{Binding Background, ElementName=Fader, Mode=OneWay}"
                 CornerRadius="10" BorderThickness="1"
                 Opacity="0">

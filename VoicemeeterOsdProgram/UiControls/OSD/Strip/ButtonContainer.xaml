@@ -15,7 +15,7 @@
         </ResourceDictionary>
     </ContentControl.Resources>
     <Grid>
-        <Border x:Name="HighlightWrap"
+        <Border x:Name="HighlightWrap" Opacity="0"
                 Width="{Binding ActualWidth, ElementName=Btn, Mode=OneWay}"
                 Height="{Binding ActualHeight, ElementName=Btn, Mode=OneWay}"
                 BorderBrush="{Binding Foreground, ElementName=Btn, Mode=OneWay}"
