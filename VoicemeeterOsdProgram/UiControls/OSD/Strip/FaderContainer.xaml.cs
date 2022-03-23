@@ -60,6 +60,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         public void Highlight()
         {
+            if (!Options.OptionsStorage.Osd.AnimationsEnabled) return;
+
             HighlightWrap.BeginAnimation(Border.OpacityProperty, m_highlightAnim);
         }
     }

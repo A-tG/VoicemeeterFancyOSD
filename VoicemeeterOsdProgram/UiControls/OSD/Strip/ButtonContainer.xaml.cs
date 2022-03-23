@@ -33,6 +33,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         public void Highlight()
         {
+            if (!Options.OptionsStorage.Osd.AnimationsEnabled) return;
+
             if (HighlightWrap.RenderTransform is not ScaleTransform t)
             {
                 HighlightWrap.RenderTransform = t = new ScaleTransform(0, 0, 0.5d, 0.5d);
