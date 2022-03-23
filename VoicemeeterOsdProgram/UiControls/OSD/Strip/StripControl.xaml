@@ -13,13 +13,13 @@
         <SolidColorBrush Color="{DynamicResource VmSepColor}"/>
     </UserControl.BorderBrush>
     <Grid>
-        <Border x:Name="HighlightWrap" BorderThickness="1" Opacity="0" CornerRadius="6"
+        <Border x:Name="HighlightWrap" BorderThickness="2" Opacity="0" CornerRadius="6"
                 RenderTransformOrigin="0.5,0.5">
             <Border.BorderBrush>
                 <SolidColorBrush Color="{DynamicResource VmActiveElementMainColor}" Opacity="1"/>
             </Border.BorderBrush>
             <Border.Effect>
-                <BlurEffect Radius="6"/>
+                <BlurEffect Radius="12"/>
             </Border.Effect>
         </Border>
         <DockPanel Name="ContentWrap" LastChildFill="True">

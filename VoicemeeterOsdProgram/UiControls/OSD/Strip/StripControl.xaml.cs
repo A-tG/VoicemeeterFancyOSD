@@ -18,7 +18,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             From = 1,
             To = 0,
             Duration = TimeSpan.FromMilliseconds(500),
-            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseIn },
+            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.HoldEnd
         };
 
