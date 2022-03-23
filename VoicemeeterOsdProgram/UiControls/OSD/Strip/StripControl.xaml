@@ -12,43 +12,54 @@
     <UserControl.BorderBrush>
         <SolidColorBrush Color="{DynamicResource VmSepColor}"/>
     </UserControl.BorderBrush>
-    <DockPanel Name="ContentWrap" LastChildFill="True">
-        <TextBlock Name="StripLabel" Text="STRIP_LABEL"
+    <Grid>
+        <Border x:Name="HighlightWrap" BorderThickness="1" Opacity="0" CornerRadius="6"
+                RenderTransformOrigin="0.5,0.5">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="{DynamicResource VmActiveElementMainColor}" Opacity="1"/>
+            </Border.BorderBrush>
+            <Border.Effect>
+                <BlurEffect Radius="6"/>
+            </Border.Effect>
+        </Border>
+        <DockPanel Name="ContentWrap" LastChildFill="True">
+            <TextBlock Name="StripLabel" Text="STRIP_LABEL"
                    DockPanel.Dock="Top" MaxWidth="75"
                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"
                    TextTrimming="CharacterEllipsis" FontSize="16" FontWeight="Bold">
-            <TextBlock.Foreground>
-                <SolidColorBrush Color="{DynamicResource VmDarkTextColor}"/>
-            </TextBlock.Foreground>
-        </TextBlock>
-        
-        <Grid Name="ControlElements" HorizontalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+                <TextBlock.Foreground>
+                    <SolidColorBrush Color="{DynamicResource VmDarkTextColor}"/>
+                </TextBlock.Foreground>
+            </TextBlock>
 
-            <local:FaderContainer x:Name="FaderCont" Grid.Column="0" Grid.Row="0"/>
-            <Grid Grid.Column="1" Grid.Row="0"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid Name="ControlElements" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
-                    <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+
+                <local:FaderContainer x:Name="FaderCont" Grid.Column="0" Grid.Row="0"/>
+                <Grid Grid.Column="1" Grid.Row="0"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <StackPanel Name="AdditionalControlBtns" Grid.Row="0"/>
-                    <StackPanel Name="BusBtnsContainer" Grid.Row="1" Margin="0,0,0,3"/>
-                </Grid>
-                <StackPanel Name="ControlBtnsContainer" Grid.Row="1"
+                    <Grid Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Name="AdditionalControlBtns" Grid.Row="0"/>
+                        <StackPanel Name="BusBtnsContainer" Grid.Row="1" Margin="0,0,0,3"/>
+                    </Grid>
+                    <StackPanel Name="ControlBtnsContainer" Grid.Row="1"
                             HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+                </Grid>
             </Grid>
-        </Grid>
-    </DockPanel>
+        </DockPanel>
+    </Grid>
 </UserControl>

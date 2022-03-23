@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
@@ -10,6 +12,15 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     public partial class StripControl : UserControl, IOsdRootElement
     {
         private bool m_hasChanges = false;
+
+        private DoubleAnimation m_highlightAnim = new()
+        {
+            From = 1,
+            To = 0,
+            Duration = TimeSpan.FromMilliseconds(500),
+            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseIn },
+            FillBehavior = FillBehavior.HoldEnd
+        };
 
         /// <summary>
         /// Resets itself when read
@@ -31,6 +42,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
         public StripControl()
         {
             InitializeComponent();
+            IsVisibleChanged += OnIsVisibleChanged;
         }
 
         public static readonly DependencyProperty ShowHorizontalSeparatorAfterProperty = DependencyProperty.Register(
@@ -45,6 +57,22 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                 BorderThickness = thickness;
                 SetValue(ShowHorizontalSeparatorAfterProperty, value);
             }
+        }
+
+        private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            bool isVisible = Visibility == Visibility.Visible;
+            var wasVisible = (bool)e.OldValue;
+            if (!(isVisible && !wasVisible)) return;
+
+            Highlight();
+        }
+
+        private void Highlight()
+        {
+            if (!Options.OptionsStorage.Osd.AnimationsEnabled) return;
+
+            HighlightWrap.BeginAnimation(Border.OpacityProperty, m_highlightAnim);
         }
     }
 }
