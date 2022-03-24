@@ -15,10 +15,10 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private DoubleAnimation m_highlightAnim = new()
         {
-            From = 1,
+            From = 0.9,
             To = 0,
-            Duration = TimeSpan.FromMilliseconds(500),
-            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut },
+            Duration = TimeSpan.FromMilliseconds(400),
+            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseIn },
             FillBehavior = FillBehavior.HoldEnd
         };
 
