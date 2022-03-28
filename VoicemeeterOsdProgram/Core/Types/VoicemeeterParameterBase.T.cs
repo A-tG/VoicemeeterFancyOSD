@@ -30,7 +30,7 @@ namespace VoicemeeterOsdProgram.Core.Types
         {
             if (!IsEnabled) return;
 
-            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
+            if ((m_api is null) || string.IsNullOrEmpty(m_name)) return;
 
             var res = GetParameter(out T val);
             if (res == 0)
@@ -53,7 +53,7 @@ namespace VoicemeeterOsdProgram.Core.Types
         {
             if (!IsEnabled) return;
 
-            if ((m_api is null) || string.IsNullOrEmpty(m_command)) return;
+            if ((m_api is null) || string.IsNullOrEmpty(m_name)) return;
 
             if (SetParameter(value) == 0)
             {
