@@ -18,7 +18,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
         {
             From = 0.0,
             To = 1.2,
-            Duration = new Duration(TimeSpan.FromMilliseconds(125)),
+            Duration = new Duration(TimeSpan.FromMilliseconds(200)),
             FillBehavior = FillBehavior.Stop
         };
 

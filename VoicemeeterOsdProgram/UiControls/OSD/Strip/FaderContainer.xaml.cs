@@ -20,7 +20,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             From = 0.8,
             To = 0.0,
             EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseIn },
-            Duration = new Duration(TimeSpan.FromMilliseconds(250)),
+            Duration = new Duration(TimeSpan.FromMilliseconds(300)),
             FillBehavior = FillBehavior.Stop
         };
 
