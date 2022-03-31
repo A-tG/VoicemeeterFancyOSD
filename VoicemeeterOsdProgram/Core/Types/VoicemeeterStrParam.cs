@@ -18,9 +18,7 @@ namespace VoicemeeterOsdProgram.Core.Types
             val = "";
             fixed (char* buffPtr = m_strGetValueBuffer)
             {
-                var ptr = (IntPtr)buffPtr;
-
-                var res = m_api.GetParameter(m_nameBuffer, ptr);
+                var res = m_api.GetParameter(m_nameBuffer, (IntPtr)buffPtr);
                 if (res == ResultCodes.Ok)
                 {
                     val = new string(buffPtr);
