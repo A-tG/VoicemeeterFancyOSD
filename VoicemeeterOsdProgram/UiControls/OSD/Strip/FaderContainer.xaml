@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.OSD.Strip"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="100"
-             MinWidth="45" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+             MinWidth="45" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,2,0,2">
     <ContentControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

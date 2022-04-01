@@ -95,7 +95,7 @@
             <Canvas VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <Ellipse Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth}" 
                          Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualHeight}" 
-                         Fill="LightGray" Opacity="0.3" RenderTransformOrigin="0.5,0.5">
+                         Fill="LightGray" Opacity="0.4" RenderTransformOrigin="0.5,0.5">
                     <Ellipse.RenderTransform>
                         <RotateTransform Angle="-70"/>
                     </Ellipse.RenderTransform>
@@ -112,7 +112,7 @@
                 </Ellipse>
                 <Ellipse Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth}" 
                          Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualHeight}" 
-                         Fill="Gray" Opacity="0.3" RenderTransformOrigin="0.5,0.5">
+                         Fill="Gray" Opacity="0.4" RenderTransformOrigin="0.5,0.5">
                     <Ellipse.RenderTransform>
                         <RotateTransform Angle="110"/>
                     </Ellipse.RenderTransform>
@@ -154,34 +154,42 @@
                     <ColumnDefinition x:Name="SliderCol" MinWidth="{TemplateBinding MinWidth}" Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TickBar x:Name="TopTick" Grid.Column="0" Fill="{TemplateBinding Foreground}" Margin="0,0,2,0" Placement="Left" Visibility="Collapsed" Width="4"/>
-                <TickBar x:Name="BottomTick" Grid.Column="2" Fill="{TemplateBinding Foreground}" Margin="2,0,0,0" Placement="Right" Visibility="Collapsed" Width="4"/>
-                <Border x:Name="TrackBackground" CornerRadius="10" Background="Transparent" BorderThickness="1" BorderBrush="{TemplateBinding Background}" Grid.Column="1" HorizontalAlignment="center" Margin="0,5" Width="20">
-                    <Canvas Margin="-1" VerticalAlignment="Bottom">
-                        <Canvas.RenderTransform>
-                            <ScaleTransform ScaleY="-1"/>
-                        </Canvas.RenderTransform>
-                        <Canvas.Clip>
-                            <RectangleGeometry RadiusX="10" RadiusY="10">
-                                <RectangleGeometry.Rect>
-                                    <MultiBinding Converter="{StaticResource RectConverter}">
-                                        <Binding ElementName="TrackBackground" Path="ActualWidth"/>
-                                        <Binding ElementName="TrackBackground" Path="ActualHeight"/>
-                                    </MultiBinding>
-                                </RectangleGeometry.Rect>
-                            </RectangleGeometry>
-                        </Canvas.Clip>
-                        <Rectangle Fill="{TemplateBinding Background}" Visibility="Visible" Width="{Binding Width, ElementName=TrackBackground}">
-                            <Rectangle.Height>
-                                <MultiBinding Converter="{StaticResource SliderSelectionConv}">
-                                    <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}"/>
-                                    <Binding Path="Maximum" RelativeSource="{RelativeSource TemplatedParent}"/>
-                                    <Binding Path="Minimum" RelativeSource="{RelativeSource TemplatedParent}"/>
-                                    <Binding ElementName="TrackBackground" Path="ActualHeight"/>
-                                </MultiBinding>
-                            </Rectangle.Height>
-                        </Rectangle>
-                    </Canvas>
+                <TickBar x:Name="TopTick" Grid.Column="0" Fill="{TemplateBinding Foreground}" Margin="0,0,2,0" 
+                         Placement="Left" Visibility="Collapsed" Width="4"/>
+                <TickBar x:Name="BottomTick" Grid.Column="2" Fill="{TemplateBinding Foreground}" 
+                         Margin="2,0,0,0" Placement="Right" Visibility="Collapsed" Width="4"/>
+                <Border Name="TrackWrap" Width="20" CornerRadius="10" BorderThickness="1"
+                        BorderBrush="{TemplateBinding Background}" Grid.Column="1">
+                    <Grid VerticalAlignment="Stretch">
+                        <Border VerticalAlignment="Bottom" BorderThickness="0">
+                            <Canvas Name="BottomFill" Margin="-1" 
+                                    Height="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth}" 
+                                    Width="{Binding ElementName=TrackWrap, Path=ActualWidth}">
+                                <Ellipse Width="{Binding ElementName=TrackWrap, Path=ActualWidth}" 
+                                         Height="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth}" Fill="{TemplateBinding Background}"></Ellipse>
+                                <Rectangle Width="{Binding ElementName=TrackWrap, Path=ActualWidth}" 
+                                           Fill="{TemplateBinding Background}"
+                                           Height="10" Canvas.Top="-1"/>
+                            </Canvas>
+                        </Border>
+                        <Border x:Name="TrackBackground" Background="Transparent" Margin="0,21,0,21" Grid.Row="0">
+                            <Canvas Margin="-1"  RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Canvas.RenderTransform>
+                                    <ScaleTransform ScaleY="-1"/>
+                                </Canvas.RenderTransform>
+                                <Rectangle Fill="{TemplateBinding Background}" Visibility="Visible" Width="20">
+                                    <Rectangle.Height>
+                                        <MultiBinding Converter="{StaticResource SliderSelectionConv}">
+                                            <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                            <Binding Path="Maximum" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                            <Binding Path="Minimum" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                            <Binding ElementName="TrackBackground" Path="ActualHeight"/>
+                                        </MultiBinding>
+                                    </Rectangle.Height>
+                                </Rectangle>
+                            </Canvas>
+                        </Border>
+                    </Grid>
                 </Border>
                 <Track x:Name="PART_Track" Grid.Column="1">
                     <Track.DecreaseRepeatButton>
