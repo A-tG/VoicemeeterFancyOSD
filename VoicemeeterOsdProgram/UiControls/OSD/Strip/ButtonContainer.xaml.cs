@@ -19,7 +19,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             From = 0.0,
             To = 1.2,
             EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut},
-            Duration = new Duration(TimeSpan.FromMilliseconds(200)),
+            Duration = new Duration(TimeSpan.FromMilliseconds(250)),
             FillBehavior = FillBehavior.Stop
         };
 
