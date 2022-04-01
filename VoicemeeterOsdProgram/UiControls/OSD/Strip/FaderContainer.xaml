@@ -21,7 +21,7 @@
                 CornerRadius="10" BorderThickness="1"
                 Opacity="0">
             <Border.Effect>
-                <DropShadowEffect ShadowDepth="0" BlurRadius="20" Color="{Binding Foreground.Color, ElementName=Fader}"/>
+                <DropShadowEffect ShadowDepth="0" BlurRadius="18" Color="{Binding Foreground.Color, ElementName=Fader}"/>
             </Border.Effect>
         </Border>
         <local:ClrChangeSlider x:Name="Fader" Style="{DynamicResource FaderStyle}" Focusable="False"
