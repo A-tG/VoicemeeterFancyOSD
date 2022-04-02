@@ -25,7 +25,7 @@
         <DockPanel Name="ContentWrap" LastChildFill="True">
             <TextBlock Name="StripLabel" Text="STRIP_LABEL"
                    DockPanel.Dock="Top" MaxWidth="75"
-                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,2,5,2"
                    TextTrimming="CharacterEllipsis" FontSize="16" FontWeight="Bold">
                 <TextBlock.Foreground>
                     <SolidColorBrush Color="{DynamicResource VmDarkTextColor}"/>
