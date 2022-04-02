@@ -14,17 +14,26 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     {
         public IOsdRootElement OsdParent;
 
+        private Duration m_animDuration = new(TimeSpan.FromMilliseconds(300));
         private DoubleAnimation m_highlightAnim = new()
         {
             From = 0.0,
-            To = 1.2,
-            EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut},
-            Duration = new Duration(TimeSpan.FromMilliseconds(250)),
+            To = 1.15,
+            EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut },
+            FillBehavior = FillBehavior.Stop
+        };
+        private DoubleAnimation m_opacityAnim = new()
+        {
+            From = 0.5,
+            To = 0.9,
             FillBehavior = FillBehavior.Stop
         };
 
         public ButtonContainer()
         {
+            m_highlightAnim.Duration = m_animDuration;
+            m_opacityAnim.Duration = m_animDuration;
+
             InitializeComponent();
         }
 
@@ -38,7 +47,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             }
             t.BeginAnimation(ScaleTransform.ScaleYProperty, m_highlightAnim);
             t.BeginAnimation(ScaleTransform.ScaleXProperty, m_highlightAnim);
-            HighlightWrap.BeginAnimation(Border.OpacityProperty, m_highlightAnim);
+            HighlightWrap.BeginAnimation(Border.OpacityProperty, m_opacityAnim);
         }
     }
 }
