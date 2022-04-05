@@ -29,19 +29,19 @@ public static class UtilsFactory
     public static ScreenProvider GetOsdScreenProvider()
     {
         ScreenProvider scrProv = new();
-        scrProv.MainScreenIndex = OptionsStorage.AltOsdOptionsFullscreenApps.Enabled ?
+        scrProv.MainScreenIndex = Globals.Osd.fullscreenAppsWatcher.IsDetected ?
                 OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndex :
                 OptionsStorage.Osd.DisplayIndex;
         // potential memory leaks
         OptionsStorage.Osd.DisplayIndexChanged += (_, val) =>
         {
-            if (OptionsStorage.AltOsdOptionsFullscreenApps.Enabled) return;
+            if (Globals.Osd.fullscreenAppsWatcher.IsDetected) return;
 
             scrProv.MainScreenIndex = val;
         };
         OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndexChanged += (_, val) =>
         {
-            if (!OptionsStorage.AltOsdOptionsFullscreenApps.Enabled) return;
+            if (!Globals.Osd.fullscreenAppsWatcher.IsDetected) return;
 
             scrProv.MainScreenIndex = val;
         };
