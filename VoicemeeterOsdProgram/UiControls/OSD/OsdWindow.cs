@@ -33,7 +33,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             Loaded += (_, _) => UpdatePos();
             SizeChanged += (_, _) => UpdatePosAlign();
             Globals.Osd.screenProvider.MainScreenChanged += OnEventUpdatePos;
-            Globals.Osd.fullscreenAppsWatcher.IsDetectedChanged += OnEventUpdatePos;
             InitAlignEvents();
 
             // triggered if any setting is changed including taskbar resize, display resolution
