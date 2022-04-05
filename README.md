@@ -1,5 +1,5 @@
 # Voicemeeter Fancy OSD
-![](https://i.imgur.com/Z8EJneq.gif)
+![](https://i.imgur.com/qdyqeYF.gif
 
 On-Screen display for [Voicemeeter](https://voicemeeter.com/) that works with fullscreen apps by using private WinAPI without hooking into Graphics API.
 
