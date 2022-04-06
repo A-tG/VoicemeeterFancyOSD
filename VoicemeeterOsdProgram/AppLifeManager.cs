@@ -16,6 +16,8 @@ namespace VoicemeeterOsdProgram
         private static bool? m_isLareadyRunning;
         private static Dispatcher m_dispatcher;
 
+        public static string[] appArgs = Array.Empty<string>();
+
         public static bool IsAlreadyRunning
         {
             get
@@ -35,7 +37,7 @@ namespace VoicemeeterOsdProgram
                 SendArgsToFirstInstance(args);
                 Environment.Exit(0);
             }
-
+            appArgs = args;
             m_dispatcher = Dispatcher.CurrentDispatcher;
 
             Thread pipeServerThread = new(CreatePipeServer)

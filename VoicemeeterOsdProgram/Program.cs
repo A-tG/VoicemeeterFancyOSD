@@ -23,13 +23,13 @@ namespace VoicemeeterOsdProgram
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
-            ArgsHandler.HandleSpecial(args);
-
             if (AppLifeManager.IsAlreadyRunning && (args.Length == 0))
             {
                 MessageBox.Show("The program is already running", Name, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
+            ArgsHandler.HandleSpecial(args);
 
             Thread thread = new(() =>
             {
