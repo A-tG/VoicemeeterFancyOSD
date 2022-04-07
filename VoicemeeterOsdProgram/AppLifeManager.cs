@@ -40,13 +40,6 @@ namespace VoicemeeterOsdProgram
             appArgs = args;
             m_dispatcher = Dispatcher.CurrentDispatcher;
 
-            Thread pipeServerThread = new(CreatePipeServer)
-            {
-                IsBackground = true,
-            };
-            pipeServerThread.SetApartmentState(ApartmentState.STA);
-            pipeServerThread.Start();
-
             action();
         }
 
@@ -60,6 +53,16 @@ namespace VoicemeeterOsdProgram
                 var procs = Process.GetProcessesByName(programName);
                 RequestKillDuplicateProcesses(procs);
             }
+        }
+
+        public static void StartArgsPipeServer()
+        {
+            Thread pipeServerThread = new(CreatePipeServer)
+            {
+                IsBackground = true,
+            };
+            pipeServerThread.SetApartmentState(ApartmentState.STA);
+            pipeServerThread.Start();
         }
 
         private static void SendArgsToFirstInstance(string[] args)

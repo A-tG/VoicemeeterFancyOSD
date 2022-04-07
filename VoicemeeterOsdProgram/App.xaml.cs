@@ -20,6 +20,7 @@ namespace VoicemeeterOsdProgram
 
         async void OnAppStartup(object sender, StartupEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("OnAppStartup");
             var optionsInit = OptionsStorage.InitAsync();
             Task[] tasks = { 
                 OptionsStorage.InitAsync(), 
@@ -42,6 +43,8 @@ namespace VoicemeeterOsdProgram
             }
             await Task.WhenAll(tasks);
             await ArgsHandler.HandleAsync(AppLifeManager.appArgs);
+            // start to recieve command-line arguments from other launched instance
+            AppLifeManager.StartArgsPipeServer();
         }
     }
 }
