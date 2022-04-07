@@ -20,10 +20,9 @@ namespace VoicemeeterOsdProgram
 
         async void OnAppStartup(object sender, StartupEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("OnAppStartup");
             var optionsInit = OptionsStorage.InitAsync();
-            Task[] tasks = { 
-                OptionsStorage.InitAsync(), 
+            Task[] tasks = {
+                VoicemeeterApiClient.InitAsync(), 
                 optionsInit 
             };
 
