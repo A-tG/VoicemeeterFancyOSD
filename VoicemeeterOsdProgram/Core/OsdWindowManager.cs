@@ -23,14 +23,8 @@ namespace VoicemeeterOsdProgram.Core
         {
             Interval = TimeSpan.FromMilliseconds(OptionsStorage.Osd.DurationMs)
         };
-        private static DispatcherTimer m_WaitForVmStartedTimer = new(DispatcherPriority.Normal) 
-        { 
-            Interval = TimeSpan.FromMilliseconds(WaitMsAfterVmStarted) 
-        };
-        private static DispatcherTimer m_WaitForVmTypeTimer = new(DispatcherPriority.Normal)
-        {
-            Interval = TimeSpan.FromMilliseconds(WaitMsAfetVmTypeChange)
-        };
+        private static DispatcherTimer m_WaitForVmStartedTimer = new(DispatcherPriority.Normal);
+        private static DispatcherTimer m_WaitForVmTypeTimer = new(DispatcherPriority.Normal);
 
         private static bool m_isMouseEntered;
         private static bool m_changingOsdContent;
@@ -59,6 +53,7 @@ namespace VoicemeeterOsdProgram.Core
             win.CreateWindow();
             m_window = win;
 
+            SetupWaitTimers(options.WaitForVoicemeeterInitialization);
             m_displayDurationTimer.Tick += TimerTick;
             m_WaitForVmStartedTimer.Tick += WaitForVmTimerTick;
             m_WaitForVmTypeTimer.Tick += WaitForVmTypeTimerTick;
@@ -67,10 +62,10 @@ namespace VoicemeeterOsdProgram.Core
             BgOpacity = options.BackgroundOpacity;
             IsEnabled = !OptionsStorage.Other.Paused;
 
-
             options.IsInteractableChanged += (_, val) => IsInteractable = val;
             options.DurationMsChanged += (_, val) => DurationMs = val;
             options.BackgroundOpacityChanged += (_, val) => BgOpacity = val;
+            options.WaitForVoicemeeterInitializationChanged += (_, val) => SetupWaitTimers(val);
             OptionsStorage.Other.PausedChanged += (_, val) => IsEnabled = !val;
 
             m_wpfControl.CloseBtn.Click += OnCloseButtonClick;
@@ -120,6 +115,19 @@ namespace VoicemeeterOsdProgram.Core
             m_vmParams = Array.Empty<VoicemeeterParameterBase>();
             m_wpfControl.MainContent.Children.Clear();
             m_wpfControl.UpdateLayout();
+        }
+
+        private static void SetupWaitTimers(bool isWait)
+        {
+            var waitMsStarted = 0;
+            var waitMsTypeChange = 0;
+            if (isWait)
+            {
+                waitMsStarted = WaitMsAfterVmStarted;
+                waitMsTypeChange = WaitMsAfetVmTypeChange;
+            }
+            m_WaitForVmStartedTimer.Interval = TimeSpan.FromMilliseconds(waitMsStarted);
+            m_WaitForVmTypeTimer.Interval = TimeSpan.FromMilliseconds(waitMsTypeChange);
         }
 
         private static void TimerTick(object sender, EventArgs e)
