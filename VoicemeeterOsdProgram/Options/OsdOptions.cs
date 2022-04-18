@@ -12,6 +12,7 @@ namespace VoicemeeterOsdProgram.Options
         private uint m_durationMs = 2000;
         private double m_backgroundOpacity = 0.9;
         private bool m_animationsEnabled = true;
+        private bool m_waitForVmInit = true;
         private HashSet<StripElements> m_alwaysShowElements = new();
         private HashSet<uint> m_ignoreStripsIndexes = new();
 
@@ -64,6 +65,13 @@ namespace VoicemeeterOsdProgram.Options
         {
             get => m_animationsEnabled;
             set => HandlePropertyChange(ref m_animationsEnabled, ref value, AnimationsEnabledChanged);
+        }
+
+        [Description("When Voicemeeter is launched it may report changes for a few seconds, it will trigger OSD to show up. This option prevents it.")]
+        public bool WaitForVoicemeeterInitialization
+        {
+            get => m_waitForVmInit;
+            set => HandlePropertyChange(ref m_waitForVmInit, ref value, WaitForVoicemeeterInitializationChanged);
         }
 
         [Description("Always show these elements on any Strip change. Multiple values separated by commas. Example: AlwaysShowElements = Mute, Buses")]
@@ -131,6 +139,7 @@ namespace VoicemeeterOsdProgram.Options
         public event EventHandler<uint> DurationMsChanged;
         public event EventHandler<double> BackgroundOpacityChanged;
         public event EventHandler<bool> AnimationsEnabledChanged;
+        public event EventHandler<bool> WaitForVoicemeeterInitializationChanged;
         public event EventHandler<HashSet<StripElements>> AlwaysShowElementsChanged;
         public event EventHandler<HashSet<uint>> IgnoreStripsIndexesChanged;
     }
