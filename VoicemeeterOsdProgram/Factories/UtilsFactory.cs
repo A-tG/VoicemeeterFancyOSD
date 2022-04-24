@@ -1,4 +1,5 @@
 ﻿using Atg.Utils;
+using AtgDev.Utils;
 using System;
 using TopmostApp.Helpers;
 using VoicemeeterOsdProgram.Core;
@@ -24,6 +25,19 @@ public static class UtilsFactory
         watcher.IsEnabled = AltOsdOpt.Enabled;
         AltOsdOpt.EnabledChanged += (_, val) => watcher.IsEnabled = val;
         return watcher;
+    }
+
+    public static AutostartManager GetAutostartManager()
+    {
+        AutostartManager autostart = new()
+        {
+            ProgramName = Program.Name,
+            ProgramPath = AppDomain.CurrentDomain.BaseDirectory + "VoicemeeterFancyOsdHost.exe",
+            IconLocation = AppDomain.CurrentDomain.BaseDirectory + "VoicemeeterFancyOsd.exe",
+            IsEnabled = OptionsStorage.Program.Autostart,
+        };
+        OptionsStorage.Program.AutostartChanged += (_, val) => autostart.IsEnabled = val;
+        return autostart;
     }
 
     public static ScreenProvider GetOsdScreenProvider()

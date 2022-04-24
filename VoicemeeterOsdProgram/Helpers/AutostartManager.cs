@@ -6,6 +6,9 @@ namespace AtgDev.Utils
 {
     public class AutostartManager
     {
+        private string m_shortcutPath;
+        private bool m_isEnabled = false;
+
         public AutostartManager()
         {
             if (!OperatingSystem.IsWindows()) throw new PlatformNotSupportedException();
@@ -16,18 +19,40 @@ namespace AtgDev.Utils
 
         public string IconLocation { get; set; }
 
-        public bool TrySetUp()
+        public bool IsEnabled 
+        { 
+            get => m_isEnabled;
+            set
+            {
+                if (m_isEnabled == value) return;
+
+                _ = value ? TryEnable() : TryDisable();
+            }
+        }
+
+        public bool TryEnable()
         {
             try
             {
-                SetUp();
+                Enable();
                 return true;
             }
             catch { }
             return false;
         }
 
-        private void SetUp()
+        public bool TryDisable()
+        {
+            try
+            {
+                Disable();
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        public void Enable()
         {
             const string AppdataVarName = "APPDATA";
             const string StartupPathTail = @"Microsoft\Windows\Start Menu\Programs\Startup";
@@ -60,6 +85,19 @@ namespace AtgDev.Utils
             shortcut.WorkingDirectory = Path.GetDirectoryName(ProgramPath);
             shortcut.IconLocation = string.IsNullOrEmpty(IconLocation) ? ProgramPath : IconLocation;
             shortcut.Save();
+
+            m_shortcutPath = shortcutPath;
+
+            m_isEnabled = true;
+        }
+
+        public void Disable()
+        {
+            if (string.IsNullOrEmpty(m_shortcutPath)) return;
+
+            System.IO.File.Delete(m_shortcutPath);
+
+            m_isEnabled = false;
         }
     }
 }
