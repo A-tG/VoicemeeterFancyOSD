@@ -11,6 +11,7 @@ namespace VoicemeeterOsdProgram.Options
 {
     public static class OptionsStorage
     {
+        public static readonly ProgramOptions Program = new();
         public static readonly OsdOptions Osd = new();
         public static readonly OsdAlternative AltOsdOptionsFullscreenApps = new();
         public static readonly UpdaterOptions Updater = new();
@@ -111,6 +112,7 @@ namespace VoicemeeterOsdProgram.Options
                     Directory.CreateDirectory(directoryPath);
                 }
 
+                OptionsToIniData(Program, nameof(Program));
                 OptionsToIniData(Osd, nameof(Osd));
                 OptionsToIniData(Updater, nameof(Updater));
                 OptionsToIniData(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
@@ -143,6 +145,7 @@ namespace VoicemeeterOsdProgram.Options
                 string fileData = await sr.ReadToEndAsync();
 
                 m_data = m_parser.Parse(fileData);
+                IniDataToOptions(Program, nameof(Program));
                 IniDataToOptions(Osd, nameof(Osd));
                 IniDataToOptions(Updater, nameof(Updater));
                 IniDataToOptions(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
