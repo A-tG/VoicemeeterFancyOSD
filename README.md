@@ -57,5 +57,4 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 * [What "private" API is used](https://blog.adeltax.com/window-z-order-in-windows-10/)
 
 ## Donate to support the project
-[![Paypal Logo](https://www.paypalobjects.com/webstatic/paypalme/images/pp_logo_small.png)](https://www.paypal.me/atgDeveloperMusician/5)
 Check out the Sponsor button (unfortunately, some options may not work)
