@@ -44,6 +44,8 @@ namespace VoicemeeterOsdProgram
             await ArgsHandler.HandleAsync(AppLifeManager.appArgs);
             // start to recieve command-line arguments from other launched instance
             AppLifeManager.StartArgsPipeServer();
+
+            Globals.Init(); // to initialize static fields
         }
     }
 }
