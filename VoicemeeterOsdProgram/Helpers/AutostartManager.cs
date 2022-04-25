@@ -14,8 +14,8 @@ namespace AtgDev.Utils
             if (!OperatingSystem.IsWindows()) throw new PlatformNotSupportedException();
         }
 
-        public string ProgramName { get; set; }
-        public string ProgramPath { get; set; }
+        public string ProgramName { get; init; }
+        public string ProgramPath { get; init; }
 
         public string IconLocation { get; set; }
 
