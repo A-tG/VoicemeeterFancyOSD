@@ -102,7 +102,6 @@ namespace VoicemeeterOsdProgram.UiControls
                     DialogText.Text = msg + updateMsg;
                     DialogText.Inlines.Add(GetVersionLink());
                     url = UpdateManager.LatestRelease.HtmlUrl;
-                    updateBtnText = "Update";
                     break;
                 case UpdaterResult.VersionUpToDate:
                     DialogText.Text = msg + "You're running the latest version";
@@ -187,7 +186,6 @@ namespace VoicemeeterOsdProgram.UiControls
             var copyP = new Progress<double>(CopyProgrChanged);
 
             ProcessUpdaterResult(await UpdateManager.TryUpdateAsync(downloadP, extractP, copyP));
-            IsUpdating = false;
             IsCopying = false;
         }
 
