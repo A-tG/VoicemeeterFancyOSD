@@ -36,6 +36,11 @@ public static class UtilsFactory
         var win8dot1Ver = new Version(6, 3);
         string exe = osVer < win8dot1Ver ? ExeName : ExeHostName;
 
+        if (!AutostartManager.IsOsSupported)
+        {
+            return new AutostartManager();
+        }
+
         AutostartManager autostart = new()
         {
             ProgramName = Program.Name,

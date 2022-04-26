@@ -9,11 +9,6 @@ namespace AtgDev.Utils
         private string m_shortcutPath;
         private bool m_isEnabled = false;
 
-        public AutostartManager()
-        {
-            if (!OperatingSystem.IsWindows()) throw new PlatformNotSupportedException();
-        }
-
         public string ProgramName { get; init; }
         public string ProgramPath { get; init; }
 
@@ -26,33 +21,57 @@ namespace AtgDev.Utils
             {
                 if (m_isEnabled == value) return;
 
-                _ = value ? TryEnable() : TryDisable();
+                TryToggle(value);
             }
         }
 
-        public bool TryEnable()
+        static public bool IsOsSupported => OperatingSystem.IsWindows();
+
+        public bool TryEnable() => TryToggle(true);
+
+        public bool TryDisable() => TryToggle(false);
+
+        public bool TryToggle(bool isEnabled)
         {
             try
             {
-                Enable();
+                Toggle(isEnabled);
                 return true;
             }
             catch { }
             return false;
         }
 
-        public bool TryDisable()
+        public void Enable() => Toggle(true);
+
+        public void Disable() => Toggle(false);
+
+        public void Toggle(bool isEnabled)
         {
-            try
+            if (OperatingSystem.IsWindows())
             {
-                Disable();
-                return true;
+                WinToggle(isEnabled);
             }
-            catch { }
-            return false;
+            else
+            {
+                throw new PlatformNotSupportedException();
+            }
+            m_isEnabled = isEnabled;
         }
 
-        public void Enable()
+        private void WinToggle(bool isEnabled)
+        {
+            if (isEnabled)
+            {
+                WinEnable();
+            }
+            else
+            {
+                WinDisable();
+            }
+        }
+
+        private void WinEnable()
         {
             const string AppdataVarName = "APPDATA";
             const string StartupPathTail = @"Microsoft\Windows\Start Menu\Programs\Startup";
@@ -87,17 +106,14 @@ namespace AtgDev.Utils
             shortcut.Save();
 
             m_shortcutPath = shortcutPath;
-
-            m_isEnabled = true;
         }
 
-        public void Disable()
+        private void WinDisable()
         {
             if (string.IsNullOrEmpty(m_shortcutPath)) return;
 
             System.IO.File.Delete(m_shortcutPath);
-
-            m_isEnabled = false;
+            m_shortcutPath = null;
         }
     }
 }
