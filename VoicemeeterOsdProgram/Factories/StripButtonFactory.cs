@@ -11,8 +11,7 @@ namespace VoicemeeterOsdProgram.Factories
 
         public static ButtonContainer GetMono(IOsdRootElement parent)
         {
-            var btnCont = GetCommonBtnCont(parent);
-            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mono);
+            var btnCont = GetCommonMono(parent);
 
             var btn = btnCont.Btn;
             btnCont.Btn.Style = (Style)btnCont.Resources["MonoBtnStyle"];
@@ -28,8 +27,7 @@ namespace VoicemeeterOsdProgram.Factories
 
         public static ButtonContainer GetMonoWithReverse(IOsdRootElement parent)
         {
-            var btnCont = GetCommonBtnCont(parent);
-            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mono);
+            var btnCont = GetCommonMono(parent);
 
             var btn = btnCont.Btn;
             btn.Style = (Style)btnCont.Resources["MonoReverseBtnStyle"];
@@ -46,7 +44,12 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetSolo(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
-            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Solo);
+            btnCont.IsAlwaysVisible = () =>
+            {
+                return !btnCont.IsNeverShow() &&
+                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Solo);
+            };
+            btnCont.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.Solo);
             btnCont.Btn.Style = (Style)btnCont.Resources["SoloBtnStyle"];
             return btnCont;
         }
@@ -54,7 +57,12 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetMute(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
-            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mute);
+            btnCont.IsAlwaysVisible = () =>
+            {
+                return !btnCont.IsNeverShow() &&
+                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mute);
+            };
+            btnCont.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.Mute);
 
             var btn = btnCont.Btn;
             btn.Style = (Style)btnCont.Resources["MuteBtnStyle"];
@@ -79,6 +87,12 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetBusSelect(IOsdRootElement parent, string name)
         {
             var btnCont = GetCommonBtnCont(parent);
+            btnCont.IsAlwaysVisible = () =>
+            {
+                return !btnCont.IsNeverShow() &&
+                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Buses);
+            };
+            btnCont.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.Buses);
             btnCont.Btn.Content = name;
             return btnCont;
         }
@@ -86,7 +100,12 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetEqOn(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
-            btnCont.IsAlwaysVisible = () => OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.EQ);
+            btnCont.IsAlwaysVisible = () =>
+            {
+                return !btnCont.IsNeverShow() &&
+                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.EQ);
+            };
+            btnCont.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.EQ);
             var btn = btnCont.Btn;
             btn.Content = "EQ";
             btn.Style = (Style)btnCont.Resources["EqOnBtnStyle"];
@@ -97,6 +116,18 @@ namespace VoicemeeterOsdProgram.Factories
         {
             ButtonContainer btnCont = new();
             btnCont.OsdParent = parent;
+            return btnCont;
+        }
+
+        private static ButtonContainer GetCommonMono(IOsdRootElement parent)
+        {
+            var btnCont = GetCommonBtnCont(parent);
+            btnCont.IsAlwaysVisible = () =>
+            {
+                return !btnCont.IsNeverShow() && 
+                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mono);
+            };
+            btnCont.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.Mono);
             return btnCont;
         }
     }

@@ -11,28 +11,27 @@ namespace VoicemeeterOsdProgram.Core
         {
             m_wpfControl.AllowAutoUpdateSeparators = false;
 
-            bool hasAnyChildVisible = false;
+            bool hasAnyElementVisible = false;
             var children = m_wpfControl.MainContent.Children;
             var len = children.Count;
             for (int i = 0; i < len; i++)
             {
                 var strip = (StripControl)children[i];
                 // 2 checks to imitate "lazy" evaluation
-                bool hasChanges = strip.HasChangesFlag;
-                if (!hasChanges) continue;
+                if (!strip.HasChangesFlag || !strip.HasAnyChildVisibleFlag) continue;
 
                 bool isIgnore = OptionsStorage.Osd.IgnoreStripsIndexes.Contains((uint)i);
                 if (isIgnore) continue;
 
                 strip.Visibility = Visibility.Visible;
                 UpdateAlwaysVisibleElements(strip);
-                hasAnyChildVisible = true;
+                hasAnyElementVisible = true;
             }
 
             m_wpfControl.UpdateSeparators();
             m_wpfControl.AllowAutoUpdateSeparators = true;
 
-            return hasAnyChildVisible;
+            return hasAnyElementVisible;
         }
 
         private static void UpdateAlwaysVisibleElements(StripControl strip)
@@ -40,20 +39,21 @@ namespace VoicemeeterOsdProgram.Core
             var options = OptionsStorage.Osd;
             foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
             {
-                if (!options.AlwaysShowElements.Contains(StripElements.Buses)) break;
-
-                btnCont.Visibility = Visibility.Visible;
-            }
-
-            foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
-            {
-                if (btnCont.IsAlwaysVisible?.Invoke() ?? false)
+                if (btnCont.IsAlwaysVisible())
                 {
                     btnCont.Visibility = Visibility.Visible;
                 }
             }
 
-            if (options.AlwaysShowElements.Contains(StripElements.Fader))
+            foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
+            {
+                if (btnCont.IsAlwaysVisible())
+                {
+                    btnCont.Visibility = Visibility.Visible;
+                }
+            }
+
+            if (strip.FaderCont.IsAlwaysVisible())
             {
                 strip.FaderCont.Visibility = Visibility.Visible;
             }

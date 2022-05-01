@@ -1,11 +1,13 @@
 ﻿using System;
 using VoicemeeterOsdProgram.Core.Types;
+using System.Windows;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
     partial class ButtonContainer
     {
         public Func<bool> IsAlwaysVisible = () => false;
+        public Func<bool> IsNeverShow = () => false;
 
         private VoicemeeterNumParam m_vmParam;
 
@@ -27,23 +29,31 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
                 m_vmParam = value;
                 m_vmParam.ReadValueChanged += OnVmValueChanged;
-                Btn.Click += OnBtnClick; ;
+                Btn.Click += OnBtnClick;
             }
         }
 
         private void OnVmValueChanged(object sender, ValOldNew<float> e)
         {
-            if (OsdParent is not null)
+            bool hasOsdParent = OsdParent is not null;
+            if (hasOsdParent)
             {
                 OsdParent.HasChangesFlag = true;
             }
 
-            Highlight();
-            Visibility = System.Windows.Visibility.Visible;
+            if (!IsNeverShow())
+            {
+                Highlight();
+                Visibility = Visibility.Visible;
+                if (hasOsdParent)
+                {
+                    OsdParent.HasAnyChildVisibleFlag = true;
+                }
+            }
             Btn.State = (uint)e.newVal;
         }
 
-        private void OnBtnClick(object sender, System.Windows.RoutedEventArgs e)
+        private void OnBtnClick(object sender, RoutedEventArgs e)
         {
             if (sender is not OutlineTglBtn btn) return;
 

@@ -1,4 +1,5 @@
 ﻿using VoicemeeterOsdProgram.Core.Types;
+using System.Windows;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
@@ -30,13 +31,21 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private void OnVmValueChanged(object sender, ValOldNew<float> e)
         {
-            if (OsdParent is not null)
+            bool hasOsdParent = OsdParent is not null;
+            if (hasOsdParent)
             {
                 OsdParent.HasChangesFlag = true;
             }
 
-            Visibility = System.Windows.Visibility.Visible;
-            Highlight();
+            if (!IsNeverShow())
+            {
+                Visibility = Visibility.Visible;
+                Highlight();
+                if (hasOsdParent)
+                {
+                    OsdParent.HasAnyChildVisibleFlag = true;
+                }
+            }
 
             // To prevent triggering OnFaderValueChanged
             Fader.isIgnoreValueChanged = true;

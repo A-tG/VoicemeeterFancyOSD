@@ -1,7 +1,8 @@
 ﻿using AtgDev.Voicemeeter.Types;
 using System.Collections.Generic;
-using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Core.Types;
+using VoicemeeterOsdProgram.Options;
+using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.OSD;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 
@@ -56,7 +57,7 @@ namespace VoicemeeterOsdProgram.Factories
                 strip.StripLabel.Text = name;
 
                 MakeFaderParam(strip, stripIndex, StripType.Output);
-                strip.FaderCont.OsdParent = strip;
+                InitFader(strip);
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -72,7 +73,7 @@ namespace VoicemeeterOsdProgram.Factories
 
                 MakeLabelParam(strip, i, name, StripType.Output);
                 MakeFaderParam(strip, i, StripType.Output);
-                strip.FaderCont.OsdParent = strip;
+                InitFader(strip);
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -88,7 +89,7 @@ namespace VoicemeeterOsdProgram.Factories
 
                 MakeLabelParam(strip, stripIndex, $"VirtIn{i + 1}", StripType.Input);
                 MakeFaderParam(strip, stripIndex, StripType.Input);
-                strip.FaderCont.OsdParent = strip;
+                InitFader(strip);
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -102,7 +103,7 @@ namespace VoicemeeterOsdProgram.Factories
 
                 MakeLabelParam(strip, i, $"HardIn{i + 1}", StripType.Input);
                 MakeFaderParam(strip, i, StripType.Input);
-                strip.FaderCont.OsdParent = strip;
+                InitFader(strip);
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -184,6 +185,18 @@ namespace VoicemeeterOsdProgram.Factories
             MakeButtonParam(BtnType.Mono, StripType.Input, btn, stripIndex);
             strip.ControlBtnsContainer.Children.Insert(0, btn);
             return strip;
+        }
+
+        private static void InitFader(StripControl strip)
+        {
+            var f = strip.FaderCont;
+            f.OsdParent = strip;
+            f.IsAlwaysVisible = () =>
+            {
+                return !f.IsNeverShow() &&
+                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Fader);
+            };
+            f.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.Fader);
         }
     }
 }

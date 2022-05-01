@@ -12,6 +12,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     public partial class StripControl : UserControl, IOsdRootElement
     {
         private bool m_hasChanges = false;
+        private bool m_hasChildVis = false;
 
         private DoubleAnimation m_highlightAnim = new()
         {
@@ -34,9 +35,26 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                     m_hasChanges = false;
                     return true;
                 }
-                return m_hasChanges;
+                return false;
             }
             set => m_hasChanges = value;
+        }
+
+        /// <summary>
+        /// Resets itself when read
+        /// </summary>
+        public bool HasAnyChildVisibleFlag
+        {
+            get
+            {
+                if (m_hasChildVis)
+                {
+                    m_hasChildVis = false;
+                    return true;
+                }
+                return false;
+            }
+            set => m_hasChildVis = value;
         }
 
         public StripControl()
