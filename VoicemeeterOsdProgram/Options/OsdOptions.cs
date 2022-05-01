@@ -14,6 +14,7 @@ namespace VoicemeeterOsdProgram.Options
         private bool m_animationsEnabled = true;
         private bool m_waitForVmInit = true;
         private HashSet<StripElements> m_alwaysShowElements = new();
+        private HashSet<StripElements> m_neverShowElements = new();
         private HashSet<uint> m_ignoreStripsIndexes = new();
 
         public OsdOptions()
@@ -93,6 +94,25 @@ namespace VoicemeeterOsdProgram.Options
             }
         }
 
+        [Description($"Never show these elements on any Strip change, prioritized over {nameof(AlwaysShowElements)}. Multiple values separated by commas. Example: NeverShowElements = Mute, Buses")]
+        public HashSet<StripElements> NeverShowElements
+        {
+            get => m_neverShowElements;
+            set
+            {
+                if ((value.Count > 1) && value.Contains(StripElements.None))
+                {
+                    value.Remove(StripElements.None);
+                }
+                if (value.Count == 0)
+                {
+                    value.Add(StripElements.None);
+                }
+
+                HandlePropertyChange(ref m_neverShowElements, ref value, NeverShowElementsChanged);
+            }
+        }
+
         [Description("Dont show changes from Inputs or Outputs with these indexes. Numbering is zero-based. Multiple value separated by commas. Example: IgnoreStripsIndexes = 0, 5, 12")]
         public HashSet<uint> IgnoreStripsIndexes
         {
@@ -141,6 +161,7 @@ namespace VoicemeeterOsdProgram.Options
         public event EventHandler<bool> AnimationsEnabledChanged;
         public event EventHandler<bool> WaitForVoicemeeterInitializationChanged;
         public event EventHandler<HashSet<StripElements>> AlwaysShowElementsChanged;
+        public event EventHandler<HashSet<StripElements>> NeverShowElementsChanged;
         public event EventHandler<HashSet<uint>> IgnoreStripsIndexesChanged;
     }
 }
