@@ -14,8 +14,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     public partial class FaderContainer : ContentControl
     {
         public IOsdRootElement OsdParent;
-        public Func<bool> IsAlwaysVisible = () => false;
-        public Func<bool> IsNeverShow = () => false;
 
         private DoubleAnimation m_highlightAnim = new()
         {

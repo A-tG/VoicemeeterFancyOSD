@@ -1,13 +1,15 @@
 ﻿using System;
 using VoicemeeterOsdProgram.Core.Types;
 using System.Windows;
+using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
-    partial class ButtonContainer
+    partial class ButtonContainer : IOsdChildElement
     {
-        public Func<bool> IsAlwaysVisible = () => false;
-        public Func<bool> IsNeverShow = () => false;
+        public Func<bool> IsAlwaysVisible { get; set; } = () => false;
+
+        public Func<bool> IsNeverShow { get; set; } = () => false;
 
         private VoicemeeterNumParam m_vmParam;
 

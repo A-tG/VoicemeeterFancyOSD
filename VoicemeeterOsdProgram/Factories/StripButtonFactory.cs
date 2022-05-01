@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
@@ -44,12 +43,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetSolo(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
-            btnCont.IsAlwaysVisible = () =>
-            {
-                return !btnCont.IsNeverShow() &&
-                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Solo);
-            };
-            btnCont.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.Solo);
+            OsdContentFactory.InitChildElement(btnCont, StripElements.Solo);
             btnCont.Btn.Style = (Style)btnCont.Resources["SoloBtnStyle"];
             return btnCont;
         }
@@ -57,12 +51,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetMute(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
-            btnCont.IsAlwaysVisible = () =>
-            {
-                return !btnCont.IsNeverShow() &&
-                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mute);
-            };
-            btnCont.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.Mute);
+            OsdContentFactory.InitChildElement(btnCont, StripElements.Mute);
 
             var btn = btnCont.Btn;
             btn.Style = (Style)btnCont.Resources["MuteBtnStyle"];
@@ -87,12 +76,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetBusSelect(IOsdRootElement parent, string name)
         {
             var btnCont = GetCommonBtnCont(parent);
-            btnCont.IsAlwaysVisible = () =>
-            {
-                return !btnCont.IsNeverShow() &&
-                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Buses);
-            };
-            btnCont.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.Buses);
+            OsdContentFactory.InitChildElement(btnCont, StripElements.Buses);
             btnCont.Btn.Content = name;
             return btnCont;
         }
@@ -100,12 +84,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetEqOn(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
-            btnCont.IsAlwaysVisible = () =>
-            {
-                return !btnCont.IsNeverShow() &&
-                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.EQ);
-            };
-            btnCont.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.EQ);
+            OsdContentFactory.InitChildElement(btnCont, StripElements.EQ);
             var btn = btnCont.Btn;
             btn.Content = "EQ";
             btn.Style = (Style)btnCont.Resources["EqOnBtnStyle"];
@@ -122,12 +101,7 @@ namespace VoicemeeterOsdProgram.Factories
         private static ButtonContainer GetCommonMono(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
-            btnCont.IsAlwaysVisible = () =>
-            {
-                return !btnCont.IsNeverShow() && 
-                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Mono);
-            };
-            btnCont.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.Mono);
+            OsdContentFactory.InitChildElement(btnCont, StripElements.Mono);
             return btnCont;
         }
     }

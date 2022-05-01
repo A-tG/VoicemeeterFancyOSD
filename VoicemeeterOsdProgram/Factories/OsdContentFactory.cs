@@ -38,6 +38,16 @@ namespace VoicemeeterOsdProgram.Factories
             m_selButtons = null;
         }
 
+        public static void InitChildElement(IOsdChildElement element, StripElements type)
+        {
+            element.IsAlwaysVisible = () =>
+            {
+                return !element.IsNeverShow() &&
+                    OptionsStorage.Osd.AlwaysShowElements.Contains(type);
+            };
+            element.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(type);
+        }
+
         private static void InitVmParameters()
         {
             foreach (var p in m_vmParams)
@@ -191,12 +201,7 @@ namespace VoicemeeterOsdProgram.Factories
         {
             var f = strip.FaderCont;
             f.OsdParent = strip;
-            f.IsAlwaysVisible = () =>
-            {
-                return !f.IsNeverShow() &&
-                    OptionsStorage.Osd.AlwaysShowElements.Contains(StripElements.Fader);
-            };
-            f.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(StripElements.Fader);
+            InitChildElement(f, StripElements.Fader);
         }
     }
 }

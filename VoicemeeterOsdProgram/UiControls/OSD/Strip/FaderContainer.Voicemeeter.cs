@@ -1,10 +1,16 @@
 ﻿using VoicemeeterOsdProgram.Core.Types;
 using System.Windows;
+using VoicemeeterOsdProgram.Types;
+using System;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
-    partial class FaderContainer
+    partial class FaderContainer : IOsdChildElement
     {
+        public Func<bool> IsAlwaysVisible { get; set; } = () => false;
+
+        public Func<bool> IsNeverShow { get; set; } = () => false;
+
         private VoicemeeterNumParam m_vmParam;
 
         public VoicemeeterNumParam VmParameter
