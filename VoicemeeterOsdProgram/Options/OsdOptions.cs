@@ -131,6 +131,9 @@ namespace VoicemeeterOsdProgram.Options
                 case nameof(AlwaysShowElements):
                     AlwaysShowElements = new(ParseEnumerableFrom<StripElements>(fromVal, ","));
                     return true;
+                case nameof(NeverShowElements):
+                    NeverShowElements = new(ParseEnumerableFrom<StripElements>(fromVal, ","));
+                    return true;
                 case nameof(IgnoreStripsIndexes):
                     IgnoreStripsIndexes = new(ParseEnumerableFrom<uint>(fromVal, ","));
                     return true;
@@ -145,6 +148,9 @@ namespace VoicemeeterOsdProgram.Options
             {
                 case nameof(AlwaysShowElements):
                     toVal = string.Join(", ", AlwaysShowElements);
+                    return true;
+                case nameof(NeverShowElements):
+                    toVal = string.Join(", ", NeverShowElements);
                     return true;
                 case nameof(IgnoreStripsIndexes):
                     toVal = string.Join(", ", IgnoreStripsIndexes);
