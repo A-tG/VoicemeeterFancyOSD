@@ -81,15 +81,7 @@ namespace VoicemeeterOsdProgram.Options
             get => m_alwaysShowElements;
             set
             {
-                if ((value.Count > 1) && value.Contains(StripElements.None))
-                {
-                    value.Remove(StripElements.None);
-                }
-                if (value.Count == 0)
-                {
-                    value.Add(StripElements.None);
-                }
-
+                HandleStripElementsCollection(value);
                 HandlePropertyChange(ref m_alwaysShowElements, ref value, AlwaysShowElementsChanged);
             }
         }
@@ -100,15 +92,7 @@ namespace VoicemeeterOsdProgram.Options
             get => m_neverShowElements;
             set
             {
-                if ((value.Count > 1) && value.Contains(StripElements.None))
-                {
-                    value.Remove(StripElements.None);
-                }
-                if (value.Count == 0)
-                {
-                    value.Add(StripElements.None);
-                }
-
+                HandleStripElementsCollection(value);
                 HandlePropertyChange(ref m_neverShowElements, ref value, NeverShowElementsChanged);
             }
         }
@@ -157,6 +141,18 @@ namespace VoicemeeterOsdProgram.Options
                     return true;
                 default:
                     return base.TryParseTo(fromPropertyName, out toVal);
+            }
+        }
+
+        private void HandleStripElementsCollection(ICollection<StripElements> elements)
+        {
+            if ((elements.Count > 1) && elements.Contains(StripElements.None))
+            {
+                elements.Remove(StripElements.None);
+            }
+            if (elements.Count == 0)
+            {
+                elements.Add(StripElements.None);
             }
         }
 
