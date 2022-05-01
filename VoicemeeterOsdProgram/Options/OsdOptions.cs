@@ -13,8 +13,8 @@ namespace VoicemeeterOsdProgram.Options
         private double m_backgroundOpacity = 0.9;
         private bool m_animationsEnabled = true;
         private bool m_waitForVmInit = true;
-        private HashSet<StripElements> m_alwaysShowElements = new();
-        private HashSet<StripElements> m_neverShowElements = new();
+        private HashSet<StripElements> m_alwaysShowElements = new(new[] { StripElements.None });
+        private HashSet<StripElements> m_neverShowElements = new(new[] { StripElements.None });
         private HashSet<uint> m_ignoreStripsIndexes = new();
 
         public OsdOptions()
