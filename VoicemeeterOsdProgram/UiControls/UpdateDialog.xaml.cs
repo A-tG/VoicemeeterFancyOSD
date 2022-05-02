@@ -91,6 +91,7 @@ namespace VoicemeeterOsdProgram.UiControls
                     break;
                 case UpdaterResult.Updated:
                     DialogText.Text = msg + "Updated, restarting the program...";
+                    UpdateBtn.IsEnabled = false;
                     isUpdating = true;
                     break;
                 case UpdaterResult.NewVersionFound:
@@ -105,6 +106,7 @@ namespace VoicemeeterOsdProgram.UiControls
                     break;
                 case UpdaterResult.VersionUpToDate:
                     DialogText.Text = msg + "You're running the latest version";
+                    UpdateBtn.IsEnabled = false;
                     break;
                 case UpdaterResult.ConnectionError:
                     DialogText.Text = msg + "Error: unable to connect to the server";
