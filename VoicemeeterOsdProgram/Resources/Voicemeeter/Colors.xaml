@@ -13,4 +13,7 @@
     <Color x:Key="VmActiveElementOrangeColor">#E8B15F</Color>
     <Color x:Key="VmActiveElementCyanColor">#68E6F8</Color>
     <Color x:Key="VmActiveElementBlueColor">#296FFD</Color>
+
+    <Color x:Key="VmLimiterBg">#3C3C00</Color>
+    <Color x:Key="VmLimiterFg">#FFFF1E</Color>
 </ResourceDictionary>
