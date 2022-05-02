@@ -9,6 +9,7 @@ namespace VoicemeeterOsdProgram.Options
     {
         private bool m_dontShowIfVoicemeeterVisible = true;
         private bool m_isInteractable = false;
+        private double m_scale = 1;
         private uint m_durationMs = 2000;
         private double m_backgroundOpacity = 0.9;
         private bool m_animationsEnabled = true;
@@ -34,6 +35,26 @@ namespace VoicemeeterOsdProgram.Options
         {
             get => m_isInteractable;
             set => HandlePropertyChange(ref m_isInteractable, ref value, IsInteractableChanged);
+        }
+
+        [Description("Scale of OSD. Maximum: 2, minimum: 0.5")]
+        public double Scale
+        {
+            get => m_scale;
+            set
+            {
+                const double min = 0.5;
+                const double max = 2;
+                if (value < min)
+                {
+                    value = min;
+                }
+                if (value > max)
+                {
+                    value = max;
+                }
+                HandlePropertyChange(ref m_scale, ref value, ScaleChanged);
+            }
         }
 
         [Description("How long OSD is displayed (in milliseconds)")]
@@ -158,6 +179,7 @@ namespace VoicemeeterOsdProgram.Options
 
         public event EventHandler<bool> DontShowIfVoicemeeterVisibleChanged;
         public event EventHandler<bool> IsInteractableChanged;
+        public event EventHandler<double> ScaleChanged;
         public event EventHandler<uint> DurationMsChanged;
         public event EventHandler<double> BackgroundOpacityChanged;
         public event EventHandler<bool> AnimationsEnabledChanged;
