@@ -102,7 +102,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             if (SecondBg is null) SecondBg = Background;
             if (FirstFg is null) FirstFg = Foreground;
             if (SecondFg is null) SecondFg = Foreground;
-            System.Diagnostics.Debug.WriteLine(GreaterOrEqualValChangeClr);
             UpdateColor();
         }
     }
