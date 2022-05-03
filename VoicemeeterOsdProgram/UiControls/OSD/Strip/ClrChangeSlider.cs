@@ -16,7 +16,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
         }
 
         public static readonly DependencyProperty FirstBgProperty = DependencyProperty.Register(
-            "FirstBg", typeof(Brush), typeof(ClrChangeSlider));
+            nameof(FirstBg), typeof(Brush), typeof(ClrChangeSlider));
         public Brush FirstBg
         {
             get => (Brush)GetValue(FirstBgProperty);
@@ -24,19 +24,43 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
         }
 
         public static readonly DependencyProperty SecondBgProperty = DependencyProperty.Register(
-            "SecondBg", typeof(Brush), typeof(ClrChangeSlider));
+            nameof(SecondBg), typeof(Brush), typeof(ClrChangeSlider));
         public Brush SecondBg
         {
             get => (Brush)GetValue(SecondBgProperty);
             set => SetValue(SecondBgProperty, value);
         }
 
-        public static readonly DependencyProperty GreaterThanValChangeClrProperty = DependencyProperty.Register(
-            "GreaterThanValChangeClr", typeof(int), typeof(ClrChangeSlider));
-        public int GreaterThanValChangeClr
+        public static readonly DependencyProperty FirstFgProperty = DependencyProperty.Register(
+            nameof(FirstFg), typeof(Brush), typeof(ClrChangeSlider));
+        public Brush FirstFg
         {
-            get => (int)GetValue(GreaterThanValChangeClrProperty);
+            get => (Brush)GetValue(FirstFgProperty);
+            set => SetValue(FirstFgProperty, value);
+        }
+
+        public static readonly DependencyProperty SecondFgProperty = DependencyProperty.Register(
+            nameof(SecondFg), typeof(Brush), typeof(ClrChangeSlider));
+        public Brush SecondFg
+        {
+            get => (Brush)GetValue(SecondFgProperty);
+            set => SetValue(SecondFgProperty, value);
+        }
+
+        public static readonly DependencyProperty GreaterThanValChangeClrProperty = DependencyProperty.Register(
+            nameof(GreaterThanValChangeClr), typeof(double?), typeof(ClrChangeSlider));
+        public double? GreaterThanValChangeClr
+        {
+            get => (double?)GetValue(GreaterThanValChangeClrProperty);
             set => SetValue(GreaterThanValChangeClrProperty, value);
+        }
+
+        public static readonly DependencyProperty GreaterOrEqualValChangeClrProperty = DependencyProperty.Register(
+            nameof(GreaterOrEqualValChangeClr), typeof(double?), typeof(ClrChangeSlider));
+        public double? GreaterOrEqualValChangeClr
+        {
+            get => (double?)GetValue(GreaterOrEqualValChangeClrProperty);
+            set => SetValue(GreaterOrEqualValChangeClrProperty, value);
         }
 
         public bool IsChangeToSecondColor
@@ -49,6 +73,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                 if (m_isChangeToSecondColor != value)
                 {
                     Background = value ? SecondBg : FirstBg;
+                    Foreground = value ? SecondFg : FirstFg;
                     m_isChangeToSecondColor = value;
                 }
             }
@@ -61,12 +86,23 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private void UpdateColor()
         {
-            IsChangeToSecondColor = Value > GreaterThanValChangeClr;
+            if (GreaterOrEqualValChangeClr is null)
+            {
+                IsChangeToSecondColor = Value > GreaterThanValChangeClr;
+            }
+            else if (GreaterThanValChangeClr is null)
+            {
+                IsChangeToSecondColor = Value >= GreaterOrEqualValChangeClr;
+            }
         }
 
         private void OnInit(object sender, EventArgs e)
         {
             if (FirstBg is null) FirstBg = Background;
+            if (SecondBg is null) SecondBg = Background;
+            if (FirstFg is null) FirstFg = Foreground;
+            if (SecondFg is null) SecondFg = Foreground;
+            System.Diagnostics.Debug.WriteLine(GreaterOrEqualValChangeClr);
             UpdateColor();
         }
     }
