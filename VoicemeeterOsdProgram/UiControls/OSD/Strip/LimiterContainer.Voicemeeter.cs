@@ -7,6 +7,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
     partial class LimiterContainer : IOsdChildElement
     {
+        public IOsdRootElement OsdParent { get; set; }
+
         public Func<bool> IsAlwaysVisible { get; set; } = () => false;
 
         public Func<bool> IsNeverShow { get; set; } = () => false;
@@ -54,15 +56,15 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             }
 
             // To prevent triggering OnFaderValueChanged
-            /*Limiter.isIgnoreValueChanged = true;
+            Limiter.isCustomFlag = true;
             Limiter.Value = e.newVal;
-            Limiter.isIgnoreValueChanged = false;*/
+            Limiter.isCustomFlag = false;
         }
 
         private void OnValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-            var limiter = sender as LimiterContainer;
-            //if ((limiter is null) || limiter.isIgnoreValueChanged) return;
+            var limiter = sender as SliderExt;
+            if ((limiter is null) || limiter.isCustomFlag) return;
 
             m_vmParam.Write((float)e.NewValue);
         }

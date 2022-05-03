@@ -20,6 +20,8 @@ namespace VoicemeeterOsdProgram.Factories
 
         public static string EqOn(int i) => GetCommandHead(i, StripType.Output) + "EQ.on";
 
+        public static string Limiter(int i) => GetCommandHead(i, StripType.Input) + "Limit";
+
         private static string GetCommandHead(int i, StripType type = StripType.Input)
         {
             return type switch

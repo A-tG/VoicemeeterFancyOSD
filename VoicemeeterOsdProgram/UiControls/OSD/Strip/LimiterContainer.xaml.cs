@@ -12,8 +12,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// </summary>
     public partial class LimiterContainer : ContentControl
     {
-        public IOsdRootElement OsdParent;
-
         private DoubleAnimation m_highlightAnim = new()
         {
             From = 1,
@@ -32,7 +30,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
         {
             if (sender is not Slider slider) return;
 
-            slider.Value = 0;
+            slider.Value = 12;
         }
 
         public void Highlight()

@@ -43,7 +43,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetSolo(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
-            OsdContentFactory.InitChildElement(btnCont, StripElements.Solo);
+            OsdContentFactory.InitChildElement(parent, btnCont, StripElements.Solo);
             btnCont.Btn.Style = (Style)btnCont.Resources["SoloBtnStyle"];
             return btnCont;
         }
@@ -51,7 +51,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetMute(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
-            OsdContentFactory.InitChildElement(btnCont, StripElements.Mute);
+            OsdContentFactory.InitChildElement(parent, btnCont, StripElements.Mute);
 
             var btn = btnCont.Btn;
             btn.Style = (Style)btnCont.Resources["MuteBtnStyle"];
@@ -76,7 +76,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetBusSelect(IOsdRootElement parent, string name)
         {
             var btnCont = GetCommonBtnCont(parent);
-            OsdContentFactory.InitChildElement(btnCont, StripElements.Buses);
+            OsdContentFactory.InitChildElement(parent, btnCont, StripElements.Buses);
             btnCont.Btn.Content = name;
             return btnCont;
         }
@@ -84,7 +84,7 @@ namespace VoicemeeterOsdProgram.Factories
         public static ButtonContainer GetEqOn(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
-            OsdContentFactory.InitChildElement(btnCont, StripElements.EQ);
+            OsdContentFactory.InitChildElement(parent, btnCont, StripElements.EQ);
             var btn = btnCont.Btn;
             btn.Content = "EQ";
             btn.Style = (Style)btnCont.Resources["EqOnBtnStyle"];
@@ -101,7 +101,7 @@ namespace VoicemeeterOsdProgram.Factories
         private static ButtonContainer GetCommonMono(IOsdRootElement parent)
         {
             var btnCont = GetCommonBtnCont(parent);
-            OsdContentFactory.InitChildElement(btnCont, StripElements.Mono);
+            OsdContentFactory.InitChildElement(parent, btnCont, StripElements.Mono);
             return btnCont;
         }
     }

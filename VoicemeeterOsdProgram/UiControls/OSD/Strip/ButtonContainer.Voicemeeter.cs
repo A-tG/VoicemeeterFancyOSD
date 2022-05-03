@@ -7,6 +7,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
     partial class ButtonContainer : IOsdChildElement
     {
+        public IOsdRootElement OsdParent { get; set; }
+
         public Func<bool> IsAlwaysVisible { get; set; } = () => false;
 
         public Func<bool> IsNeverShow { get; set; } = () => false;

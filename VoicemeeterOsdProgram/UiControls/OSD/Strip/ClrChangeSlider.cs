@@ -5,10 +5,8 @@ using System.Windows.Media;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
-    public class ClrChangeSlider : Slider
+    public class ClrChangeSlider : SliderExt
     {
-        public bool isIgnoreValueChanged;
-
         private bool m_isChangeToSecondColor = false;
 
         public ClrChangeSlider() : base()

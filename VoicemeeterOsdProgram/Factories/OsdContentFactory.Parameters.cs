@@ -33,6 +33,13 @@ namespace VoicemeeterOsdProgram.Factories
             m_vmParams.Add(p);
         }
 
+        private static void MakeLimiterParam(StripControl strip, int i)
+        {
+            var p = new VoicemeeterNumParam(VoicemeeterApiClient.Api, Limiter(i));
+            strip.LimiterCont.VmParameter = p;
+            m_vmParams.Add(p);
+        }
+
         private static VoicemeeterNumParam GetSelParam(int i, ButtonContainer btnCtn)
         {
             VoicemeeterNumParam p = new(VoicemeeterApiClient.Api, Sel(i));

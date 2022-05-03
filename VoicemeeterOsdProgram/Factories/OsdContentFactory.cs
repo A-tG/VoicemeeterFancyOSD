@@ -38,8 +38,9 @@ namespace VoicemeeterOsdProgram.Factories
             m_selButtons = null;
         }
 
-        public static void InitChildElement(IOsdChildElement element, StripElements type)
+        public static void InitChildElement(IOsdRootElement parent, IOsdChildElement element, StripElements type)
         {
+            element.OsdParent = parent;
             element.IsAlwaysVisible = () =>
             {
                 return !element.IsNeverShow() &&
@@ -67,7 +68,7 @@ namespace VoicemeeterOsdProgram.Factories
                 strip.StripLabel.Text = name;
 
                 MakeFaderParam(strip, stripIndex, StripType.Output);
-                InitFader(strip);
+                InitChildElement(strip, strip.FaderCont, StripElements.Fader);
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -83,7 +84,7 @@ namespace VoicemeeterOsdProgram.Factories
 
                 MakeLabelParam(strip, i, name, StripType.Output);
                 MakeFaderParam(strip, i, StripType.Output);
-                InitFader(strip);
+                InitChildElement(strip, strip.FaderCont, StripElements.Fader);
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -99,7 +100,10 @@ namespace VoicemeeterOsdProgram.Factories
 
                 MakeLabelParam(strip, stripIndex, $"VirtIn{i + 1}", StripType.Input);
                 MakeFaderParam(strip, stripIndex, StripType.Input);
-                InitFader(strip);
+                MakeLimiterParam(strip, stripIndex);
+
+                InitChildElement(strip, strip.FaderCont, StripElements.Fader);
+                InitChildElement(strip, strip.LimiterCont, StripElements.Limiter);
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -113,7 +117,10 @@ namespace VoicemeeterOsdProgram.Factories
 
                 MakeLabelParam(strip, i, $"HardIn{i + 1}", StripType.Input);
                 MakeFaderParam(strip, i, StripType.Input);
-                InitFader(strip);
+                MakeLimiterParam(strip, i);
+
+                InitChildElement(strip, strip.FaderCont, StripElements.Fader);
+                InitChildElement(strip, strip.LimiterCont, StripElements.Limiter);
 
                 osd.MainContent.Children.Add(strip);
             }
@@ -195,13 +202,6 @@ namespace VoicemeeterOsdProgram.Factories
             MakeButtonParam(BtnType.Mono, StripType.Input, btn, stripIndex);
             strip.ControlBtnsContainer.Children.Insert(0, btn);
             return strip;
-        }
-
-        private static void InitFader(StripControl strip)
-        {
-            var f = strip.FaderCont;
-            f.OsdParent = strip;
-            InitChildElement(f, StripElements.Fader);
         }
     }
 }

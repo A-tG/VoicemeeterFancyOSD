@@ -7,6 +7,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
     partial class FaderContainer : IOsdChildElement
     {
+        public IOsdRootElement OsdParent { get; set; }
+
         public Func<bool> IsAlwaysVisible { get; set; } = () => false;
 
         public Func<bool> IsNeverShow { get; set; } = () => false;
@@ -54,15 +56,15 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             }
 
             // To prevent triggering OnFaderValueChanged
-            Fader.isIgnoreValueChanged = true;
+            Fader.isCustomFlag = true;
             Fader.Value = e.newVal;
-            Fader.isIgnoreValueChanged = false;
+            Fader.isCustomFlag = false;
         }
 
         private void OnFaderValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
             var fader = sender as ClrChangeSlider;
-            if ((fader is null) || fader.isIgnoreValueChanged) return;
+            if ((fader is null) || fader.isCustomFlag) return;
 
             m_vmParam.Write((float)e.NewValue);
         }

@@ -13,8 +13,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// </summary>
     public partial class FaderContainer : ContentControl
     {
-        public IOsdRootElement OsdParent;
-
         private DoubleAnimation m_highlightAnim = new()
         {
             From = 1,
