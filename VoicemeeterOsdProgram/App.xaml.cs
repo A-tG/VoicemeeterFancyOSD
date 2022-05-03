@@ -48,12 +48,12 @@ namespace VoicemeeterOsdProgram
 
             Globals.Init(); // to initialize static fields
 
-            await CheckProgramDirectoryIO();
+            await CheckProgramDirectoryIOAsync();
         }
 
-        private async Task CheckProgramDirectoryIO()
+        private async Task CheckProgramDirectoryIOAsync()
         {
-            const string Msg = "Unable to create files/directories in the program's directory. Updater and persistent config may not work." + 
+            const string Msg = "Unable to create files/directories in the program's directory. Updater and persistent config might not work." + 
                 "\nPossible solution: if program is located in Program Files move it to a different folder/drive";
 
             string path = AppDomain.CurrentDomain.BaseDirectory;
