@@ -41,7 +41,7 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="Lim" Foreground="{TemplateBinding Foreground}" Grid.Row="0" FontSize="12" FontWeight="Thin"/>
                     <TextBlock Grid.Row="1" HorizontalAlignment="Center" FontSize="12" FontWeight="Thin"
-                    Text="{Binding Value, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}, StringFormat={}{0}}" />
+                    Text="{Binding Value, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}, StringFormat={}{0:N0}}" />
                 </Grid>
             </Border>
         </Border>
