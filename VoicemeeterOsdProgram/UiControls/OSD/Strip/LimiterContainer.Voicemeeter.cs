@@ -32,6 +32,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                 }
 
                 m_vmParam = value;
+                Limiter.Value = m_vmParam.Value;
                 m_vmParam.ReadValueChanged += OnVmValueChanged;
                 Limiter.ValueChanged += OnValueChanged;
             }

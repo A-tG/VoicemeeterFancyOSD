@@ -17,6 +17,8 @@ namespace VoicemeeterOsdProgram.Core.Types
             m_api = api;
             m_name = command;
             m_nameBuffer = Marshal.StringToHGlobalAnsi(m_name);
+
+            Read();
         }
 
         public string Name { get => m_name; }

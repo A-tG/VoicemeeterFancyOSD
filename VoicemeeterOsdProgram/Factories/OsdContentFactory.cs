@@ -30,8 +30,6 @@ namespace VoicemeeterOsdProgram.Factories
             osd.UpdateSeparators();
             osd.AllowAutoUpdateSeparators = true;
 
-            InitVmParameters();
-
             vmParams = m_vmParams.ToArray();
             m_vmParams.Clear();
             m_vmParams = null;
@@ -47,14 +45,6 @@ namespace VoicemeeterOsdProgram.Factories
                     OptionsStorage.Osd.AlwaysShowElements.Contains(type);
             };
             element.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(type);
-        }
-
-        private static void InitVmParameters()
-        {
-            foreach (var p in m_vmParams)
-            {
-                p.Read();
-            }
         }
 
         private static void AddVirtualOutputs(OsdControl osd)

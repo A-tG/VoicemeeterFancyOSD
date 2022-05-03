@@ -32,6 +32,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                 }
 
                 m_vmParam = value;
+                Fader.Value = m_vmParam.Value;
                 m_vmParam.ReadValueChanged += OnVmValueChanged;
                 Fader.ValueChanged += OnFaderValueChanged;
             }
@@ -61,7 +62,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             Fader.isCustomFlag = false;
         }
 
-        private void OnFaderValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+        private void OnFaderValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var s = sender as ClrChangeSlider;
             if ((s is null) || s.isCustomFlag) return;
