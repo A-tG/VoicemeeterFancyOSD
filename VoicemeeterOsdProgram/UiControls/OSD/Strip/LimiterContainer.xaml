@@ -29,11 +29,12 @@
                 <SolidColorBrush Color="{DynamicResource VmDarkElementColor}"/>
             </Border.BorderBrush>
             <local:SliderExt Style="{DynamicResource VmLimiter}" x:Name="Limiter" Focusable="False"
-                    MinHeight="140"
-                    Minimum="-40" Maximum="12" TickFrequency="1" Value="0"
-                    SmallChange="0" LargeChange="0"
-                    IsSnapToTickEnabled="True"
-                    HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                             MinHeight="140"
+                             Minimum="-40" Maximum="12" TickFrequency="1" Value="0"
+                             SmallChange="0" LargeChange="0"
+                             IsSnapToTickEnabled="True"
+                             HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                             MouseDoubleClick="OnMouseDoubleClick">
                 <local:SliderExt.Background>
                     <SolidColorBrush Color="{DynamicResource VmLimiterBg}"/>
                 </local:SliderExt.Background>
