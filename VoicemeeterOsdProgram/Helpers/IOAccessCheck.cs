@@ -6,7 +6,9 @@ namespace VoicemeeterOsdProgram.Helpers
 {
     static public class IOAccessCheck
     {
-        static public async Task<bool> TryCreateRandomFileAsync(string folderPath, ref Exception e)
+        public static Exception LastException { get; private set; }
+
+        static public async Task<bool> TryCreateRandomFileAsync(string folderPath)
         {
             try
             {
@@ -18,12 +20,12 @@ namespace VoicemeeterOsdProgram.Helpers
             }
             catch (Exception ex)
             {
-                e = ex;
+                LastException = ex;
             }
             return false;
         }
 
-        static public bool TryCreateRandomDirectory(string inFolder, ref Exception e)
+        static public bool TryCreateRandomDirectory(string inFolder)
         {
             try
             {
@@ -37,7 +39,7 @@ namespace VoicemeeterOsdProgram.Helpers
             }
             catch (Exception ex)
             {
-                e = ex;
+                LastException = ex;
             }
             return false;
         }

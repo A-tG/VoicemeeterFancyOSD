@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Helpers;
@@ -46,6 +47,23 @@ namespace VoicemeeterOsdProgram
             AppLifeManager.StartArgsPipeServer();
 
             Globals.Init(); // to initialize static fields
+
+            await CheckProgramDirectoryIO();
+        }
+
+        private async Task CheckProgramDirectoryIO()
+        {
+            const string Msg = "Unable to create files/directories in the program's directory. Updater and persistent config may not work." + 
+                "\nPossible solution: if program is located in Program Files move it to a different folder/drive";
+
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            bool canCreateDirs = IOAccessCheck.TryCreateRandomDirectory(path);
+            bool canCreateFiles = await IOAccessCheck.TryCreateRandomFileAsync(path);
+            if (!canCreateDirs || !canCreateFiles)
+            {
+                var exType = IOAccessCheck.LastException.GetType();
+                await Task.Run(() => MessageBox.Show($"{exType}\n{Msg}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning));
+            }
         }
     }
 }
