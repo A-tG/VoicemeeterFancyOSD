@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls"
+             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.OSD.Strip"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="100"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -28,20 +28,27 @@
             <Border.BorderBrush>
                 <SolidColorBrush Color="{DynamicResource VmDarkElementColor}"/>
             </Border.BorderBrush>
-            <local:SliderExt Style="{DynamicResource VmLimiter}" x:Name="Limiter" Focusable="False"
-                             MinHeight="140"
-                             Minimum="-40" Maximum="12" TickFrequency="1" Value="0"
-                             SmallChange="0" LargeChange="0"
-                             IsSnapToTickEnabled="True"
-                             HorizontalAlignment="Center" VerticalAlignment="Stretch"
-                             MouseDoubleClick="OnMouseDoubleClick">
-                <local:SliderExt.Background>
+            <local:ClrChangeSlider Style="{DynamicResource VmLimiter}" x:Name="Limiter" Focusable="False"
+                                   GreaterOrEqualValChangeClr="12"
+                                   MinHeight="140"
+                                   Minimum="-40" Maximum="12" TickFrequency="1" Value="0"
+                                   SmallChange="0" LargeChange="0"
+                                   IsSnapToTickEnabled="True"
+                                   HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                                   MouseDoubleClick="OnMouseDoubleClick">
+                <local:ClrChangeSlider.Background>
                     <SolidColorBrush Color="{DynamicResource VmLimiterBg}"/>
-                </local:SliderExt.Background>
-                <local:SliderExt.Foreground>
+                </local:ClrChangeSlider.Background>
+                <local:ClrChangeSlider.SecondBg>
+                    <SolidColorBrush Color="{DynamicResource VmDarkElementColor}"/>
+                </local:ClrChangeSlider.SecondBg>
+                <local:ClrChangeSlider.Foreground>
                     <SolidColorBrush Color="{DynamicResource VmLimiterFg}"/>
-                </local:SliderExt.Foreground>
-            </local:SliderExt>
+                </local:ClrChangeSlider.Foreground>
+                <local:ClrChangeSlider.SecondFg>
+                    <SolidColorBrush Color="White"/>
+                </local:ClrChangeSlider.SecondFg>
+            </local:ClrChangeSlider>
         </Border>
     </Grid>
 </ContentControl>
