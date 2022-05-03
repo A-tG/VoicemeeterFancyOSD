@@ -24,6 +24,7 @@
         Mute,
         EQ,
         Solo,
-        Buses
+        Buses,
+        Limiter
     }
 }
