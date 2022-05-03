@@ -9,7 +9,7 @@ May work with older Windows versions (not older than Windows 7) but OSD will wor
 It might not work with some OpenGL games, even in borderless mode. Basically if "Xbox Game Bar" or standard Volume/Media pop-up is not showing on top of the game, neither will this OSD.
 
 # Installation and Usage
-The program is portable, no installation required, but you need [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/6.0/runtime). Download the latest version from the [Releases](https://github.com/A-tG/VoicemeeterFancyOSD/releases) page, unpack and launch VoicemeeterFancyOsdHost.exe (on Windows 8.1 or newer), or VoicemeeterFancyOsd.exe if VoicemeeterFancyOsdHost.exe doesn't work for some reason or you are using older version of Windows.
+The program is portable, no installation required, but you need [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/6.0/runtime). Download the latest version from the [Releases](https://github.com/A-tG/VoicemeeterFancyOSD/releases) page, unpack and launch VoicemeeterFancyOsdHost.exe (on Windows 8.1 or newer), or VoicemeeterFancyOsd.exe if VoicemeeterFancyOsdHost.exe doesn't work for some reason or you are using older version of Windows. Do not use program from system's *Program Files* or there might be problems creating config file or installing updates because of Windows permisions/policies.
 
 Settings are stored in *PROGRAM_LOCATION\config\config.ini* (created on program launch if not exist). Settings file can be quickly opened from tray icon's context menu. And options are automatically validated and updated on file change, no need to restart.
 
