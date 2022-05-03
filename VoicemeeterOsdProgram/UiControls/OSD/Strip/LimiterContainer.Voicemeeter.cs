@@ -61,10 +61,10 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             Limiter.isCustomFlag = false;
         }
 
-        private void OnValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+        private void OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            var limiter = sender as SliderExt;
-            if ((limiter is null) || limiter.isCustomFlag) return;
+            var s = sender as SliderExt;
+            if ((s is null) || s.isCustomFlag) return;
 
             m_vmParam.Write((float)e.NewValue);
         }

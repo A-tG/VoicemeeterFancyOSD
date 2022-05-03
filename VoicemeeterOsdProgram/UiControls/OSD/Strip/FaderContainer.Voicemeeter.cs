@@ -63,8 +63,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private void OnFaderValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-            var fader = sender as ClrChangeSlider;
-            if ((fader is null) || fader.isCustomFlag) return;
+            var s = sender as ClrChangeSlider;
+            if ((s is null) || s.isCustomFlag) return;
 
             m_vmParam.Write((float)e.NewValue);
         }
