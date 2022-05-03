@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.OSD.Strip"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="100"
-             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2">
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <ContentControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,26 +16,31 @@
     </ContentControl.Resources>
     <Grid>
         <Border x:Name="HighlightWrap"
-                Width="20"
-                BorderBrush="{Binding Background, ElementName=Limiter, Mode=OneWay}"
+                Width="{Binding ActualWidth, ElementName=LimiterBorder, Mode=OneWay}"
+                BorderBrush="{Binding Foreground, ElementName=Limiter, Mode=OneWay}"
                 CornerRadius="10" BorderThickness="1"
                 Opacity="0">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="0" BlurRadius="18" Color="{Binding Foreground.Color, ElementName=Limiter}"/>
             </Border.Effect>
         </Border>
-        <Slider Style="{DynamicResource VmLimiter}" x:Name="Limiter" Focusable="False"
-                MinHeight="140"
-                Minimum="-40" Maximum="12" TickFrequency="1" Value="0"
-                SmallChange="0" LargeChange="0"
-                IsSnapToTickEnabled="True"
-                HorizontalAlignment="Center" VerticalAlignment="Stretch">
-            <Slider.Background>
-                <SolidColorBrush Color="{DynamicResource VmLimiterBg}"/>
-            </Slider.Background>
-            <Slider.Foreground>
-                <SolidColorBrush Color="{DynamicResource VmLimiterFg}"/>
-            </Slider.Foreground>
-        </Slider>
+        <Border Name="LimiterBorder" Padding="2" CornerRadius="4" BorderThickness="2">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="{DynamicResource VmDarkElementColor}"/>
+            </Border.BorderBrush>
+            <Slider Style="{DynamicResource VmLimiter}" x:Name="Limiter" Focusable="False"
+                    MinHeight="140"
+                    Minimum="-40" Maximum="12" TickFrequency="1" Value="0"
+                    SmallChange="0" LargeChange="0"
+                    IsSnapToTickEnabled="True"
+                    HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                <Slider.Background>
+                    <SolidColorBrush Color="{DynamicResource VmLimiterBg}"/>
+                </Slider.Background>
+                <Slider.Foreground>
+                    <SolidColorBrush Color="{DynamicResource VmLimiterFg}"/>
+                </Slider.Foreground>
+            </Slider>
+        </Border>
     </Grid>
 </ContentControl>

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.OSD.Strip"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="100"
-             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,2,0,2">
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <ContentControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,7 +25,6 @@
             </Border.Effect>
         </Border>
         <local:ClrChangeSlider x:Name="Fader" Style="{DynamicResource FaderStyle}" Focusable="False"
-                           MinHeight="140"
                            Foreground="White" GreaterThanValChangeClr="0"
                            Minimum="-60" Maximum="12" TickFrequency="0.1" SmallChange="0" LargeChange="0"
                            IsSnapToTickEnabled="True"

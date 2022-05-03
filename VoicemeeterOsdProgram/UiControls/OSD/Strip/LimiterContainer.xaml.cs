@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Media.Animation;
+using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
@@ -20,9 +12,34 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// </summary>
     public partial class LimiterContainer : ContentControl
     {
+        public IOsdRootElement OsdParent;
+
+        private DoubleAnimation m_highlightAnim = new()
+        {
+            From = 1,
+            To = 0.0,
+            EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseIn },
+            Duration = new Duration(TimeSpan.FromMilliseconds(300)),
+            FillBehavior = FillBehavior.Stop
+        };
+
         public LimiterContainer()
         {
             InitializeComponent();
+        }
+
+        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is not Slider slider) return;
+
+            slider.Value = 0;
+        }
+
+        public void Highlight()
+        {
+            if (!Options.OptionsStorage.Osd.AnimationsEnabled) return;
+
+            HighlightWrap.BeginAnimation(Border.OpacityProperty, m_highlightAnim);
         }
     }
 }

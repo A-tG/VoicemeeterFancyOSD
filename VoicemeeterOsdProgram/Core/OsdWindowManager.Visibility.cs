@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using VoicemeeterOsdProgram.Options;
-using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.OSD.Strip;
 
 namespace VoicemeeterOsdProgram.Core
@@ -44,7 +43,6 @@ namespace VoicemeeterOsdProgram.Core
                     btnCont.Visibility = Visibility.Visible;
                 }
             }
-
             foreach (ButtonContainer btnCont in strip.ControlBtnsContainer.Children)
             {
                 if (btnCont.IsAlwaysVisible())
@@ -57,6 +55,10 @@ namespace VoicemeeterOsdProgram.Core
             {
                 strip.FaderCont.Visibility = Visibility.Visible;
             }
+            if (strip.LimiterCont.IsAlwaysVisible())
+            {
+                strip.LimiterCont.Visibility = Visibility.Visible;
+            }
         }
 
         private static void ApplyVisibilityToOsdElements(Visibility vis)
@@ -68,6 +70,7 @@ namespace VoicemeeterOsdProgram.Core
             {
                 strip.Visibility = vis;
                 strip.FaderCont.Visibility = vis;
+                strip.LimiterCont.Visibility = vis;
                 foreach (ButtonContainer btnCont in strip.BusBtnsContainer.Children)
                 {
                     btnCont.Visibility = vis;
