@@ -30,7 +30,6 @@
             </Border.BorderBrush>
             <local:ClrChangeSlider Style="{DynamicResource VmLimiter}" x:Name="Limiter" Focusable="False"
                                    GreaterOrEqualValChangeClr="12"
-                                   MinHeight="140"
                                    Minimum="-40" Maximum="12" TickFrequency="1" Value="0"
                                    SmallChange="0" LargeChange="0"
                                    IsSnapToTickEnabled="True"
