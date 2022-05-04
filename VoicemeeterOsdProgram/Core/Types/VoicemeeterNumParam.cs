@@ -22,7 +22,5 @@ namespace VoicemeeterOsdProgram.Core.Types
                 return m_api.SetParameter((IntPtr)command, value);
             }
         }
-
-
     }
 }
