@@ -14,7 +14,7 @@ namespace VoicemeeterOsdProgram.Core.Types
             get => m_value;
             protected set
             {
-                if ((!m_value.Equals(value)) && m_isInit)
+                if (!m_value.Equals(value))
                 {
                     OnReadValueChanged(m_value, value);
                 }
@@ -44,7 +44,6 @@ namespace VoicemeeterOsdProgram.Core.Types
                 {
                     m_value = val;
                 }
-                m_isInit = true;
                 OnValueRead(oldVal, val);
             }
         }

@@ -1,4 +1,5 @@
 ﻿using AtgDev.Voicemeeter;
+using System;
 
 namespace VoicemeeterOsdProgram.Core.Types
 {
@@ -6,8 +7,22 @@ namespace VoicemeeterOsdProgram.Core.Types
     {
         public VoicemeeterNumParam(RemoteApiExtender api, string command) : base(api, command) { }
 
-        public override int GetParameter(out float val) => m_api.GetParameter(m_nameBuffer, out val);
+        unsafe public override int GetParameter(out float val)
+        {
+            fixed (byte* command = m_nameBuffer)
+            {
+                return m_api.GetParameter((IntPtr)command, out val);
+            }
+        }
 
-        public override int SetParameter(float value) => m_api.SetParameter(m_nameBuffer, value);
+        unsafe public override int SetParameter(float value)
+        {
+            fixed (byte* command = m_nameBuffer)
+            {
+                return m_api.SetParameter((IntPtr)command, value);
+            }
+        }
+
+
     }
 }

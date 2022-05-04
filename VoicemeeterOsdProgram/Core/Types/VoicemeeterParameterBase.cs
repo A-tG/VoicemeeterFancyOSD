@@ -1,6 +1,5 @@
 ﻿using AtgDev.Voicemeeter;
-using System;
-using System.Runtime.InteropServices;
+using System.Text;
 
 namespace VoicemeeterOsdProgram.Core.Types
 {
@@ -8,15 +7,15 @@ namespace VoicemeeterOsdProgram.Core.Types
     {
         protected readonly string m_name;
         protected readonly RemoteApiExtender m_api;
-        protected bool m_isInit;
 
-        protected readonly IntPtr m_nameBuffer;
+        protected readonly byte[] m_nameBuffer;
 
         public VoicemeeterParameterBase(RemoteApiExtender api, string command)
         {
             m_api = api;
             m_name = command;
-            m_nameBuffer = Marshal.StringToHGlobalAnsi(m_name);
+
+            m_nameBuffer = GetNullTermAsciiBuffFromString(command);
 
             Read();
         }
@@ -39,9 +38,14 @@ namespace VoicemeeterOsdProgram.Core.Types
 
         public abstract void ClearEvents();
 
-        ~VoicemeeterParameterBase()
+        protected byte[] GetNullTermAsciiBuffFromString(string str)
         {
-            Marshal.FreeHGlobal(m_nameBuffer);
+            var len = str.Length;
+            var buff = new byte[str.Length + 1];
+            Encoding.ASCII.GetBytes(str, 0, len, buff, 0);
+            buff[^1] = 0;
+            return buff;
         }
+
     }
 }

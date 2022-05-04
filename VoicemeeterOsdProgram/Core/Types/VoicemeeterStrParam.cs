@@ -10,7 +10,6 @@ namespace VoicemeeterOsdProgram.Core.Types
         public VoicemeeterStrParam(RemoteApiExtender api, string command) : base(api, command)
         {
             m_value = string.Empty;
-            m_isInit = true;
         }
 
         unsafe public override int GetParameter(out string val)
@@ -18,15 +17,24 @@ namespace VoicemeeterOsdProgram.Core.Types
             val = "";
             fixed (char* buffPtr = m_strGetValueBuffer)
             {
-                var res = m_api.GetParameter(m_nameBuffer, (IntPtr)buffPtr);
-                if (res == ResultCodes.Ok)
+                fixed (byte* command = m_nameBuffer)
                 {
-                    val = new string(buffPtr);
+                    var res = m_api.GetParameter((IntPtr)command, (IntPtr)buffPtr);
+                    if (res == ResultCodes.Ok)
+                    {
+                        val = new string(buffPtr);
+                    }
+                    return res;
                 }
-                return res;
             }
         }
 
-        public override int SetParameter(string value) => m_api.SetParameter(m_nameBuffer, value);
+        unsafe public override int SetParameter(string value)
+        {
+            fixed (byte* command = m_nameBuffer)
+            {
+                return m_api.SetParameter((IntPtr)command, value);
+            }
+        }
     }
 }
