@@ -111,10 +111,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             return viewbox.ActualWidth / fe.ActualWidth;
         }
 
-        public void ReapplyScale()
-        {
-            SetScale(Scale);
-        }
+        public void ReapplyScale() => SetScale(Scale);
 
         private void SetScale(double scale)
         {
