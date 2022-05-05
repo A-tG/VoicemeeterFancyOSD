@@ -149,6 +149,7 @@ namespace VoicemeeterOsdProgram.Options
 
         public override bool TryParseTo(string fromPropertyName, out string toVal)
         {
+            // for decimals and floats use toVal = string.Join(", ", arr.Select(e => e.ToString(CultureInfo.InvariantCulture)));
             switch (fromPropertyName)
             {
                 case nameof(AlwaysShowElements):

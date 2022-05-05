@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -141,7 +142,7 @@ namespace VoicemeeterOsdProgram.Options
             }
             else
             {
-                res = Convert.ChangeType(fromVal, toType);
+                res = Convert.ChangeType(fromVal, toType, CultureInfo.InvariantCulture);
             }
             return res;
         }
@@ -149,7 +150,7 @@ namespace VoicemeeterOsdProgram.Options
         protected string Parse(string fromPropertyName)
         {
             var prop = GetType().GetProperty(fromPropertyName, BindingFlags.Public | BindingFlags.Instance);
-            return prop.GetValue(this).ToString();
+            return Convert.ToString(prop.GetValue(this), CultureInfo.InvariantCulture);
         }
 
         protected IEnumerable<T> ParseEnumerableFrom<T>(string fromVal, string separator)
