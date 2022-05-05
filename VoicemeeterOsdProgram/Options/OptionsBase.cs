@@ -10,15 +10,15 @@ namespace VoicemeeterOsdProgram.Options
 {
     public abstract class OptionsBase
     {
-        private PropertyInfo[] m_Properties;
+        private Dictionary<string, PropertyInfo> m_Properties;
 
-        private PropertyInfo[] Properties
+        private Dictionary<string, PropertyInfo> Properties
         {
             get
             {
                 if (m_Properties is null)
                 {
-                    m_Properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    m_Properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).ToDictionary(p => p.Name);
                 }
                 return m_Properties;
             }
@@ -68,8 +68,9 @@ namespace VoicemeeterOsdProgram.Options
 
         protected void FromDictSkipComplexTypesAuto(Dictionary<string, string> dict, bool isSkip)
         {
-            foreach (var p in Properties)
+            foreach (var item in Properties)
             {
+                var p = item.Value;
                 if (isSkip && !IsSimpleType(p.PropertyType)) continue;
 
                 string name = p.Name;
@@ -83,8 +84,9 @@ namespace VoicemeeterOsdProgram.Options
         public IEnumerable<KeyValuePair<string, string>> ToDictSkipComplexTypesAuto(bool isSkip)
         {
             Dictionary<string, string> dict = new();
-            foreach (var p in Properties)
+            foreach (var item in Properties)
             {
+                var p = item.Value;
                 if (isSkip && !IsSimpleType(p.PropertyType)) continue;
 
                 if (TryParseTo(p.Name, out string val))
@@ -149,8 +151,7 @@ namespace VoicemeeterOsdProgram.Options
 
         protected string Parse(string fromPropertyName)
         {
-            var prop = GetType().GetProperty(fromPropertyName, BindingFlags.Public | BindingFlags.Instance);
-            return Convert.ToString(prop.GetValue(this), CultureInfo.InvariantCulture);
+            return Convert.ToString(Properties[fromPropertyName].GetValue(this), CultureInfo.InvariantCulture);
         }
 
         protected IEnumerable<T> ParseEnumerableFrom<T>(string fromVal, string separator)
