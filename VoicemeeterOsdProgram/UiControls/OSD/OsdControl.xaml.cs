@@ -48,11 +48,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         public double BgOpacity
         {
             get => m_opacity;
-            set
-            {
-                BgBorder.Background.Opacity = value;
-                BgBorder.BorderBrush.Opacity = value;
-            }
+            set => BgBorder.Background.Opacity = value;
         }
 
 
