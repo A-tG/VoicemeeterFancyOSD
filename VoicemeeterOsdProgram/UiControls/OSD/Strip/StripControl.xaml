@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="280" d:DesignWidth="120" 
              VerticalAlignment="Stretch" HorizontalAlignment="Left"
-             Padding="6,0,6,0" Margin="0,8,0,8">
+             Padding="6,0,6,0" Margin="0,4,0,8">
     <UserControl.BorderBrush>
         <SolidColorBrush Color="{DynamicResource VmSepColor}"/>
     </UserControl.BorderBrush>
