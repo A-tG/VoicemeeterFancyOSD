@@ -20,6 +20,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         public bool AllowAutoUpdateSeparators { get; set; } = true;
 
         private double m_scale = 1;
+        private double m_opacity = 1;
         private bool m_isInteractable;
 
         public double Scale
@@ -43,6 +44,17 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
                 m_isInteractable = value;
             }
         }
+
+        public double BgOpacity
+        {
+            get => m_opacity;
+            set
+            {
+                BgBorder.Background.Opacity = value;
+                BgBorder.BorderBrush.Opacity = value;
+            }
+        }
+
 
         public void AdjustContMaxSize()
         {

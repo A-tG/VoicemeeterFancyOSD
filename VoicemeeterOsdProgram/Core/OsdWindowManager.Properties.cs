@@ -28,18 +28,6 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
-        public static double BgOpacity
-        {
-            get => m_wpfControl.Background.Opacity;
-            set
-            {
-                if (value >= 0)
-                {
-                    m_wpfControl.Background.Opacity = value;
-                }
-            }
-        }
-
         public static double Scale
         {
             get => m_wpfControl.Scale;

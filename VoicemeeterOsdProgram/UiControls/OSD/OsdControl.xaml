@@ -14,41 +14,35 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
-    <UserControl.Background>
-        <SolidColorBrush Color="{DynamicResource VmBgMainColor}"/>
-    </UserControl.Background>
 
-    <Viewbox Name="MainContentWrap" StretchDirection="DownOnly">
-        <Grid Name="SizeWrap">
-            <StackPanel Orientation="Horizontal">
-                <local:WrapPanelExt x:Name="MainContent" 
-                                    Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                    Margin="0"/>
-                <Button Name="CloseBtn" Style="{DynamicResource PressButton}"
-                        Margin="5" Padding="0" BorderThickness="0"
-                        Width="20" Height="20"
-                        HorizontalAlignment="Right" VerticalAlignment="Top" 
-                        Visibility="Collapsed" Background="Transparent">
-                    <Viewbox Stretch="Uniform">
-                        <Canvas Width="100" Height="100">
-                            <Path x:Name="Cross" StrokeThickness="16" Stroke="{Binding Foreground, ElementName=CloseBtn}"
-                                  Data="M 0,0 L 100,100 M 0,100 L 100,0"/>
-                        </Canvas>
-                    </Viewbox>
-                </Button>
-            </StackPanel>
-        </Grid>
-    </Viewbox>
-    <!-- Used to add rounded corners -->
-    <UserControl.Clip>
-        <RectangleGeometry RadiusX="8" RadiusY="8">
-            <RectangleGeometry.Rect>
-                <MultiBinding Converter="{StaticResource RectConverter}">
-                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
-                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
-                </MultiBinding>
-            </RectangleGeometry.Rect>
-        </RectangleGeometry>
-    </UserControl.Clip>
+    <Border Name="BgBorder" BorderThickness="1" CornerRadius="12">
+        <Border.Background>
+            <SolidColorBrush Color="{DynamicResource VmBgMainColor}"/>
+        </Border.Background>
+        <Border.BorderBrush>
+            <SolidColorBrush Color="{DynamicResource VmActiveElementMainColor}"/>
+        </Border.BorderBrush>
+
+        <Viewbox Name="MainContentWrap" StretchDirection="DownOnly">
+            <Grid Name="SizeWrap">
+                <StackPanel Orientation="Horizontal">
+                    <local:WrapPanelExt x:Name="MainContent" 
+                                        Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                        Margin="0"/>
+                    <Button Name="CloseBtn" Style="{DynamicResource PressButton}"
+                            Margin="5" Padding="0" BorderThickness="0"
+                            Width="20" Height="20"
+                            HorizontalAlignment="Right" VerticalAlignment="Top" 
+                            Visibility="Collapsed" Background="Transparent">
+                        <Viewbox Stretch="Uniform">
+                            <Canvas Width="100" Height="100">
+                                <Path x:Name="Cross" StrokeThickness="16" Stroke="{Binding Foreground, ElementName=CloseBtn}"
+                                      Data="M 0,0 L 100,100 M 0,100 L 100,0"/>
+                            </Canvas>
+                        </Viewbox>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Viewbox>
+    </Border>
 </UserControl>
