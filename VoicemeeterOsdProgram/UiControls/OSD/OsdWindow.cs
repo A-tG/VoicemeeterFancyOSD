@@ -122,9 +122,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         {
             if (Content is not OsdControl cont) return;
 
-            cont.MainContentWrap.MaxWidth = m_workingArea.Width;
-            cont.MainContentWrap.MaxHeight = m_workingArea.Height;
-            cont.MainContent.MaxWidth = m_workingArea.Width;
+            cont.MaxW = m_workingArea.Width;
+            cont.MaxH = m_workingArea.Height;
         }
 
         private void UpdatePos()

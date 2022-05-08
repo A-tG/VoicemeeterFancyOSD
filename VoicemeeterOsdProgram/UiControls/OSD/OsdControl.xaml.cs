@@ -22,6 +22,30 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         private double m_scale = 1;
         private double m_opacity = 1;
         private bool m_isInteractable;
+        private double m_maxW;
+        private double m_maxH;
+
+        public double MaxW
+        {
+            get => m_maxW;
+            set
+            {
+                var w = value / Scale;
+                MainContentWrap.MaxWidth = w;
+                MainContent.MaxWidth = w;
+                m_maxW = value;
+            }
+        }
+
+        public double MaxH
+        {
+            get => m_maxH;
+            set
+            {
+                MainContentWrap.MaxHeight = value / Scale;
+                m_maxH = value;
+            }
+        }
 
         public double Scale
         {
@@ -29,7 +53,9 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             set
             {
                 m_scale = value;
-                SetScale(value);
+                LayoutTransform = new ScaleTransform(value, value);
+                MaxW = m_maxW;
+                MaxH = m_maxH;
             }
         }
 
@@ -49,35 +75,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         {
             get => m_opacity;
             set => BgBorder.Background.Opacity = value;
-        }
-
-
-        public void AdjustContMaxSize()
-        {
-            // Need to find better solution for automatic resize
-            return;
-
-            /*var scale = GetContentScaleX();
-            if (scale >= 1)
-            {
-                MainContent.MaxWidth = MainContentWrap.MaxWidth;
-                return;
-            }
-            // PROBLEM: When size is decreased but scale < 1 incorrect MaxWidth is assigned
-            MainContent.MaxWidth = MainContentWrap.MaxWidth / scale;*/
-        }
-
-        public bool IsAnyVisibleChild()
-        {
-            var children = MainContent.Children;
-            foreach (UIElement child in children)
-            {
-                if (child.Visibility == Visibility.Visible)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         public void UpdateSeparators()
@@ -123,11 +120,11 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void SetScale(double scale)
         {
-            var elements = MainContent.Children;
+            /*var elements = MainContent.Children;
             foreach (FrameworkElement element in elements)
             {
                 element.LayoutTransform = new ScaleTransform(scale, scale);
-            }
+            }*/
         }
 
         private void OnSizeChange(object sender, SizeChangedEventArgs e)
@@ -136,7 +133,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             {
                 UpdateSeparators();
             }
-            AdjustContMaxSize();
         }
     }
 }
