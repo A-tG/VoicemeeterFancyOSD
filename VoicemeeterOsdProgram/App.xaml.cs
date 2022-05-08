@@ -26,6 +26,8 @@ namespace VoicemeeterOsdProgram
                 VoicemeeterApiClient.InitAsync(), 
                 optionsInit 
             };
+            VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPoolingRate;
+            OptionsStorage.Voicemeeter.ApiPoolingRateChanged += (_, val) => VoicemeeterApiClient.PoolingRate = val;
 
             DpiHelper.Init();
             TrayIconManager.Init();
@@ -42,6 +44,7 @@ namespace VoicemeeterOsdProgram
                 }
             }
             await Task.WhenAll(tasks);
+
             await ArgsHandler.HandleAsync(AppLifeManager.appArgs);
             // start to recieve command-line arguments from other launched instance
             AppLifeManager.StartArgsPipeServer();

@@ -10,20 +10,24 @@ namespace VoicemeeterOsdProgram.Core
 {
     public static class VoicemeeterApiClient
     {
-        private const double SlowTickTimeMs = 1000;
-        private const double NormalTickTime = 1000 / 30;
-        private const double FastTickTimeMs = 1000 / 60;
+        public enum Rate
+        {
+            Slow,
+            Normal,
+            Fast,
+            VeryFast
+        }
 
         private static Timer m_loopTimer = new()
         {
-            AutoReset = true,
-            Interval = NormalTickTime
+            AutoReset = true
         };
         private static VoicemeeterType m_type;
-        private static bool m_isSlowUpdate;
+        private static bool m_isIdling;
         private static bool m_isTypeChanging;
         private static bool m_isVmRunning;
         private static bool m_isVmTurningOn;
+        private static Rate m_poolingRate;
         private static bool m_isInit = false;
 
         static VoicemeeterApiClient()
@@ -31,6 +35,8 @@ namespace VoicemeeterOsdProgram.Core
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
             Application.Current.DispatcherUnhandledException += (_, _) => Exit();
             Application.Current.Exit += (_, _) => Exit();
+
+            PoolingRate = Rate.Normal;
         }
 
         public static async Task InitAsync()
@@ -89,26 +95,48 @@ namespace VoicemeeterOsdProgram.Core
             }
         }
 
-        private static double TickTime
+        public static Rate PoolingRate
         {
-            get => m_loopTimer.Interval;
+            get => m_poolingRate;
             set
             {
-                if ((m_loopTimer.Interval != value) && (value > 0))
+                m_poolingRate = value;
+                if (IsIdling) return;
+
+                double interval = 1000.0 / value switch
                 {
-                    m_loopTimer.Interval = value;
+                    Rate.Slow => 15,
+                    Rate.Normal => 30,
+                    Rate.Fast => 60,
+                    _ => 30
+                };
+                m_loopTimer.Interval = interval;
+            }
+        }
+
+        private static bool IsIdling
+        {
+            get => m_isIdling;
+            set
+            {
+                if (m_isIdling == value) return;
+
+                m_isIdling = value;
+                if (value)
+                {
+                    PoolingInterval = 1000;
+                }
+                else
+                {
+                    PoolingRate = m_poolingRate;
                 }
             }
         }
 
-        private static bool IsSlowUpdate
+        private static double PoolingInterval
         {
-            get => m_isSlowUpdate;
-            set
-            {
-                m_isSlowUpdate = value;
-                TickTime = value ? SlowTickTimeMs : NormalTickTime;
-            }
+            get => m_loopTimer.Interval;
+            set => m_loopTimer.Interval = value;
         }
 
         public static async Task LoadAsync()
@@ -165,7 +193,7 @@ namespace VoicemeeterOsdProgram.Core
             if (!IsHandlingParams)
             {
                 _ = Api.IsParametersDirty();
-                IsSlowUpdate = true;
+                IsIdling = true;
                 return;
             }
 
@@ -180,7 +208,7 @@ namespace VoicemeeterOsdProgram.Core
             if (m_isVmTurningOn) return;
 
             bool isRunningActual = IsVoicemeeterRunning;
-            IsSlowUpdate = !isRunningActual;
+            IsIdling = !isRunningActual;
             IsVoicemeeterRunning = isRunningActual;
         }
 
