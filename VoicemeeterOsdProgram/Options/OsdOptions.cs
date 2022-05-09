@@ -12,6 +12,7 @@ namespace VoicemeeterOsdProgram.Options
         private double m_scale = 1;
         private uint m_durationMs = 2000;
         private double m_backgroundOpacity = 0.9;
+        private double m_borderThickness = 1;
         private bool m_animationsEnabled = true;
         private bool m_waitForVmInit = true;
         private HashSet<StripElements> m_alwaysShowElements = new(new[] { StripElements.None });
@@ -79,6 +80,24 @@ namespace VoicemeeterOsdProgram.Options
                     value = 1;
                 }
                 HandlePropertyChange(ref m_backgroundOpacity, ref value, BackgroundOpacityChanged);
+            }
+        }
+
+        [Description("From 0 to 4.0")]
+        public double BorderThickness
+        {
+            get => m_borderThickness;
+            set
+            {
+                if (value < 0)
+                {
+                    value = 0;
+                }
+                else if (value > 4)
+                {
+                    value = 4;
+                }
+                HandlePropertyChange(ref m_borderThickness, ref value, BorderThicknessChanged);
             }
         }
 
@@ -183,6 +202,7 @@ namespace VoicemeeterOsdProgram.Options
         public event EventHandler<double> ScaleChanged;
         public event EventHandler<uint> DurationMsChanged;
         public event EventHandler<double> BackgroundOpacityChanged;
+        public event EventHandler<double> BorderThicknessChanged;
         public event EventHandler<bool> AnimationsEnabledChanged;
         public event EventHandler<bool> WaitForVoicemeeterInitializationChanged;
         public event EventHandler<HashSet<StripElements>> AlwaysShowElementsChanged;

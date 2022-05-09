@@ -15,7 +15,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border Name="BgBorder" BorderThickness="1" CornerRadius="12">
+    <Border Name="BgBorder" BorderThickness="1" CornerRadius="12" SnapsToDevicePixels="False">
         <Border.Background>
             <SolidColorBrush Color="{DynamicResource VmBgMainColor}"/>
         </Border.Background>
@@ -23,7 +23,7 @@
             <SolidColorBrush Color="{DynamicResource VmActiveElementMainColor}"/>
         </Border.BorderBrush>
 
-        <Viewbox Name="MainContentWrap" StretchDirection="DownOnly">
+        <Viewbox Name="MainContentWrap" StretchDirection="DownOnly" SnapsToDevicePixels="True">
             <Grid Name="SizeWrap">
                 <StackPanel Orientation="Horizontal">
                     <local:WrapPanelExt x:Name="MainContent" 

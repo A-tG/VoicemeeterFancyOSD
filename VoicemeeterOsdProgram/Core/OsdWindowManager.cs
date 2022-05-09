@@ -62,11 +62,13 @@ namespace VoicemeeterOsdProgram.Core
             m_wpfControl.BgOpacity = options.BackgroundOpacity;
             IsEnabled = !OptionsStorage.Other.Paused;
             m_wpfControl.Scale = options.Scale;
+            m_wpfControl.BgBorder.BorderThickness = new Thickness(options.BorderThickness);
 
             options.IsInteractableChanged += (_, val) => IsInteractable = val;
             options.ScaleChanged += (_, val) => m_wpfControl.Scale = val;
             options.DurationMsChanged += (_, val) => DurationMs = val;
             options.BackgroundOpacityChanged += (_, val) => m_wpfControl.BgOpacity = val;
+            options.BorderThicknessChanged += (_, val) => m_wpfControl.BgBorder.BorderThickness = new Thickness(val);
             options.WaitForVoicemeeterInitializationChanged += (_, val) => SetupWaitTimers(val);
             OptionsStorage.Other.PausedChanged += (_, val) => IsEnabled = !val;
 
