@@ -56,6 +56,12 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
                 LayoutTransform = new ScaleTransform(value, value);
                 MaxW = m_maxW;
                 MaxH = m_maxH;
+                UpdateLayout();
+                var s = GetContentScaleX();
+                if (s < 1)
+                {
+                    Scale *= System.Math.Sqrt(s);
+                }
             }
         }
 
@@ -114,6 +120,18 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             if ((fe is null) || (fe.ActualWidth == 0)) return 1;
 
             return viewbox.ActualWidth / fe.ActualWidth;
+        }
+
+        public double GetContentScaleY()
+        {
+            Viewbox viewbox = MainContentWrap;
+            if (viewbox.Child == null) return 1;
+
+            var fe = viewbox.Child as FrameworkElement;
+
+            if ((fe is null) || (fe.ActualHeight == 0)) return 1;
+
+            return viewbox.ActualHeight / fe.ActualHeight;
         }
 
         public void ReapplyScale() => SetScale(Scale);
