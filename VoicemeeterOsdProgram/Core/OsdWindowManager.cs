@@ -184,7 +184,6 @@ namespace VoicemeeterOsdProgram.Core
             OsdContentFactory.FillOsdWindow(ref m_wpfControl, ref m_vmParams, type);
 
             ApplyVisibilityToOsdElements(Visibility.Collapsed);
-            m_wpfControl.ReapplyScale();
             m_changingOsdContent = false;
         }
 

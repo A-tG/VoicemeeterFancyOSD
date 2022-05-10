@@ -15,6 +15,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         {
             InitializeComponent();
             MainContent.SizeChanged += OnSizeChange;
+            LayoutUpdated += OnLayoutUpdate;
+            
         }
 
         public bool AllowAutoUpdateSeparators { get; set; } = true;
@@ -56,12 +58,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
                 LayoutTransform = new ScaleTransform(value, value);
                 MaxW = m_maxW;
                 MaxH = m_maxH;
-                UpdateLayout();
-                var s = GetContentScaleX();
-                if (s < 1)
-                {
-                    Scale *= System.Math.Sqrt(s);
-                }
             }
         }
 
@@ -134,22 +130,20 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             return viewbox.ActualHeight / fe.ActualHeight;
         }
 
-        public void ReapplyScale() => SetScale(Scale);
-
-        private void SetScale(double scale)
-        {
-            /*var elements = MainContent.Children;
-            foreach (FrameworkElement element in elements)
-            {
-                element.LayoutTransform = new ScaleTransform(scale, scale);
-            }*/
-        }
-
         private void OnSizeChange(object sender, SizeChangedEventArgs e)
         {
             if (AllowAutoUpdateSeparators)
             {
                 UpdateSeparators();
+            }
+        }
+
+        private void OnLayoutUpdate(object sender, System.EventArgs e)
+        {
+            var scale = GetContentScaleX();
+            if (scale < 1)
+            {
+                Scale *= System.Math.Sqrt(scale);
             }
         }
     }
