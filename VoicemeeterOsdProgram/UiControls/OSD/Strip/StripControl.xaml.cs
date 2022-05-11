@@ -9,7 +9,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// <summary>
     /// Interaction logic for StripControl.xaml
     /// </summary>
-    public partial class StripControl : UserControl, IOsdRootElement
+    public partial class StripControl : UserControl, IOsdRootElement, IOsdAnimatedElement
     {
         private bool m_hasChanges = false;
         private bool m_hasChildVis = false;
@@ -22,6 +22,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseIn },
             FillBehavior = FillBehavior.HoldEnd
         };
+
+        public Func<bool> IsAnimationsEnabled { get; set; } = () => true;
 
         /// <summary>
         /// Resets itself when read
@@ -88,7 +90,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private void Highlight()
         {
-            if (!Options.OptionsStorage.Osd.AnimationsEnabled) return;
+            if (!IsAnimationsEnabled()) return;
 
             HighlightWrap.BeginAnimation(Border.OpacityProperty, m_highlightAnim);
         }

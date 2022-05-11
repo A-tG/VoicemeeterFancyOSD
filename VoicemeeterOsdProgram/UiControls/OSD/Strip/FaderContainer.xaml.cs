@@ -11,7 +11,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// <summary>
     /// Interaction logic for FaderContainer.xaml
     /// </summary>
-    public partial class FaderContainer : ContentControl
+    public partial class FaderContainer : ContentControl, IOsdAnimatedElement
     {
         private DoubleAnimation m_highlightAnim = new()
         {
@@ -26,6 +26,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
         {
             InitializeComponent();
         }
+
+        public Func<bool> IsAnimationsEnabled { get; set; } = () => true;
 
         private void OnFaderMouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -54,7 +56,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         public void Highlight()
         {
-            if (!Options.OptionsStorage.Osd.AnimationsEnabled) return;
+            if (!IsAnimationsEnabled()) return;
 
             HighlightWrap.BeginAnimation(Border.OpacityProperty, m_highlightAnim);
         }

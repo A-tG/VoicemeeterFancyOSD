@@ -3,13 +3,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
     /// <summary>
     /// Interaction logic for LimiterContainer.xaml
     /// </summary>
-    public partial class LimiterContainer : ContentControl
+    public partial class LimiterContainer : ContentControl, IOsdAnimatedElement
     {
         private DoubleAnimation m_highlightAnim = new()
         {
@@ -25,6 +26,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             InitializeComponent();
         }
 
+        public Func<bool> IsAnimationsEnabled { get; set; } = () => true;
+
         private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (sender is not Slider slider) return;
@@ -34,7 +37,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         public void Highlight()
         {
-            if (!Options.OptionsStorage.Osd.AnimationsEnabled) return;
+            if (!IsAnimationsEnabled()) return;
 
             HighlightWrap.BeginAnimation(Border.OpacityProperty, m_highlightAnim);
         }

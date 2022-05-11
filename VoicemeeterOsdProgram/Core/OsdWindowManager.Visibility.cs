@@ -16,8 +16,10 @@ namespace VoicemeeterOsdProgram.Core
             for (int i = 0; i < len; i++)
             {
                 var strip = (StripControl)children[i];
-                // 2 checks to imitate "lazy" evaluation
-                if (!strip.HasChangesFlag || !strip.HasAnyChildVisibleFlag) continue;
+
+                bool changesFlag = strip.HasChangesFlag;
+                bool visChildrenFlag = strip.HasAnyChildVisibleFlag;
+                if (!changesFlag || !visChildrenFlag) continue;
 
                 bool isIgnore = OptionsStorage.Osd.IgnoreStripsIndexes.Contains((uint)i);
                 if (isIgnore) continue;
@@ -29,6 +31,8 @@ namespace VoicemeeterOsdProgram.Core
 
             m_wpfControl.UpdateSeparators();
             m_wpfControl.AllowAutoUpdateSeparators = true;
+
+            m_wpfControl.UpdateLayout();
 
             return hasAnyElementVisible;
         }

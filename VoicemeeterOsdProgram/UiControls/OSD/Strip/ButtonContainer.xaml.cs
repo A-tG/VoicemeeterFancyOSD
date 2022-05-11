@@ -10,7 +10,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// <summary>
     /// Interaction logic for ButtonContainer.xaml
     /// </summary>
-    public partial class ButtonContainer : ContentControl
+    public partial class ButtonContainer : ContentControl, IOsdAnimatedElement
     {
         private Duration m_animDuration = new(TimeSpan.FromMilliseconds(300));
         private DoubleAnimation m_highlightAnim = new()
@@ -35,9 +35,11 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             InitializeComponent();
         }
 
+        public Func<bool> IsAnimationsEnabled { get; set; } = () => true;
+
         public void Highlight()
         {
-            if (!Options.OptionsStorage.Osd.AnimationsEnabled) return;
+            if (!IsAnimationsEnabled()) return;
 
             if (HighlightWrap.RenderTransform is not ScaleTransform t)
             {

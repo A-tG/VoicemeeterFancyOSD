@@ -45,6 +45,20 @@ namespace VoicemeeterOsdProgram.Factories
                     OptionsStorage.Osd.AlwaysShowElements.Contains(type);
             };
             element.IsNeverShow = () => OptionsStorage.Osd.NeverShowElements.Contains(type);
+
+            if (parent is IOsdAnimatedElement p)
+            {
+                InitAnimatedElement(p);
+            }
+            if (element is IOsdAnimatedElement el)
+            {
+                InitAnimatedElement(el);
+            }
+        }
+
+        public static void InitAnimatedElement(IOsdAnimatedElement el)
+        {
+            el.IsAnimationsEnabled = () => OptionsStorage.Osd.AnimationsEnabled;
         }
 
         private static void AddVirtualOutputs(OsdControl osd)
