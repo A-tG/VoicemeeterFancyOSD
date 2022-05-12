@@ -58,7 +58,11 @@ namespace AtgDev.Utils
         {
             if (!IsEnabled) return;
 
-            m_logs.Add(m);
+            try
+            {
+                m_logs.Add(m);
+            }
+            catch { }
         }
 
         public void Log(string text, LogType type = LogType.Info) => Log(new Message(text, type));
@@ -118,6 +122,7 @@ namespace AtgDev.Utils
 
         private void Loop()
         {
+
             foreach (var m in m_logs.GetConsumingEnumerable())
             {
 #if !DEBUG
@@ -134,7 +139,7 @@ namespace AtgDev.Utils
                 LogType.Info => "",
                 _ => m.Type.ToString().ToUpper(),
             };
-            return TryWrite($"{DateTime.Now:HH:mm:ss dd-MM-yyyy} {t} {m.Text}");
+            return TryWrite($"{DateTime.Now:dd-MM-yyyy HH:mm:ss} {t} {m.Text}");
         }
 
         private bool TryWrite(string text)
@@ -160,6 +165,7 @@ namespace AtgDev.Utils
         {
             if (m_disposed) return;
 
+            m_logs.CompleteAdding();
             m_writer?.Dispose();
             m_logs?.Dispose();
             m_disposed = true;
@@ -171,6 +177,7 @@ namespace AtgDev.Utils
         {
             if (m_disposed) return;
 
+            m_logs.CompleteAdding();
             m_logs?.Dispose();
             await (m_writer?.DisposeAsync() ?? ValueTask.CompletedTask);
             m_disposed = true;
