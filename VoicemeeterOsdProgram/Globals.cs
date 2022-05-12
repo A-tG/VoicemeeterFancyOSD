@@ -7,7 +7,7 @@ namespace VoicemeeterOsdProgram;
 
 public static class Globals
 {
-    public static readonly AutostartManager autostartManager;
+    public static readonly AutostartManager autostartManager = UtilsFactory.GetAutostartManager();
     public static readonly Logger logger = UtilsFactory.GetLogger();
 
     public static class Osd
@@ -16,11 +16,4 @@ public static class Globals
         public static readonly ScreenProvider screenProvider = UtilsFactory.GetOsdScreenProvider();
         public static readonly ScrWorkingAreaProvider workingAreaProvider = new(screenProvider);
     }
-
-    static Globals() 
-    {
-        autostartManager = UtilsFactory.GetAutostartManager();
-    }
-
-    static public void Init() { }
 }
