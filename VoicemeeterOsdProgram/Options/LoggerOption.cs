@@ -14,7 +14,7 @@ namespace VoicemeeterOsdProgram.Options
             set => HandlePropertyChange(ref m_enabled, ref value, EnabledChanged);
         }
 
-        [Description("Maximum number of stored Log files (excluding the current). 0 - no limit")]
+        [Description("Maximum number of stored Log files. 0 - no limit")]
         public uint LogFilesMax
         {
             get => m_logFilesMax;
