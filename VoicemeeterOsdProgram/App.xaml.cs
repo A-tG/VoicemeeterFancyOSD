@@ -22,7 +22,6 @@ namespace VoicemeeterOsdProgram
         async void OnAppStartup(object sender, StartupEventArgs e)
         {
             var optionsTask = OptionsStorage.InitAsync();
-            var vmTask = VoicemeeterApiClient.InitAsync();
 
             VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPoolingRate;
             OptionsStorage.Voicemeeter.ApiPoolingRateChanged += (_, val) => VoicemeeterApiClient.PoolingRate = val;
@@ -33,6 +32,8 @@ namespace VoicemeeterOsdProgram
             UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
 
             await optionsTask;
+            var vmTask = VoicemeeterApiClient.InitAsync();
+
             if (OptionsStorage.Updater.CheckOnStartup)
             {
                 var updaterRes = await UpdateManager.TryCheckForUpdatesAsync();
