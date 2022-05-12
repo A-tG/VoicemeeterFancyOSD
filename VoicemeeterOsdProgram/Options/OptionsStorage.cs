@@ -16,6 +16,7 @@ namespace VoicemeeterOsdProgram.Options
         public static readonly VoicemeeterOptions Voicemeeter = new();
         public static readonly OsdAlternative AltOsdOptionsFullscreenApps = new();
         public static readonly UpdaterOptions Updater = new();
+        public static readonly LoggerOption Logger = new();
         public static readonly OtherOptions Other = new();
 
         private static readonly string m_path = @$"{AppDomain.CurrentDomain.BaseDirectory}config\config.ini";
@@ -118,6 +119,7 @@ namespace VoicemeeterOsdProgram.Options
                 OptionsToIniData(Voicemeeter, nameof(Voicemeeter));
                 OptionsToIniData(Updater, nameof(Updater));
                 OptionsToIniData(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
+                OptionsToIniData(Logger, nameof(Logger));
                 await using (StreamWriter sw = new(m_path))
                 {
                     await sw.WriteAsync(m_data.ToString());
@@ -152,6 +154,7 @@ namespace VoicemeeterOsdProgram.Options
                 IniDataToOptions(Voicemeeter, nameof(Voicemeeter));
                 IniDataToOptions(Updater, nameof(Updater));
                 IniDataToOptions(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
+                IniDataToOptions(Logger, nameof(Logger));
 
                 m_data = new();
                 result = true;

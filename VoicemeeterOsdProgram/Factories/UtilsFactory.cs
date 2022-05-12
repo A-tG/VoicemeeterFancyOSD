@@ -84,12 +84,16 @@ public static class UtilsFactory
         Logger logger = null;
         try
         {
+            var o = OptionsStorage.Logger;
+
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
             Directory.CreateDirectory(path);
             logger = new(path)
             { 
-                IsEnabled = true 
+                IsEnabled = o.Enabled,
+                OldLogFilesMaxNumber = o.LogFilesMax
             };
+            o.EnabledChanged += (_, val) => logger.IsEnabled = val;
         }
         catch { }
         return logger;

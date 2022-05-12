@@ -2,7 +2,6 @@
 using TopmostApp.Helpers;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Factories;
-using VoicemeeterOsdProgram.Helpers;
 
 namespace VoicemeeterOsdProgram;
 
