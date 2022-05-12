@@ -33,6 +33,7 @@ namespace VoicemeeterOsdProgram.Options
                 if (m_Properties is null)
                 {
                     m_Properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).ToDictionary(p => p.Name);
+                    m_Properties.Remove(nameof(Logger));
                 }
                 return m_Properties;
             }
