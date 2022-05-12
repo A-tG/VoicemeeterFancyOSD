@@ -2,12 +2,14 @@
 using TopmostApp.Helpers;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Factories;
+using VoicemeeterOsdProgram.Helpers;
 
 namespace VoicemeeterOsdProgram;
 
 public static class Globals
 {
     public static readonly AutostartManager autostartManager;
+    public static readonly Logger logger = UtilsFactory.GetLogger();
 
     public static class Osd
     {

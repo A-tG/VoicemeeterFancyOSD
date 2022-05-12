@@ -1,6 +1,7 @@
 ﻿using Atg.Utils;
 using AtgDev.Utils;
 using System;
+using System.IO;
 using TopmostApp.Helpers;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Options;
@@ -76,5 +77,21 @@ public static class UtilsFactory
             scrProv.MainScreenIndex = val ? OptionsStorage.AltOsdOptionsFullscreenApps.DisplayIndex : OptionsStorage.Osd.DisplayIndex;
         };
         return scrProv;
+    }
+
+    public static Logger GetLogger()
+    {
+        Logger logger = null;
+        try
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
+            Directory.CreateDirectory(path);
+            logger = new(path)
+            { 
+                IsEnabled = true 
+            };
+        }
+        catch { }
+        return logger;
     }
 }
