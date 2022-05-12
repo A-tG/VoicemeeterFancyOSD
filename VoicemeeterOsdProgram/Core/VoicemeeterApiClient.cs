@@ -1,4 +1,5 @@
-﻿using AtgDev.Voicemeeter;
+﻿using AtgDev.Utils;
+using AtgDev.Voicemeeter;
 using AtgDev.Voicemeeter.Types;
 using AtgDev.Voicemeeter.Utils;
 using System;
@@ -29,6 +30,8 @@ namespace VoicemeeterOsdProgram.Core
         private static bool m_isVmTurningOn;
         private static Rate m_poolingRate;
         private static bool m_isInit = false;
+
+        private static Logger m_logger = Globals.logger;
 
         static VoicemeeterApiClient()
         {
@@ -100,6 +103,8 @@ namespace VoicemeeterOsdProgram.Core
             get => m_poolingRate;
             set
             {
+                m_logger.Log($"vmrapi Client pooling rate is set to: {value}");
+
                 m_poolingRate = value;
                 if (IsIdling) return;
 
@@ -120,6 +125,8 @@ namespace VoicemeeterOsdProgram.Core
             set
             {
                 if (m_isIdling == value) return;
+
+                m_logger.Log($"vmrapi Client is idling: {value}");
 
                 m_isIdling = value;
                 if (value)
@@ -145,6 +152,7 @@ namespace VoicemeeterOsdProgram.Core
 
             try
             {
+                m_logger?.Log("Initializing vmrapi Client");
                 if (!IsLoaded)
                 {
                     Api = new(PathHelper.GetDllPath());
@@ -162,10 +170,11 @@ namespace VoicemeeterOsdProgram.Core
                 m_loopTimer.Start();
 
                 IsInitialized = true;
-
+                m_logger?.Log("vmrapi Client initialized");
             }
-            catch
+            catch (Exception e)
             {
+                m_logger?.LogError($"Failed to initialize vmrapi Client: {e.GetType()} {e.Message}");
                 if (!IsLoaded)
                 {
                     Api?.Dispose();
@@ -263,11 +272,13 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void OnVmTurnedOff()
         {
+            m_logger?.Log("Voicemeeter shutdown detected");
             VoicemeeterTurnedOff?.Invoke(null, EventArgs.Empty);
         }
 
         private static void OnVmTurnedOn()
         {
+            m_logger?.Log("Voicemeeter is running");
             m_isVmTurningOn = true;
             VoicemeeterTurnedOn?.Invoke(null, EventArgs.Empty);
             m_isVmTurningOn = false;
@@ -275,6 +286,8 @@ namespace VoicemeeterOsdProgram.Core
 
         private static void OnProgramTypeChange()
         {
+            m_logger?.Log($"Voicemeeter type changed to: {ProgramType}");
+
             m_isTypeChanging = true;
            
             var type = ProgramType;
