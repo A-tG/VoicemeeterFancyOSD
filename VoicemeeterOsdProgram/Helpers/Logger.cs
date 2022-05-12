@@ -33,6 +33,7 @@ namespace AtgDev.Utils
         private Thread m_thread;
         private BlockingCollection<Message> m_logs = new(new ConcurrentQueue<Message>());
         private StreamWriter m_writer;
+        private uint m_maxLogs = 0;
 
         public Logger(string folderPath)
         {
@@ -40,7 +41,6 @@ namespace AtgDev.Utils
 
             FolderPath = folderPath;
 
-            DeleteMaxLogFiles();
             m_thread = new(Loop)
             {
                 IsBackground = true
@@ -52,7 +52,17 @@ namespace AtgDev.Utils
 
         public bool IsEnabled { get; set; } = false;
 
-        public uint OldLogFilesMaxNumber { get; set; } = 5;
+        public uint MaxLogFiles
+        { 
+            get => m_maxLogs; 
+            set
+            {
+                if (m_maxLogs == value) return;
+
+                m_maxLogs = value;
+                DeleteMaxLogFiles();
+            }
+        }
 
         public void Log(Message m)
         {
@@ -88,11 +98,13 @@ namespace AtgDev.Utils
 
         private void DeleteMaxLogFiles()
         {
-            var max = OldLogFilesMaxNumber;
+            var max = MaxLogFiles;
             if (max == 0) return;
 
             var files = Directory.GetFiles(FolderPath, "*.log", SearchOption.TopDirectoryOnly);
-            var oldestFiles = files.OrderByDescending(f => File.GetLastWriteTime(f)).Skip((int)max);
+            if (files.Length <= max) return;
+
+            var oldestFiles = files.OrderByDescending(f => File.GetLastWriteTime(f)).Take((int)max);
             foreach (var f in oldestFiles)
             {
                 try
