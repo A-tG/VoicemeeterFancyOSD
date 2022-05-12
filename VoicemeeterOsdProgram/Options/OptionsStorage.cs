@@ -30,6 +30,8 @@ namespace VoicemeeterOsdProgram.Options
         private static bool m_isInit = false;
         private static Dispatcher m_disp;
 
+        private static Logger m_logger = Globals.logger;
+
         static OptionsStorage()
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
@@ -101,6 +103,7 @@ namespace VoicemeeterOsdProgram.Options
 
         public static async Task<bool> TrySaveAsync()
         {
+            m_logger?.Log("Writing config");
             bool result = false;
             if (!m_isInit) return result;
 
@@ -126,8 +129,12 @@ namespace VoicemeeterOsdProgram.Options
                 }
 
                 result = true;
+                m_logger?.Log("Writing config: OK");
             }
-            catch { }
+            catch (Exception e)
+            {
+                m_logger?.LogError($"Writing config: FAILED {e.GetType} {e.Message}");
+            }
 
             IsWatcherPaused = false;
             return result;
@@ -135,6 +142,7 @@ namespace VoicemeeterOsdProgram.Options
 
         public static async Task<bool> TryReadAsync()
         {
+            m_logger?.Log("Reading config");
             bool result = false;
             if (!m_isInit) return result;
 
@@ -158,8 +166,12 @@ namespace VoicemeeterOsdProgram.Options
 
                 m_data = new();
                 result = true;
+                m_logger?.Log("Reading config: OK");
             }
-            catch { }
+            catch (Exception e)
+            {
+                m_logger?.LogError($"Reading config: FAILED {e.GetType} {e.Message}");
+            }
 
             IsWatcherPaused = true;
             return result;
@@ -215,6 +227,7 @@ namespace VoicemeeterOsdProgram.Options
                   if (await m_timer.WaitForNextTickAsync())
                   {
                       m_timer.Stop();
+                      m_logger?.Log("Config file changed, validating...");
                       await ValidateConfigFileAsync();
                   }
               });
