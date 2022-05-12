@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AtgDev.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +12,19 @@ namespace VoicemeeterOsdProgram.Options
     public abstract class OptionsBase
     {
         private Dictionary<string, PropertyInfo> m_Properties;
+        private Logger m_logger;
+
+        public Logger Logger
+        {
+            get => m_logger;
+            set
+            {
+                if (m_logger is null)
+                {
+                    m_logger = value;
+                }
+            }
+        }
 
         private Dictionary<string, PropertyInfo> Properties
         {
@@ -37,7 +51,10 @@ namespace VoicemeeterOsdProgram.Options
                 ParseFrom(toPropertyName, fromVal);
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger?.LogError($"Parsing to option \"{toPropertyName}\" from value \"{fromVal}\": {e.GetType} {e.Message}");
+            }
             return false;
         }
 
@@ -48,7 +65,10 @@ namespace VoicemeeterOsdProgram.Options
                 toVal = Parse(fromPropertyName);
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger?.LogError($"Parsing from option \"{fromPropertyName}\": {e.GetType} {e.Message}");
+            }
             toVal = "";
             return false;
         }
@@ -164,7 +184,10 @@ namespace VoicemeeterOsdProgram.Options
                 {
                     resList.Add((T)ParseFrom(typeof(T), v));
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger?.LogError($"Parsing value \"{v}\" from enumerable \"{fromVal}\": {e.GetType} {e.Message}");
+                }
             }
             return resList;
         }

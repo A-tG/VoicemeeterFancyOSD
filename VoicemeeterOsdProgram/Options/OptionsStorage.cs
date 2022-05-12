@@ -36,6 +36,13 @@ namespace VoicemeeterOsdProgram.Options
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
             System.Windows.Application.Current.Exit += (_, _) => Exit();
+
+            Program.Logger = m_logger;
+            Osd.Logger = m_logger;
+            Voicemeeter.Logger = m_logger;
+            AltOsdOptionsFullscreenApps.Logger = m_logger;
+            Updater.Logger = m_logger;
+            Logger.Logger = m_logger;
         }
 
         public static string ConfigFilePath => m_path;
