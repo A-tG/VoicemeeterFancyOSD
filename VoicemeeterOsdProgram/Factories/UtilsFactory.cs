@@ -91,9 +91,10 @@ public static class UtilsFactory
             logger = new(path)
             { 
                 IsEnabled = o.Enabled,
-                OldLogFilesMaxNumber = o.LogFilesMax
+                MaxLogFiles = o.LogFilesMax
             };
             o.EnabledChanged += (_, val) => logger.IsEnabled = val;
+            o.LogFilesMaxChanged += (_, val) => logger.MaxLogFiles = val;
         }
         catch { }
         return logger;
