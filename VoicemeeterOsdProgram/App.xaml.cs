@@ -21,11 +21,11 @@ namespace VoicemeeterOsdProgram
 
         async void OnAppStartup(object sender, StartupEventArgs e)
         {
-            var optionsInit = OptionsStorage.InitAsync();
-            Task[] tasks = {
-                VoicemeeterApiClient.InitAsync(), 
-                optionsInit 
-            };
+            await OptionsStorage.InitAsync();
+            Globals.logger?.Log("Starting program");
+
+            var vmTask = VoicemeeterApiClient.InitAsync();
+
             VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPoolingRate;
             OptionsStorage.Voicemeeter.ApiPoolingRateChanged += (_, val) => VoicemeeterApiClient.PoolingRate = val;
 
@@ -34,7 +34,6 @@ namespace VoicemeeterOsdProgram
             OsdWindowManager.Init();
             UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
 
-            await optionsInit;
             if (OptionsStorage.Updater.CheckOnStartup)
             {
                 var updaterRes = await UpdateManager.TryCheckForUpdatesAsync();
@@ -43,7 +42,7 @@ namespace VoicemeeterOsdProgram
                     TrayIconManager.OpenUpdaterWindow();
                 }
             }
-            await Task.WhenAll(tasks);
+            await vmTask;
 
             await ArgsHandler.HandleAsync(AppLifeManager.appArgs);
             // start to recieve command-line arguments from other launched instance
@@ -52,6 +51,8 @@ namespace VoicemeeterOsdProgram
             Globals.Init(); // to initialize static fields
 
             await CheckProgramDirectoryIOAsync();
+
+            Globals.logger?.Log("Program initialized");
         }
 
         private async Task CheckProgramDirectoryIOAsync()
