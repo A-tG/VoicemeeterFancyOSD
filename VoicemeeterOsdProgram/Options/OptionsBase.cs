@@ -12,19 +12,8 @@ namespace VoicemeeterOsdProgram.Options
     public abstract class OptionsBase
     {
         private Dictionary<string, PropertyInfo> m_Properties;
-        private Logger m_logger;
 
-        public Logger Logger
-        {
-            get => m_logger;
-            set
-            {
-                if (m_logger is null)
-                {
-                    m_logger = value;
-                }
-            }
-        }
+        public Logger Logger { get; set; }
 
         private Dictionary<string, PropertyInfo> Properties
         {
