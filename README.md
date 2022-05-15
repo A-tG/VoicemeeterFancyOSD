@@ -11,7 +11,7 @@ It might not work with some OpenGL games, even in borderless mode. Basically if 
 # Installation and Usage
 The program is portable, no installation required, but you need [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/6.0/runtime) (Under the *Run desktop apps*, *Download x64*) 
 
-or install via Command Promt: *winget install Microsoft.DotNet.DesktopRuntime.6* 
+or install the Runtime via Command Promt: *winget install Microsoft.DotNet.DesktopRuntime.6* 
 
 Download the latest version from the [Releases](https://github.com/A-tG/VoicemeeterFancyOSD/releases) page, unpack and launch VoicemeeterFancyOsdHost.exe (on Windows 8.1 or newer), or VoicemeeterFancyOsd.exe if VoicemeeterFancyOsdHost.exe doesn't work for some reason or you are using older version of Windows. Do not use program from system's *Program Files* or there might be problems creating config file or installing updates because of Windows permisions/policies.
 
