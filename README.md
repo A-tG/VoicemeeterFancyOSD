@@ -3,34 +3,31 @@
 
 On-Screen display for [Voicemeeter](https://voicemeeter.com/) that works with fullscreen apps by using private WinAPI without hooking into Graphics API.
 
-Windows 10 or newer is required. 
-May work with older Windows versions (not older than Windows 7) but OSD will work as normal window and will not be displayed on top of fullscreen applications.
+Windows 10 or newer is required. May work with older Windows versions (no older than Windows 7) but the actual OSD will work as a normal window and will not be displayed on top of fullscreen applications.
 
-It might not work with some OpenGL games, even in borderless mode. Basically if "Xbox Game Bar" or standard Volume/Media pop-up is not showing on top of the game, neither will this OSD.
+It might also not work with some OpenGL games, even if in borderless mode. Basically if "Xbox Game Bar" or standard Volume/Media pop-up is not showing on top of the game, neither will this OSD.
 
 # Installation and Usage
-The program is portable, no installation required, but you need [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/6.0/runtime) (Under the *Run desktop apps*, *Download x64*) 
+The program is portable, no installation is required but you need [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/6.0/runtime) (click 'Download x64' under 'Run desktop apps') or alternatively you may install the runtime via Command Prompt with the following command: winget install Microsoft.DotNet.DesktopRuntime.6 (winget is bundled in Windows 11 and some modern versions of Windows 10 by default as the 'App Installer', if your Windows version does not include it, you may read [here](https://docs.microsoft.com/en-us/windows/package-manager/winget/) for further instructions on how to get it). 
 
-or install the Runtime via Command Promt: *winget install Microsoft.DotNet.DesktopRuntime.6* 
+Download the latest version of VoicemeeterFancyOSD from the [Releases](https://github.com/A-tG/VoicemeeterFancyOSD/releases) page, unpack and launch VoicemeeterFancyOsdHost.exe (if you're on Windows 8.1 or newer). For any other scenario such as running an older Windows version, or if VoicemeeterFancyOsdHost.exe simply doesn't work for some reason, you may instead try and run VoicemeeterFancyOsd.exe. Do not use the program from Window's 'Program Files' since that might cause problems creating the config file or installing future updates because of Windows' permissions and policies.
 
-Download the latest version from the [Releases](https://github.com/A-tG/VoicemeeterFancyOSD/releases) page, unpack and launch VoicemeeterFancyOsdHost.exe (on Windows 8.1 or newer), or VoicemeeterFancyOsd.exe if VoicemeeterFancyOsdHost.exe doesn't work for some reason or you are using older version of Windows. Do not use program from system's *Program Files* or there might be problems creating config file or installing updates because of Windows permisions/policies.
-
-Settings are stored in *PROGRAM_LOCATION\config\config.ini* (created on program launch if not exist). Settings file can be quickly opened from tray icon's context menu. And options are automatically validated and updated on file change, no need to restart.
+Settings are stored in 'PROGRAM_LOCATION\config\config.ini' (the file is created on first launch if it doesn't exist). Additionally the config file can be  opened from the tray icon's context menu for quick editing. Any changes to the options are automatically validated and updated upon saving the file, no need for a restart.
 
 # Upcoming features
 Check the [Milestones](https://github.com/A-tG/VoicemeeterFancyOSD/milestones)
 
-# What's the point?
-When you change gain/routing by using Voicemeeter Macro Buttons (or maybe some other way), for example if some of your Button's configuration looks like this
+# What's the purpose?
+When you change gain/routing/mute etc, by using Voicemeeter Macro Buttons (or any other way), for example if some of your buttons configuration looks like this:
 
 ![](https://i.imgur.com/M3mwHnY.png)
 
-it's very convenient to see changes on little On-screen display instead of opening the Voicemeeter window.
-In other words it works similar to Windows volume pop-up but for Voicemeeter so you can enjoy all good thing like volume/gain in decibels instead of unnatural 0-100 range.
-For example in Voicemeeter when you change gain from 0 to -60 you will experience smooth volume transition from loud to quiet, but in Windows volume pop-up
-100% is 0 in Voicemeeter, 50% is actually a equivalent to Voicemeeter's -10.0, 25% is around -20.0, 12.5% is -30.0 and so on - not very smooth transition.
+For the above example it's very convenient to see changes on a little On-screen display instead of opening the actual Voicemeeter window.
+In other words it works similar to Windows' volume pop-up but for Voicemeeter, so you can enjoy all good things like volume/gain in decibels instead of the unnatural 0-100 range that Windows uses.
 
-So this program should be a good "replacement" of volume pop-up built in Windows, if you use Voicemeeter of course.
+For example, in Voicemeeter when you change the gain from 0 to -60, you will experience a smooth volume transition from loud to quiet, but in Windows' volume pop-up 100% is 0 in Voicemeeter, 50% is actually equivalent to Voicemeeter's -10.0, 25% is around -20.0, 12.5% is -30.0 and so on - i.e not a very smooth transition and enjoyable experience.
+
+So this program should be a good "replacement" of the default volume pop-up in Windows, considering that you're using Voicemeeter of course.
 
 
 # Build instructions
@@ -39,9 +36,9 @@ So this program should be a good "replacement" of volume pop-up built in Windows
 Start/build in debug mode to get acces to Debug Window in tray context menu.
 
 * Select Target Platform (x64 or x86, dont use AnyCpu or \*Host.exe will not be copied).
-* Press "Rebuild Solution" to guarantee that up-to-date Host.exe and dependencies are copied to result folder.
-* The program will be compiled in the **Solution's** folder.
-* Launch \*Host.exe or ontop fullscreen functionality will not work.
+* Press "Rebuild Solution" to guarantee that up-to-date Host.exe and dependencies are copied to the results folder.
+* The program will be compiled in the **Solution** folder.
+* Launch \*Host.exe or on-top fullscreen functionality will not work.
 
 # Uses
 * [INI File Parser](https://github.com/rickyah/ini-parser)
@@ -54,8 +51,8 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 # Explanation for developers
 * Don't forget app.manifest if you want to modify/make your own program based on this or BandWindow might throw Exception.
 * Make whatever WPF UserControl you want and assign it to BandWindow's Content
-* All magic stuff happens in Host and Bridge projects (copied from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts)). Without it, it's not that easy to create "true" topmost window. The alternative is to sign your exe file with Microsoft Windows certificate.
-* Main code for topmost window is located in [Interop](VoicemeeterOsdProgram/Interop) based on a modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts) (Thanks for advice and directions from their Discord server!)
+* All magic stuff happens in the Host and Bridge projects (copied from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts)). Without it, it's not that easy to create "true" topmost window. The alternative is to sign your .exe file with Microsoft Windows certificate.
+* Main code for topmost window is located in [Interop](VoicemeeterOsdProgram/Interop) based on a modified code from [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts) (Thanks to their Discord server for advice and directions!)
 * [Program.cs](VoicemeeterOsdProgram/Program.cs) and [App.xaml.cs](VoicemeeterOsdProgram/App.xaml.cs) are entry points. The program dll's name should be defined [here](Bridge/dllmain.cpp#L42)
 * As far as I know, Host.exe is actually renamed ApplicationFrameHost.exe from System32
 * [What "private" API is used](https://blog.adeltax.com/window-z-order-in-windows-10/)
