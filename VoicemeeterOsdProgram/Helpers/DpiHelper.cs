@@ -14,7 +14,6 @@ namespace VoicemeeterOsdProgram.Helpers
                 WindowStyle = WindowStyle.None,
                 IsClickThrough = true,
                 IsHiddenFromTasklist = true,
-                AllowsTransparency = true,
                 ShowActivated = false,
                 ShowInTaskbar = false,
                 Focusable = false,
