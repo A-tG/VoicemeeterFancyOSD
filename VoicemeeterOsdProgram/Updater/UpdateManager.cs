@@ -59,7 +59,8 @@ namespace VoicemeeterOsdProgram.Updater
 
             try
             {
-                var releases = await m_ghClient.Repository.Release.GetAll(Owner, RepoName);
+                var allReleases = await m_ghClient.Repository.Release.GetAll(Owner, RepoName);
+                var releases = allReleases.Where(r => !r.Prerelease).ToList();
                 if (releases.Count == 0) return UpdaterResult.ReleasesNotFound;
 
                 var rel = releases[0];
