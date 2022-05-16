@@ -48,9 +48,9 @@ namespace VoicemeeterOsdProgram
 
         private static void ShowExceptionMsgBox(Exception ex)
         {
-            const string message = "PRESS Ctrl + C TO COPY THIS TEXT\n" + "Unhandled exception:\n";
+            const string message = "PRESS Ctrl + C TO COPY THIS TEXT\n" + "Unhandled exception:";
 
-            MessageBox.Show($"{message} {ex.Message} {ex.StackTrace}", Name, MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"{message}\n{ex.GetType}\n{ex.Message} {ex.StackTrace}", Name, MessageBoxButton.OK, MessageBoxImage.Error);
             Environment.Exit(1);
         }
 
