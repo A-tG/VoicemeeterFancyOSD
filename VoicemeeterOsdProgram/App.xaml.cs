@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Options;
@@ -22,6 +24,9 @@ namespace VoicemeeterOsdProgram
         async void OnAppStartup(object sender, StartupEventArgs e)
         {
             var optionsTask = OptionsStorage.InitAsync();
+
+            RenderOptions.ProcessRenderMode = OptionsStorage.Program.RenderMode;
+            OptionsStorage.Program.RenderModeChanged += (_, val) => RenderOptions.ProcessRenderMode = val;
 
             VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPoolingRate;
             OptionsStorage.Voicemeeter.ApiPoolingRateChanged += (_, val) => VoicemeeterApiClient.PoolingRate = val;
