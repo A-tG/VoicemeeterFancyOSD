@@ -37,12 +37,12 @@ namespace VoicemeeterOsdProgram.Options
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
             System.Windows.Application.Current.Exit += (_, _) => Exit();
 
-            Program.Logger = m_logger;
-            Osd.Logger = m_logger;
-            Voicemeeter.Logger = m_logger;
-            AltOsdOptionsFullscreenApps.Logger = m_logger;
-            Updater.Logger = m_logger;
-            Logger.Logger = m_logger;
+            Program.logger = m_logger;
+            Osd.logger = m_logger;
+            Voicemeeter.logger = m_logger;
+            AltOsdOptionsFullscreenApps.logger = m_logger;
+            Updater.logger = m_logger;
+            Logger.logger = m_logger;
         }
 
         public static string ConfigFilePath => m_path;
@@ -110,7 +110,7 @@ namespace VoicemeeterOsdProgram.Options
 
         public static async Task<bool> TrySaveAsync()
         {
-            m_logger?.Log("Writing config");
+            m_logger?.Log("Writing config...");
             bool result = false;
             if (!m_isInit) return result;
 
@@ -149,7 +149,7 @@ namespace VoicemeeterOsdProgram.Options
 
         public static async Task<bool> TryReadAsync()
         {
-            m_logger?.Log("Reading config");
+            m_logger?.Log("Reading config...");
             bool result = false;
             if (!m_isInit) return result;
 

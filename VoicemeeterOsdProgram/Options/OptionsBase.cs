@@ -13,7 +13,7 @@ namespace VoicemeeterOsdProgram.Options
     {
         private Dictionary<string, PropertyInfo> m_Properties;
 
-        public Logger Logger { get; set; }
+        public Logger logger;
 
         private Dictionary<string, PropertyInfo> Properties
         {
@@ -22,7 +22,6 @@ namespace VoicemeeterOsdProgram.Options
                 if (m_Properties is null)
                 {
                     m_Properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).ToDictionary(p => p.Name);
-                    m_Properties.Remove(nameof(Logger));
                 }
                 return m_Properties;
             }
@@ -43,7 +42,7 @@ namespace VoicemeeterOsdProgram.Options
             }
             catch (Exception e)
             {
-                Logger?.LogError($"Parsing to option \"{toPropertyName}\" from value \"{fromVal}\": {e.GetType} {e.Message}");
+                logger?.LogError($"Parsing to option \"{toPropertyName}\" from value \"{fromVal}\": {e.GetType} {e.Message}");
             }
             return false;
         }
@@ -57,7 +56,7 @@ namespace VoicemeeterOsdProgram.Options
             }
             catch (Exception e)
             {
-                Logger?.LogError($"Parsing from option \"{fromPropertyName}\": {e.GetType} {e.Message}");
+                logger?.LogError($"Parsing from option \"{fromPropertyName}\": {e.GetType} {e.Message}");
             }
             toVal = "";
             return false;
@@ -176,7 +175,7 @@ namespace VoicemeeterOsdProgram.Options
                 }
                 catch (Exception e)
                 {
-                    Logger?.LogError($"Parsing value \"{v}\" from enumerable \"{fromVal}\": {e.GetType} {e.Message}");
+                    logger?.LogError($"Parsing value \"{v}\" from enumerable \"{fromVal}\": {e.GetType} {e.Message}");
                 }
             }
             return resList;

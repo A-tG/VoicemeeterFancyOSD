@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using AtgDev.Utils;
+using Microsoft.Win32;
 using System;
 using System.Windows;
 using System.Windows.Media.Animation;
@@ -142,11 +143,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         // do unsubcribing really works?
         private void OnEventUpdatePos<T>(object sender, T e) => UpdatePos();
         private void OnEventUpdatePosAlign<T>(object sender, T e) => UpdatePosAlign();
-
-        private void OnSystemSettingsChanged(object sender, UserPreferenceChangedEventArgs e)
-        {
-            UpdatePos();
-        }
 
         private void OnFadeOutComplete(object sender, EventArgs e) => Hide();
 
