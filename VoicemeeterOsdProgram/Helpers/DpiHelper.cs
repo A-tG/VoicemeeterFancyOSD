@@ -12,7 +12,6 @@ namespace VoicemeeterOsdProgram.Helpers
             m_dummyWindow = new()
             {
                 WindowStyle = WindowStyle.None,
-                IsClickThrough = true,
                 IsHiddenFromTasklist = true,
                 ShowActivated = false,
                 ShowInTaskbar = false,
