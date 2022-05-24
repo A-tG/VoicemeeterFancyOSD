@@ -20,7 +20,11 @@ namespace VoicemeeterOsdProgram.Options
         public uint InitializationDelay
         {
             get => m_initDelay;
-            set => HandlePropertyChange(ref m_initDelay, ref value, DelayInitializationChanged);
+            set
+            {
+                value = value > int.MaxValue ? int.MaxValue : value;
+                HandlePropertyChange(ref m_initDelay, ref value, DelayInitializationChanged);
+            }
         }
 
         public event EventHandler<VoicemeeterApiClient.Rate> ApiPoolingRateChanged;
