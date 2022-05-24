@@ -42,9 +42,14 @@ namespace VoicemeeterOsdProgram.Core
             PoolingRate = Rate.Normal;
         }
 
-        public static async Task InitAsync()
+        public static async Task InitAsync(int waitTime = 0)
         {
             if (m_isInit) return;
+
+            if (waitTime > 0)
+            {
+                await Task.Delay(waitTime);
+            }
 
             await LoadAsync();
 
