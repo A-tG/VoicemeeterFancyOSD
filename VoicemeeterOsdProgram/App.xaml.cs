@@ -37,7 +37,7 @@ namespace VoicemeeterOsdProgram
             UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
 
             await optionsTask;
-            var vmTask = VoicemeeterApiClient.InitAsync();
+            var vmTask = VoicemeeterApiClient.InitAsync((int)OptionsStorage.Voicemeeter.InitializationDelay);
 
             if (OptionsStorage.Updater.CheckOnStartup)
             {
