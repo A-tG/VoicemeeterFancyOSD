@@ -104,7 +104,7 @@ namespace AtgDev.Utils
             var files = Directory.GetFiles(FolderPath, "*.log", SearchOption.TopDirectoryOnly);
             if (files.Length <= max) return;
 
-            var oldestFiles = files.OrderByDescending(f => File.GetLastWriteTime(f)).Take((int)max);
+            var oldestFiles = files.OrderBy(f => File.GetLastWriteTime(f)).Take(files.Length - (int)max);
             foreach (var f in oldestFiles)
             {
                 try
@@ -155,7 +155,7 @@ namespace AtgDev.Utils
             {
                 t = t.PadLeft(t.Length + 1);
             }
-            return TryWrite($"{DateTime.Now:dd-MM-yyyy HH:mm:ss}{t} {m.Text}");
+            return TryWrite($"{DateTime.Now:dd-MM-yyyy HH:mm:ss.fff}{t} {m.Text}");
         }
 
         private bool TryWrite(string text)
