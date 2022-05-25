@@ -188,7 +188,7 @@ namespace VoicemeeterOsdProgram.Core
             }
             catch (Exception e)
             {
-                m_logger?.LogError($"Failed to initialize VmrApi Client: {e.GetType()} {e.Message}");
+                m_logger?.LogCritical($"Failed to initialize VmrApi Client: {e.GetType()} {e.Message}");
                 if (!IsLoaded)
                 {
                     Api?.Dispose();
