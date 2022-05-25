@@ -4,6 +4,8 @@ using IniParser.Parser;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
@@ -29,6 +31,7 @@ namespace VoicemeeterOsdProgram.Options
         private static bool m_isWatcherPaused;
         private static bool m_isInit = false;
         private static Dispatcher m_disp;
+        private static Dictionary<string, OptionsBase> m_sectionsOptions;
 
         private static Logger m_logger = Globals.logger;
 
@@ -62,6 +65,7 @@ namespace VoicemeeterOsdProgram.Options
             m_watcher.Changed += OnConfigFileChanged;
             IsWatcherEnabled = true;
 
+            TryGetSectionOptions("osd", out OptionsBase o);
         }
 
         public static bool IsWatcherEnabled
@@ -106,6 +110,37 @@ namespace VoicemeeterOsdProgram.Options
                     }
                 }
             }
+        }
+
+        public static IEnumerable<string> Sections => SectionsOptions.Keys;
+
+        private static IDictionary<string, OptionsBase> SectionsOptions
+        {
+            get
+            {
+                if (m_sectionsOptions is not null) return m_sectionsOptions;
+
+                var fields = typeof(OptionsStorage).GetFields(BindingFlags.Public | BindingFlags.Static);
+                m_sectionsOptions = fields.Where(o =>
+                {
+                    var val = o.GetValue(null);
+                    return (val is OptionsBase) && (val is not OtherOptions);
+                }).ToDictionary(f => f.Name.ToLower(), f => (OptionsBase)f.GetValue(null));
+
+                return SectionsOptions;
+            }
+        }
+
+        public static bool TryGetSectionOptions(string sectionName, out OptionsBase options)
+        {
+            if (SectionsOptions.TryGetValue(sectionName.ToLower(), out OptionsBase o))
+            {
+                options = o;
+                return true;
+            }
+
+            options = null;
+            return false;
         }
 
         public static async Task<bool> TrySaveAsync()

@@ -86,19 +86,13 @@ namespace VoicemeeterOsdProgram
                 bool.TryParse(args[i], out isSaveToConfig);
             }
 
-            switch (category.ToLower())
+            if (OptionsStorage.TryGetSectionOptions(category, out OptionsBase options))
             {
-                case OptionsCategory.Osd:
-                    if (!OptionsStorage.Osd.TryParseFrom(option, val)) return false;
-                    break;
-                case OptionsCategory.AltOsd:
-                    if (!OptionsStorage.AltOsdOptionsFullscreenApps.TryParseFrom(option, val)) return false;
-                    break;
-                case OptionsCategory.Updater:
-                    if (!OptionsStorage.Updater.TryParseFrom(option, val)) return false;
-                    break;
-                default:
-                    break;
+                if (!options.TryParseFrom(option, val)) return false;
+            }
+            else
+            {
+                return false;
             }
 
             if (isSaveToConfig)
