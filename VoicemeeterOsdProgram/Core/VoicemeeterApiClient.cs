@@ -108,7 +108,7 @@ namespace VoicemeeterOsdProgram.Core
             get => m_poolingRate;
             set
             {
-                m_logger.Log($"vmrapi Client pooling rate is set to: {value}");
+                m_logger.Log($"VmrApi Client pooling rate is set to: {value}");
 
                 m_poolingRate = value;
                 if (IsIdling) return;
@@ -131,7 +131,7 @@ namespace VoicemeeterOsdProgram.Core
             {
                 if (m_isIdling == value) return;
 
-                m_logger.Log($"vmrapi Client is idling: {value}");
+                m_logger.Log($"VmrApi Client is idling: {value}");
 
                 m_isIdling = value;
                 if (value)
@@ -157,12 +157,21 @@ namespace VoicemeeterOsdProgram.Core
 
             try
             {
-                m_logger?.Log("Initializing vmrapi Client");
+                m_logger?.Log("Initializing VmrApi Client");
                 if (!IsLoaded)
                 {
                     Api = new(PathHelper.GetDllPath());
-                    Api.Login();
-                    _ = await Api.WaitForNewParamsAsync(250, 1000 / 30);
+                    var loginRes = Api.Login();
+
+                    m_logger?.Log($"VmrApi Login result: {loginRes}");
+                    if ((loginRes != ResultCodes.Ok) && (loginRes != ResultCodes.OkVmNotLaunched))
+                    {
+                        throw new InvalidOperationException("VmrApi is unable to login");
+                    }
+
+                    var newParamsTime = await Api.WaitForNewParamsAsync(250, 1000 / 30);
+                    m_logger?.Log($"VmrApi WaitForNewParams done after: {newParamsTime}ms");
+
                     m_type = ProgramType;
                     m_isVmRunning = IsVoicemeeterRunning;
 
@@ -175,11 +184,11 @@ namespace VoicemeeterOsdProgram.Core
                 m_loopTimer.Start();
 
                 IsInitialized = true;
-                m_logger?.Log("vmrapi Client initialized");
+                m_logger?.Log("VmrApi Client initialized");
             }
             catch (Exception e)
             {
-                m_logger?.LogError($"Failed to initialize vmrapi Client: {e.GetType()} {e.Message}");
+                m_logger?.LogError($"Failed to initialize VmrApi Client: {e.GetType()} {e.Message}");
                 if (!IsLoaded)
                 {
                     Api?.Dispose();
