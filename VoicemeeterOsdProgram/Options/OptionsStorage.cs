@@ -64,8 +64,6 @@ namespace VoicemeeterOsdProgram.Options
             m_watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
             m_watcher.Changed += OnConfigFileChanged;
             IsWatcherEnabled = true;
-
-            TryGetSectionOptions("osd", out OptionsBase o);
         }
 
         public static bool IsWatcherEnabled
