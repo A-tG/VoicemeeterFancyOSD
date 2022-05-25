@@ -15,7 +15,7 @@
   <PropertyGroup>
       <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
       <ApplicationManifest>app.manifest</ApplicationManifest>
-      <Version>0.13.1.0</Version>
+      <Version>0.13.2.0</Version>
       <PackageId>VoicemeeterFancyOsd</PackageId>
       <Description>On-screen display for Voicemeeter</Description>
       <AssemblyName>VoicemeeterFancyOsd</AssemblyName>
