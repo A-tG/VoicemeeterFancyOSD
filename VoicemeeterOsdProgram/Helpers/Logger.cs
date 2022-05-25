@@ -151,7 +151,11 @@ namespace AtgDev.Utils
                 LogType.Info => "",
                 _ => m.Type.ToString().ToUpper(),
             };
-            return TryWrite($"{DateTime.Now:dd-MM-yyyy HH:mm:ss} {t} {m.Text}");
+            if (!string.IsNullOrEmpty(t))
+            {
+                t = t.PadLeft(t.Length + 1);
+            }
+            return TryWrite($"{DateTime.Now:dd-MM-yyyy HH:mm:ss}{t} {m.Text}");
         }
 
         private bool TryWrite(string text)
