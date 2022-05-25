@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using AtgDev.Utils;
+using System.Threading.Tasks;
 using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Updater;
 
@@ -15,12 +16,7 @@ namespace VoicemeeterOsdProgram
             public const string SetOption = "-set-option";
         }
 
-        public static class OptionsCategory
-        {
-            public const string Osd = "osd";
-            public const string AltOsd = "altosd";
-            public const string Updater = "updater";
-        }
+        private static Logger m_logger = Globals.logger;
 
         public static void HandleSpecial(string[] args)
         {
@@ -68,6 +64,7 @@ namespace VoicemeeterOsdProgram
                 case Args.SetOption:
                     return await SetOptionAsync(args, i);
                 default:
+                    m_logger?.LogError($"Unknown command line argument: {arg}");
                     return false;
             }
         }
@@ -83,15 +80,23 @@ namespace VoicemeeterOsdProgram
             bool isSaveToConfig = false;
             if (++i < len)
             {
-                bool.TryParse(args[i], out isSaveToConfig);
+                if (!bool.TryParse(args[i], out isSaveToConfig))
+                {
+                    m_logger?.LogError($"{Args.SetOption} error parsing 4th sub-argument 'saveToConfig'");
+                }
             }
 
             if (OptionsStorage.TryGetSectionOptions(category, out OptionsBase options))
             {
-                if (!options.TryParseFrom(option, val)) return false;
+                if (!options.TryParseFrom(option, val))
+                {
+                    m_logger?.LogError($"{Args.SetOption} error parsing 2nd sub-argument 'CaseSensitiveOptionName'");
+                    return false;
+                }
             }
             else
             {
+                m_logger?.LogError($"{Args.SetOption} error parsing 1st sub-argument 'category'");
                 return false;
             }
 
