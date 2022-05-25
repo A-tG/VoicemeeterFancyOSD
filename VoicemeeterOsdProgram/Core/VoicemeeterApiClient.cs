@@ -169,8 +169,8 @@ namespace VoicemeeterOsdProgram.Core
                         throw new InvalidOperationException("VmrApi is unable to login");
                     }
 
-                    var newParamsTime = await Api.WaitForNewParamsAsync(250, 1000 / 30);
-                    m_logger?.Log($"VmrApi WaitForNewParams done after: {newParamsTime}ms");
+                    var paramsRes = await Api.WaitForNewParamsAsync(250, 1000 / 30);
+                    m_logger?.Log($"VmrApi WaitForNewParams returned: {paramsRes}");
 
                     m_type = ProgramType;
                     m_isVmRunning = IsVoicemeeterRunning;
