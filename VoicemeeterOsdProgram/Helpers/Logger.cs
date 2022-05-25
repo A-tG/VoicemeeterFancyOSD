@@ -24,10 +24,14 @@ namespace AtgDev.Utils
             {
                 Text = text;
                 Type = t;
+                Timestamp = DateTime.Now;
             }
 
             public LogType Type { get; private set; }
+
             public string Text { get; private set; }
+
+            public DateTime Timestamp { get; private set; }
         }
 
         private Thread m_thread;
@@ -155,7 +159,7 @@ namespace AtgDev.Utils
             {
                 t = t.PadLeft(t.Length + 1);
             }
-            return TryWrite($"{DateTime.Now:dd-MM-yyyy HH:mm:ss.fff}{t} {m.Text}");
+            return TryWrite($"{m.Timestamp:dd-MM-yyyy HH:mm:ss.fff}{t} {m.Text}");
         }
 
         private bool TryWrite(string text)
