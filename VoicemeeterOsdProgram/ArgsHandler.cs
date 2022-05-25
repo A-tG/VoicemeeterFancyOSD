@@ -54,19 +54,21 @@ namespace VoicemeeterOsdProgram
             {
                 case Args.Pause:
                     OptionsStorage.Other.Paused = true;
-                    return true;
+                    break;
                 case Args.Unpause:
                     OptionsStorage.Other.Paused = false;
-                    return true;
+                    break;
                 case Args.TogglePause:
                     OptionsStorage.Other.Paused ^= true; // invert bool
-                    return true;
+                    break;
                 case Args.SetOption:
                     return await SetOptionAsync(args, i);
                 default:
                     m_logger?.LogError($"Unknown command line argument: {arg}");
                     return false;
             }
+            m_logger?.Log($"Command line argument processed: {arg}");
+            return true;
         }
 
         private static async Task<bool> SetOptionAsync(string[] args, int i)
