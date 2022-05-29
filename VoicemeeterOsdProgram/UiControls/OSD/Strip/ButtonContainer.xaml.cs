@@ -12,7 +12,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
     /// </summary>
     public partial class ButtonContainer : ContentControl, IOsdAnimatedElement
     {
-        private Duration m_animDuration = new(TimeSpan.FromMilliseconds(300));
+        private Duration m_animDuration = new(TimeSpan.FromMilliseconds(350));
         private DoubleAnimation m_highlightAnim = new()
         {
             From = 0.0,
