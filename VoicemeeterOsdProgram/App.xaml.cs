@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Media;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Helpers;
@@ -19,6 +18,8 @@ namespace VoicemeeterOsdProgram
         public App()
         {
             InitializeComponent();
+
+            Current.DispatcherUnhandledException += OnUnhandledException;
         }
 
         async void OnAppStartup(object sender, StartupEventArgs e)
@@ -71,6 +72,11 @@ namespace VoicemeeterOsdProgram
                 var exType = IOAccessCheck.LastException.GetType();
                 await Task.Run(() => MessageBox.Show($"{exType}\n{Msg}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning));
             }
+        }
+
+        private void OnUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            Globals.logger.LogCritical($"Unhandled exception: {e.Exception}");
         }
     }
 }
