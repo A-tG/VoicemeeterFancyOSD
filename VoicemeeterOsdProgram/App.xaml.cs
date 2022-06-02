@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using VoicemeeterOsdProgram.Core;
+using VoicemeeterOsdProgram.Factories;
 using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.UiControls;
@@ -72,10 +73,7 @@ namespace VoicemeeterOsdProgram
             if (!canCreateDirs || !canCreateFiles)
             {
                 var exType = IOAccessCheck.LastException.GetType();
-                Dialog d = new()
-                {
-                    Title = "Warning"
-                };
+                var d = MsgBoxFactory.GetWarning();
                 d.CancelButton.Visibility = Visibility.Collapsed;
                 d.ContentToDisplay.Content = $"{exType}\n{Msg}";
                 d.Show();

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using VoicemeeterOsdProgram.Factories;
 using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.UiControls;
 using VoicemeeterOsdProgram.Updater;
@@ -81,7 +82,7 @@ namespace VoicemeeterOsdProgram
 
         private static void ShowHelpWindow()
         {
-            string msg = 
+            const string Msg = 
                 "Available commandline arguments:\n" +
                 $"{Args.Help}: list available commandline arguments\n" +
                 $"{Args.Pause}: stop displaying OSD on Parameters' change\n" +
@@ -95,19 +96,16 @@ namespace VoicemeeterOsdProgram
                 "\tsaveToConfig: (optional) save changes to config file\n" +
                 "Examples:\n" +
                 "\t-set-option osd BackgroundOpacity 0.3 true\n" +
-                "\t-set-option osd IgnoreStripsIndexes \"1, 5\"" +
+                "\t-set-option osd IgnoreStripsIndexes \"1, 5\"\n" +
                 "\t-set-option osd IgnoreStripsIndexes \" \"";
+
             if (m_helpDialog is null)
             {
-                m_helpDialog = new()
-                {
-                    Title = "Help"
-                };
-                m_helpDialog.CancelButton.Visibility = Visibility.Collapsed;
+                m_helpDialog = MsgBoxFactory.GetInfo("Help");
                 m_helpDialog.ContentToDisplay.Content = new TextBox()
                 {
                     IsReadOnly = true,
-                    Text = msg
+                    Text = Msg
                 };
                 m_helpDialog.Closing += (_, _) => m_helpDialog = null;
                 m_helpDialog.Show();

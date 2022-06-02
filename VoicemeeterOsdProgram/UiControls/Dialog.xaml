@@ -32,7 +32,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ContentPresenter Grid.Column="1" Grid.Row="0" x:Name="ContentToDisplay"/>
+        <Image Grid.Column="0" Grid.Row="0" x:Name="DialogIcon"  VerticalAlignment="Top"/>
+        <ContentPresenter Grid.Column="1" Grid.Row="0" x:Name="ContentToDisplay" Margin="5,0,0,5"/>
 
         <!-- Accept or Cancel -->
         <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
