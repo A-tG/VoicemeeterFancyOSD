@@ -32,7 +32,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Left,Top,Right,Bottom margins-->
         <ContentPresenter Grid.Column="1" Grid.Row="0" x:Name="ContentToDisplay"/>
 
         <!-- Accept or Cancel -->
