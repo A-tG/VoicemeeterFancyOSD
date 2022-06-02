@@ -5,6 +5,7 @@ using System.Windows.Media;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Options;
+using VoicemeeterOsdProgram.UiControls;
 using VoicemeeterOsdProgram.Updater;
 using VoicemeeterOsdProgram.Updater.Types;
 
@@ -61,8 +62,9 @@ namespace VoicemeeterOsdProgram
 
         private async Task CheckProgramDirectoryIOAsync()
         {
-            const string Msg = "Unable to create files/directories in the program's directory. Updater and persistent config might not work." + 
-                "\nPossible solution: if program is located in Program Files move it to a different folder/drive";
+            const string Msg = "Unable to create files/directories in the program's directory.\n" + 
+                "Updater and persistent config might not work.\n\n" + 
+                "Possible solution: if program is located in Program Files move it to a different folder/drive";
 
             string path = AppDomain.CurrentDomain.BaseDirectory;
             bool canCreateDirs = IOAccessCheck.TryCreateRandomDirectory(path);
@@ -70,7 +72,13 @@ namespace VoicemeeterOsdProgram
             if (!canCreateDirs || !canCreateFiles)
             {
                 var exType = IOAccessCheck.LastException.GetType();
-                await Task.Run(() => MessageBox.Show($"{exType}\n{Msg}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning));
+                Dialog d = new()
+                {
+                    Title = "Warning"
+                };
+                d.CancelButton.Visibility = Visibility.Collapsed;
+                d.ContentToDisplay.Content = $"{exType}\n{Msg}";
+                d.Show();
             }
         }
 
