@@ -1,6 +1,9 @@
 ﻿using AtgDev.Utils;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using VoicemeeterOsdProgram.Options;
+using VoicemeeterOsdProgram.UiControls;
 using VoicemeeterOsdProgram.Updater;
 
 namespace VoicemeeterOsdProgram
@@ -14,8 +17,10 @@ namespace VoicemeeterOsdProgram
             public const string Unpause = "-unpause";
             public const string TogglePause = "-toggle-pause";
             public const string SetOption = "-set-option";
+            public const string Help = "-help";
         }
 
+        private static Dialog m_helpDialog;
         private static Logger m_logger = Globals.logger;
 
         public static void HandleSpecial(string[] args)
@@ -63,12 +68,55 @@ namespace VoicemeeterOsdProgram
                     break;
                 case Args.SetOption:
                     return await SetOptionAsync(args, i);
+                case Args.Help:
+                    ShowHelpWindow();
+                    return true;
                 default:
                     m_logger?.LogError($"Unknown command line argument: {arg}");
                     return false;
             }
             m_logger?.Log($"Command line argument processed: {arg}");
             return true;
+        }
+
+        private static void ShowHelpWindow()
+        {
+            string msg = 
+                "Available commandline arguments:\n" +
+                $"{Args.Help}: list available commandline arguments\n" +
+                $"{Args.Pause}: stop displaying OSD on Parameters' change\n" +
+                $"{Args.Unpause}: resume displaying OSD on Parameters' change\n" +
+                $"{Args.TogglePause}: stop/resume displaying OSD\n" +
+                $"{Args.SetOption}: Change program options.\n" +
+                "\tUsage -set-option category Option value [saveToConfig]\n" +
+                "\tcategory: [Category] from config file\n" +
+                "\tOption: case sensetive option name under specified category\n" +
+                "\tvalue: value to set option to\n" +
+                "\tsaveToConfig: (optional) save changes to config file\n" +
+                "Examples:\n" +
+                "\t-set-option osd BackgroundOpacity 0.3 true\n" +
+                "\t-set-option osd IgnoreStripsIndexes \"1, 5\"" +
+                "\t-set-option osd IgnoreStripsIndexes \" \"";
+            if (m_helpDialog is null)
+            {
+                m_helpDialog = new()
+                {
+                    Title = "Help"
+                };
+                m_helpDialog.CancelButton.Visibility = Visibility.Collapsed;
+                m_helpDialog.ContentToDisplay.Content = new TextBox()
+                {
+                    IsReadOnly = true,
+                    Text = msg
+                };
+                m_helpDialog.Closing += (_, _) => m_helpDialog = null;
+                m_helpDialog.Show();
+            }
+            else
+            {
+                m_helpDialog.Show();
+                m_helpDialog.Focus();
+            }
         }
 
         private static async Task<bool> SetOptionAsync(string[] args, int i)
