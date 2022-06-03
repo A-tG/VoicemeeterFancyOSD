@@ -15,7 +15,7 @@
         </ResourceDictionary>
     </ContentControl.Resources>
     <Grid>
-        <Border x:Name="HighlightWrap"
+        <Border x:Name="HighlightWrap" SnapsToDevicePixels="False"
                 Width="{Binding ActualWidth, ElementName=LimiterBorder, Mode=OneWay}"
                 BorderBrush="{Binding Foreground, ElementName=Limiter, Mode=OneWay}"
                 CornerRadius="{Binding CornerRadius, ElementName=LimiterBorder, Mode=OneWay}" BorderThickness="1"
@@ -24,7 +24,7 @@
                 <DropShadowEffect ShadowDepth="0" BlurRadius="18" Color="{Binding Foreground.Color, ElementName=Limiter}"/>
             </Border.Effect>
         </Border>
-        <Border Name="LimiterBorder" Padding="2" CornerRadius="4" BorderThickness="2">
+        <Border Name="LimiterBorder" Padding="2" CornerRadius="4" BorderThickness="2" SnapsToDevicePixels="False">
             <Border.BorderBrush>
                 <SolidColorBrush Color="{DynamicResource VmDarkElementColor}"/>
             </Border.BorderBrush>
