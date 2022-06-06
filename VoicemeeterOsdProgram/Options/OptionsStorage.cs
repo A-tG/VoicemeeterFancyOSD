@@ -116,16 +116,14 @@ namespace VoicemeeterOsdProgram.Options
         {
             get
             {
-                if (m_sectionsOptions is not null) return m_sectionsOptions;
-
-                var fields = typeof(OptionsStorage).GetFields(BindingFlags.Public | BindingFlags.Static);
-                m_sectionsOptions = fields.Where(o =>
-                {
-                    var val = o.GetValue(null);
-                    return (val is OptionsBase) && (val is not OtherOptions);
-                }).ToDictionary(f => f.Name.ToLower(), f => (OptionsBase)f.GetValue(null));
-
-                return SectionsOptions;
+                return m_sectionsOptions ??= typeof(OptionsStorage).
+                    GetFields(BindingFlags.Public | BindingFlags.Static).
+                    Where(o =>
+                    {
+                        var val = o.GetValue(null);
+                        return (val is OptionsBase) && (val is not OtherOptions);
+                    }).
+                    ToDictionary(f => f.Name.ToLower(), f => (OptionsBase)f.GetValue(null));
             }
         }
 
@@ -137,7 +135,7 @@ namespace VoicemeeterOsdProgram.Options
                 return true;
             }
 
-            options = null;
+            options = default;
             return false;
         }
 

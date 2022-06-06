@@ -19,11 +19,7 @@ namespace VoicemeeterOsdProgram.Options
         {
             get
             {
-                if (m_Properties is null)
-                {
-                    m_Properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).ToDictionary(p => p.Name);
-                }
-                return m_Properties;
+                return m_Properties ??= GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).ToDictionary(p => p.Name);
             }
         }
 
