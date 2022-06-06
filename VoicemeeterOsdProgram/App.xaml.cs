@@ -74,7 +74,6 @@ namespace VoicemeeterOsdProgram
             {
                 var exType = IOAccessCheck.LastException.GetType();
                 var d = MsgBoxFactory.GetWarning();
-                d.CancelButton.Visibility = Visibility.Collapsed;
                 d.ContentToDisplay.Content = $"{exType}\n{Msg}";
                 d.Show();
             }
