@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls"
         mc:Ignorable="d" 
-        ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen"
         Icon="/Resources/Icons/MainIcon.ico">
     <Grid Margin="10">
         <Grid.Resources>
