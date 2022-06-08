@@ -10,7 +10,13 @@
         Icon="/Resources/Icons/MainIcon.ico">
     <Grid>
         <TabControl TabStripPlacement="Left">
-            <TabItem Header="Options"></TabItem>
+            <TabItem Header="Options">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <WrapPanel Orientation="Horizontal" local:PanelMarginSetter.Margin="4">
+                        <local:Program/>
+                    </WrapPanel>
+                </ScrollViewer>
+            </TabItem>
             <TabItem Header="About"></TabItem>
         </TabControl>
     </Grid>
