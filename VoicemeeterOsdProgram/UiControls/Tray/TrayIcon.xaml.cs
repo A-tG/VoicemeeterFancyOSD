@@ -67,7 +67,7 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
             PausedItem.IsChecked = val;
         }
 
-        private void OnSettingsClick(object sender, RoutedEventArgs e) => OpenPreferencesWindow();
+        private void OnSettingsClick(object sender, RoutedEventArgs e) => OpenSettingsWindow();
 
         private void OnOpenConfigClick(object sender, RoutedEventArgs e)
         {
@@ -100,12 +100,11 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
             IsPaused = !IsPaused;
         }
 
-        private void OpenPreferencesWindow()
+        private void OpenSettingsWindow()
         {
             if (m_settingsWindow is null)
             {
                 m_settingsWindow = new SettingsWindow();
-                m_settingsWindow.Closing += (_, _) => m_settingsWindow = null;
             }
             m_settingsWindow.Show();
             m_settingsWindow.Activate();

@@ -21,7 +21,26 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
     {
         public SettingsWindow()
         {
+            Closing += SettingsWindow_Closing;
             InitializeComponent();
+
+            InitOptions();
+        }
+
+        private void InitOptions()
+        {
+            var ch = OptionsCont.Children;
+
+            var item = new OptionsSection();
+            item.ContentContainer.Content = new Program();
+            ch.Add(item);
+        }
+
+        private void SettingsWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // need to hide Window instead of closing becase TabControl keeps Window in memory (internal memory leak?)
+            e.Cancel = true;
+            Hide();
         }
     }
 }
