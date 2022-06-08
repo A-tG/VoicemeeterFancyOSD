@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
-             mc:Ignorable="d">
+             mc:Ignorable="d" VerticalAlignment="Top">
     <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4">
-        <ContentPresenter Name="ContentContainer" local:PanelMarginSetter.Margin="4"/>
+        <ContentPresenter Name="ContentContainer" local:PanelMarginSetter.Margin="2"/>
     </Border>
 </UserControl>

@@ -34,6 +34,10 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             var item = new OptionsSection();
             item.ContentContainer.Content = new Program();
             ch.Add(item);
+
+            item = new OptionsSection();
+            item.ContentContainer.Content = new Osd();
+            ch.Add(item);
         }
 
         private void SettingsWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
