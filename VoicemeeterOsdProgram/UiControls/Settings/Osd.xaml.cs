@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using VoicemeeterOsdProgram.Options;
@@ -28,6 +30,8 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         public Osd()
         {
             InitializeComponent();
+
+            InitDisplayCombo();
 
             var o = OptionsStorage.Osd;
 
@@ -60,6 +64,22 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             Unloaded += OnUnload;
         }
 
+        private void InitDisplayCombo()
+        {
+            // Find way to get Display's name
+            var items = Enumerable.Range(0, WpfScreenHelper.Screen.AllScreens.ToList().Count).ToDictionary(i => (uint)i, i => i.ToString());
+            DisplayCombo.DisplayMemberPath = "Value";
+            DisplayCombo.SelectedValuePath = "Key";
+            DisplayCombo.ItemsSource = items;
+
+            var o = OptionsStorage.Osd;
+            DisplayCombo.SelectedValue = o.DisplayIndex;
+
+            o.DisplayIndexChanged += OptionEvent_DisplayIndexChanged;
+        }
+
+        private void OptionEvent_DisplayIndexChanged(object sender, uint val) => DisplayCombo.SelectedValue = val;
+
         private void OptionEvent_VertAlignmentChanged(object sender, VertAlignment val) => VertAlignmentCombo.SelectedValue = val;
 
         private void OptionEvent_HorAlignmentChanged(object sender, HorAlignment val) => HorAlignmentCombo.SelectedValue = val;
@@ -90,6 +110,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             o.AnimationsEnabledChanged -= OptionEvent_AnimationsEnabledChanged;
             o.WaitForVoicemeeterInitializationChanged -= OptionEven_WaitForVmChanged;
 
+            o.DisplayIndexChanged -= OptionEvent_DisplayIndexChanged;
             o.HorizontalAlignmentChanged -= OptionEvent_HorAlignmentChanged;
             o.VerticalAlignmentChanged -= OptionEvent_VertAlignmentChanged;
         }

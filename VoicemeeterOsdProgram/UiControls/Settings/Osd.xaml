@@ -50,7 +50,14 @@
     <!-- NeverShowElements -->
     <!-- IgnoreStripsIndexes -->
     <!-- IgnoreStripsIndexes -->
-    <!-- DisplayIndex -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="What display to use" Grid.Column="0"/>
+        <ComboBox Name="DisplayCombo" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
     <Separator/>
     <StackPanel Orientation="Vertical">
         <Label Content="Alignment" HorizontalAlignment="Center"/>

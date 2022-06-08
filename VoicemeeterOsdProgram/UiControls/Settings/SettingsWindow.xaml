@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
         mc:Ignorable="d"
-        Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="WidthAndHeight" 
+        Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
         Icon="/Resources/Icons/MainIcon.ico">
     <TabControl x:Name="Tab" TabStripPlacement="Left">
