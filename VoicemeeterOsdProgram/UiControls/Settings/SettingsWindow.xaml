@@ -1,11 +1,11 @@
-﻿<Window x:Class="VoicemeeterOsdProgram.UiControls.PreferencesWindow"
+﻿<Window x:Class="VoicemeeterOsdProgram.UiControls.Settings.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls"
+        xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
         mc:Ignorable="d"
-        Title="Preferences" Height="450" Width="800" Icon="/Resources/Icons/MainIcon.ico">
+        Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="WidthAndHeight" Icon="/Resources/Icons/MainIcon.ico">
     <Grid>
         <TabControl TabStripPlacement="Left">
             <TabItem Header="Options"></TabItem>

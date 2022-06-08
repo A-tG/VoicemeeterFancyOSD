@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace VoicemeeterOsdProgram.UiControls
+namespace VoicemeeterOsdProgram.UiControls.Settings
 {
     /// <summary>
-    /// Interaction logic for PreferencesWindow.xaml
+    /// Interaction logic for SettingsWindow.xaml
     /// </summary>
-    public partial class PreferencesWindow : Window
+    public partial class SettingsWindow : Window
     {
-        public PreferencesWindow()
+        public SettingsWindow()
         {
             InitializeComponent();
         }
