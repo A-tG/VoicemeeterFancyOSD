@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Windows;
 using VoicemeeterOsdProgram.Options;
+using VoicemeeterOsdProgram.UiControls.Settings;
 
 namespace VoicemeeterOsdProgram.UiControls.Tray
 {
@@ -12,6 +13,7 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
     public partial class TrayIcon : Window
     {
         private UpdateDialog m_updateDialog;
+        private Window m_settingsWindow;
         private bool m_isPaused = false;
 
         public TrayIcon()
@@ -65,6 +67,8 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
             PausedItem.IsChecked = val;
         }
 
+        private void OnSettingsClick(object sender, RoutedEventArgs e) => OpenPreferencesWindow();
+
         private void OnOpenConfigClick(object sender, RoutedEventArgs e)
         {
             OpenInOs.TryOpen(OptionsStorage.ConfigFilePath);
@@ -94,6 +98,17 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
         private void NotifyIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
         {
             IsPaused = !IsPaused;
+        }
+
+        private void OpenPreferencesWindow()
+        {
+            if (m_settingsWindow is null)
+            {
+                m_settingsWindow = new SettingsWindow();
+                m_settingsWindow.Closing += (_, _) => m_settingsWindow = null;
+            }
+            m_settingsWindow.Show();
+            m_settingsWindow.Activate();
         }
 
 #if DEBUG

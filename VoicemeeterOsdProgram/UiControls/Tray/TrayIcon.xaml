@@ -5,14 +5,15 @@
   xmlns:tb="http://www.hardcodet.net/taskbar">
 
     <tb:TaskbarIcon x:Name="NotifyIcon"
-                Visibility="Visible"
-                ToolTipText="Voicemeeter Fancy OSD"
-                IconSource="/Resources/Icons/MainIcon.ico"
-                MenuActivation="RightClick"
-                TrayMouseDoubleClick="NotifyIcon_TrayMouseDoubleClick">
+                    Visibility="Visible"
+                    ToolTipText="Voicemeeter Fancy OSD"
+                    IconSource="/Resources/Icons/MainIcon.ico"
+                    MenuActivation="RightClick"
+                    TrayMouseDoubleClick="NotifyIcon_TrayMouseDoubleClick">
         <tb:TaskbarIcon.ContextMenu>
             <ContextMenu BorderThickness="0">
                 <MenuItem Header="DEBUG WINDOW" Name="DebugWindowItem" Visibility="Collapsed"/>
+                <MenuItem Header="Settings" Click="OnSettingsClick"/>
                 <MenuItem Header="Open Config File" Click="OnOpenConfigClick"/>
                 <MenuItem Header="Open Config Folder" Click="OnOpenConfigFolderClick"/>
                 <Separator/>
