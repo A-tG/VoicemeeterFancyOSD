@@ -30,16 +30,13 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         public Osd()
         {
-            InitializeComponent();
-
             var o = OptionsStorage.Osd;
             DataContext = o;
 
+            InitializeComponent();
+
             DontShowChbox.IsChecked = o.DontShowIfVoicemeeterVisible;
             IsInteractableChbox.IsChecked = o.IsInteractable;
-            ((SliderOptionViewModel)Scale.DataContext).Value = o.Scale;
-            ((SliderOptionViewModel)BgOpacity.DataContext).Value = o.BackgroundOpacity;
-            ((SliderOptionViewModel)BorderThickness.DataContext).Value = o.BorderThickness;
             AnimationsChbox.IsChecked = o.AnimationsEnabled;
             WaitVmChbox.IsChecked = o.WaitForVoicemeeterInitialization;
             //AlwaysShowElements
@@ -55,9 +52,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
             o.DontShowIfVoicemeeterVisibleChanged += OptionEvent_DontShowIfVmVisible;
             o.IsInteractableChanged += OptionEvent_IsInteractableChanged;
-            o.ScaleChanged += OptionEvent_ScaleChanged;
-            o.BackgroundOpacityChanged += OptionEvent_BgOpacityChanged;
-            o.BorderThicknessChanged += OptionEvent_BorderThicknessChanged;
             o.AnimationsEnabledChanged += OptionEvent_AnimationsEnabledChanged;
             o.WaitForVoicemeeterInitializationChanged += OptionEven_WaitForVmChanged;
 
@@ -66,9 +60,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
             DontShowChbox.Click += (_, _) => o.DontShowIfVoicemeeterVisible = DontShowChbox.IsChecked ?? false;
             IsInteractableChbox.Click += (_, _) => o.IsInteractable = IsInteractableChbox.IsChecked ?? false;
-            Scale.Slider.ValueChanged += (_, e) => o.Scale = e.NewValue;
-            BgOpacity.Slider.ValueChanged += (_, e) => o.BackgroundOpacity = e.NewValue;
-            BorderThickness.Slider.ValueChanged += (_, e) => o.BorderThickness = e.NewValue;
             AnimationsChbox.Click += (_, _) => o.AnimationsEnabled = AnimationsChbox.IsChecked ?? false;
             WaitVmChbox.Click += (_, _) => o.WaitForVoicemeeterInitialization = WaitVmChbox.IsChecked ?? false;
 
@@ -120,12 +111,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private void OptionEvent_AnimationsEnabledChanged(object sender, bool val) => AnimationsChbox.IsChecked = val;
 
-        private void OptionEvent_BorderThicknessChanged(object sender, double val) => BorderThickness.Slider.Value = val;
-
-        private void OptionEvent_ScaleChanged(object sender, double val) => Scale.Slider.Value = val;
-
-        private void OptionEvent_BgOpacityChanged(object sender, double val) => BgOpacity.Slider.Value = val;
-
         private void OptionEvent_IsInteractableChanged(object sender, bool val) => IsInteractableChbox.IsChecked = val;
 
         private void OptionEvent_DontShowIfVmVisible(object sender, bool val) => DontShowChbox.IsChecked = val;
@@ -137,9 +122,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
             o.DontShowIfVoicemeeterVisibleChanged -= OptionEvent_DontShowIfVmVisible;
             o.IsInteractableChanged -= OptionEvent_IsInteractableChanged;
-            o.ScaleChanged -= OptionEvent_ScaleChanged;
-            o.BackgroundOpacityChanged -= OptionEvent_BgOpacityChanged;
-            o.BorderThicknessChanged -= OptionEvent_BorderThicknessChanged;
             o.AnimationsEnabledChanged -= OptionEvent_AnimationsEnabledChanged;
             o.WaitForVoicemeeterInitializationChanged -= OptionEven_WaitForVmChanged;
 
