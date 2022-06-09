@@ -35,40 +35,30 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
             InitializeComponent();
 
-            DontShowChbox.IsChecked = o.DontShowIfVoicemeeterVisible;
-            IsInteractableChbox.IsChecked = o.IsInteractable;
-            AnimationsChbox.IsChecked = o.AnimationsEnabled;
-            WaitVmChbox.IsChecked = o.WaitForVoicemeeterInitialization;
             //AlwaysShowElements
             //NeverShowElements
             //IgnoreStripsIndexes
             //IgnoreStripsIndexes
+            //Duration
             InitDisplayCombo();
             HorAlignmentCombo.SelectedValue = o.HorizontalAlignment;
             VertAlignmentCombo.SelectedValue = o.VerticalAlignment;
 
-            HorAlignmentCombo.ItemsSource = HAValues;
-            VertAlignmentCombo.ItemsSource = VAValues;
-
-            o.DontShowIfVoicemeeterVisibleChanged += OptionEvent_DontShowIfVmVisible;
-            o.IsInteractableChanged += OptionEvent_IsInteractableChanged;
-            o.AnimationsEnabledChanged += OptionEvent_AnimationsEnabledChanged;
-            o.WaitForVoicemeeterInitializationChanged += OptionEven_WaitForVmChanged;
-
             o.HorizontalAlignmentChanged += OptionEvent_HorAlignmentChanged;
             o.VerticalAlignmentChanged += OptionEvent_VertAlignmentChanged;
-
-            DontShowChbox.Click += (_, _) => o.DontShowIfVoicemeeterVisible = DontShowChbox.IsChecked ?? false;
-            IsInteractableChbox.Click += (_, _) => o.IsInteractable = IsInteractableChbox.IsChecked ?? false;
-            AnimationsChbox.Click += (_, _) => o.AnimationsEnabled = AnimationsChbox.IsChecked ?? false;
-            WaitVmChbox.Click += (_, _) => o.WaitForVoicemeeterInitialization = WaitVmChbox.IsChecked ?? false;
 
             SystemEvents.UserPreferenceChanged += SystemEvents_UserPreferenceChanged;
 
             Unloaded += OnUnload;
         }
 
-        private void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e) => ReinitDisplayCombo();
+        private void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+        {
+            var c = e.Category;
+            if (c != UserPreferenceCategory.Desktop) return;
+
+            ReinitDisplayCombo();
+        }
 
         private void ReinitDisplayCombo()
         {
@@ -107,23 +97,11 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private void OptionEvent_HorAlignmentChanged(object sender, HorAlignment val) => HorAlignmentCombo.SelectedValue = val;
 
-        private void OptionEven_WaitForVmChanged(object sender, bool val) => WaitVmChbox.IsChecked = val;
-
-        private void OptionEvent_AnimationsEnabledChanged(object sender, bool val) => AnimationsChbox.IsChecked = val;
-
-        private void OptionEvent_IsInteractableChanged(object sender, bool val) => IsInteractableChbox.IsChecked = val;
-
-        private void OptionEvent_DontShowIfVmVisible(object sender, bool val) => DontShowChbox.IsChecked = val;
 
         private void OnUnload(object sender, RoutedEventArgs e)
         {
             SystemEvents.UserPreferenceChanged -= SystemEvents_UserPreferenceChanged;
             var o = OptionsStorage.Osd;
-
-            o.DontShowIfVoicemeeterVisibleChanged -= OptionEvent_DontShowIfVmVisible;
-            o.IsInteractableChanged -= OptionEvent_IsInteractableChanged;
-            o.AnimationsEnabledChanged -= OptionEvent_AnimationsEnabledChanged;
-            o.WaitForVoicemeeterInitializationChanged -= OptionEven_WaitForVmChanged;
 
             o.DisplayIndexChanged -= OptionEvent_DisplayIndexChanged;
             o.HorizontalAlignmentChanged -= OptionEvent_HorAlignmentChanged;
