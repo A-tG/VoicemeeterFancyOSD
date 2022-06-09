@@ -10,7 +10,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
     {
         public SliderOption()
         {
-            Value = 1;
             InitializeComponent();
         }
 
