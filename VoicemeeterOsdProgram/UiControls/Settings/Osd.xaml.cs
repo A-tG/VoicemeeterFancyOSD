@@ -1,5 +1,4 @@
 ﻿using Microsoft.Win32;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -12,7 +11,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
     /// <summary>
     /// Interaction logic for Osd.xaml
     /// </summary>
-    public partial class Osd : StackPanel
+    public partial class Osd : UserControl
     {
         public Dictionary<HorAlignment, string> HAValues { get; } = new()
         {
@@ -41,11 +40,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             //IgnoreStripsIndexes
             //Duration
             InitDisplayCombo();
-            HorAlignmentCombo.SelectedValue = o.HorizontalAlignment;
-            VertAlignmentCombo.SelectedValue = o.VerticalAlignment;
-
-            o.HorizontalAlignmentChanged += OptionEvent_HorAlignmentChanged;
-            o.VerticalAlignmentChanged += OptionEvent_VertAlignmentChanged;
 
             SystemEvents.UserPreferenceChanged += SystemEvents_UserPreferenceChanged;
 
@@ -93,10 +87,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private void OptionEvent_DisplayIndexChanged(object sender, uint val) => DisplayCombo.SelectedValue = val;
 
-        private void OptionEvent_VertAlignmentChanged(object sender, VertAlignment val) => VertAlignmentCombo.SelectedValue = val;
-
-        private void OptionEvent_HorAlignmentChanged(object sender, HorAlignment val) => HorAlignmentCombo.SelectedValue = val;
-
 
         private void OnUnload(object sender, RoutedEventArgs e)
         {
@@ -104,8 +94,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             var o = OptionsStorage.Osd;
 
             o.DisplayIndexChanged -= OptionEvent_DisplayIndexChanged;
-            o.HorizontalAlignmentChanged -= OptionEvent_HorAlignmentChanged;
-            o.VerticalAlignmentChanged -= OptionEvent_VertAlignmentChanged;
         }
     }
 }
