@@ -6,10 +6,11 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace VoicemeeterOsdProgram.Options
 {
-    public abstract class OptionsBase
+    public abstract class OptionsBase : INotifyPropertyChanged
     {
         private Dictionary<string, PropertyInfo> m_Properties;
 
@@ -118,20 +119,24 @@ namespace VoicemeeterOsdProgram.Options
             return t.IsEnum ? "Possible values: " + string.Join(", ", t.GetEnumNames()) : string.Empty;
         }
 
-        protected void HandlePropertyChange<T>(ref T oldVal, ref T newVal, EventHandler<T> eventIfNotEqual)
+        protected void HandlePropertyChange<T>(ref T oldVal, ref T newVal, 
+            EventHandler<T> eventIfNotEqual, [CallerMemberName] string propertyName = null)
         {
             if (oldVal.Equals(newVal)) return;
 
             oldVal = newVal;
             eventIfNotEqual?.Invoke(this, newVal);
+            OnPropertyChanged(propertyName);
         }
 
-        protected void HandlePropertyChange<T>(ref IEnumerable<T> oldVal, ref IEnumerable<T> newVal, EventHandler<IEnumerable<T>> eventIfNotEqual)
+        protected void HandlePropertyChange<T>(ref IEnumerable<T> oldVal, ref IEnumerable<T> newVal, 
+            EventHandler<IEnumerable<T>> eventIfNotEqual, [CallerMemberName] string propertyName = null)
         {
             if (oldVal.SequenceEqual<T>(newVal)) return;
 
             oldVal = newVal;
             eventIfNotEqual?.Invoke(this, newVal);
+            OnPropertyChanged(propertyName);
         }
 
         protected void ParseFrom(string toPropertyName, string fromVal)
@@ -213,6 +218,13 @@ namespace VoicemeeterOsdProgram.Options
                 }
             }
             return comments;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
