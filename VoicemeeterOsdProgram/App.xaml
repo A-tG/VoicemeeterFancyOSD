@@ -9,6 +9,7 @@
             <converters:RectConverter x:Key="RectConverter"/>
             <converters:RectVertHalfConverter x:Key="RectVertHalfConverter"/>
             <converters:IsGreaterThanConverter x:Key="IsGreaterThanConverter"/>
+            <converters:UintToStringConverter x:Key="UintToStrConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Voicemeeter/Colors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
