@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="VoicemeeterOsdProgram.UiControls.Settings.InputOption"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
+             mc:Ignorable="d" x:Name="InputOptControl">
+    <UserControl.DataContext>
+        <local:InputOptionViewModel Label="Input Label:"/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="{Binding Label}" Grid.Column="0" HorizontalAlignment="Left"/>
+        <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="4,0" HorizontalAlignment="Stretch"
+                 AcceptsTab="False" AcceptsReturn="False"
+                 PreviewTextInput="PreviewText" TextAlignment="Center" TextChanged="TextBox_TextChanged"
+                 Text="{Binding InputValue, ElementName=InputOptControl, UpdateSourceTrigger=PropertyChanged}"/>
+    </Grid>
+</UserControl>
