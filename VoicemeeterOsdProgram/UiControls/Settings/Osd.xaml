@@ -1,48 +1,39 @@
 ﻿<StackPanel x:Class="VoicemeeterOsdProgram.UiControls.Settings.Osd"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
-             mc:Ignorable="d"  
-             local:PanelMarginSetter.Margin="4" Orientation="Vertical"
-             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
+            mc:Ignorable="d" 
+            DataContext="{Binding RelativeSource={RelativeSource Self}}"
+            local:PanelMarginSetter.Margin="4" Orientation="Vertical">
     <Label Content="OSD" FontWeight="Bold" HorizontalAlignment="Center"/>
     <CheckBox Name="DontShowChbox" Content="Don't show if Voicemeeter is visible"/>
     <CheckBox Name="IsInteractableChbox" Content="User can interact with OSD"/>
     <Separator/>
-    <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Label Content="Scale:"/>
-            <TextBlock VerticalAlignment="Center" Text="{Binding ElementName=ScaleSlider, Path=Value, StringFormat={}{0:F2}}"/>
-        </StackPanel>
-        <Slider Name="ScaleSlider"
-                Orientation="Horizontal" Minimum="0.5" Maximum="2" 
-                TickFrequency="0.01" IsSnapToTickEnabled="True" 
-                SmallChange="0.01" LargeChange="0.05"/>
-    </StackPanel>
+    <local:SliderOption x:Name="Scale">
+        <local:SliderOption.DataContext>
+            <local:SliderOptionViewModel Label="Scale:" Tooltip=""
+                                         SmallChange="0.01" LargeChange="0.05" TickFreq="0.01"
+                                         Min="0.5" Max="2"/>
+        </local:SliderOption.DataContext>
+    </local:SliderOption>
     <Separator/>
-    <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Label Content="Background opacity:"/>
-            <TextBlock VerticalAlignment="Center" Text="{Binding ElementName=BgOpacitySlider, Path=Value, StringFormat={}{0:F2}}"/>
-        </StackPanel>
-        <Slider Name="BgOpacitySlider"
-                Orientation="Horizontal" Minimum="0" Maximum="1" 
-                TickFrequency="0.01" IsSnapToTickEnabled="True" 
-                SmallChange="0.01" LargeChange="0.05"/>
-    </StackPanel>
+    <local:SliderOption x:Name="BgOpacity">
+        <local:SliderOption.DataContext>
+            <local:SliderOptionViewModel Label="Background opacity:" Tooltip=""
+                                         SmallChange="0.01" LargeChange="0.05" TickFreq="0.01"
+                                         Min="0" Max="1"/>
+        </local:SliderOption.DataContext>
+    </local:SliderOption>
     <Separator/>
-    <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Label Content="Border thickness:"/>
-            <TextBlock VerticalAlignment="Center" Text="{Binding ElementName=BorderThicknessSlider, Path=Value, StringFormat={}{0:F2}}"/>
-        </StackPanel>
-        <Slider Name="BorderThicknessSlider"
-                Orientation="Horizontal" Minimum="0" Maximum="4" 
-                TickFrequency="0.1" IsSnapToTickEnabled="True" 
-                SmallChange="0.1" LargeChange="1"/>
-    </StackPanel>
+    <local:SliderOption x:Name="BorderThickness">
+        <local:SliderOption.DataContext>
+            <local:SliderOptionViewModel Label="Border thickness:" Tooltip=""
+                                         SmallChange="0.1" LargeChange="1" TickFreq="0.1"
+                                         Min="0" Max="4"/>
+        </local:SliderOption.DataContext>
+    </local:SliderOption>
     <Separator/>
     <CheckBox Name="AnimationsChbox" Content="Use animations"/>
     <CheckBox Name="WaitVmChbox" Content="Wait for Voicemeeter initialization"/>

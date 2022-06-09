@@ -36,9 +36,9 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
             DontShowChbox.IsChecked = o.DontShowIfVoicemeeterVisible;
             IsInteractableChbox.IsChecked = o.IsInteractable;
-            ScaleSlider.Value = o.Scale;
-            BgOpacitySlider.Value = o.BackgroundOpacity;
-            BorderThicknessSlider.Value = o.BorderThickness;
+            ((SliderOptionViewModel)Scale.DataContext).Value = o.Scale;
+            ((SliderOptionViewModel)BgOpacity.DataContext).Value = o.BackgroundOpacity;
+            ((SliderOptionViewModel)BorderThickness.DataContext).Value = o.BorderThickness;
             AnimationsChbox.IsChecked = o.AnimationsEnabled;
             WaitVmChbox.IsChecked = o.WaitForVoicemeeterInitialization;
             //AlwaysShowElements
@@ -62,9 +62,9 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
             DontShowChbox.Click += (_, _) => o.DontShowIfVoicemeeterVisible = DontShowChbox.IsChecked ?? false;
             IsInteractableChbox.Click += (_, _) => o.IsInteractable = IsInteractableChbox.IsChecked ?? false;
-            ScaleSlider.ValueChanged += (_, e) => o.Scale = e.NewValue;
-            BgOpacitySlider.ValueChanged += (_, e) => o.BackgroundOpacity = e.NewValue;
-            BorderThicknessSlider.ValueChanged += (_, e) => o.BorderThickness = e.NewValue;
+            Scale.Slider.ValueChanged += (_, e) => o.Scale = e.NewValue;
+            BgOpacity.Slider.ValueChanged += (_, e) => o.BackgroundOpacity = e.NewValue;
+            BorderThickness.Slider.ValueChanged += (_, e) => o.BorderThickness = e.NewValue;
             AnimationsChbox.Click += (_, _) => o.AnimationsEnabled = AnimationsChbox.IsChecked ?? false;
             WaitVmChbox.Click += (_, _) => o.WaitForVoicemeeterInitialization = WaitVmChbox.IsChecked ?? false;
 
@@ -116,11 +116,11 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private void OptionEvent_AnimationsEnabledChanged(object sender, bool val) => AnimationsChbox.IsChecked = val;
 
-        private void OptionEvent_BorderThicknessChanged(object sender, double val) => BorderThicknessSlider.Value = val;
+        private void OptionEvent_BorderThicknessChanged(object sender, double val) => BorderThickness.Slider.Value = val;
 
-        private void OptionEvent_ScaleChanged(object sender, double val) => ScaleSlider.Value = val;
+        private void OptionEvent_ScaleChanged(object sender, double val) => Scale.Slider.Value = val;
 
-        private void OptionEvent_BgOpacityChanged(object sender, double val) => BgOpacitySlider.Value = val;
+        private void OptionEvent_BgOpacityChanged(object sender, double val) => BgOpacity.Slider.Value = val;
 
         private void OptionEvent_IsInteractableChanged(object sender, bool val) => IsInteractableChbox.IsChecked = val;
 
