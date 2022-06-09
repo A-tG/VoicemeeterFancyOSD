@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -31,8 +32,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         {
             InitializeComponent();
 
-            InitDisplayCombo();
-
             var o = OptionsStorage.Osd;
 
             DontShowChbox.IsChecked = o.DontShowIfVoicemeeterVisible;
@@ -46,7 +45,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             //NeverShowElements
             //IgnoreStripsIndexes
             //IgnoreStripsIndexes
-            //DisplayIndex
+            InitDisplayCombo();
             HorAlignmentCombo.SelectedValue = o.HorizontalAlignment;
             VertAlignmentCombo.SelectedValue = o.VerticalAlignment;
 
@@ -61,12 +60,32 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             o.HorizontalAlignmentChanged += OptionEvent_HorAlignmentChanged;
             o.VerticalAlignmentChanged += OptionEvent_VertAlignmentChanged;
 
+            DontShowChbox.Click += (_, _) => o.DontShowIfVoicemeeterVisible = DontShowChbox.IsChecked ?? false;
+            IsInteractableChbox.Click += (_, _) => o.IsInteractable = IsInteractableChbox.IsChecked ?? false;
+            ScaleSlider.ValueChanged += (_, e) => o.Scale = e.NewValue;
+            BgOpacitySlider.ValueChanged += (_, e) => o.BackgroundOpacity = e.NewValue;
+            BorderThicknessSlider.ValueChanged += (_, e) => o.BorderThickness = e.NewValue;
+            AnimationsChbox.Click += (_, _) => o.AnimationsEnabled = AnimationsChbox.IsChecked ?? false;
+            WaitVmChbox.Click += (_, _) => o.WaitForVoicemeeterInitialization = WaitVmChbox.IsChecked ?? false;
+
+            SystemEvents.UserPreferenceChanged += SystemEvents_UserPreferenceChanged;
+
             Unloaded += OnUnload;
+        }
+
+        private void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e) => ReinitDisplayCombo();
+
+        private void ReinitDisplayCombo()
+        {
+            OptionsStorage.Osd.DisplayIndexChanged -= OptionEvent_DisplayIndexChanged;
+            DisplayCombo.SelectionChanged -= DisplayCombo_SelectionChanged;
+
+            InitDisplayCombo();
         }
 
         private void InitDisplayCombo()
         {
-            // Find way to get Display's name
+            // Find a way to get Display's name
             var items = Enumerable.Range(0, WpfScreenHelper.Screen.AllScreens.ToList().Count).ToDictionary(i => (uint)i, i => i.ToString());
             DisplayCombo.DisplayMemberPath = "Value";
             DisplayCombo.SelectedValuePath = "Key";
@@ -76,6 +95,15 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             DisplayCombo.SelectedValue = o.DisplayIndex;
 
             o.DisplayIndexChanged += OptionEvent_DisplayIndexChanged;
+            DisplayCombo.SelectionChanged += DisplayCombo_SelectionChanged;
+        }
+
+        private void DisplayCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var items = e.AddedItems.OfType<KeyValuePair<uint, string>>().ToArray();
+            if (items.Length == 0) return;
+
+            OptionsStorage.Osd.DisplayIndex = items[0].Key;
         }
 
         private void OptionEvent_DisplayIndexChanged(object sender, uint val) => DisplayCombo.SelectedValue = val;
@@ -100,6 +128,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private void OnUnload(object sender, RoutedEventArgs e)
         {
+            SystemEvents.UserPreferenceChanged -= SystemEvents_UserPreferenceChanged;
             var o = OptionsStorage.Osd;
 
             o.DontShowIfVoicemeeterVisibleChanged -= OptionEvent_DontShowIfVmVisible;

@@ -30,7 +30,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             o.AutostartChanged += OptionEvent_Autostart;
             o.RenderModeChanged += OptionEvent_RenderMode;
 
-            AutostartChbox.Click += AutostartCheckBoxClick;
+            AutostartChbox.Click += (_, _) => o.Autostart = AutostartChbox.IsChecked ?? false;
             RenderingModeCombo.SelectionChanged += RenderingModeSelected;
 
             Unloaded += OnUnload;
@@ -43,17 +43,12 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             o.RenderModeChanged -= OptionEvent_RenderMode;
         }
 
-        private void AutostartCheckBoxClick(object sender, RoutedEventArgs e)
-        {
-            OptionsStorage.Program.Autostart = AutostartChbox.IsChecked ?? false;
-        }
-
         private void RenderingModeSelected(object sender, SelectionChangedEventArgs e)
         {
-            var items = e.AddedItems.OfType<RenderMode>().ToArray();
+            var items = e.AddedItems.OfType<KeyValuePair<RenderMode, string>>().ToArray();
             if (items.Length == 0) return;
 
-            OptionsStorage.Program.RenderMode = items[0];
+            OptionsStorage.Program.RenderMode = items[0].Key;
         }
 
         private void OptionEvent_Autostart(object o, bool val) => AutostartChbox.IsChecked = val;
