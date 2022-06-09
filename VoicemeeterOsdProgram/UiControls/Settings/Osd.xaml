@@ -5,7 +5,6 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
             mc:Ignorable="d" 
-            DataContext="{Binding RelativeSource={RelativeSource Self}}"
             local:PanelMarginSetter.Margin="4" Orientation="Vertical">
     <Label Content="OSD" FontWeight="Bold" HorizontalAlignment="Center"/>
     <CheckBox Name="DontShowChbox" Content="Don't show if Voicemeeter is visible"/>
@@ -13,7 +12,7 @@
     <Separator/>
     <local:SliderOption x:Name="Scale">
         <local:SliderOption.DataContext>
-            <local:SliderOptionViewModel Label="Scale:" Tooltip=""
+            <local:SliderOptionViewModel Label="Scale:"
                                          SmallChange="0.01" LargeChange="0.05" TickFreq="0.01"
                                          Min="0.5" Max="2"/>
         </local:SliderOption.DataContext>
@@ -21,7 +20,7 @@
     <Separator/>
     <local:SliderOption x:Name="BgOpacity">
         <local:SliderOption.DataContext>
-            <local:SliderOptionViewModel Label="Background opacity:" Tooltip=""
+            <local:SliderOptionViewModel Label="Background opacity:"
                                          SmallChange="0.01" LargeChange="0.05" TickFreq="0.01"
                                          Min="0" Max="1"/>
         </local:SliderOption.DataContext>
@@ -29,7 +28,7 @@
     <Separator/>
     <local:SliderOption x:Name="BorderThickness">
         <local:SliderOption.DataContext>
-            <local:SliderOptionViewModel Label="Border thickness:" Tooltip=""
+            <local:SliderOptionViewModel Label="Border thickness:"
                                          SmallChange="0.1" LargeChange="1" TickFreq="0.1"
                                          Min="0" Max="4"/>
         </local:SliderOption.DataContext>
@@ -58,11 +57,9 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <ComboBox Name="HorAlignmentCombo" Height="Auto" HorizontalAlignment="Stretch" Grid.Column="0"
-                  ItemsSource="{Binding Path=HAValues}" Margin="4,0"
-                  DisplayMemberPath="Value" SelectedValuePath="Key"/>
+                  Margin="4,0" DisplayMemberPath="Value" SelectedValuePath="Key"/>
             <ComboBox Name="VertAlignmentCombo" Height="Auto" HorizontalAlignment="Stretch" Grid.Column="1"
-                  ItemsSource="{Binding Path=VAValues}" Margin="4,0"
-                  DisplayMemberPath="Value" SelectedValuePath="Key"/>
+                  Margin="4,0" DisplayMemberPath="Value" SelectedValuePath="Key"/>
         </Grid>
     </StackPanel>
 </StackPanel>

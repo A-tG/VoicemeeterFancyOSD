@@ -4,7 +4,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 {
     public class SliderOptionViewModel : BaseViewModel
     {
-        private string m_label = "", m_tooltip = "";
+        private string m_label = "";
         private double m_min, m_max, m_tickFreq, m_smallChange, m_largeChange, m_value;
         
         public string Label
@@ -13,16 +13,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             set
             {
                 m_label = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Tooltip
-        {
-            get => m_tooltip;
-            set
-            {
-                m_tooltip = value;
                 OnPropertyChanged();
             }
         }

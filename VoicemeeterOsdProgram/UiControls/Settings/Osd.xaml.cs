@@ -33,6 +33,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             InitializeComponent();
 
             var o = OptionsStorage.Osd;
+            DataContext = o;
 
             DontShowChbox.IsChecked = o.DontShowIfVoicemeeterVisible;
             IsInteractableChbox.IsChecked = o.IsInteractable;
@@ -48,6 +49,9 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             InitDisplayCombo();
             HorAlignmentCombo.SelectedValue = o.HorizontalAlignment;
             VertAlignmentCombo.SelectedValue = o.VerticalAlignment;
+
+            HorAlignmentCombo.ItemsSource = HAValues;
+            VertAlignmentCombo.ItemsSource = VAValues;
 
             o.DontShowIfVoicemeeterVisibleChanged += OptionEvent_DontShowIfVmVisible;
             o.IsInteractableChanged += OptionEvent_IsInteractableChanged;

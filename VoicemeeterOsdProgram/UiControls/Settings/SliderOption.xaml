@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
              mc:Ignorable="d">
     <UserControl.DataContext>
-        <local:SliderOptionViewModel Label="Slider Label:" Max="2" SmallChange="0.1" TickFreq="0.1" Value="1" LargeChange="0.5" Tooltip="Slider Tooltip"/>
+        <local:SliderOptionViewModel Label="Slider Label:" Max="2" SmallChange="0.1" TickFreq="0.1" Value="1" LargeChange="0.5"/>
     </UserControl.DataContext>
-    <StackPanel Orientation="Vertical" ToolTip="{Binding Tooltip}">
+    <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Label Content="{Binding Label}"/>
             <TextBlock VerticalAlignment="Center" Text="{Binding Path=Value, StringFormat={}{0:F2}}"/>
