@@ -38,6 +38,10 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             item = new OptionsSection();
             item.ContentContainer.Content = new Osd();
             ch.Add(item);
+
+            item = new OptionsSection();
+            item.ContentContainer.Content = new OsdAlt();
+            ch.Add(item);
         }
 
         private void SettingsWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
