@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="VoicemeeterOsdProgram.UiControls.Settings.Logger"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
+             xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
+             mc:Ignorable="d" Name="LoggerOptControl">
+    <StackPanel help:PanelMarginSetter.Margin="4">
+        <Label Content="Logger" FontWeight="Bold" HorizontalAlignment="Center"/>
+        <CheckBox Content="Enabled" IsChecked="{Binding Enabled, Mode=TwoWay}"/>
+        <local:UintInputOption InputValue="{Binding DataContext.LogFilesMax, ElementName=LoggerOptControl, Mode=TwoWay,
+                                            Converter={StaticResource UintToStrConverter}}">
+            <local:UintInputOption.DataContext>
+                <local:InputOptionViewModel Label="Max old log files"/>
+            </local:UintInputOption.DataContext>
+        </local:UintInputOption>
+    </StackPanel>
+</UserControl>
