@@ -1,18 +1,24 @@
-﻿<StackPanel x:Class="VoicemeeterOsdProgram.UiControls.Settings.Program"
+﻿<UserControl x:Class="VoicemeeterOsdProgram.UiControls.Settings.Program"
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
-            mc:Ignorable="d" 
-            local:PanelMarginSetter.Margin="4" Orientation="Vertical"
-            DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <Label Content="Program" FontWeight="Bold" HorizontalAlignment="Center"/>
-    <CheckBox Name="AutostartChbox" Content="Autostart with Windows"/>
-    <StackPanel Orientation="Horizontal">
-        <Label Content="Rendering Mode" VerticalAlignment="Center"/>
-        <ComboBox Name="RenderingModeCombo" Height="Auto" VerticalAlignment="Center"
-                  ItemsSource="{Binding Path=RmodeValues}"
-                  DisplayMemberPath="Value" SelectedValuePath="Key"/>
+            xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
+            mc:Ignorable="d"
+            Name="ProgramOptControl">
+    <StackPanel help:PanelMarginSetter.Margin="4" Orientation="Vertical">
+        <Label Content="Program" FontWeight="Bold" HorizontalAlignment="Center"/>
+        <CheckBox Content="Autostart with Windows" IsChecked="{Binding Autostart, Mode=TwoWay}"/>
+        <Grid DataContext="{Binding ElementName=ProgramOptControl}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Rendering Mode" Grid.Column="0"/>
+            <ComboBox VerticalAlignment="Center" Grid.Column="1"
+                      ItemsSource="{Binding Path=RmodeValues}" DisplayMemberPath="Value" SelectedValuePath="Key"
+                      SelectedValue="{Binding DataContext.RenderMode, Mode=TwoWay}"/>
+        </Grid>
     </StackPanel>
-</StackPanel>
+</UserControl>
