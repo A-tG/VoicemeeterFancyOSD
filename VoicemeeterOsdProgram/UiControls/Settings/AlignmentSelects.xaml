@@ -11,17 +11,13 @@
     </UserControl.DataContext>
     <StackPanel Orientation="Vertical">
         <Label Content="Alignment" HorizontalAlignment="Center"/>
-        <Grid HorizontalAlignment="Stretch">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <ComboBox Height="Auto" HorizontalAlignment="Stretch" Grid.Column="0" Margin="4,0"
+        <UniformGrid HorizontalAlignment="Stretch" Rows="1">
+            <ComboBox Height="Auto" HorizontalAlignment="Stretch" Margin="4,0"
                           ItemsSource="{Binding HAValues}" DisplayMemberPath="Value" SelectedValuePath="Key"
                           SelectedValue="{Binding HorAlignmentVal, ElementName=AlignSelOptionControl}"/>
-            <ComboBox Height="Auto" HorizontalAlignment="Stretch" Grid.Column="1" Margin="4,0" 
+            <ComboBox Height="Auto" HorizontalAlignment="Stretch" Margin="4,0" 
                           ItemsSource="{Binding VAValues}" DisplayMemberPath="Value" SelectedValuePath="Key"
                           SelectedValue="{Binding VertAlignmentVal, ElementName=AlignSelOptionControl}"/>
-        </Grid>
+        </UniformGrid>
     </StackPanel>
 </UserControl>

@@ -10,15 +10,11 @@
     <StackPanel help:PanelMarginSetter.Margin="4" Orientation="Vertical">
         <Label Content="Program" FontWeight="Bold" HorizontalAlignment="Center"/>
         <CheckBox Content="Autostart with Windows" IsChecked="{Binding Autostart, Mode=TwoWay}"/>
-        <Grid DataContext="{Binding ElementName=ProgramOptControl}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+        <UniformGrid DataContext="{Binding ElementName=ProgramOptControl}" Rows="1">
             <Label Content="Rendering Mode" Grid.Column="0"/>
-            <ComboBox VerticalAlignment="Center" Grid.Column="1"
+            <ComboBox VerticalAlignment="Center" Margin="4,0"
                       ItemsSource="{Binding Path=RmodeValues}" DisplayMemberPath="Value" SelectedValuePath="Key"
                       SelectedValue="{Binding DataContext.RenderMode, Mode=TwoWay}"/>
-        </Grid>
+        </UniformGrid>
     </StackPanel>
 </UserControl>

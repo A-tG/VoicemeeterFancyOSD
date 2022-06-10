@@ -8,15 +8,11 @@
     <UserControl.DataContext>
         <local:InputOptionViewModel Label="Input Label:"/>
     </UserControl.DataContext>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Label Content="{Binding Label}" Grid.Column="0" HorizontalAlignment="Left"/>
-        <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="4,0" HorizontalAlignment="Stretch"
+    <UniformGrid Rows="1">
+        <Label Content="{Binding Label}"/>
+        <TextBox VerticalAlignment="Center" Margin="4,0"
                  AcceptsTab="False" AcceptsReturn="False"
                  PreviewTextInput="PreviewText" TextAlignment="Center" TextChanged="TextBox_TextChanged"
                  Text="{Binding InputValue, ElementName=InputOptControl, UpdateSourceTrigger=PropertyChanged}"/>
-    </Grid>
+    </UniformGrid>
 </UserControl>
