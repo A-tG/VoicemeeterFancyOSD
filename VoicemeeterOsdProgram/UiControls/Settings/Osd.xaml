@@ -7,8 +7,7 @@
                 xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
                 mc:Ignorable="d" 
                 Name="OsdOptControl">
-    <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4" 
-                DataContext="{Binding DataContext, ElementName=OsdOptControl}">
+    <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4">
         <Label Content="OSD" FontWeight="Bold" HorizontalAlignment="Center"/>
         <CheckBox Content="Don't show if Voicemeeter is visible" 
                   IsChecked="{Binding DontShowIfVoicemeeterVisible, Mode=TwoWay}"/>
@@ -24,7 +23,7 @@
         <local:UintInputOption InputValue="{Binding DataContext.DurationMs, ElementName=OsdOptControl, Mode=TwoWay,
                                             Converter={StaticResource UintToStrConverter}}">
             <local:UintInputOption.DataContext>
-                <local:InputOptionViewModel Label="Duration:"/>
+                <local:InputOptionViewModel Label="Duration"/>
             </local:UintInputOption.DataContext>
         </local:UintInputOption>
         <Separator/>
@@ -51,7 +50,7 @@
         <local:UintInputOption InputValue="{Binding DataContext.DisplayIndex, ElementName=OsdOptControl, Mode=TwoWay,
                                             Converter={StaticResource UintToStrConverter}}">
             <local:UintInputOption.DataContext>
-                <local:InputOptionViewModel Label="Display used index:"/>
+                <local:InputOptionViewModel Label="Display used index"/>
             </local:UintInputOption.DataContext>
         </local:UintInputOption>
         <Separator/>
