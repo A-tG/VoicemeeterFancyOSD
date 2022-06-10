@@ -12,7 +12,8 @@
         <local:UintInputOption InputValue="{Binding DataContext.LogFilesMax, ElementName=LoggerOptControl, Mode=TwoWay,
                                             Converter={StaticResource UintToStrConverter}}">
             <local:UintInputOption.DataContext>
-                <local:InputOptionViewModel Label="Max old log files"/>
+                <local:InputOptionViewModel Label="Max old log files"
+                                            TooltipText="Maximum number of stored Log files (excluding new).&#x0a;0 - no limit"/>
             </local:UintInputOption.DataContext>
         </local:UintInputOption>
     </StackPanel>
