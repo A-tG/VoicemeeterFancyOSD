@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
+        xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
         mc:Ignorable="d"
         Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
@@ -11,7 +12,7 @@
     <TabControl x:Name="Tab" TabStripPlacement="Left">
         <TabItem Header="Options">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <WrapPanel Orientation="Horizontal" local:PanelMarginSetter.Margin="4" x:Name="OptionsCont"/>
+                <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4" x:Name="OptionsCont"/>
             </ScrollViewer>
         </TabItem>
         <TabItem Header="About"></TabItem>
