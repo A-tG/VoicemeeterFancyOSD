@@ -10,7 +10,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type UserControl}">
-                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="4">
+                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="4" VerticalAlignment="Top">
                             <ContentPresenter Content="{TemplateBinding Content}"/>
                         </Border>
                     </ControlTemplate>
