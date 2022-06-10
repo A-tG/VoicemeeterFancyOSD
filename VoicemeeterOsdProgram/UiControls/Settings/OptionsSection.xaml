@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
              mc:Ignorable="d" VerticalAlignment="Top">
-    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4">
+    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="4">
         <ContentPresenter Name="ContentContainer"/>
     </Border>
 </UserControl>

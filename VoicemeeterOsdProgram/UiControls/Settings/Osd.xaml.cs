@@ -1,10 +1,6 @@
-﻿using Microsoft.Win32;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using VoicemeeterOsdProgram.Options;
-using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.Settings
 {

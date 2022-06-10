@@ -4,7 +4,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 {
     public class InputOptionViewModel: BaseViewModel
     {
-        private string m_label = "";
+        private string m_label = "", m_tooltipText = "";
 
         public string Label
         {
@@ -12,6 +12,16 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             set
             {
                 m_label = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string TooltipText
+        {
+            get => m_tooltipText;
+            set
+            {
+                m_tooltipText = value;
                 OnPropertyChanged();
             }
         }

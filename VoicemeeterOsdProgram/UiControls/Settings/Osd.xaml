@@ -59,11 +59,10 @@
         <!-- AlwaysShowElements -->
         <!-- NeverShowElements -->
         <!-- IgnoreStripsIndexes -->
-        <!-- IgnoreStripsIndexes -->
         <local:UintInputOption InputValue="{Binding DataContext.DisplayIndex, ElementName=OsdOptControl, Mode=TwoWay,
                                             Converter={StaticResource UintToStrConverter}}">
             <local:UintInputOption.DataContext>
-                <local:InputOptionViewModel Label="Display used index"/>
+                <local:DisplayIndexInputOptionViewModel/>
             </local:UintInputOption.DataContext>
         </local:UintInputOption>
         
