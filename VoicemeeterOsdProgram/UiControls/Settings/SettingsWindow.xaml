@@ -12,7 +12,26 @@
     <TabControl x:Name="Tab" TabStripPlacement="Left">
         <TabItem Header="Options">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4" x:Name="OptionsCont"/>
+                <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4" x:Name="OptionsCont">
+                    <local:OptionsSection>
+                        <local:Program/>
+                    </local:OptionsSection>
+                    <local:OptionsSection>
+                        <local:Osd/>
+                    </local:OptionsSection>
+                    <local:OptionsSection>
+                        <local:OsdAlt/>
+                    </local:OptionsSection>
+                    <local:OptionsSection>
+                        <local:Updater/>
+                    </local:OptionsSection>
+                    <local:OptionsSection>
+                        <local:Logger/>
+                    </local:OptionsSection>
+                    <local:OptionsSection>
+                        <local:Voicemeeter/>
+                    </local:OptionsSection>
+                </WrapPanel>
             </ScrollViewer>
         </TabItem>
         <TabItem Header="About"></TabItem>

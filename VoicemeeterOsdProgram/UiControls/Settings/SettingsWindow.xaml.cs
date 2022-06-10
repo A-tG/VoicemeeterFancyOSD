@@ -23,37 +23,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         {
             Closing += SettingsWindow_Closing;
             InitializeComponent();
-
-            InitOptions();
-        }
-
-        private void InitOptions()
-        {
-            var ch = OptionsCont.Children;
-
-            var item = new OptionsSection();
-            item.ContentContainer.Content = new Program();
-            ch.Add(item);
-
-            item = new OptionsSection();
-            item.ContentContainer.Content = new Osd();
-            ch.Add(item);
-
-            item = new OptionsSection();
-            item.ContentContainer.Content = new OsdAlt();
-            ch.Add(item);
-
-            item = new OptionsSection();
-            item.ContentContainer.Content = new Updater();
-            ch.Add(item);
-
-            item = new OptionsSection();
-            item.ContentContainer.Content = new Logger();
-            ch.Add(item);
-
-            item = new OptionsSection();
-            item.ContentContainer.Content = new Voicemeeter();
-            ch.Add(item);
         }
 
         private void SettingsWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
