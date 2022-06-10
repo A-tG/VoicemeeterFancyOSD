@@ -13,20 +13,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
     /// </summary>
     public partial class Osd : UserControl
     {
-        public Dictionary<HorAlignment, string> HAValues { get; } = new()
-        {
-            { HorAlignment.Left, "Left" },
-            { HorAlignment.Center, "Center" },
-            { HorAlignment.Right, "Right" }
-        };
-
-        public Dictionary<VertAlignment, string> VAValues { get; } = new()
-        {
-            { VertAlignment.Top, "Top" },
-            { VertAlignment.Center, "Center" },
-            { VertAlignment.Bottom, "Bottom" }
-        };
-
         public Osd()
         {
             DataContext = OptionsStorage.Osd;

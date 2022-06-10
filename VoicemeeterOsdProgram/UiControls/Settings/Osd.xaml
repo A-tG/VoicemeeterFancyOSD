@@ -68,22 +68,9 @@
         </local:UintInputOption>
         
         <Separator/>
-        
-        <StackPanel Orientation="Vertical">
-            <Label Content="Alignment" HorizontalAlignment="Center"/>
-            <Grid HorizontalAlignment="Stretch" DataContext="{Binding ElementName=OsdOptControl}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <ComboBox Height="Auto" HorizontalAlignment="Stretch" Grid.Column="0" Margin="4,0"
-                          ItemsSource="{Binding HAValues}" DisplayMemberPath="Value" SelectedValuePath="Key"
-                          SelectedValue="{Binding DataContext.HorizontalAlignment, Mode=TwoWay}"/>
-                <ComboBox Height="Auto" HorizontalAlignment="Stretch" Grid.Column="1" Margin="4,0" 
-                          ItemsSource="{Binding VAValues}" DisplayMemberPath="Value" SelectedValuePath="Key"
-                          SelectedValue="{Binding DataContext.VerticalAlignment, Mode=TwoWay}"/>
-            </Grid>
-        </StackPanel>
-        
+
+        <local:AlignmentSelects HorAlignmentVal="{Binding DataContext.HorizontalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"
+                                VertAlignmentVal="{Binding DataContext.VerticalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"/>
+
     </StackPanel>
 </UserControl>
