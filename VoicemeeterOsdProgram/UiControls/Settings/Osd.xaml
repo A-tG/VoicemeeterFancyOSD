@@ -11,38 +11,51 @@
         <Label Content="OSD" FontWeight="Bold" HorizontalAlignment="Center"/>
         <CheckBox Content="Don't show if Voicemeeter is visible" 
                   IsChecked="{Binding DontShowIfVoicemeeterVisible, Mode=TwoWay}"/>
+        
         <CheckBox Content="User can interact with OSD"
                   IsChecked="{Binding IsInteractable, Mode=TwoWay}"/>
+        
         <Separator/>
+        
         <local:SliderOption Value="{Binding DataContext.Scale, ElementName=OsdOptControl, Mode=TwoWay}">
             <local:SliderOption.DataContext>
                 <local:ScaleSliderOptionViewModel Label="Scale:"/>
             </local:SliderOption.DataContext>
         </local:SliderOption>
+        
         <Separator/>
+        
         <local:UintInputOption InputValue="{Binding DataContext.DurationMs, ElementName=OsdOptControl, Mode=TwoWay,
                                             Converter={StaticResource UintToStrConverter}}">
             <local:UintInputOption.DataContext>
                 <local:InputOptionViewModel Label="Duration"/>
             </local:UintInputOption.DataContext>
         </local:UintInputOption>
+        
         <Separator/>
+        
         <local:SliderOption Value="{Binding DataContext.BackgroundOpacity, ElementName=OsdOptControl, Mode=TwoWay}">
             <local:SliderOption.DataContext>
                 <local:BgOpacitySliderOptionViewModel Label="Background opacity:"/>
             </local:SliderOption.DataContext>
         </local:SliderOption>
+        
         <Separator/>
+        
         <local:SliderOption Value="{Binding DataContext.BorderThickness, ElementName=OsdOptControl, Mode=TwoWay}">
             <local:SliderOption.DataContext>
                 <local:BorderThSliderOptionViewModel Label="Border thickness:"/>
             </local:SliderOption.DataContext>
         </local:SliderOption>
+        
         <Separator/>
+        
         <CheckBox Content="Use animations"
               IsChecked="{Binding AnimationsEnabled, Mode=TwoWay}"/>
+        
         <CheckBox Content="Wait for Voicemeeter initialization"
               IsChecked="{Binding WaitForVoicemeeterInitialization, Mode=TwoWay}"/>
+        
         <!-- AlwaysShowElements -->
         <!-- NeverShowElements -->
         <!-- IgnoreStripsIndexes -->
@@ -53,7 +66,9 @@
                 <local:InputOptionViewModel Label="Display used index"/>
             </local:UintInputOption.DataContext>
         </local:UintInputOption>
+        
         <Separator/>
+        
         <StackPanel Orientation="Vertical">
             <Label Content="Alignment" HorizontalAlignment="Center"/>
             <Grid HorizontalAlignment="Stretch" DataContext="{Binding ElementName=OsdOptControl}">
@@ -69,5 +84,6 @@
                           SelectedValue="{Binding DataContext.VerticalAlignment, Mode=TwoWay}"/>
             </Grid>
         </StackPanel>
+        
     </StackPanel>
 </UserControl>
