@@ -52,14 +52,11 @@
         <!-- NeverShowElements -->
         <!-- IgnoreStripsIndexes -->
         <!-- IgnoreStripsIndexes -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Label Content="What display to use" Grid.Column="0"/>
-            <ComboBox Name="DisplayCombo" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Grid>
+        <local:UintInputOption InputValue="{Binding DataContext.DisplayIndex, ElementName=OsdOptControl, Mode=TwoWay, Converter={StaticResource UintToStrConverter}}">
+            <local:UintInputOption.DataContext>
+                <local:InputOptionViewModel Label="Display used index:"/>
+            </local:UintInputOption.DataContext>
+        </local:UintInputOption>
         <Separator/>
         <StackPanel Orientation="Vertical">
             <Label Content="Alignment" HorizontalAlignment="Center"/>

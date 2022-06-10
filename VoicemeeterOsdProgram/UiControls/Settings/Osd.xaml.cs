@@ -39,61 +39,14 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             //IgnoreStripsIndexes
             //IgnoreStripsIndexes
             //Duration
-            InitDisplayCombo();
-
-            SystemEvents.UserPreferenceChanged += SystemEvents_UserPreferenceChanged;
 
             Unloaded += OnUnload;
         }
 
-        private void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
-        {
-            var c = e.Category;
-            if (c != UserPreferenceCategory.Desktop) return;
-
-            ReinitDisplayCombo();
-        }
-
-        private void ReinitDisplayCombo()
-        {
-            OptionsStorage.Osd.DisplayIndexChanged -= OptionEvent_DisplayIndexChanged;
-            DisplayCombo.SelectionChanged -= DisplayCombo_SelectionChanged;
-
-            InitDisplayCombo();
-        }
-
-        private void InitDisplayCombo()
-        {
-            // Find a way to get Display's name
-            var items = Enumerable.Range(0, WpfScreenHelper.Screen.AllScreens.ToList().Count).ToDictionary(i => (uint)i, i => i.ToString());
-            DisplayCombo.DisplayMemberPath = "Value";
-            DisplayCombo.SelectedValuePath = "Key";
-            DisplayCombo.ItemsSource = items;
-
-            var o = OptionsStorage.Osd;
-            DisplayCombo.SelectedValue = o.DisplayIndex;
-
-            o.DisplayIndexChanged += OptionEvent_DisplayIndexChanged;
-            DisplayCombo.SelectionChanged += DisplayCombo_SelectionChanged;
-        }
-
-        private void DisplayCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var items = e.AddedItems.OfType<KeyValuePair<uint, string>>().ToArray();
-            if (items.Length == 0) return;
-
-            OptionsStorage.Osd.DisplayIndex = items[0].Key;
-        }
-
-        private void OptionEvent_DisplayIndexChanged(object sender, uint val) => DisplayCombo.SelectedValue = val;
-
 
         private void OnUnload(object sender, RoutedEventArgs e)
         {
-            SystemEvents.UserPreferenceChanged -= SystemEvents_UserPreferenceChanged;
-            var o = OptionsStorage.Osd;
-
-            o.DisplayIndexChanged -= OptionEvent_DisplayIndexChanged;
+            return;
         }
     }
 }
