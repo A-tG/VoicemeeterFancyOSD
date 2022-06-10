@@ -4,9 +4,10 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                 xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
+                xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
                 mc:Ignorable="d" 
                 Name="OsdOptControl">
-    <StackPanel Orientation="Vertical" local:PanelMarginSetter.Margin="4" 
+    <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4" 
                 DataContext="{Binding DataContext, ElementName=OsdOptControl}">
         <Label Content="OSD" FontWeight="Bold" HorizontalAlignment="Center"/>
         <CheckBox Content="Don't show if Voicemeeter is visible" 
@@ -16,13 +17,12 @@
         <Separator/>
         <local:SliderOption Value="{Binding DataContext.Scale, ElementName=OsdOptControl, Mode=TwoWay}">
             <local:SliderOption.DataContext>
-                <local:SliderOptionViewModel Label="Scale:" 
-                                             SmallChange="0.01" LargeChange="0.05" TickFreq="0.01"
-                                             Min="0.5" Max="2"/>
+                <local:ScaleSliderOptionViewModel Label="Scale:"/>
             </local:SliderOption.DataContext>
         </local:SliderOption>
         <Separator/>
-        <local:UintInputOption InputValue="{Binding DataContext.DurationMs, ElementName=OsdOptControl, Mode=TwoWay, Converter={StaticResource UintToStrConverter}}">
+        <local:UintInputOption InputValue="{Binding DataContext.DurationMs, ElementName=OsdOptControl, Mode=TwoWay,
+                                            Converter={StaticResource UintToStrConverter}}">
             <local:UintInputOption.DataContext>
                 <local:InputOptionViewModel Label="Duration:"/>
             </local:UintInputOption.DataContext>
@@ -30,17 +30,13 @@
         <Separator/>
         <local:SliderOption Value="{Binding DataContext.BackgroundOpacity, ElementName=OsdOptControl, Mode=TwoWay}">
             <local:SliderOption.DataContext>
-                <local:SliderOptionViewModel Label="Background opacity:"
-                                             SmallChange="0.01" LargeChange="0.05" TickFreq="0.01"
-                                             Min="0" Max="1"/>
+                <local:BgOpacitySliderOptionViewModel Label="Background opacity:"/>
             </local:SliderOption.DataContext>
         </local:SliderOption>
         <Separator/>
         <local:SliderOption Value="{Binding DataContext.BorderThickness, ElementName=OsdOptControl, Mode=TwoWay}">
             <local:SliderOption.DataContext>
-                <local:SliderOptionViewModel Label="Border thickness:"
-                                             SmallChange="0.1" LargeChange="1" TickFreq="0.1"
-                                             Min="0" Max="4"/>
+                <local:BorderThSliderOptionViewModel Label="Border thickness:"/>
             </local:SliderOption.DataContext>
         </local:SliderOption>
         <Separator/>
@@ -52,7 +48,8 @@
         <!-- NeverShowElements -->
         <!-- IgnoreStripsIndexes -->
         <!-- IgnoreStripsIndexes -->
-        <local:UintInputOption InputValue="{Binding DataContext.DisplayIndex, ElementName=OsdOptControl, Mode=TwoWay, Converter={StaticResource UintToStrConverter}}">
+        <local:UintInputOption InputValue="{Binding DataContext.DisplayIndex, ElementName=OsdOptControl, Mode=TwoWay,
+                                            Converter={StaticResource UintToStrConverter}}">
             <local:UintInputOption.DataContext>
                 <local:InputOptionViewModel Label="Display used index:"/>
             </local:UintInputOption.DataContext>
@@ -60,7 +57,7 @@
         <Separator/>
         <StackPanel Orientation="Vertical">
             <Label Content="Alignment" HorizontalAlignment="Center"/>
-            <Grid HorizontalAlignment="Stretch" DataContext="{Binding ElementName=OsdOptControl}" >
+            <Grid HorizontalAlignment="Stretch" DataContext="{Binding ElementName=OsdOptControl}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>

@@ -29,16 +29,9 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         public Osd()
         {
-            var o = OptionsStorage.Osd;
-            DataContext = o;
+            DataContext = OptionsStorage.Osd;
 
             InitializeComponent();
-
-            //AlwaysShowElements
-            //NeverShowElements
-            //IgnoreStripsIndexes
-            //IgnoreStripsIndexes
-            //Duration
 
             Unloaded += OnUnload;
         }
