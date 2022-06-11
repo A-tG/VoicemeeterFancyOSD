@@ -16,20 +16,8 @@
         <Style TargetType="{x:Type local:OptionsSection}">
             <Setter Property="FontWeight" Value="Normal"/>
         </Style>
-        <Style TargetType="{x:Type TabItem}">
-            <Setter Property="Template" Value="{StaticResource VmTabItemStyle}"/>
-            <Setter Property="BorderThickness" Value="1"/>
+        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource VmTabItemStyle}">
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Foreground">
-                <Setter.Value>
-                    <SolidColorBrush Color="{StaticResource VmDarkElementColor}"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="BorderBrush">
-                <Setter.Value>
-                    <SolidColorBrush Color="{StaticResource VmDarkElementColor}"/>
-                </Setter.Value>
-            </Setter>
         </Style>
         <Style TargetType="{x:Type Label}">
             <Setter Property="Foreground">
