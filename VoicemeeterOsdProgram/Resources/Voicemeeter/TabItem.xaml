@@ -48,6 +48,7 @@
                                     <SolidColorBrush Color="{StaticResource VmLightTextColor}"/>
                                 </Setter.Value>
                             </Setter>
+                            <Setter Property="Opacity" Value="0.5"/>
                             <Setter Property="Background" TargetName="mainBorder" Value="Transparent"/>
                             <Setter Property="BorderBrush" TargetName="mainBorder" Value="Transparent"/>
                         </MultiDataTrigger>
