@@ -3,16 +3,8 @@
 
     <Style x:Key="VmTabItemStyle" TargetType="{x:Type TabItem}">
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Foreground">
-            <Setter.Value>
-                <SolidColorBrush Color="{StaticResource VmDarkElementColor}"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="BorderBrush">
-            <Setter.Value>
-                <SolidColorBrush Color="{StaticResource VmDarkElementColor}"/>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Foreground" Value="{StaticResource VmDarkElementBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource VmDarkElementBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
@@ -32,22 +24,14 @@
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="BorderBrush">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="{StaticResource VmActiveElementMainColor}"/>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter Property="BorderBrush" Value="{StaticResource VmActiveElementMainBrush}"/>
                         </MultiDataTrigger>
 
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="{StaticResource VmLightTextColor}"/>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter Property="Foreground" Value="{StaticResource VmLightTextBrush}"/>
                             <Setter Property="Opacity" Value="0.5"/>
                             <Setter Property="Background" TargetName="mainBorder" Value="Transparent"/>
                             <Setter Property="BorderBrush" TargetName="mainBorder" Value="Transparent"/>
@@ -55,23 +39,10 @@
 
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
-                            </MultiDataTrigger.Conditions>
-                        </MultiDataTrigger>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="{StaticResource VmActiveElementMainColor}"/>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="BorderBrush">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="{StaticResource VmActiveElementMainColor}"/>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter Property="Foreground" Value="{StaticResource VmActiveElementMainBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource VmActiveElementMainBrush}"/>
                             <Setter Property="Panel.ZIndex" Value="1"/>
                         </MultiDataTrigger>
                     </ControlTemplate.Triggers>

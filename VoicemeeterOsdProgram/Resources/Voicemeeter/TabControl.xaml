@@ -5,11 +5,7 @@
         <Setter Property="Padding" Value="2"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Background">
-            <Setter.Value>
-                <SolidColorBrush Color="{StaticResource VmBgAltColor}"/>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Background" Value="{StaticResource VmBgAltBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Template">
@@ -24,11 +20,8 @@
                             <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
                             <RowDefinition x:Name="RowDefinition1" Height="*"/>
                         </Grid.RowDefinitions>
-                        <TabPanel x:Name="headerPanel" Grid.Column="0" IsItemsHost="true" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1">
-                            <TabPanel.Background>
-                                <SolidColorBrush Color="{StaticResource VmBgMainColor}"/>
-                            </TabPanel.Background>
-                        </TabPanel>
+                        <TabPanel x:Name="headerPanel"  Background="{StaticResource VmBgMainBrush}"
+                                  Grid.Column="0" IsItemsHost="true" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
                         <Border x:Name="contentPanel" Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" 
                                 Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" 
