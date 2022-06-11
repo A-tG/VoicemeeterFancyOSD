@@ -24,6 +24,10 @@
 
         <local:AlignmentSelects HorAlignmentVal="{Binding DataContext.HorizontalAlignment, ElementName=OsdAltOptControl, Mode=TwoWay}"
                                 VertAlignmentVal="{Binding DataContext.VerticalAlignment, ElementName=OsdAltOptControl, Mode=TwoWay}"/>
+        
+        <Separator/>
 
+        <Button Content="Edit Apps list file" ToolTip="Each line - name of an App executable"
+                Click="EditListFileButtonClick" HorizontalAlignment="Center" Padding="4"/>
     </StackPanel>
 </UserControl>

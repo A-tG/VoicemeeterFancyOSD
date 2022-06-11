@@ -15,7 +15,7 @@ public static class UtilsFactory
         FullscreenAppsWatcher watcher = new();
         try
         {
-            watcher.appsToDetect = new ListInFile(@$"{AppDomain.CurrentDomain.BaseDirectory}config\detect_apps.txt")
+            watcher.appsToDetect = new ListInFile(Globals.FullscreenAppsListFile)
             {
                 AllowDuplicates = false,
                 IsCaseSensetive = false,
