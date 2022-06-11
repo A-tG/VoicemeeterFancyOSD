@@ -13,15 +13,11 @@
     <Window.Resources>
         <Style TargetType="ToolTip">
             <Style.Triggers>
-                <Trigger Property="Content"
-                 Value="{x:Static sys:String.Empty}">
-                    <Setter Property="Visibility"
-                    Value="Collapsed" />
+                <Trigger Property="Content" Value="{x:Static sys:String.Empty}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
                 </Trigger>
-                <Trigger Property="Content"
-                 Value="{x:Null}">
-                    <Setter Property="Visibility"
-                    Value="Collapsed" />
+                <Trigger Property="Content" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -35,72 +31,61 @@
             <Setter Property="FontSize" Value="14"/>
         </Style>
         <Style TargetType="{x:Type Label}">
-            <Setter Property="Foreground">
-                <Setter.Value>
-                    <SolidColorBrush Color="{StaticResource VmDarkLighterTextColor}"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
         </Style>
         <Style TargetType="{x:Type Separator}">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <SolidColorBrush Color="{StaticResource VmSepColor}"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Background" Value="{StaticResource VmSepBrush}"/>
         </Style>
         <Style TargetType="{x:Type CheckBox}">
-            <Setter Property="Foreground">
-                <Setter.Value>
-                    <SolidColorBrush Color="{StaticResource VmDarkLighterTextColor}"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
         </Style>
         <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground">
-                <Setter.Value>
-                    <SolidColorBrush Color="{StaticResource VmLightTextColor}"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Foreground" Value="{StaticResource VmLightTextBrush}"/>
         </Style>
     </Window.Resources>
+    
     <TabControl x:Name="Tab" TabStripPlacement="Left">
         <TabItem Header="Options">
-            <TabControl>
-                <TabItem Header="OSD">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
-                            <local:OptionsSection>
-                                <local:Osd/>
-                            </local:OptionsSection>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Vertical">
+                    <TabControl>
+                        <TabItem Header="OSD">
+                            <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
+                                <local:OptionsSection>
+                                    <local:Osd/>
+                                </local:OptionsSection>
 
-                            <local:OptionsSection>
-                                <local:OsdAlt/>
-                            </local:OptionsSection>
-                        </WrapPanel>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="Other">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
-                            <local:OptionsSection>
-                                <local:Program/>
-                            </local:OptionsSection>
+                                <local:OptionsSection>
+                                    <local:OsdAlt/>
+                                </local:OptionsSection>
+                            </WrapPanel>
+                        </TabItem>
+                        <TabItem Header="Other">
+                            <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
+                                <local:OptionsSection>
+                                    <local:Program/>
+                                </local:OptionsSection>
 
-                            <local:OptionsSection>
-                                <local:Updater/>
-                            </local:OptionsSection>
-                            
-                            <local:OptionsSection>
-                                <local:Logger/>
-                            </local:OptionsSection>
-                            
-                            <local:OptionsSection>
-                                <local:Voicemeeter/>
-                            </local:OptionsSection>
-                        </WrapPanel>
-                    </ScrollViewer>
-                </TabItem>
-            </TabControl>
+                                <local:OptionsSection>
+                                    <local:Updater/>
+                                </local:OptionsSection>
+
+                                <local:OptionsSection>
+                                    <local:Logger/>
+                                </local:OptionsSection>
+
+                                <local:OptionsSection>
+                                    <local:Voicemeeter/>
+                                </local:OptionsSection>
+                            </WrapPanel>
+                        </TabItem>
+                    </TabControl>
+                    <StackPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
+                        <Button Content="Open Config File" Padding="4" FontSize="12"/>
+                        <Button Content="Open Config Folder" Padding="4" FontSize="12"/>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
         </TabItem>
         <TabItem Header="About"></TabItem>
     </TabControl>
