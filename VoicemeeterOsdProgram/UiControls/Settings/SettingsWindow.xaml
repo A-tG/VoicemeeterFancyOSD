@@ -7,8 +7,59 @@
         xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
         mc:Ignorable="d"
         Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
-        WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
         Icon="/Resources/Icons/MainIcon.ico">
+    <Window.Resources>
+        <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource VmTabControlStyle}">
+            <Setter Property="Padding" Value="8"/>
+        </Style>
+        <Style TargetType="{x:Type local:OptionsSection}">
+            <Setter Property="FontWeight" Value="Normal"/>
+        </Style>
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="Template" Value="{StaticResource VmTabItemStyle}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <SolidColorBrush Color="{StaticResource VmDarkElementColor}"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="{StaticResource VmDarkElementColor}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <SolidColorBrush Color="{StaticResource VmDarkLighterTextColor}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type Separator}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{StaticResource VmSepColor}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type CheckBox}">
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <SolidColorBrush Color="{StaticResource VmDarkLighterTextColor}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <SolidColorBrush Color="{StaticResource VmLightTextColor}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <TabControl x:Name="Tab" TabStripPlacement="Left">
         <TabItem Header="Options">
             <TabControl>

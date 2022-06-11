@@ -28,7 +28,7 @@
                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,2,5,2"
                    TextTrimming="CharacterEllipsis" FontSize="16" FontWeight="Bold">
                 <TextBlock.Foreground>
-                    <SolidColorBrush Color="{DynamicResource VmDarkTextColor}"/>
+                    <SolidColorBrush Color="{DynamicResource VmDarkLighterTextColor}"/>
                 </TextBlock.Foreground>
             </TextBlock>
 

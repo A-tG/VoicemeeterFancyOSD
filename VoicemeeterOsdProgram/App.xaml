@@ -12,6 +12,8 @@
             <converters:UintToStringConverter x:Key="UintToStrConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Voicemeeter/Colors.xaml"/>
+                <ResourceDictionary Source="Resources/Voicemeeter/TabControl.xaml"/>
+                <ResourceDictionary Source="Resources/Voicemeeter/TabItem.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

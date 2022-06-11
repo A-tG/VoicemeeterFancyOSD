@@ -4,13 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
-             mc:Ignorable="d">
+             mc:Ignorable="d" 
+             FontSize="12" FontWeight="Normal">
     <UserControl.Style>
         <Style TargetType="{x:Type UserControl}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type UserControl}">
-                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="4" VerticalAlignment="Top">
+                        <Border BorderThickness="2" CornerRadius="4" Padding="4" VerticalAlignment="Top">
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="{StaticResource VmSepColor}"/>
+                            </Border.BorderBrush>
                             <ContentPresenter Content="{TemplateBinding Content}"/>
                         </Border>
                     </ControlTemplate>
