@@ -29,24 +29,14 @@
                 <SolidColorBrush Color="{DynamicResource VmDarkElementColor}"/>
             </Border.BorderBrush>
             <local:ClrChangeSlider Style="{DynamicResource VmLimiter}" x:Name="Limiter" Focusable="False"
+                                   Background="{DynamicResource VmLimiterBgBrush}" SecondBg="{DynamicResource VmDarkElementBrush}"
+                                   Foreground="{DynamicResource VmLimiterFgBrush}" SecondFg="White"
                                    GreaterOrEqualValChangeClr="12"
                                    Minimum="-40" Maximum="12" TickFrequency="1" Value="12"
                                    SmallChange="0" LargeChange="0"
                                    IsSnapToTickEnabled="True"
                                    HorizontalAlignment="Center" VerticalAlignment="Stretch"
                                    MouseDoubleClick="OnMouseDoubleClick">
-                <local:ClrChangeSlider.Background>
-                    <SolidColorBrush Color="{DynamicResource VmLimiterBg}"/>
-                </local:ClrChangeSlider.Background>
-                <local:ClrChangeSlider.SecondBg>
-                    <SolidColorBrush Color="{DynamicResource VmDarkElementColor}"/>
-                </local:ClrChangeSlider.SecondBg>
-                <local:ClrChangeSlider.Foreground>
-                    <SolidColorBrush Color="{DynamicResource VmLimiterFg}"/>
-                </local:ClrChangeSlider.Foreground>
-                <local:ClrChangeSlider.SecondFg>
-                    <SolidColorBrush Color="White"/>
-                </local:ClrChangeSlider.SecondFg>
             </local:ClrChangeSlider>
         </Border>
     </Grid>
