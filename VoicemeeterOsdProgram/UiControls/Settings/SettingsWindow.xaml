@@ -5,11 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
         xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
         WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
         Icon="/Resources/Icons/MainIcon.ico">
     <Window.Resources>
+        <Style TargetType="ToolTip">
+            <Style.Triggers>
+                <Trigger Property="Content"
+                 Value="{x:Static sys:String.Empty}">
+                    <Setter Property="Visibility"
+                    Value="Collapsed" />
+                </Trigger>
+                <Trigger Property="Content"
+                 Value="{x:Null}">
+                    <Setter Property="Visibility"
+                    Value="Collapsed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource VmTabControlStyle}">
             <Setter Property="Padding" Value="8"/>
         </Style>
