@@ -55,10 +55,11 @@
         
         <CheckBox Content="Wait for Voicemeeter initialization"
               IsChecked="{Binding WaitForVoicemeeterInitialization, Mode=TwoWay}"/>
+
+        <Label Content="Always show OSD Elements (WIP)"/>
+        <Label Content="Never show OSD Elements (WIP)"/>
+        <Label Content="Ignore Strips (WIP)"/>
         
-        <!-- AlwaysShowElements -->
-        <!-- NeverShowElements -->
-        <!-- IgnoreStripsIndexes -->
         <local:UintInputOption InputValue="{Binding DataContext.DisplayIndex, ElementName=OsdOptControl, Mode=TwoWay,
                                             Converter={StaticResource UintToStrConverter}}">
             <local:UintInputOption.DataContext>
