@@ -9,10 +9,11 @@
         <local:SliderOptionViewModel Label="Slider Label:" Max="2" SmallChange="0.1" TickFreq="0.1" LargeChange="0.5"/>
     </UserControl.DataContext>
     <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+        <UniformGrid Rows="1">
             <Label Content="{Binding Label}"/>
-            <TextBlock VerticalAlignment="Center" Text="{Binding Value, ElementName=SliderOptControl, StringFormat={}{0:F2}}"/>
-        </StackPanel>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Text="{Binding Value, ElementName=SliderOptControl, StringFormat={}{0:F2}}"/>
+        </UniformGrid>
         <Slider Name="Slider" Value="{Binding Value, ElementName=SliderOptControl}"
                 Orientation="Horizontal" Minimum="{Binding Min}" Maximum="{Binding Max}" 
                 TickFrequency="{Binding TickFreq}" IsSnapToTickEnabled="True" 
