@@ -11,6 +11,7 @@
         WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
         Icon="/Resources/Icons/MainIcon.ico">
     <Window.Resources>
+        <Style TargetType="{x:Type ResizeGrip}" BasedOn="{StaticResource VmResizeGripStyle}"/>
         <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource VmComboBoxItemStyle}"/>
         <Style TargetType="ToolTip">
             <Style.Triggers>
@@ -48,6 +49,7 @@
             <Setter Property="Foreground" Value="{StaticResource VmLightTextBrush}"/>
         </Style>
         <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource VmComboBoxStyle}"/>
+        <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource VmSliderStyle}"/>
     </Window.Resources>
     
     <TabControl x:Name="Tab" TabStripPlacement="Left">
@@ -58,7 +60,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    
+
                     <TabControl VerticalAlignment="Top" Grid.Row="0">
                         <TabItem Header="OSD">
                             <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
