@@ -24,6 +24,7 @@
         <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource VmTabControlStyle}">
             <Setter Property="Padding" Value="8"/>
         </Style>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource VmTextBoxStyle}"></Style>
         <Style TargetType="{x:Type local:OptionsSection}">
             <Setter Property="FontWeight" Value="Normal"/>
         </Style>

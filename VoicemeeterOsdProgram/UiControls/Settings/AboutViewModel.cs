@@ -8,10 +8,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         public string Version
         {
             get => Assembly.GetEntryAssembly().GetName().Version.ToString();
-            set
-            {
-                return;
-            }
+            set { return; }
         }
     }
 }

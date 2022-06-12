@@ -9,7 +9,7 @@
         <local:InputOptionViewModel Label="Input Label:"/>
     </UserControl.DataContext>
     <UniformGrid Rows="1">
-        <Label Content="{Binding Label}"/>
+        <Label Content="{Binding Label}" VerticalAlignment="Center"/>
         <TextBox VerticalAlignment="Center" Margin="4,0"
                  AcceptsTab="False" AcceptsReturn="False"
                  PreviewTextInput="PreviewText" TextAlignment="Center" TextChanged="TextBox_TextChanged"
