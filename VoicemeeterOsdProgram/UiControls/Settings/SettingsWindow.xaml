@@ -47,8 +47,13 @@
     <TabControl x:Name="Tab" TabStripPlacement="Left">
         <TabItem Header="Options">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
-                    <TabControl VerticalAlignment="Top">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    
+                    <TabControl VerticalAlignment="Top" Grid.Row="0">
                         <TabItem Header="OSD">
                             <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
                                 <local:OptionsSection>
@@ -80,15 +85,17 @@
                             </WrapPanel>
                         </TabItem>
                     </TabControl>
-                    <StackPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4" VerticalAlignment="Bottom">
-                        <Button Content="Open Config File" Padding="4" FontSize="12"/>
-                        <Button Content="Open Config Folder" Padding="4" FontSize="12"/>
+                    
+                    <StackPanel Orientation="Horizontal" Grid.Row="1"
+                                VerticalAlignment="Bottom" help:PanelMarginSetter.Margin="4">
+                        <Button Content="Open Config File" Padding="4" FontSize="12" Click="OpenConfigFileClick"/>
+                        <Button Content="Open Config Folder" Padding="4" FontSize="12" Click="OpenConfigFolderClick"/>
                     </StackPanel>
-                </StackPanel>
+                </Grid>
             </ScrollViewer>
         </TabItem>
         <TabItem Header="About">
-            <local:About/>
+            <local:About Margin="8"/>
         </TabItem>
     </TabControl>
 </Window>
