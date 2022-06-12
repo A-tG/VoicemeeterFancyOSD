@@ -40,8 +40,8 @@
     
     <ControlTemplate x:Key="SliderThumbHorizontalDefault" TargetType="{x:Type Thumb}">
         <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-            <Ellipse x:Name="grip" Fill="{StaticResource VmActiveElementMainBrush}" Stroke="{StaticResource VmDarkLighterTextBrush}"
-                     StrokeThickness="3" SnapsToDevicePixels="False" UseLayoutRounding="True" Width="22" Height="22"/>
+            <Ellipse x:Name="grip" Stroke="{StaticResource VmActiveElementMainBrush}" Fill="{StaticResource VmDarkElementBrush}"
+                     StrokeThickness="4" SnapsToDevicePixels="False" UseLayoutRounding="True" Width="22" Height="22"/>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
