@@ -13,11 +13,11 @@
         <Label Content="Alignment" HorizontalAlignment="Center"/>
         <UniformGrid HorizontalAlignment="Stretch" Rows="1">
             <ComboBox Height="Auto" HorizontalAlignment="Stretch" Margin="4,0"
-                          ItemsSource="{Binding HAValues}" DisplayMemberPath="Value" SelectedValuePath="Key"
-                          SelectedValue="{Binding HorAlignmentVal, ElementName=AlignSelOptionControl}"/>
+                      ItemsSource="{Binding HAValues}" DisplayMemberPath="Value" SelectedValuePath="Key"
+                      SelectedValue="{Binding HorAlignmentVal, ElementName=AlignSelOptionControl}"/>
             <ComboBox Height="Auto" HorizontalAlignment="Stretch" Margin="4,0" 
-                          ItemsSource="{Binding VAValues}" DisplayMemberPath="Value" SelectedValuePath="Key"
-                          SelectedValue="{Binding VertAlignmentVal, ElementName=AlignSelOptionControl}"/>
+                      ItemsSource="{Binding VAValues}" DisplayMemberPath="Value" SelectedValuePath="Key"
+                      SelectedValue="{Binding VertAlignmentVal, ElementName=AlignSelOptionControl}"/>
         </UniformGrid>
     </StackPanel>
 </UserControl>

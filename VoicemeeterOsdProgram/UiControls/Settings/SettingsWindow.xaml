@@ -11,6 +11,7 @@
         WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
         Icon="/Resources/Icons/MainIcon.ico">
     <Window.Resources>
+        <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource VmComboBoxItemStyle}"/>
         <Style TargetType="ToolTip">
             <Style.Triggers>
                 <Trigger Property="Content" Value="{x:Static sys:String.Empty}">
