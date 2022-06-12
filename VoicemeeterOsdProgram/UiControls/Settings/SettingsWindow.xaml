@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
         WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
-        Icon="/Resources/Icons/MainIcon.ico">
+        Icon="/Resources/Icons/MainIcon.ico" Height="800">
     <Window.Resources>
         <Style TargetType="ToolTip">
             <Style.Triggers>
@@ -47,8 +47,8 @@
     <TabControl x:Name="Tab" TabStripPlacement="Left">
         <TabItem Header="Options">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel Orientation="Vertical">
-                    <TabControl>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
+                    <TabControl VerticalAlignment="Top">
                         <TabItem Header="OSD">
                             <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
                                 <local:OptionsSection>
@@ -80,13 +80,15 @@
                             </WrapPanel>
                         </TabItem>
                     </TabControl>
-                    <StackPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
+                    <StackPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4" VerticalAlignment="Bottom">
                         <Button Content="Open Config File" Padding="4" FontSize="12"/>
                         <Button Content="Open Config Folder" Padding="4" FontSize="12"/>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
         </TabItem>
-        <TabItem Header="About"></TabItem>
+        <TabItem Header="About">
+            <local:About/>
+        </TabItem>
     </TabControl>
 </Window>

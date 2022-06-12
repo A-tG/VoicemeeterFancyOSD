@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="VoicemeeterOsdProgram.UiControls.Settings.About"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
+             mc:Ignorable="d">
+    <UserControl.DataContext>
+        <local:AboutViewModel/>
+    </UserControl.DataContext>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Image Source="/Resources/Icons/MainIcon.ico" Grid.Column="0" Stretch="None">
+                <Image.LayoutTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="0.5" ScaleY="0.5"/>
+                    </TransformGroup>
+                </Image.LayoutTransform>
+            </Image>
+            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="VoicemeeterFancyOSD " Padding="0" HorizontalAlignment="Left"/>
+                    <Label Content="{Binding Version}" Padding="0" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</UserControl>
