@@ -12,7 +12,7 @@
         <Label Content="{Binding Label}" VerticalAlignment="Center"/>
         <TextBox VerticalAlignment="Center" Margin="4,0"
                  AcceptsTab="False" AcceptsReturn="False"
-                 PreviewTextInput="PreviewText" TextAlignment="Center" TextChanged="TextBox_TextChanged"
+                 PreviewTextInput="PreviewText" TextAlignment="Center"
                  Text="{Binding InputValue, ElementName=InputOptControl, UpdateSourceTrigger=PropertyChanged}"/>
     </UniformGrid>
 </UserControl>

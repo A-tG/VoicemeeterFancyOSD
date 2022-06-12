@@ -29,10 +29,5 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         {
             e.Handled = !filterTextFunc(e.Text);
         }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine(InputValue);
-        }
     }
 }
