@@ -11,6 +11,7 @@
         WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
         Icon="/Resources/Icons/MainIcon.ico">
     <Window.Resources>
+        <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource VmScrollBarStyle}"/>
         <Style TargetType="{x:Type ResizeGrip}" BasedOn="{StaticResource VmResizeGripStyle}"/>
         <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource VmComboBoxItemStyle}"/>
         <Style TargetType="ToolTip">
