@@ -46,6 +46,7 @@
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground" Value="{StaticResource VmLightTextBrush}"/>
         </Style>
+        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource VmComboBoxStyle}"/>
     </Window.Resources>
     
     <TabControl x:Name="Tab" TabStripPlacement="Left">
