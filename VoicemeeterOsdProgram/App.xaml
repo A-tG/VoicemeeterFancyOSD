@@ -19,6 +19,8 @@
                 <ResourceDictionary Source="Resources/Voicemeeter/CheckBox.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/ComboBox.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/ComboBoxItem.xaml"/>
+                <ResourceDictionary Source="Resources/Voicemeeter/Slider.xaml"/>
+                <ResourceDictionary Source="Resources/Voicemeeter/ResizeGrip.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
