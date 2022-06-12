@@ -23,7 +23,7 @@
             </Image>
             <StackPanel Grid.Column="1" Margin="8,0,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="VoicemeeterFancyOSD " Padding="0" HorizontalAlignment="Left"/>
+                    <Label FontWeight="Bold" Content="VoicemeeterFancyOSD " Padding="0" HorizontalAlignment="Left"/>
                     <Label Content="{Binding Version}" Padding="0" HorizontalAlignment="Left"/>
                 </StackPanel>
             </StackPanel>
