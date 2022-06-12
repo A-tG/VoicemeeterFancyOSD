@@ -16,6 +16,8 @@
                 <ResourceDictionary Source="Resources/Voicemeeter/TabItem.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/TextBox.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/Button.xaml"/>
+                <ResourceDictionary Source="Resources/Voicemeeter/CheckBox.xaml"/>
+                <ResourceDictionary Source="Resources/Voicemeeter/ComboBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
