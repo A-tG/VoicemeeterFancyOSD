@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
         WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
-        Icon="/Resources/Icons/MainIcon.ico" Height="800">
+        Icon="/Resources/Icons/MainIcon.ico">
     <Window.Resources>
         <Style TargetType="ToolTip">
             <Style.Triggers>
@@ -30,6 +30,9 @@
         </Style>
         <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource VmTabItemStyle}">
             <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource VmButtonStyle}">
+            <Setter Property="Padding" Value="6"/>
         </Style>
         <Style TargetType="{x:Type Label}">
             <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
@@ -89,8 +92,8 @@
                     
                     <StackPanel Orientation="Horizontal" Grid.Row="1"
                                 VerticalAlignment="Bottom" help:PanelMarginSetter.Margin="4">
-                        <Button Content="Open Config File" Padding="4" FontSize="12" Click="OpenConfigFileClick"/>
-                        <Button Content="Open Config Folder" Padding="4" FontSize="12" Click="OpenConfigFolderClick"/>
+                        <Button Content="Open Config File" FontSize="12" Click="OpenConfigFileClick"/>
+                        <Button Content="Open Config Folder" FontSize="12" Click="OpenConfigFolderClick"/>
                     </StackPanel>
                 </Grid>
             </ScrollViewer>

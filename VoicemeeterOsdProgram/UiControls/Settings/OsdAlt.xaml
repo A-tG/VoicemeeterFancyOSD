@@ -28,6 +28,6 @@
         <Separator/>
 
         <Button Content="Edit Apps list file" ToolTip="Each line - name of an App executable"
-                Click="EditListFileButtonClick" HorizontalAlignment="Center" Padding="4"/>
+                Click="EditListFileButtonClick" HorizontalAlignment="Center"/>
     </StackPanel>
 </UserControl>
