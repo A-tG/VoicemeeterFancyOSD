@@ -1,8 +1,10 @@
 ﻿using AtgDev.Utils;
 using System;
+using System.IO;
 using TopmostApp.Helpers;
 using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Factories;
+using VoicemeeterOsdProgram.Options;
 
 namespace VoicemeeterOsdProgram;
 
@@ -10,7 +12,7 @@ public static class Globals
 {
     public static readonly AutostartManager autostartManager = UtilsFactory.GetAutostartManager();
     public static readonly Logger logger = UtilsFactory.GetLogger();
-    public static readonly string FullscreenAppsListFile = @$"{AppDomain.CurrentDomain.BaseDirectory}config\detect_apps.txt";
+    public static readonly string FullscreenAppsListFile = Path.Combine(OptionsStorage.ConfigFolderFolder, "detect_apps.txt");
 
     public static class Osd
     {

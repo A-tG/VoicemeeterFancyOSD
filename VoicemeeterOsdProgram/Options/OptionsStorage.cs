@@ -21,8 +21,6 @@ namespace VoicemeeterOsdProgram.Options
         public static readonly LoggerOption Logger = new();
         public static readonly OtherOptions Other = new();
 
-        private static readonly string m_path = @$"{AppDomain.CurrentDomain.BaseDirectory}config\config.ini";
-
         private static readonly IniDataParser m_parser = new();
         private static IniData m_data = new();
         private static FileSystemWatcher m_watcher = new();
@@ -32,6 +30,10 @@ namespace VoicemeeterOsdProgram.Options
         private static bool m_isInit = false;
         private static Dispatcher m_disp;
         private static Dictionary<string, OptionsBase> m_sectionsOptions;
+
+        public static string ConfigFolderFolder { get; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config");
+
+        public static string ConfigFilePath { get; } = Path.Combine(ConfigFolderFolder, "config.ini");
 
         private static Logger m_logger = Globals.logger;
 
@@ -48,7 +50,6 @@ namespace VoicemeeterOsdProgram.Options
             Logger.logger = m_logger;
         }
 
-        public static string ConfigFilePath => m_path;
 
         public static async Task InitAsync()
         {
@@ -59,8 +60,8 @@ namespace VoicemeeterOsdProgram.Options
             await ValidateConfigFileAsync();
 
             m_disp = Dispatcher.CurrentDispatcher;
-            m_watcher.Path = Path.GetDirectoryName(m_path);
-            m_watcher.Filter = Path.GetFileName(m_path);
+            m_watcher.Path = Path.GetDirectoryName(ConfigFilePath);
+            m_watcher.Filter = Path.GetFileName(ConfigFilePath);
             m_watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
             m_watcher.Changed += OnConfigFileChanged;
             IsWatcherEnabled = true;
@@ -149,7 +150,7 @@ namespace VoicemeeterOsdProgram.Options
 
             try
             {
-                var directoryPath = Path.GetDirectoryName(m_path);
+                var directoryPath = Path.GetDirectoryName(ConfigFilePath);
                 if (!Directory.Exists(directoryPath))
                 {
                     Directory.CreateDirectory(directoryPath);
@@ -161,7 +162,7 @@ namespace VoicemeeterOsdProgram.Options
                 OptionsToIniData(Updater, nameof(Updater));
                 OptionsToIniData(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
                 OptionsToIniData(Logger, nameof(Logger));
-                await using (StreamWriter sw = new(m_path))
+                await using (StreamWriter sw = new(ConfigFilePath))
                 {
                     await sw.WriteAsync(m_data.ToString());
                 }
@@ -189,9 +190,9 @@ namespace VoicemeeterOsdProgram.Options
             try
             {
                 const long MB = 1024 * 1024;
-                if (new FileInfo(m_path).Length > 100 * MB) throw new InvalidOperationException("Config file size is too large");
+                if (new FileInfo(ConfigFilePath).Length > 100 * MB) throw new InvalidOperationException("Config file size is too large");
 
-                using StreamReader sr = new(m_path);
+                using StreamReader sr = new(ConfigFilePath);
                 string fileData = await sr.ReadToEndAsync();
 
                 m_data = m_parser.Parse(fileData);

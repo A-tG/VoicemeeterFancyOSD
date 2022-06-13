@@ -8,7 +8,9 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
+        Height="{Binding Height, Mode=TwoWay}" Width="{Binding Width, Mode=TwoWay}" WindowState="{Binding State, Mode=TwoWay}"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
+        Closing="OnWindowClosing"
         Icon="/Resources/Icons/MainIcon.ico">
     <Window.Resources>
         <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource VmScrollBarStyle}"/>
