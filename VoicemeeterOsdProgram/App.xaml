@@ -22,6 +22,7 @@
                 <ResourceDictionary Source="Resources/Voicemeeter/Slider.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/ResizeGrip.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/ScrollBar.xaml"/>
+                <ResourceDictionary Source="Resources/Voicemeeter/ContextMenu.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -8,8 +8,13 @@
                     IconSource="/Resources/Icons/MainIcon.ico"
                     MenuActivation="RightClick"
                     TrayMouseDoubleClick="NotifyIcon_TrayMouseDoubleClick">
+        <tb:TaskbarIcon.Resources>
+            <Style TargetType="{x:Type Separator}">
+                <Setter Property="Background" Value="{DynamicResource VmSepBrush}"/>
+            </Style>
+        </tb:TaskbarIcon.Resources>
         <tb:TaskbarIcon.ContextMenu>
-            <ContextMenu BorderThickness="0">
+            <ContextMenu Style="{StaticResource VmContextMenuStyle}">
                 <MenuItem Header="DEBUG WINDOW" Name="DebugWindowItem" Visibility="Collapsed"/>
                 <MenuItem Header="Settings &amp; Info" Click="OnSettingsClick"/>
                 <MenuItem Header="Open Config File" Click="OnOpenConfigClick"/>
