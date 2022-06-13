@@ -44,6 +44,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         private async void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
+
             m_movedTimer.Stop();
             await m_model.TrySaveWindowSettings();
             // need to hide Window instead of closing becase TabControl keeps Window in memory (internal memory leak?)
@@ -59,6 +60,11 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         {
             string folder = Path.GetDirectoryName(OptionsStorage.ConfigFilePath);
             OpenInOs.TryOpen(folder);
+        }
+
+        private void OnClosed(object sender, EventArgs e)
+        {
+            m_model.Close();
         }
     }
 }

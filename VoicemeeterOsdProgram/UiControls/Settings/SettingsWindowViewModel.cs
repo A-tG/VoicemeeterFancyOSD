@@ -14,6 +14,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         private WindowState m_state;
 
         private string m_winSettingConf = Path.Combine(OptionsStorage.ConfigFolderFolder, "SettingsWindow");
+        private FileStream m_fs;
         private AtgDev.Utils.Logger m_logger = Globals.logger;
 
         public double Width
@@ -71,6 +72,12 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             }
         }
 
+        public void Close()
+        {
+            m_fs?.Dispose();
+            m_fs = null;
+        }
+
         private async Task ReadWindowSettings()
         {
             var c = CultureInfo.InvariantCulture;
@@ -97,14 +104,29 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         private async Task WriteWindowSettings()
         {
             var c = CultureInfo.InvariantCulture;
-            await using StreamWriter sw = new(m_winSettingConf);
 
+            if (m_fs is null)
+            {
+                m_fs = new(m_winSettingConf, FileMode.OpenOrCreate, FileAccess.Write);
+            }
+
+            m_fs.SetLength(0);
+
+            using StreamWriter sw = new(m_fs, leaveOpen: true)
+            {
+                AutoFlush = false
+            };
             int isWindowMax = State == WindowState.Maximized ? 1 : 0;
             await sw.WriteLineAsync(Convert.ToString(isWindowMax, c));
-            if (isWindowMax == 1) return;
+            if (isWindowMax == 1)
+            {
+                await m_fs.FlushAsync();
+                return;
+            }
 
             await sw.WriteLineAsync(Convert.ToString(Width, c));
             await sw.WriteLineAsync(Convert.ToString(Height, c));
+            await sw.FlushAsync();
         }
     }
 }

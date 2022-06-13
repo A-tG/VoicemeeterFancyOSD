@@ -10,7 +10,7 @@
         Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
         Height="{Binding Height, Mode=TwoWay}" Width="{Binding Width, Mode=TwoWay}" WindowState="{Binding State, Mode=TwoWay}"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
-        Closing="OnWindowClosing"
+        Closing="OnWindowClosing" Closed="OnClosed"
         Icon="/Resources/Icons/MainIcon.ico">
     <Window.Resources>
         <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource VmScrollBarStyle}"/>
@@ -96,7 +96,7 @@
                             </WrapPanel>
                         </TabItem>
                     </TabControl>
-                    
+
                     <StackPanel Orientation="Horizontal" Grid.Row="1"
                                 VerticalAlignment="Bottom" help:PanelMarginSetter.Margin="4">
                         <Button Content="Open Config File" FontSize="12" Click="OpenConfigFileClick"/>
