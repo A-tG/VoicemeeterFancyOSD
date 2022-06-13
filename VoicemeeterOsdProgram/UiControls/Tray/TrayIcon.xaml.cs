@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Windows;
 using VoicemeeterOsdProgram.Options;
+using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.Settings;
 
 namespace VoicemeeterOsdProgram.UiControls.Tray
@@ -19,9 +20,9 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
         public TrayIcon()
         {
             InitializeComponent();
+            NotifyIcon.LeftClickCommand = new DelegateCommand(_ => OpenSettingsWindow());
             IsPaused = OptionsStorage.Other.Paused;
             OptionsStorage.Other.PausedChanged += (_, val) => IsPaused = val;
-
 #if DEBUG
             DebugWindowItem.Visibility = Visibility.Visible;
             DebugWindowItem.Click += OnDebugWindowClick;
