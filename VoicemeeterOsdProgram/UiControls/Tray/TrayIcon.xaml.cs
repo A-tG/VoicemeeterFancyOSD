@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.Settings;
@@ -15,30 +16,18 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
     {
         private UpdateDialog m_updateDialog;
         private Window m_settingsWindow;
-        private bool m_isPaused = false;
 
         public TrayIcon()
         {
+            Application.Current.DispatcherUnhandledException += (_, _) => Destroy();
+            AppDomain.CurrentDomain.UnhandledException += (_, _) => Destroy();
+
             InitializeComponent();
             NotifyIcon.LeftClickCommand = new DelegateCommand(_ => OpenSettingsWindow());
-            IsPaused = OptionsStorage.Other.Paused;
-            OptionsStorage.Other.PausedChanged += (_, val) => IsPaused = val;
 #if DEBUG
             DebugWindowItem.Visibility = Visibility.Visible;
             DebugWindowItem.Click += OnDebugWindowClick;
 #endif
-        }
-
-        public bool IsPaused
-        {
-            get => m_isPaused;
-            set
-            {
-                if (m_isPaused == value) return;
-
-                m_isPaused = value;
-                TogglePaused(value);
-            }
         }
 
         public void CheckForUpdate()
@@ -50,22 +39,6 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
             }
             m_updateDialog.Show();
             m_updateDialog.Activate();
-        }
-
-        private void TogglePaused(bool val)
-        {
-            if (val)
-            {
-                NotifyIcon.Icon = Properties.Resources.MainIconInactive;
-                PausedItem.FontWeight = FontWeights.Bold;
-            }
-            else
-            {
-                NotifyIcon.Icon = Properties.Resources.MainIcon;
-                PausedItem.FontWeight = FontWeights.Normal;
-            }
-            OptionsStorage.Other.Paused = val;
-            PausedItem.IsChecked = val;
         }
 
         private void OnSettingsClick(object sender, RoutedEventArgs e) => OpenSettingsWindow();
@@ -88,7 +61,8 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
 
         private void OnPausedClick(object sender, RoutedEventArgs e)
         {
-            IsPaused = !IsPaused;
+            var mItem = (MenuItem)sender;
+            mItem.IsChecked = !mItem.IsChecked;
         }
 
         private void ExitClick(object sender, RoutedEventArgs e)
@@ -98,7 +72,7 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
 
         private void NotifyIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            IsPaused = !IsPaused;
+            PausedItem.IsChecked = !PausedItem.IsChecked;
         }
 
         private void OpenSettingsWindow()
@@ -109,6 +83,12 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
             }
             m_settingsWindow.Show();
             m_settingsWindow.Activate();
+        }
+
+
+        public void Destroy()
+        {
+            NotifyIcon?.Dispose();
         }
 
 #if DEBUG
