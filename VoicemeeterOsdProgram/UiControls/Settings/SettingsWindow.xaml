@@ -8,9 +8,11 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
-        Height="{Binding Height, Mode=TwoWay}" Width="{Binding Width, Mode=TwoWay}" WindowState="{Binding State, Mode=TwoWay}"
-        WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
-        Closing="OnWindowClosing" Closed="OnClosed"
+        Height="{Binding Height, Mode=TwoWay}" Width="{Binding Width, Mode=TwoWay}" 
+        Top="{Binding Top, Mode=TwoWay}" Left="{Binding Left, Mode=TwoWay}"
+        WindowState="{Binding State, Mode=TwoWay}"
+        WindowStartupLocation="Manual" ResizeMode="CanResizeWithGrip"
+        Closing="OnWindowClosing" Closed="OnClosed" Initialized="OnInitialized" LocationChanged="OnLocationChange"
         Icon="/Resources/Icons/MainIcon.ico">
     <Window.Resources>
         <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource VmScrollBarStyle}"/>
@@ -68,10 +70,16 @@
                         <TabItem Header="OSD">
                             <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
                                 <local:OptionsSection>
+                                    <local:OptionsSection.DataContext>
+                                        <local:OptionsSectionViewModel LabelText="OSD"/>
+                                    </local:OptionsSection.DataContext>
                                     <local:Osd/>
                                 </local:OptionsSection>
 
                                 <local:OptionsSection>
+                                    <local:OptionsSection.DataContext>
+                                        <local:OptionsSectionViewModel LabelText="OSD Alternative"/>
+                                    </local:OptionsSection.DataContext>
                                     <local:OsdAlt/>
                                 </local:OptionsSection>
                             </WrapPanel>
@@ -79,18 +87,30 @@
                         <TabItem Header="Other">
                             <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
                                 <local:OptionsSection>
+                                    <local:OptionsSection.DataContext>
+                                        <local:OptionsSectionViewModel LabelText="Program"/>
+                                    </local:OptionsSection.DataContext>
                                     <local:Program/>
                                 </local:OptionsSection>
 
                                 <local:OptionsSection>
+                                    <local:OptionsSection.DataContext>
+                                        <local:OptionsSectionViewModel LabelText="Updater"/>
+                                    </local:OptionsSection.DataContext>
                                     <local:Updater/>
                                 </local:OptionsSection>
 
                                 <local:OptionsSection>
+                                    <local:OptionsSection.DataContext>
+                                        <local:OptionsSectionViewModel LabelText="Logger"/>
+                                    </local:OptionsSection.DataContext>
                                     <local:Logger/>
                                 </local:OptionsSection>
 
                                 <local:OptionsSection>
+                                    <local:OptionsSection.DataContext>
+                                        <local:OptionsSectionViewModel LabelText="Voicemeeter"/>
+                                    </local:OptionsSection.DataContext>
                                     <local:Voicemeeter/>
                                 </local:OptionsSection>
                             </WrapPanel>

@@ -10,10 +10,10 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 {
     public class SettingsWindowViewModel : BaseViewModel
     {
-        private double m_width, m_height;
+        private double m_width = 700, m_height = 770, m_top, m_left;
         private WindowState m_state;
 
-        private string m_winSettingConf = Path.Combine(OptionsStorage.ConfigFolderFolder, "SettingsWindow");
+        private string m_winSettingConf = Path.Combine(OptionsStorage.ConfigFolder, "SettingsWindow");
         private FileStream m_fs;
         private AtgDev.Utils.Logger m_logger = Globals.logger;
 
@@ -33,6 +33,26 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             set
             {
                 m_height = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double Top
+        {
+            get => m_top;
+            set
+            {
+                m_top = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double Left
+        {
+            get => m_left;
+            set
+            {
+                m_left = value;
                 OnPropertyChanged();
             }
         }
@@ -83,22 +103,22 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             var c = CultureInfo.InvariantCulture;
             if (!File.Exists(m_winSettingConf)) return;
 
+            // WindowState
+            // Left
+            // Top
+            // Width
+            // Height
             using StreamReader sr = new(m_winSettingConf);
-            string line;
-            if (string.IsNullOrEmpty(line = await sr.ReadLineAsync())) return;
-
-            int isWindowMax = int.Parse(line, c);
-            if (isWindowMax == 1)
+            var state = (WindowState)int.Parse(await sr.ReadLineAsync(), c);
+            Left = double.Parse(await sr.ReadLineAsync(), c);
+            Top = double.Parse(await sr.ReadLineAsync(), c);
+            if (state == WindowState.Maximized)
             {
-                State = WindowState.Maximized;
+                State = state;
                 return;
             }
-
-            if (string.IsNullOrEmpty(line = await sr.ReadLineAsync())) return;
-            Width = double.Parse(line, c);
-
-            if (string.IsNullOrEmpty(line = await sr.ReadLineAsync())) return;
-            Height = double.Parse(line, c);
+            Width = double.Parse(await sr.ReadLineAsync(), c);
+            Height = double.Parse(await sr.ReadLineAsync(), c);
         }
 
         private async Task WriteWindowSettings()
@@ -112,20 +132,30 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
             m_fs.SetLength(0);
 
+            // WindowState
+            // Left
+            // Top
+            // Width
+            // Height
             using StreamWriter sw = new(m_fs, leaveOpen: true)
             {
                 AutoFlush = false
             };
-            int isWindowMax = State == WindowState.Maximized ? 1 : 0;
-            await sw.WriteLineAsync(Convert.ToString(isWindowMax, c));
-            if (isWindowMax == 1)
+            var state = State switch
             {
-                await m_fs.FlushAsync();
-                return;
+                WindowState.Normal => 0,
+                WindowState.Maximized => 1,
+                _ => 0
+            };
+            await sw.WriteLineAsync(Convert.ToString(state, c));
+            await sw.WriteLineAsync(Convert.ToString(Left, c));
+            await sw.WriteLineAsync(Convert.ToString(Top, c));
+            if (State != WindowState.Maximized)
+            {
+                await sw.WriteLineAsync(Convert.ToString(Width, c));
+                await sw.WriteLineAsync(Convert.ToString(Height, c));
             }
 
-            await sw.WriteLineAsync(Convert.ToString(Width, c));
-            await sw.WriteLineAsync(Convert.ToString(Height, c));
             await sw.FlushAsync();
         }
     }
