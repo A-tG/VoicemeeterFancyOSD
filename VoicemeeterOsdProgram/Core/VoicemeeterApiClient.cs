@@ -204,6 +204,8 @@ namespace VoicemeeterOsdProgram.Core
 
         public static void Exit()
         {
+
+            System.Diagnostics.Debug.WriteLine("Exiting VMRAPI");
             m_loopTimer?.Stop();
             Api?.Logout();
         }

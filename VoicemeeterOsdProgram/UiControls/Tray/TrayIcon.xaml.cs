@@ -1,6 +1,7 @@
 ﻿using AtgDev.Utils;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using VoicemeeterOsdProgram.Options;
@@ -87,7 +88,8 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
 
         private void Destroy()
         {
-            NotifyIcon?.Dispose();
+            System.Diagnostics.Debug.WriteLine("Disposing Tray Icon");
+            App.Current.Dispatcher.Invoke(() => NotifyIcon?.Dispose());
         }
 
 #if DEBUG
