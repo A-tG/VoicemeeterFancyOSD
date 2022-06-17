@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using TopmostApp.Interop;
@@ -46,14 +48,6 @@ namespace VoicemeeterOsdProgram
             thread.Start();
         }
 
-        private static void ShowExceptionMsgBox(Exception ex)
-        {
-            const string message = "PRESS Ctrl + C TO COPY THIS TEXT\n" + "Unhandled exception:";
-
-            MessageBox.Show($"{message}\n{ex.GetType}\n{ex.Message} {ex.StackTrace}", Name, MessageBoxButton.OK, MessageBoxImage.Error);
-            Environment.Exit(1);
-        }
-
         private static void OnTerminationSignal(ref MSG msg, ref bool handled)
         {
             if ((msg.message == (int)WindowMessage.WM_CLOSE) || (msg.message == (int)WindowMessage.WM_QUIT))
@@ -69,10 +63,19 @@ namespace VoicemeeterOsdProgram
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Debug.WriteLine("UNHANDLED EXCEPTION");
-
-            var ex = e.ExceptionObject as Exception;
-
-            ShowExceptionMsgBox(ex);
+            try
+            {
+                var ex = e.ExceptionObject as Exception;
+                var path = AppDomain.CurrentDomain.BaseDirectory + @"\crashes";
+                var filePath = path + @$"\crash {DateTime.Now:dd-MM-yyyy HH-mm-ss}.log";
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                using StreamWriter sr = new(filePath);
+                sr.WriteLine($"{ex.GetType}\n{ex.Message}\n{ex.StackTrace}");
+            }
+            catch { }
         }
 
         private static void OnProcessExit(object sender, EventArgs e)
