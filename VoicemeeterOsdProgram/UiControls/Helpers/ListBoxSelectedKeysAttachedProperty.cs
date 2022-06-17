@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.Helpers
 {
@@ -59,7 +58,6 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
         {
             var listbox = (ListBox)sender;
             List<object> modelSelectedItems = new();
-            System.Diagnostics.Debug.WriteLine($"test {listbox.SelectedItems.Count}");
 
             if (listbox.SelectedItems is not null)
             {

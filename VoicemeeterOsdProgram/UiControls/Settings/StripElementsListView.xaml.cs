@@ -14,11 +14,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         public StripElementsListView()
         {
             InitializeComponent();
-            ListViewControl.SelectionChanged += ListViewControl_SelectionChanged;
-        }
-
-        private void ListViewControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
         }
 
         public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(
