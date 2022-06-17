@@ -6,16 +6,24 @@
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
              mc:Ignorable="d" 
              FontSize="12" FontWeight="Normal">
+    <UserControl.DataContext>
+        <local:OptionsSectionViewModel/>
+    </UserControl.DataContext>
     <UserControl.Style>
         <Style TargetType="{x:Type UserControl}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type UserControl}">
-                        <Border BorderThickness="2" CornerRadius="4" Padding="4" VerticalAlignment="Top">
-                            <Border.BorderBrush>
-                                <SolidColorBrush Color="{StaticResource VmSepColor}"/>
-                            </Border.BorderBrush>
-                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        <Border BorderThickness="2" CornerRadius="4" BorderBrush="{StaticResource VmSepBrush}"
+                                Padding="4" VerticalAlignment="Top">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Label Content="{Binding LabelText}" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <ContentPresenter Grid.Row="1" Content="{TemplateBinding Content}"/>
+                            </Grid>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>

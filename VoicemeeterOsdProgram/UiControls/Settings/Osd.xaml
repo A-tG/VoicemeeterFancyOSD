@@ -1,76 +1,91 @@
 ﻿<UserControl x:Class="VoicemeeterOsdProgram.UiControls.Settings.Osd"
-                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-                xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
-                xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
-                mc:Ignorable="d" 
-                Name="OsdOptControl">
-    <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4">
-        <Label Content="OSD" FontWeight="Bold" HorizontalAlignment="Center"/>
-        <CheckBox Content="Don't show if Voicemeeter is visible"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
+             xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
+             mc:Ignorable="d" 
+             Name="OsdOptControl">
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4" Margin="0,0,6,6">
+                <CheckBox Content="Don't show if Voicemeeter is visible"
                   IsChecked="{Binding DontShowIfVoicemeeterVisible, Mode=TwoWay}"/>
-        
-        <CheckBox Content="User can interact with OSD"
+
+                <CheckBox Content="User can interact with OSD"
                   IsChecked="{Binding IsInteractable, Mode=TwoWay}"/>
-        
-        <Separator/>
-        
-        <local:SliderOption Value="{Binding DataContext.Scale, ElementName=OsdOptControl, Mode=TwoWay}">
-            <local:SliderOption.DataContext>
-                <local:ScaleSliderOptionViewModel Label="Scale:"/>
-            </local:SliderOption.DataContext>
-        </local:SliderOption>
-        
-        <Separator/>
-        
-        <local:UintInputOption InputValue="{Binding DataContext.DurationMs, ElementName=OsdOptControl, Mode=TwoWay,
+
+                <Separator/>
+
+                <local:SliderOption Value="{Binding DataContext.Scale, ElementName=OsdOptControl, Mode=TwoWay}">
+                    <local:SliderOption.DataContext>
+                        <local:ScaleSliderOptionViewModel Label="Scale:"/>
+                    </local:SliderOption.DataContext>
+                </local:SliderOption>
+
+                <Separator/>
+
+                <local:UintInputOption InputValue="{Binding DataContext.DurationMs, ElementName=OsdOptControl, Mode=TwoWay,
                                             Converter={StaticResource UintToStrConverter}}">
-            <local:UintInputOption.DataContext>
-                <local:InputOptionViewModel Label="Duration"/>
-            </local:UintInputOption.DataContext>
-        </local:UintInputOption>
-        
-        <Separator/>
-        
-        <local:SliderOption Value="{Binding DataContext.BackgroundOpacity, ElementName=OsdOptControl, Mode=TwoWay}">
-            <local:SliderOption.DataContext>
-                <local:BgOpacitySliderOptionViewModel Label="Background opacity:"/>
-            </local:SliderOption.DataContext>
-        </local:SliderOption>
-        
-        <Separator/>
-        
-        <local:SliderOption Value="{Binding DataContext.BorderThickness, ElementName=OsdOptControl, Mode=TwoWay}">
-            <local:SliderOption.DataContext>
-                <local:BorderThSliderOptionViewModel Label="Border thickness:"/>
-            </local:SliderOption.DataContext>
-        </local:SliderOption>
-        
-        <Separator/>
-        
-        <CheckBox Content="Use animations"
+                    <local:UintInputOption.DataContext>
+                        <local:InputOptionViewModel Label="Duration"/>
+                    </local:UintInputOption.DataContext>
+                </local:UintInputOption>
+
+                <Separator/>
+
+                <local:SliderOption Value="{Binding DataContext.BackgroundOpacity, ElementName=OsdOptControl, Mode=TwoWay}">
+                    <local:SliderOption.DataContext>
+                        <local:BgOpacitySliderOptionViewModel Label="Background opacity:"/>
+                    </local:SliderOption.DataContext>
+                </local:SliderOption>
+
+                <Separator/>
+
+                <local:SliderOption Value="{Binding DataContext.BorderThickness, ElementName=OsdOptControl, Mode=TwoWay}">
+                    <local:SliderOption.DataContext>
+                        <local:BorderThSliderOptionViewModel Label="Border thickness:"/>
+                    </local:SliderOption.DataContext>
+                </local:SliderOption>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4" Margin="6,0,0,0">
+                <CheckBox Content="Use animations"
               IsChecked="{Binding AnimationsEnabled, Mode=TwoWay}"/>
-        
-        <CheckBox Content="Wait for Voicemeeter initialization"
+
+                <CheckBox Content="Wait for Voicemeeter initialization"
               IsChecked="{Binding WaitForVoicemeeterInitialization, Mode=TwoWay}"/>
 
-        <Label Content="Always show OSD Elements (WIP)" Foreground="{StaticResource VmDarkElementBrush}"/>
-        <Label Content="Never show OSD Elements (WIP)" Foreground="{StaticResource VmDarkElementBrush}"/>
-        <Label Content="Ignore Strips (WIP)" Foreground="{StaticResource VmDarkElementBrush}"/>
-        
-        <local:UintInputOption InputValue="{Binding DataContext.DisplayIndex, ElementName=OsdOptControl, Mode=TwoWay,
-                                            Converter={StaticResource UintToStrConverter}}">
-            <local:UintInputOption.DataContext>
-                <local:DisplayIndexInputOptionViewModel/>
-            </local:UintInputOption.DataContext>
-        </local:UintInputOption>
-        
-        <Separator/>
+                <local:StripElementsListView HorizontalAlignment="Center"
+                                             SelectedItems="{Binding DataContext.AlwaysShowElements, ElementName=OsdOptControl,
+                                                             Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
+                    <local:StripElementsListView.DataContext>
+                        <local:StripElementsListViewViewModel BtnContent="Always show Elements (WIP)"/>
+                    </local:StripElementsListView.DataContext>
+                </local:StripElementsListView>
 
-        <local:AlignmentSelects HorAlignmentVal="{Binding DataContext.HorizontalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"
-                                VertAlignmentVal="{Binding DataContext.VerticalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"/>
+                <local:StripElementsListView HorizontalAlignment="Center"
+                                             SelectedItems="{Binding DataContext.NeverShowElements, ElementName=OsdOptControl,
+                                                             Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
+                    <local:StripElementsListView.DataContext>
+                        <local:StripElementsListViewViewModel BtnContent="Never show Elements (WIP)"/>
+                    </local:StripElementsListView.DataContext>
+                </local:StripElementsListView>
 
+                <Label Content="Ignore Strips (WIP)" Foreground="{StaticResource VmDarkElementBrush}"/>
+
+                <local:UintInputOption InputValue="{Binding DataContext.DisplayIndex, ElementName=OsdOptControl, Mode=TwoWay,
+                                                Converter={StaticResource UintToStrConverter}}">
+                    <local:UintInputOption.DataContext>
+                        <local:DisplayIndexInputOptionViewModel/>
+                    </local:UintInputOption.DataContext>
+                </local:UintInputOption>
+
+                <Separator/>
+
+                <local:AlignmentSelects HorAlignmentVal="{Binding DataContext.HorizontalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"
+                                    VertAlignmentVal="{Binding DataContext.VerticalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"/>
+            </StackPanel>
+        </StackPanel>
     </StackPanel>
 </UserControl>

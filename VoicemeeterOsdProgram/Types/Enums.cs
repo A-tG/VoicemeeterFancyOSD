@@ -18,7 +18,6 @@
 
     public enum StripElements
     {
-        None,
         Fader,
         Mono,
         Mute,

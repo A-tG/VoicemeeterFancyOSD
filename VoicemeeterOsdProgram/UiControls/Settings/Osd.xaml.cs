@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using VoicemeeterOsdProgram.Options;
 
@@ -14,14 +16,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             DataContext = OptionsStorage.Osd;
 
             InitializeComponent();
-
-            Unloaded += OnUnload;
-        }
-
-
-        private void OnUnload(object sender, RoutedEventArgs e)
-        {
-            return;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using VoicemeeterOsdProgram.Types;
 
@@ -15,14 +16,10 @@ namespace VoicemeeterOsdProgram.Options
         private double m_borderThickness = 1;
         private bool m_animationsEnabled = true;
         private bool m_waitForVmInit = true;
-        private HashSet<StripElements> m_alwaysShowElements = new(new[] { StripElements.None });
-        private HashSet<StripElements> m_neverShowElements = new(new[] { StripElements.None });
+        private HashSet<StripElements> m_alwaysShowElements = new();
+        private HashSet<StripElements> m_neverShowElements = new();
         private HashSet<uint> m_ignoreStripsIndexes = new();
 
-        public OsdOptions()
-        {
-            m_alwaysShowElements.Add(StripElements.None);
-        }
 
         [Description("Dont show OSD if Voicemeeter's window is visible (and not obstructed) or is active window")]
         public bool DontShowIfVoicemeeterVisible 
@@ -121,7 +118,6 @@ namespace VoicemeeterOsdProgram.Options
             get => m_alwaysShowElements;
             set
             {
-                HandleStripElementsCollection(value);
                 HandlePropertyChange(ref m_alwaysShowElements, ref value, AlwaysShowElementsChanged);
             }
         }
@@ -132,7 +128,6 @@ namespace VoicemeeterOsdProgram.Options
             get => m_neverShowElements;
             set
             {
-                HandleStripElementsCollection(value);
                 HandlePropertyChange(ref m_neverShowElements, ref value, NeverShowElementsChanged);
             }
         }
@@ -182,18 +177,6 @@ namespace VoicemeeterOsdProgram.Options
                     return true;
                 default:
                     return base.TryParseTo(fromPropertyName, out toVal);
-            }
-        }
-
-        private void HandleStripElementsCollection(ICollection<StripElements> elements)
-        {
-            if ((elements.Count > 1) && elements.Contains(StripElements.None))
-            {
-                elements.Remove(StripElements.None);
-            }
-            if (elements.Count == 0)
-            {
-                elements.Add(StripElements.None);
             }
         }
 

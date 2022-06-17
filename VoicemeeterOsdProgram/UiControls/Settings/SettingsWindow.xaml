@@ -47,9 +47,7 @@
         <Style TargetType="{x:Type Separator}">
             <Setter Property="Background" Value="{StaticResource VmSepBrush}"/>
         </Style>
-        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource VmCheckBoxStyle}">
-            <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
-        </Style>
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource VmCheckBoxStyle}"/>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground" Value="{StaticResource VmLightTextBrush}"/>
         </Style>

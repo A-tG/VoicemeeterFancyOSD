@@ -7,7 +7,6 @@
              xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
              mc:Ignorable="d">
     <StackPanel help:PanelMarginSetter.Margin="4">
-        <Label Content="Updater" FontWeight="Bold" HorizontalAlignment="Center"/>
         <CheckBox Content="Check on startup" ToolTip="Check for updates on program startup"
                   IsChecked="{Binding CheckOnStartup, Mode=TwoWay}"/>
     </StackPanel>

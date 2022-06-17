@@ -7,8 +7,6 @@
              xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
              mc:Ignorable="d" Name="VmOptControl">
     <StackPanel help:PanelMarginSetter.Margin="4">
-        <Label Content="Voicemeeter" FontWeight="Bold" HorizontalAlignment="Center"/>
-        
         <UniformGrid Rows="1">
             <Label Content="API pooling rate"/>
             <ComboBox Height="Auto" HorizontalAlignment="Stretch" Margin="4,0" 

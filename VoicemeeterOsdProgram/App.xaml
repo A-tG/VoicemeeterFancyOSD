@@ -10,6 +10,7 @@
             <converters:RectVertHalfConverter x:Key="RectVertHalfConverter"/>
             <converters:IsGreaterThanConverter x:Key="IsGreaterThanConverter"/>
             <converters:UintToStringConverter x:Key="UintToStrConverter"/>
+            <converters:StripElementsToListConverter x:Key="StripElementsToListConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Voicemeeter/Colors.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/TabControl.xaml"/>
@@ -24,6 +25,7 @@
                 <ResourceDictionary Source="Resources/Voicemeeter/ScrollBar.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/ContextMenu.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/MenuItem.xaml"/>
+                <ResourceDictionary Source="Resources/Common/PopupButtonUC.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

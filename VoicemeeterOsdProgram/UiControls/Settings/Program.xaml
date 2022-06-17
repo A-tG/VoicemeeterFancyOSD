@@ -8,7 +8,6 @@
             mc:Ignorable="d"
             Name="ProgramOptControl">
     <StackPanel help:PanelMarginSetter.Margin="4" Orientation="Vertical">
-        <Label Content="Program" FontWeight="Bold" HorizontalAlignment="Center"/>
         <CheckBox Content="Autostart with Windows" IsChecked="{Binding Autostart, Mode=TwoWay}"/>
         <UniformGrid DataContext="{Binding ElementName=ProgramOptControl}" Rows="1">
             <Label Content="Rendering Mode" Grid.Column="0"/>

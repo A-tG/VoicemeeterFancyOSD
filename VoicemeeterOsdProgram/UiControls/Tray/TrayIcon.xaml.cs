@@ -19,7 +19,6 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
 
         public TrayIcon()
         {
-            Application.Current.DispatcherUnhandledException += (_, _) => Destroy();
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Destroy();
 
             InitializeComponent();
@@ -86,7 +85,7 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
         }
 
 
-        public void Destroy()
+        private void Destroy()
         {
             NotifyIcon?.Dispose();
         }

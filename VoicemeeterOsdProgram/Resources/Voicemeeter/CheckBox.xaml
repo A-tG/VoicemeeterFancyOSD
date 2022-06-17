@@ -25,7 +25,7 @@
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource VmBgMainBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource VmActiveElementMainBrush}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="Template">
             <Setter.Value>

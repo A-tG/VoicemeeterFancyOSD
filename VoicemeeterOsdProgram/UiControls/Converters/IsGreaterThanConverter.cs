@@ -12,7 +12,7 @@ namespace VoicemeeterOsdProgram.UiControls.Converters
             {
                 throw new ArgumentException("Target must be a boolean");
             }*/
-            if ((value == null) || (parameter == null))
+            if ((value is null) || (parameter is null))
             {
                 return false;
             }

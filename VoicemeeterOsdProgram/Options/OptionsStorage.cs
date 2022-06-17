@@ -31,9 +31,9 @@ namespace VoicemeeterOsdProgram.Options
         private static Dispatcher m_disp;
         private static Dictionary<string, OptionsBase> m_sectionsOptions;
 
-        public static string ConfigFolderFolder { get; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config");
+        public static string ConfigFolder { get; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config");
 
-        public static string ConfigFilePath { get; } = Path.Combine(ConfigFolderFolder, "config.ini");
+        public static string ConfigFilePath { get; } = Path.Combine(ConfigFolder, "config.ini");
 
         private static Logger m_logger = Globals.logger;
 

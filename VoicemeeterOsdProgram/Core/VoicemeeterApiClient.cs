@@ -36,7 +36,6 @@ namespace VoicemeeterOsdProgram.Core
         static VoicemeeterApiClient()
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
-            Application.Current.DispatcherUnhandledException += (_, _) => Exit();
             Application.Current.Exit += (_, _) => Exit();
 
             PoolingRate = Rate.Normal;

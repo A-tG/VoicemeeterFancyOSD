@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="VoicemeeterOsdProgram.UiControls.Settings.StripElementsListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
+             xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
+             mc:Ignorable="d" Name="Root">
+    <UserControl.Style>
+        <Style TargetType="{x:Type UserControl}" BasedOn="{StaticResource PopupButtonUCStyle}"/>
+    </UserControl.Style>
+    <UserControl.DataContext>
+        <local:StripElementsListViewViewModel/>
+    </UserControl.DataContext>
+    <ListBox Name="ListViewControl" SelectionMode="Multiple" ItemsSource="{Binding PossibleValues}"
+              help:ListBoxSelectedKeysAttachedProperty.SelectedKeys="{Binding SelectedItems, ElementName=Root, Mode=TwoWay}"
+              DisplayMemberPath="Value" SelectedValuePath="Key"/>
+</UserControl>

@@ -8,9 +8,6 @@
              mc:Ignorable="d" 
              Name="OsdAltOptControl">
     <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4">
-        <Label Content="OSD Alternative" FontWeight="Bold" HorizontalAlignment="Center"
-               ToolTip="Use alternative settings (like display and alignment) for fullscreen apps specified in detect_apps.txt.&#x0a;Useful for for some OpenGL games where OSD is unable to work"/>
-        
         <CheckBox Content="Enabled" IsChecked="{Binding Enabled, Mode=TwoWay}"/>
 
         <local:UintInputOption InputValue="{Binding DataContext.DisplayIndex, ElementName=OsdAltOptControl, Mode=TwoWay,
