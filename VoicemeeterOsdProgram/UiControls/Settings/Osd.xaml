@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
-             xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
+             xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers" 
+             xmlns:ui="clr-namespace:VoicemeeterOsdProgram.UiControls"
              mc:Ignorable="d" 
              Name="OsdOptControl">
     <StackPanel Orientation="Vertical">
@@ -56,23 +57,25 @@
                 <CheckBox Content="Wait for Voicemeeter initialization"
               IsChecked="{Binding WaitForVoicemeeterInitialization, Mode=TwoWay}"/>
 
-                <local:StripElementsListView HorizontalAlignment="Center"
-                                             SelectedItems="{Binding DataContext.AlwaysShowElements, ElementName=OsdOptControl,
+                <local:StripElementsListView SelectedItems="{Binding DataContext.AlwaysShowElements, ElementName=OsdOptControl,
                                                              Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
                     <local:StripElementsListView.DataContext>
-                        <local:StripElementsListViewViewModel BtnContent="Always show Elements (WIP)"/>
+                        <local:StripElementsListViewViewModel BtnContent="Always show Elements"/>
                     </local:StripElementsListView.DataContext>
                 </local:StripElementsListView>
 
-                <local:StripElementsListView HorizontalAlignment="Center"
-                                             SelectedItems="{Binding DataContext.NeverShowElements, ElementName=OsdOptControl,
+                <local:StripElementsListView SelectedItems="{Binding DataContext.NeverShowElements, ElementName=OsdOptControl,
                                                              Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
                     <local:StripElementsListView.DataContext>
-                        <local:StripElementsListViewViewModel BtnContent="Never show Elements (WIP)"/>
+                        <local:StripElementsListViewViewModel BtnContent="Never show Elements"/>
                     </local:StripElementsListView.DataContext>
                 </local:StripElementsListView>
 
-                <Label Content="Ignore Strips (WIP)" Foreground="{StaticResource VmDarkElementBrush}"/>
+                <local:IgnoreStripIndexes>
+                    <local:IgnoreStripIndexes.DataContext>
+                        <ui:PopupButtonViewModel BtnContent="Ignore Strips Indexes"/>
+                    </local:IgnoreStripIndexes.DataContext>
+                </local:IgnoreStripIndexes>
 
                 <local:UintInputOption InputValue="{Binding DataContext.DisplayIndex, ElementName=OsdOptControl, Mode=TwoWay,
                                                 Converter={StaticResource UintToStrConverter}}">
@@ -84,7 +87,7 @@
                 <Separator/>
 
                 <local:AlignmentSelects HorAlignmentVal="{Binding DataContext.HorizontalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"
-                                    VertAlignmentVal="{Binding DataContext.VerticalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"/>
+                                        VertAlignmentVal="{Binding DataContext.VerticalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"/>
             </StackPanel>
         </StackPanel>
     </StackPanel>

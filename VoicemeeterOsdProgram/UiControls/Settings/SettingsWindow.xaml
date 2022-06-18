@@ -41,6 +41,9 @@
         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource VmButtonStyle}">
             <Setter Property="Padding" Value="6"/>
         </Style>
+        <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource VmToggleButtonStyle}">
+            <Setter Property="Padding" Value="6"/>
+        </Style>
         <Style TargetType="{x:Type Label}">
             <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
         </Style>
