@@ -1,10 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ui="clr-namespace:VoicemeeterOsdProgram.UiControls">
+                    xmlns:ui="clr-namespace:VoicemeeterOsdProgram.UiControls"
+                    xmlns:vm="clr-namespace:VoicemeeterOsdProgram.UiControls.ViewModels">
     <Style x:Key="PopupButtonUCStyle" TargetType="{x:Type UserControl}">
         <Setter Property="DataContext">
             <Setter.Value>
-                <ui:PopupButtonViewModel/>
+                <vm:PopupButtonViewModel/>
             </Setter.Value>
         </Setter>
         <Setter Property="Template">
@@ -13,12 +14,12 @@
                     <ToggleButton Name="TglBtn">
                         <StackPanel>
                             <ContentPresenter Content="{Binding BtnContent}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Popup Name="PopupControl"
+                            <ui:PopupExt x:Name="PopupControl"
                                    HorizontalAlignment="Right" VerticalAlignment="Center" StaysOpen="False" PopupAnimation="Scroll"
                                    Placement="Right" PlacementTarget="{Binding ElementName=TglBtn}" AllowsTransparency="True"
                                    IsOpen="{Binding IsChecked, ElementName=TglBtn, Mode=TwoWay, Delay=200}">
                                 <ContentPresenter/>
-                            </Popup>
+                            </ui:PopupExt>
                         </StackPanel>
                     </ToggleButton>
                 </ControlTemplate>
