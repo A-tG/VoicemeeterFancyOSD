@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using VoicemeeterOsdProgram.Types;
 
-namespace VoicemeeterOsdProgram.UiControls.Settings
+namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
 {
     public class AlignmentSelectsViewModel : BaseViewModel
     {

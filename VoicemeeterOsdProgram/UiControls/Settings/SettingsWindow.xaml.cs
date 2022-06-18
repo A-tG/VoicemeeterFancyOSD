@@ -1,9 +1,11 @@
 ﻿using AtgDev.Utils;
 using System;
 using System.Collections.Generic;
-using System.Windows;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using VoicemeeterOsdProgram.Options;
+using VoicemeeterOsdProgram.UiControls.Helpers;
 using WpfScreenHelper;
 
 namespace VoicemeeterOsdProgram.UiControls.Settings
@@ -14,18 +16,18 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
     public partial class SettingsWindow : Window
     {
         private PeriodicTimerExt m_movedTimer = new(TimeSpan.FromSeconds(2));
-        private SettingsWindowViewModel m_model = new();
+        private WindowPersistence m_pers;
 
         public SettingsWindow()
         {
-            DataContext = m_model;
+            m_pers = new(this, Path.Combine(OptionsStorage.ConfigFolder, "SettingsWindow"));
             InitializeComponent();
             SizeChanged += OnSizeChanged;
         }
 
         private async void OnInitialized(object sender, EventArgs e)
         {
-            await m_model.TryReadWindowSettings();
+            await m_pers.TryReadWindowSettings();
             MoveToWorkingArea();
         }
 
@@ -75,7 +77,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             m_movedTimer.Start();
             if (await m_movedTimer.WaitForNextTickAsync())
             {
-                await m_model.TrySaveWindowSettings();
+                _ = await m_pers.TrySaveWindowSettings();
             }
 
         }
@@ -85,7 +87,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             e.Cancel = true;
 
             m_movedTimer.Stop();
-            await m_model.TrySaveWindowSettings();
+            _ = await m_pers.TrySaveWindowSettings();
             // need to hide Window instead of closing becase TabControl keeps Window in memory (internal memory leak?)
             Hide();
         }
@@ -102,7 +104,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private void OnClosed(object sender, EventArgs e)
         {
-            m_model.Close();
+            m_pers.Close();
         }
 
         private async void OnLocationChange(object sender, EventArgs e)
@@ -112,7 +114,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             m_movedTimer.Start();
             if (await m_movedTimer.WaitForNextTickAsync())
             {
-                await m_model.TrySaveWindowSettings();
+                await m_pers.TrySaveWindowSettings();
             }
         }
     }

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using VoicemeeterOsdProgram.Types;
+using VoicemeeterOsdProgram.UiControls.ViewModels;
 
-namespace VoicemeeterOsdProgram.UiControls.Settings
+namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
 {
     public class StripElementsListViewViewModel : PopupButtonViewModel
     {

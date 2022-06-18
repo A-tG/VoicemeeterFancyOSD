@@ -9,11 +9,17 @@
     <UserControl.Style>
         <Style TargetType="{x:Type UserControl}" BasedOn="{StaticResource PopupButtonUCStyle}"/>
     </UserControl.Style>
-    <ListView Name="ListViewControl" SelectionMode="Multiple">
-        <ListView.Resources>
-            <Style TargetType="{x:Type GridViewColumnHeader}">
-                <Setter Property="IsEnabled" Value="False"/>
-            </Style>
-        </ListView.Resources>
-    </ListView>
+    <StackPanel Orientation="Vertical">
+        <ListView Name="ListViewControl" SelectionMode="Multiple">
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </Style>
+            </ListView.Resources>
+        </ListView>
+        <StackPanel Orientation="Vertical">
+            <Label Content="Additional indexes"/>
+            <TextBox/>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

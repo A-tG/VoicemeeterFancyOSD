@@ -1,7 +1,6 @@
-﻿using System.Windows.Controls;
-using VoicemeeterOsdProgram.Types;
+﻿using VoicemeeterOsdProgram.Types;
 
-namespace VoicemeeterOsdProgram.UiControls
+namespace VoicemeeterOsdProgram.UiControls.ViewModels
 {
     public class PopupButtonViewModel : BaseViewModel
     {

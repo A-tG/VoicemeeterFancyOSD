@@ -1,4 +1,4 @@
-﻿namespace VoicemeeterOsdProgram.UiControls.Settings
+﻿namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
 {
     public class DisplayIndexInputOptionViewModel : InputOptionViewModel
     {

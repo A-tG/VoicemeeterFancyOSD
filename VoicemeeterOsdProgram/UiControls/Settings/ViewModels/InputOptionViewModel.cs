@@ -1,6 +1,6 @@
 ﻿using VoicemeeterOsdProgram.Types;
 
-namespace VoicemeeterOsdProgram.UiControls.Settings
+namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
 {
     public class InputOptionViewModel: BaseViewModel
     {
