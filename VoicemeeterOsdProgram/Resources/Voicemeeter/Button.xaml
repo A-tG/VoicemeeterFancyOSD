@@ -31,7 +31,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDefaulted" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource VmActiveElementOrangeBrush}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource VmActiveElementOrangeBrush}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource VmActiveElementCyanBrush}"/>

@@ -12,6 +12,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
     {
         private double m_width = 700, m_height = 770, m_top, m_left;
         private WindowState m_state;
+        private bool m_isWriting = false;
 
         private string m_winSettingConf = Path.Combine(OptionsStorage.ConfigFolder, "SettingsWindow");
         private FileStream m_fs;
@@ -84,11 +85,18 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         {
             try
             {
+                if (m_isWriting) return;
+
+                m_isWriting = true;
                 await WriteWindowSettings();
             }
             catch (Exception e)
             {
                 m_logger?.LogError($"Error saving {nameof(SettingsWindow)} size {e}");
+            }
+            finally
+            {
+                m_isWriting = false;
             }
         }
 
