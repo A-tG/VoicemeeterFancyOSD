@@ -13,7 +13,7 @@
     <UserControl.DataContext>
         <vm:StripElementsListViewViewModel/>
     </UserControl.DataContext>
-    <ListBox Name="ListViewControl" SelectionMode="Multiple" ItemsSource="{Binding PossibleValues}"
+    <ListView Name="ListViewControl" SelectionMode="Multiple" ItemsSource="{Binding PossibleValues}"
               help:ListBoxSelectedKeysAttachedProperty.SelectedKeys="{Binding SelectedItems, ElementName=Root, Mode=TwoWay}"
               DisplayMemberPath="Value" SelectedValuePath="Key"/>
 </UserControl>
