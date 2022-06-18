@@ -3,7 +3,6 @@
 
     <Style x:Key="VmGridViewScrollViewerStyleKey" TargetType="{x:Type ScrollViewer}">
         <Setter Property="Foreground" Value="{StaticResource VmLightTextBrush}"/>
-        <Setter Property="IsEnabled" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ScrollViewer">
@@ -22,7 +21,7 @@
                                           HorizontalScrollBarVisibility="Hidden"
                                           VerticalScrollBarVisibility="Hidden"
                                           Focusable="false">
-                                <GridViewHeaderRowPresenter Margin="2,0,2,0"
+                                <GridViewHeaderRowPresenter Margin="2,0,2,0" IsEnabled="False"
                                                             Columns="{Binding Path=TemplatedParent.View.Columns, RelativeSource={RelativeSource TemplatedParent}}"
                                                             ColumnHeaderContainerStyle="{Binding Path=TemplatedParent.View.ColumnHeaderContainerStyle,
                                                                                          RelativeSource={RelativeSource TemplatedParent}}"
@@ -93,21 +92,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="GridViewColumnHeader">
                     <Grid>
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal" />
-                                <VisualState x:Name="MouseOver">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
-                                                                      Storyboard.TargetName="HeaderBorder">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ControlMouseOverColor}"/>
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Pressed" />
-                                <VisualState x:Name="Disabled" />
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
                         <Border x:Name="HeaderBorder" BorderThickness="0,1,0,1" Padding="2,0,2,0" 
                                 Background="{StaticResource VmBgAltBrush}" BorderBrush="{StaticResource VmSepBrush}">
                             <ContentPresenter x:Name="HeaderContent"

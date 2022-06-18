@@ -12,7 +12,7 @@
              Name="OsdOptControl">
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Horizontal">
-            <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4" Margin="0,0,6,6">
+            <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4" Margin="0,0,6,0">
                 <CheckBox Content="Don't show if Voicemeeter is visible"
                   IsChecked="{Binding DontShowIfVoicemeeterVisible, Mode=TwoWay}"/>
 

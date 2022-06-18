@@ -51,13 +51,13 @@
             <Setter Property="Background" Value="{StaticResource VmSepBrush}"/>
         </Style>
         <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource VmCheckBoxStyle}"/>
-        <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="{StaticResource VmLightTextBrush}"/>
-        </Style>
         <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource VmComboBoxStyle}"/>
         <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource VmSliderStyle}"/>
         <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource VmListViewStyle}"/>
         <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource VmListViewItemStyle}"/>
+        <Style TargetType="{x:Type local:SliderOption}">
+            <Setter Property="Foreground" Value="{StaticResource VmLightTextBrush}"/>
+        </Style>
     </Window.Resources>
     
     <TabControl x:Name="Tab" TabStripPlacement="Left">
