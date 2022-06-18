@@ -250,7 +250,7 @@
                                               MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
                     <Border x:Name="dropDownBorder" 
                             Background="{DynamicResource VmBgMainBrush}" 
-                            BorderBrush="{DynamicResource VmActiveElementMainBrush}" BorderThickness="0">
+                            BorderBrush="{DynamicResource VmActiveElementMainBrush}" BorderThickness="0" CornerRadius="2" Padding="2">
                         <ScrollViewer x:Name="DropDownScrollViewer">
                             <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
                                 <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
