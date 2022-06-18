@@ -9,10 +9,8 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
-        Height="{Binding Height, Mode=TwoWay}" Width="{Binding Width, Mode=TwoWay}" 
-        Top="{Binding Top, Mode=TwoWay}" Left="{Binding Left, Mode=TwoWay}"
-        WindowState="{Binding State, Mode=TwoWay}"
-        WindowStartupLocation="Manual" ResizeMode="CanResizeWithGrip"
+        Height="750" Width="700"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
         Closing="OnWindowClosing" Closed="OnClosed" Initialized="OnInitialized" LocationChanged="OnLocationChange"
         Icon="/Resources/Icons/MainIcon.ico">
     <Window.Resources>
