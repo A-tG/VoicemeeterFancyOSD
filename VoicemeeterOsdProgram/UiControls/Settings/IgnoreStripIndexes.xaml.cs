@@ -30,7 +30,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private void InitList()
         {
-            GridView gv = new();
+            GridView gv = (GridView)ListViewControl.View;
             VoicemeeterProperties[] vmProps = {
                 new VoicemeeterProperties(VoicemeeterType.Standard),
                 new VoicemeeterProperties(VoicemeeterType.Banana),
@@ -70,7 +70,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             }
         }
 
-        private string GetName(VoicemeeterProperties p, int index)
+        private static string GetName(VoicemeeterProperties p, int index)
         {
             index++;
             string name = "";

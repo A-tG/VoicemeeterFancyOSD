@@ -16,8 +16,7 @@
                 <CheckBox Content="Don't show if Voicemeeter is visible"
                   IsChecked="{Binding DontShowIfVoicemeeterVisible, Mode=TwoWay}"/>
 
-                <CheckBox Content="User can interact with OSD"
-                  IsChecked="{Binding IsInteractable, Mode=TwoWay}"/>
+                <CheckBox Content="User can interact with OSD" IsChecked="{Binding IsInteractable, Mode=TwoWay}"/>
 
                 <Separator/>
 

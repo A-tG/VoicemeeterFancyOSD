@@ -11,7 +11,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="VmListViewItemStyle" TargetType="{x:Type ListViewItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Padding" Value="4,1"/>
@@ -32,6 +32,49 @@
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource VmActiveElementCyanBrush}"/>
+                            <Setter Property="Background" Value="{StaticResource VmBgAltBrush}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                <Condition Property="IsSelected" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Foreground" Value="{StaticResource VmActiveElementCyanBrush}"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource VmActiveElementCyanBrush}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                                <Condition Property="IsSelected" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Foreground" Value="{StaticResource VmActiveElementCyanBrush}"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource VmActiveElementCyanBrush}"/>
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource VmLightTextBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="VmListViewGridItemStyle" TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource VmListViewItemStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="2"
+                            BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                        <GridViewRowPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <MultiTrigger>
