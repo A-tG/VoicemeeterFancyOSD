@@ -117,8 +117,8 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             await sw.WriteLineAsync(Convert.ToString(m_window.Top, c));
             if (m_window.WindowState != WindowState.Maximized)
             {
-                await sw.WriteLineAsync(Convert.ToString(m_window.Width, c));
-                await sw.WriteLineAsync(Convert.ToString(m_window.Height, c));
+                await sw.WriteLineAsync(Convert.ToString(m_window.ActualWidth, c));
+                await sw.WriteLineAsync(Convert.ToString(m_window.ActualHeight, c));
             }
 
             await sw.FlushAsync();
