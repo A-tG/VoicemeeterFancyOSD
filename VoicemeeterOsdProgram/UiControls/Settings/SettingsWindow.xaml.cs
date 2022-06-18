@@ -20,7 +20,10 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         public SettingsWindow()
         {
-            m_pers = new(this, Path.Combine(OptionsStorage.ConfigFolder, "SettingsWindow"));
+            m_pers = new(this, Path.Combine(OptionsStorage.ConfigFolder, "SettingsWindow"))
+            {
+                logger = Globals.logger
+            };
             InitializeComponent();
             SizeChanged += OnSizeChanged;
         }
