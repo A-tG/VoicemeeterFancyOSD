@@ -9,17 +9,20 @@
     <UserControl.Style>
         <Style TargetType="{x:Type UserControl}" BasedOn="{StaticResource PopupButtonUCStyle}"/>
     </UserControl.Style>
-    <StackPanel Orientation="Vertical">
-        <ListView Name="ListViewControl" SelectionMode="Multiple">
-            <ListView.Resources>
-                <Style TargetType="{x:Type GridViewColumnHeader}">
-                    <Setter Property="IsEnabled" Value="False"/>
-                </Style>
-            </ListView.Resources>
-        </ListView>
+    <Border Background="{StaticResource VmBgMainBrush}" BorderBrush="{Binding Background, RelativeSource={RelativeSource self}}"
+            CornerRadius="2" BorderThickness="0" Padding="2">
         <StackPanel Orientation="Vertical">
-            <Label Content="Additional indexes"/>
-            <TextBox/>
+            <ListView Name="ListViewControl" SelectionMode="Multiple">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="IsEnabled" Value="False"/>
+                    </Style>
+                </ListView.Resources>
+            </ListView>
+            <StackPanel Orientation="Vertical">
+                <Label Content="Additional indexes" HorizontalAlignment="Center"/>
+                <TextBox/>
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </Border>
 </UserControl>
