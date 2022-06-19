@@ -27,6 +27,8 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
 
         public async Task<bool> TryReadWindowSettings()
         {
+            if (!Monitor.TryEnter(this)) return false;
+
             try
             {
                 await ReadWindowSettings();
@@ -36,6 +38,7 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             {
                 logger?.LogError($"Error reading Window size {e}");
             }
+            Monitor.Exit(this);
             return false;
         }
 
