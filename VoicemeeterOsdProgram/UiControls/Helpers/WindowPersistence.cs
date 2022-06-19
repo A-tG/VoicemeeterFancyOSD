@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -8,10 +9,10 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
 {
     public class WindowPersistence
     {
-        private Window m_window;
-        private bool m_isWriting = false;
+        private readonly Window m_window;
         private FileStream m_fs;
-        private string m_winSettingPath = "";
+        private readonly ReaderWriterLockSlim m_lock = new();
+        private readonly string m_winSettingPath;
 
         public AtgDev.Utils.Logger logger;
 
@@ -40,9 +41,8 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             bool result = false;
             try
             {
-                if (m_isWriting) return false;
+                if (m_lock.TryEnterWriteLock(0)) return false;
 
-                m_isWriting = true;
                 await WriteWindowSettings();
                 result = true;
             }
@@ -52,7 +52,7 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             }
             finally
             {
-                m_isWriting = false;
+                m_lock.ExitWriteLock();
             }
             return result;
         }
@@ -102,7 +102,7 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             // Top
             // Width
             // Height
-            using StreamWriter sw = new(m_fs, leaveOpen: true)
+            await using StreamWriter sw = new(m_fs, leaveOpen: true)
             {
                 AutoFlush = false
             };
