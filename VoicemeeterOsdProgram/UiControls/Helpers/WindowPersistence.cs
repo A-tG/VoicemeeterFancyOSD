@@ -11,7 +11,6 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
     {
         private readonly Window m_window;
         private FileStream m_fs;
-        private readonly ReaderWriterLockSlim m_lock = new();
         private readonly string m_winSettingPath;
 
         private bool m_disposed = false;
@@ -23,6 +22,8 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             m_window = w;
             m_winSettingPath = filePathSaveTo;
         }
+
+        public int MaxFileSize => 512;
 
         public async Task<bool> TryReadWindowSettings()
         {
@@ -41,10 +42,10 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
         public async Task<bool> TrySaveWindowSettings()
         {
             bool result = false;
+            if (!Monitor.TryEnter(this)) return false;
+
             try
             {
-                if (m_lock.TryEnterWriteLock(0)) return false;
-
                 await WriteWindowSettings();
                 result = true;
             }
@@ -52,10 +53,7 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             {
                 logger?.LogError($"Error saving Window size {e}");
             }
-            finally
-            {
-                m_lock.ExitWriteLock();
-            }
+            Monitor.Exit(this);
             return result;
         }
 
@@ -63,6 +61,7 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
         {
             var c = CultureInfo.InvariantCulture;
             if (!File.Exists(m_winSettingPath)) return;
+            if ((new FileInfo(m_winSettingPath).Length) > MaxFileSize) return;
 
             // WindowState
             // Left
@@ -70,27 +69,26 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             // Width
             // Height
             using StreamReader sr = new(m_winSettingPath);
-            var state = (WindowState)int.Parse(await sr.ReadLineAsync(), c);
-            m_window.Left = double.Parse(await sr.ReadLineAsync(), c);
-            m_window.Top = double.Parse(await sr.ReadLineAsync(), c);
+            using StringReader strR = new(await sr.ReadToEndAsync());
+
+            var state = (WindowState)int.Parse(strR.ReadLine(), c);
+            m_window.Left = double.Parse(strR.ReadLine(), c);
+            m_window.Top = double.Parse(strR.ReadLine(), c);
             if (state == WindowState.Maximized)
             {
                 m_window.WindowState = state;
                 return;
             }
-            m_window.Width = double.Parse(await sr.ReadLineAsync(), c);
-            m_window.Height = double.Parse(await sr.ReadLineAsync(), c);
+            m_window.Width = double.Parse(strR.ReadLine(), c);
+            m_window.Height = double.Parse(strR.ReadLine(), c);
         }
 
         private async Task WriteWindowSettings()
         {
-            var c = CultureInfo.InvariantCulture;
-
             if (m_fs is null)
             {
                 m_fs = new(m_winSettingPath, FileMode.OpenOrCreate, FileAccess.Write);
             }
-
             m_fs.SetLength(0);
 
             // WindowState
@@ -98,25 +96,20 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             // Top
             // Width
             // Height
-            await using StreamWriter sw = new(m_fs, leaveOpen: true)
-            {
-                AutoFlush = false
-            };
+            await using StreamWriter sw = new(m_fs, leaveOpen: true);
             var state = m_window.WindowState switch
             {
                 WindowState.Normal => 0,
                 WindowState.Maximized => 1,
                 _ => 0
             };
-            await sw.WriteLineAsync(Convert.ToString(state, c));
-            await sw.WriteLineAsync(Convert.ToString(m_window.Left, c));
-            await sw.WriteLineAsync(Convert.ToString(m_window.Top, c));
+            string data = FormattableString.Invariant($"{state}\n{m_window.Left}\n{m_window.Top}");
             if (m_window.WindowState != WindowState.Maximized)
             {
-                await sw.WriteLineAsync(Convert.ToString(m_window.ActualWidth, c));
-                await sw.WriteLineAsync(Convert.ToString(m_window.ActualHeight, c));
+                data += FormattableString.Invariant($"\n{m_window.ActualWidth}\n{m_window.ActualHeight}");
             }
 
+            sw.Write(data);
             await sw.FlushAsync();
         }
 
@@ -124,7 +117,6 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
         {
             if (m_disposed) return;
 
-            m_lock?.Dispose();
             m_fs?.Dispose();
             m_disposed = true;
         }
