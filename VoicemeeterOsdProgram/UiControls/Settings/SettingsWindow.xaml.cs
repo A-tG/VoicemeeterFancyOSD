@@ -107,7 +107,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private void OnClosed(object sender, EventArgs e)
         {
-            m_pers.Close();
+            m_pers.Dispose();
         }
 
         private async void OnLocationChange(object sender, EventArgs e)

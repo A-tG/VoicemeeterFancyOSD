@@ -7,12 +7,14 @@ using System.Windows;
 
 namespace VoicemeeterOsdProgram.UiControls.Helpers
 {
-    public class WindowPersistence
+    public class WindowPersistence : IDisposable
     {
         private readonly Window m_window;
         private FileStream m_fs;
         private readonly ReaderWriterLockSlim m_lock = new();
         private readonly string m_winSettingPath;
+
+        private bool m_disposed = false;
 
         public AtgDev.Utils.Logger logger;
 
@@ -55,12 +57,6 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
                 m_lock.ExitWriteLock();
             }
             return result;
-        }
-
-        public void Close()
-        {
-            m_fs?.Dispose();
-            m_fs = null;
         }
 
         private async Task ReadWindowSettings()
@@ -122,6 +118,15 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             }
 
             await sw.FlushAsync();
+        }
+
+        public void Dispose()
+        {
+            if (m_disposed) return;
+
+            m_lock?.Dispose();
+            m_fs?.Dispose();
+            m_disposed = true;
         }
     }
 }
