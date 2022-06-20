@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Windows.Data;
 using VoicemeeterOsdProgram.Types;
@@ -12,7 +13,7 @@ namespace VoicemeeterOsdProgram.UiControls.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var result = new List<object>();
-            if (value is HashSet<StripElements> set)
+            if (value is ImmutableHashSet<StripElements> set)
             {
                 foreach (var item in set)
                 {
@@ -29,10 +30,13 @@ namespace VoicemeeterOsdProgram.UiControls.Converters
             {
                 foreach (var item in set)
                 {
-                    if (item is StripElements el) result.Add(el);
+                    if (item is StripElements el)
+                    {
+                        result.Add(el);
+                    }
                 }
             }
-            return result;
+            return result.ToImmutableHashSet();
         }
     }
 }

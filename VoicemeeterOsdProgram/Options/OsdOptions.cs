@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using VoicemeeterOsdProgram.Types;
@@ -16,9 +17,9 @@ namespace VoicemeeterOsdProgram.Options
         private double m_borderThickness = 1;
         private bool m_animationsEnabled = true;
         private bool m_waitForVmInit = true;
-        private HashSet<StripElements> m_alwaysShowElements = new();
-        private HashSet<StripElements> m_neverShowElements = new();
-        private HashSet<uint> m_ignoreStripsIndexes = new();
+        private ImmutableHashSet<StripElements> m_alwaysShowElements = ImmutableHashSet.Create<StripElements>();
+        private ImmutableHashSet<StripElements> m_neverShowElements = ImmutableHashSet.Create<StripElements>();
+        private ImmutableHashSet<uint> m_ignoreStripsIndexes = ImmutableHashSet.Create<uint>();
 
 
         [Description("Dont show OSD if Voicemeeter's window is visible (and not obstructed) or is active window")]
@@ -113,7 +114,7 @@ namespace VoicemeeterOsdProgram.Options
         }
 
         [Description("Always show these elements on any Strip change. Multiple values separated by commas. Example: AlwaysShowElements = Mute, Buses")]
-        public HashSet<StripElements> AlwaysShowElements
+        public ImmutableHashSet<StripElements> AlwaysShowElements
         {
             get => m_alwaysShowElements;
             set
@@ -123,7 +124,7 @@ namespace VoicemeeterOsdProgram.Options
         }
 
         [Description($"Never show these elements on any Strip change, prioritized over {nameof(AlwaysShowElements)}. Multiple values separated by commas. Example: NeverShowElements = Mute, Buses")]
-        public HashSet<StripElements> NeverShowElements
+        public ImmutableHashSet<StripElements> NeverShowElements
         {
             get => m_neverShowElements;
             set
@@ -133,7 +134,7 @@ namespace VoicemeeterOsdProgram.Options
         }
 
         [Description("Dont show changes from Inputs or Outputs with these indexes. Numbering is zero-based. Multiple value separated by commas. Example: IgnoreStripsIndexes = 0, 5, 12")]
-        public HashSet<uint> IgnoreStripsIndexes
+        public ImmutableHashSet<uint> IgnoreStripsIndexes
         {
             get => m_ignoreStripsIndexes;
             set => HandlePropertyChange(ref m_ignoreStripsIndexes, ref value, IgnoreStripsIndexesChanged);
@@ -148,13 +149,13 @@ namespace VoicemeeterOsdProgram.Options
             switch (toPropertyName)
             {
                 case nameof(AlwaysShowElements):
-                    AlwaysShowElements = new(ParseEnumerableFrom<StripElements>(fromVal, ","));
+                    AlwaysShowElements = ParseEnumerableFrom<StripElements>(fromVal, ",").ToImmutableHashSet();
                     return true;
                 case nameof(NeverShowElements):
-                    NeverShowElements = new(ParseEnumerableFrom<StripElements>(fromVal, ","));
+                    NeverShowElements = ParseEnumerableFrom<StripElements>(fromVal, ",").ToImmutableHashSet();
                     return true;
                 case nameof(IgnoreStripsIndexes):
-                    IgnoreStripsIndexes = new(ParseEnumerableFrom<uint>(fromVal, ","));
+                    IgnoreStripsIndexes = ParseEnumerableFrom<uint>(fromVal, ",").ToImmutableHashSet();
                     return true;
                 default:
                     return base.TryParseFrom(toPropertyName, fromVal);
@@ -188,8 +189,8 @@ namespace VoicemeeterOsdProgram.Options
         public event EventHandler<double> BorderThicknessChanged;
         public event EventHandler<bool> AnimationsEnabledChanged;
         public event EventHandler<bool> WaitForVoicemeeterInitializationChanged;
-        public event EventHandler<HashSet<StripElements>> AlwaysShowElementsChanged;
-        public event EventHandler<HashSet<StripElements>> NeverShowElementsChanged;
-        public event EventHandler<HashSet<uint>> IgnoreStripsIndexesChanged;
+        public event EventHandler<ImmutableHashSet<StripElements>> AlwaysShowElementsChanged;
+        public event EventHandler<ImmutableHashSet<StripElements>> NeverShowElementsChanged;
+        public event EventHandler<ImmutableHashSet<uint>> IgnoreStripsIndexesChanged;
     }
 }
