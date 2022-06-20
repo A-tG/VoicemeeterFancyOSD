@@ -30,7 +30,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private async void OnInitialized(object sender, EventArgs e)
         {
-            await m_pers.TryReadWindowSettings();
+            await m_pers.TryReadWindowSettingsAsync();
             MoveToWorkingArea();
         }
 
@@ -80,19 +80,18 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             m_movedTimer.Start();
             if (await m_movedTimer.WaitForNextTickAsync())
             {
-                _ = await m_pers.TrySaveWindowSettings();
+                _ = await m_pers.TrySaveWindowSettingsAsync();
             }
 
         }
 
-        private async void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
-
             m_movedTimer.Stop();
-            _ = await m_pers.TrySaveWindowSettings();
             // need to hide Window instead of closing becase TabControl keeps Window in memory (internal memory leak?)
             Hide();
+            m_pers.TrySaveWindowSettings();
         }
 
         private void OpenConfigFileClick(object sender, RoutedEventArgs e)
@@ -117,7 +116,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             m_movedTimer.Start();
             if (await m_movedTimer.WaitForNextTickAsync())
             {
-                await m_pers.TrySaveWindowSettings();
+                await m_pers.TrySaveWindowSettingsAsync();
             }
         }
     }

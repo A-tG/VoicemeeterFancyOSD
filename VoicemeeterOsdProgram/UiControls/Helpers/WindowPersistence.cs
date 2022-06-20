@@ -25,13 +25,13 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
 
         public int MaxFileSize => 512;
 
-        public async Task<bool> TryReadWindowSettings()
+        public bool TryReadWindowSettings()
         {
             if (!Monitor.TryEnter(this)) return false;
 
             try
             {
-                await ReadWindowSettings();
+                ReadWindowSettings();
                 return true;
             }
             catch (Exception e)
@@ -42,14 +42,31 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             return false;
         }
 
-        public async Task<bool> TrySaveWindowSettings()
+        public async Task<bool> TryReadWindowSettingsAsync()
+        {
+            if (!Monitor.TryEnter(this)) return false;
+
+            try
+            {
+                await ReadWindowSettingsAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                logger?.LogError($"Error reading Window size {e}");
+            }
+            Monitor.Exit(this);
+            return false;
+        }
+
+        public async Task<bool> TrySaveWindowSettingsAsync()
         {
             bool result = false;
             if (!Monitor.TryEnter(this)) return false;
 
             try
             {
-                await WriteWindowSettings();
+                await WriteWindowSettingsAsync();
                 result = true;
             }
             catch (Exception e)
@@ -60,46 +77,89 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             return result;
         }
 
-        private async Task ReadWindowSettings()
+        public bool TrySaveWindowSettings()
         {
-            var c = CultureInfo.InvariantCulture;
+            bool result = false;
+            if (!Monitor.TryEnter(this)) return false;
+
+            try
+            {
+                WriteWindowSettings();
+                result = true;
+            }
+            catch (Exception e)
+            {
+                logger?.LogError($"Error saving Window size {e}");
+            }
+            Monitor.Exit(this);
+            return result;
+        }
+
+        private async Task ReadWindowSettingsAsync()
+        {
             if (!File.Exists(m_winSettingPath)) return;
             if ((new FileInfo(m_winSettingPath).Length) > MaxFileSize) return;
 
+            using StreamReader sr = new(m_winSettingPath);
+            using StringReader strR = new(await sr.ReadToEndAsync());
+            ReadData(strR);
+        }
+
+        private void ReadWindowSettings()
+        {
+            if (!File.Exists(m_winSettingPath)) return;
+            if ((new FileInfo(m_winSettingPath).Length) > MaxFileSize) return;
+
+            using StreamReader sr = new(m_winSettingPath);
+            using StringReader strR = new(sr.ReadToEnd());
+            ReadData(strR);
+        }
+
+        private async Task WriteWindowSettingsAsync()
+        {
+            m_fs ??= new(m_winSettingPath, FileMode.OpenOrCreate, FileAccess.Write);
+            m_fs.SetLength(0);
+            await using StreamWriter sw = new(m_fs, leaveOpen: true);
+            await sw.WriteAsync(GetData());
+            await sw.FlushAsync();
+        }
+
+        private void WriteWindowSettings()
+        {
+            m_fs ??= new(m_winSettingPath, FileMode.OpenOrCreate, FileAccess.Write);
+            m_fs.SetLength(0);
+            using StreamWriter sw = new(m_fs, leaveOpen: true);
+            sw.Write(GetData());
+            sw.Flush();
+        }
+
+        private void ReadData(StringReader data)
+        {
+            var c = CultureInfo.InvariantCulture;
             // WindowState
             // Left
             // Top
             // Width
             // Height
-            using StreamReader sr = new(m_winSettingPath);
-            using StringReader strR = new(await sr.ReadToEndAsync());
-
-            var state = (WindowState)int.Parse(strR.ReadLine(), c);
-            m_window.Left = double.Parse(strR.ReadLine(), c);
-            m_window.Top = double.Parse(strR.ReadLine(), c);
+            var state = (WindowState)int.Parse(data.ReadLine(), c);
+            m_window.Left = double.Parse(data.ReadLine(), c);
+            m_window.Top = double.Parse(data.ReadLine(), c);
             if (state == WindowState.Maximized)
             {
                 m_window.WindowState = state;
                 return;
             }
-            m_window.Width = double.Parse(strR.ReadLine(), c);
-            m_window.Height = double.Parse(strR.ReadLine(), c);
+            m_window.Width = double.Parse(data.ReadLine(), c);
+            m_window.Height = double.Parse(data.ReadLine(), c);
         }
 
-        private async Task WriteWindowSettings()
+        private string GetData()
         {
-            if (m_fs is null)
-            {
-                m_fs = new(m_winSettingPath, FileMode.OpenOrCreate, FileAccess.Write);
-            }
-            m_fs.SetLength(0);
-
             // WindowState
             // Left
             // Top
             // Width
             // Height
-            await using StreamWriter sw = new(m_fs, leaveOpen: true);
             var state = m_window.WindowState switch
             {
                 WindowState.Normal => 0,
@@ -111,9 +171,7 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             {
                 data += FormattableString.Invariant($"\n{m_window.ActualWidth}\n{m_window.ActualHeight}");
             }
-
-            sw.Write(data);
-            await sw.FlushAsync();
+            return data;
         }
 
         public void Dispose()
