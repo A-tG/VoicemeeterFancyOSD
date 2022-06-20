@@ -62,34 +62,34 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private static string GetName(VoicemeeterProperties p, int index)
         {
-            index++;
+            var indexToDisplay = index + 1;
             string name = "";
             int HV = p.hardInputs + p.virtInputs;
             int HVA = HV + p.hardOutputs;
             int HVAB = HVA + p.virtOutputs;
 
-            if (index <= p.hardInputs)
+            if (index < p.hardInputs)
             {
-                name = $"HwIn {index}";
+                name = $"HwIn {indexToDisplay}";
             }
-            else if (index <= HV)
+            else if (index < HV)
             {
                 int virtInpIndex = index - p.hardInputs;
                 name = virtInpIndex switch
                 {
-                    <= 1 => "VAIO",
-                    <= 2 => "AUX",
-                    <= 3 => "VAIO 3",
+                    < 1 => "VAIO",
+                    < 2 => "AUX",
+                    < 3 => "VAIO 3",
                     _ => $"VirtIn {virtInpIndex}"
                 };
             }
-            else if (index <= HVA)
+            else if (index < HVA)
             {
-                name = (p.type == VoicemeeterType.Standard) ? "A" : $"A{index - HV}";
+                name = (p.type == VoicemeeterType.Standard) ? "A" : $"A{indexToDisplay - HV}";
             }
-            else if (index <= HVAB)
+            else if (index < HVAB)
             {
-                name = (p.type == VoicemeeterType.Standard) ? "B" : $"B{index - HVA}";
+                name = (p.type == VoicemeeterType.Standard) ? "B" : $"B{indexToDisplay - HVA}";
             }
             return name;
         }
