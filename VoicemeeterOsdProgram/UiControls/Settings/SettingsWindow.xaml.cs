@@ -39,9 +39,9 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             var right = Left + ActualWidth;
             var bottom = Top - ActualHeight;
             var allScreens = Screen.AllScreens;
-            bool isLTonScreen = !allScreens.All(s => !s.WorkingArea.Contains(new Point(Left, Top)));
-            bool isRTonScreen = !allScreens.All(s => !s.WorkingArea.Contains(new Point(right, Top)));
-            bool isTitleBarOnScreen = isLTonScreen && isRTonScreen;
+            bool isLtOnScreen = !allScreens.All(s => !s.WorkingArea.Contains(new Point(Left, Top)));
+            bool isRtOnScreen = !allScreens.All(s => !s.WorkingArea.Contains(new Point(right, Top)));
+            bool isTitleBarOnScreen = isLtOnScreen && isRtOnScreen;
             if (isTitleBarOnScreen) return;
 
             List<Screen> screens = new(new[]
@@ -61,8 +61,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             var screen = Screen.FromPoint(new Point(Left, Top));
             var h = screen.WorkingArea.Height;
             var w = screen.WorkingArea.Width;
-            var top = screen.WorkingArea.Top;
-            var left = screen.WorkingArea.Left;
             UpdateLayout();
             if ((ActualHeight > h) || (ActualWidth > w))
             {
