@@ -95,10 +95,17 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             return result;
         }
 
+        private bool IsValidSettingsFile()
+        {
+            if (!File.Exists(m_winSettingPath)) return false;
+            if ((new FileInfo(m_winSettingPath).Length) > MaxFileSize) throw new ArgumentException($"{m_winSettingPath} file is too big");
+
+            return true;
+        }
+
         private async Task ReadWindowSettingsAsync()
         {
-            if (!File.Exists(m_winSettingPath)) return;
-            if ((new FileInfo(m_winSettingPath).Length) > MaxFileSize) return;
+            if (!IsValidSettingsFile()) return;
 
             using StreamReader sr = new(m_winSettingPath);
             using StringReader strR = new(await sr.ReadToEndAsync());
@@ -107,28 +114,30 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
 
         private void ReadWindowSettings()
         {
-            if (!File.Exists(m_winSettingPath)) return;
-            if ((new FileInfo(m_winSettingPath).Length) > MaxFileSize) return;
+            if (!IsValidSettingsFile()) return;
 
             using StreamReader sr = new(m_winSettingPath);
             using StringReader strR = new(sr.ReadToEnd());
             ReadData(strR);
         }
 
-        private async Task WriteWindowSettingsAsync()
+        private StreamWriter GetWriteStream()
         {
             m_fs ??= new(m_winSettingPath, FileMode.OpenOrCreate, FileAccess.Write);
             m_fs.SetLength(0);
-            await using StreamWriter sw = new(m_fs, leaveOpen: true);
+            return new StreamWriter(m_fs, leaveOpen: true);
+        }
+
+        private async Task WriteWindowSettingsAsync()
+        {
+            await using StreamWriter sw = GetWriteStream();
             await sw.WriteAsync(GetData());
             await sw.FlushAsync();
         }
 
         private void WriteWindowSettings()
         {
-            m_fs ??= new(m_winSettingPath, FileMode.OpenOrCreate, FileAccess.Write);
-            m_fs.SetLength(0);
-            using StreamWriter sw = new(m_fs, leaveOpen: true);
+            using StreamWriter sw = GetWriteStream();
             sw.Write(GetData());
             sw.Flush();
         }
