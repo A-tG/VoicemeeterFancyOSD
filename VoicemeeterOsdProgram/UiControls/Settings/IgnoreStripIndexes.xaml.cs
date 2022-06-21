@@ -1,6 +1,10 @@
 ﻿using AtgDev.Voicemeeter.Types;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using VoicemeeterOsdProgram.Core.Types;
@@ -16,6 +20,14 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         {
             InitializeComponent();
             InitList();
+        }
+
+        public static readonly DependencyProperty ValuesProperty = DependencyProperty.Register(
+            nameof(Values), typeof(ImmutableHashSet<uint>), typeof(IgnoreStripIndexes));
+        public ImmutableHashSet<uint> Values
+        {
+            get => (ImmutableHashSet<uint>)GetValue(ValuesProperty);
+            set => SetValue(ValuesProperty, value);
         }
 
         private void InitList()
@@ -92,6 +104,95 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
                 name = (p.type == VoicemeeterType.Standard) ? "B" : $"B{indexToDisplay - HVA}";
             }
             return name;
+        }
+
+        private HashSet<uint> GetValuesFromTextbox()
+        {
+            HashSet<uint> set = new();
+            var values = TextBoxControl.Text.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            foreach (var val in values)
+            {
+                if (uint.TryParse(val, out uint numb))
+                {
+                    set.Add(numb);
+                }
+            }
+            return set;
+        }
+
+        private HashSet<uint> GetSelectedValues()
+        {
+            HashSet<uint> set = new();
+            var items = ListViewControl.SelectedItems;
+            if (items is null) return set;
+
+            foreach (var val in items)
+            {
+                if (val is not List<string> item) continue;
+                if (item.Count == 0) continue;
+                
+                if (uint.TryParse(item[0], out uint numb))
+                {
+                    set.Add(numb);
+                }
+            }
+            return set;
+        }
+
+        private HashSet<uint> GetItemsIndeces()
+        {
+            HashSet<uint> set = new();
+            var items = ListViewControl.Items;
+            if (items is null) return set;
+
+            foreach (var val in items)
+            {
+                if (val is not List<string> item) continue;
+                if (item.Count == 0) continue;
+
+                if (uint.TryParse(item[0], out uint numb))
+                {
+                    set.Add(numb);
+                }
+            }
+            return set;
+        }
+
+        private void GetValues()
+        {
+            var vals = GetValuesFromTextbox();
+            vals.UnionWith(GetSelectedValues());
+            Values = vals.ToImmutableHashSet();
+        }
+
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            GetValues();
+        }
+
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("changed");
+            var text = TextBoxControl.Text;
+            if (text.Contains(' '))
+            {
+                TextBoxControl.Text = text.Replace(" ", "");
+                return;
+            }
+            GetValues();
+        }
+
+        private void OnPreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            foreach (var ch in e.Text)
+            {
+                if (!(char.IsDigit(ch) || (ch == ',')))
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+            e.Handled = false;
         }
     }
 }

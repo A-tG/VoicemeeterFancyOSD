@@ -17,10 +17,10 @@
     <Border Background="{StaticResource VmBgMainBrush}" BorderBrush="{StaticResource VmSepBrush}"
             CornerRadius="2" BorderThickness="2" Padding="2">
         <StackPanel Orientation="Vertical">
-            <ListView Name="ListViewControl" SelectionMode="Multiple"/>
+            <ListView Name="ListViewControl" SelectionMode="Multiple" SelectionChanged="OnSelectionChanged"/>
             <StackPanel Orientation="Vertical" Margin="6">
-                <Label Content="Additional indexes" HorizontalAlignment="Center"/>
-                <TextBox/>
+                <Label Content="Additional" HorizontalAlignment="Center"/>
+                <TextBox Name="TextBoxControl" TextChanged="OnTextChanged" PreviewTextInput="OnPreviewTextInput" AcceptsTab="False"/>
             </StackPanel>
         </StackPanel>
     </Border>

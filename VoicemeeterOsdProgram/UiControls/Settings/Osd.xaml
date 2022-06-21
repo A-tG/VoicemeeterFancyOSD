@@ -72,7 +72,8 @@
                     </local:StripElementsListView.DataContext>
                 </local:StripElementsListView>
 
-                <local:IgnoreStripIndexes>
+                <local:IgnoreStripIndexes Values="{Binding DataContext.IgnoreStripsIndexes, ElementName=OsdOptControl,
+                                                             Mode=TwoWay}">
                     <local:IgnoreStripIndexes.DataContext>
                         <uivm:PopupButtonViewModel BtnContent="Ignore Strips Indexes"/>
                     </local:IgnoreStripIndexes.DataContext>
