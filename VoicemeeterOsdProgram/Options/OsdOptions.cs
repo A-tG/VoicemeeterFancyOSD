@@ -20,7 +20,6 @@ namespace VoicemeeterOsdProgram.Options
         private ImmutableHashSet<StripElements> m_neverShowElements = ImmutableHashSet.Create<StripElements>();
         private ImmutableHashSet<uint> m_ignoreStripsIndexes = ImmutableHashSet.Create<uint>();
 
-
         [Description("Dont show OSD if Voicemeeter's window is visible (and not obstructed) or is active window")]
         public bool DontShowIfVoicemeeterVisible 
         {

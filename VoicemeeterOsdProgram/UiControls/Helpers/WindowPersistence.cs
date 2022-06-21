@@ -36,10 +36,28 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             }
             catch (Exception e)
             {
-                logger?.LogError($"Error reading Window size {e}");
+                logger?.LogError($"Error reading '{m_window.Title}' Window size {e}");
             }
             Monitor.Exit(this);
             return false;
+        }
+
+        public bool TrySaveWindowSettings()
+        {
+            bool result = false;
+            if (!Monitor.TryEnter(this)) return false;
+
+            try
+            {
+                WriteWindowSettings();
+                result = true;
+            }
+            catch (Exception e)
+            {
+                logger?.LogError($"Error saving '{m_window.Title}' Window size {e}");
+            }
+            Monitor.Exit(this);
+            return result;
         }
 
         public async Task<bool> TryReadWindowSettingsAsync()
@@ -53,7 +71,7 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             }
             catch (Exception e)
             {
-                logger?.LogError($"Error reading Window size {e}");
+                logger?.LogError($"Error reading '{m_window.Title}' Window size {e}");
             }
             Monitor.Exit(this);
             return false;
@@ -71,25 +89,7 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             }
             catch (Exception e)
             {
-                logger?.LogError($"Error saving Window size {e}");
-            }
-            Monitor.Exit(this);
-            return result;
-        }
-
-        public bool TrySaveWindowSettings()
-        {
-            bool result = false;
-            if (!Monitor.TryEnter(this)) return false;
-
-            try
-            {
-                WriteWindowSettings();
-                result = true;
-            }
-            catch (Exception e)
-            {
-                logger?.LogError($"Error saving Window size {e}");
+                logger?.LogError($"Error saving '{m_window.Title}' Window size {e}");
             }
             Monitor.Exit(this);
             return result;
