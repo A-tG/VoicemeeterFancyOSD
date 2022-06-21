@@ -139,25 +139,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             return set;
         }
 
-        private HashSet<uint> GetItemsIndeces()
-        {
-            HashSet<uint> set = new();
-            var items = ListViewControl.Items;
-            if (items is null) return set;
-
-            foreach (var val in items)
-            {
-                if (val is not List<string> item) continue;
-                if (item.Count == 0) continue;
-
-                if (uint.TryParse(item[0], out uint numb))
-                {
-                    set.Add(numb);
-                }
-            }
-            return set;
-        }
-
         private void GetValues()
         {
             var vals = GetValuesFromTextbox();
