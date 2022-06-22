@@ -150,7 +150,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("changed");
             var text = TextBoxControl.Text;
             if (text.Contains(' '))
             {
