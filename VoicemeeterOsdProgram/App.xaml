@@ -28,6 +28,7 @@
                 <ResourceDictionary Source="Resources/Voicemeeter/ToggleButton.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/ListView.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/ListViewItem.xaml"/>
+                <ResourceDictionary Source="Resources/Voicemeeter/FocusCommonStyle.xaml"/>
                 <ResourceDictionary Source="Resources/Common/PopupButtonUC.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
