@@ -51,9 +51,9 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
                 Screen.FromPoint(new Point(right, bottom)),
                 Screen.FromPoint(new Point(Left, bottom))
             });
-            var screen = screens.GroupBy(s => s).OrderByDescending(g => g.Count()).First().Key;
-            Left = screen.WorkingArea.Left;
-            Top = screen.WorkingArea.Top;
+            var screenWithMostCorners = screens.GroupBy(s => s).OrderByDescending(g => g.Count()).First().Key;
+            Left = screenWithMostCorners.WorkingArea.Left;
+            Top = screenWithMostCorners.WorkingArea.Top;
         }
 
         private void Center()
