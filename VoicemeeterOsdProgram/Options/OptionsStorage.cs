@@ -140,6 +140,51 @@ namespace VoicemeeterOsdProgram.Options
             return false;
         }
 
+        public static void SaveData()
+        {
+            var directoryPath = Path.GetDirectoryName(ConfigFilePath);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            OptionsToIniData(Program, nameof(Program));
+            OptionsToIniData(Osd, nameof(Osd));
+            OptionsToIniData(Voicemeeter, nameof(Voicemeeter));
+            OptionsToIniData(Updater, nameof(Updater));
+            OptionsToIniData(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
+            OptionsToIniData(Logger, nameof(Logger));
+        }
+
+        public static bool TrySave()
+        {
+
+            m_logger?.Log("Writing config...");
+            bool result = false;
+            if (!m_isInit) return result;
+
+            IsWatcherPaused = true;
+
+            try
+            {
+                SaveData();
+                using (StreamWriter sw = new(ConfigFilePath))
+                {
+                    sw.Write(m_data.ToString());
+                }
+
+                result = true;
+                m_logger?.Log("Writing config: OK");
+            }
+            catch (Exception e)
+            {
+                m_logger?.LogError($"Writing config: FAILED {e.GetType} {e.Message}");
+            }
+
+            IsWatcherPaused = false;
+            return result;
+        }
+
         public static async Task<bool> TrySaveAsync()
         {
             m_logger?.Log("Writing config...");
@@ -150,18 +195,7 @@ namespace VoicemeeterOsdProgram.Options
 
             try
             {
-                var directoryPath = Path.GetDirectoryName(ConfigFilePath);
-                if (!Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
-
-                OptionsToIniData(Program, nameof(Program));
-                OptionsToIniData(Osd, nameof(Osd));
-                OptionsToIniData(Voicemeeter, nameof(Voicemeeter));
-                OptionsToIniData(Updater, nameof(Updater));
-                OptionsToIniData(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
-                OptionsToIniData(Logger, nameof(Logger));
+                SaveData();
                 await using (StreamWriter sw = new(ConfigFilePath))
                 {
                     await sw.WriteAsync(m_data.ToString());

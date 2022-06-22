@@ -146,10 +146,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             Values = vals.ToImmutableHashSet();
         }
 
-        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            GetValues();
-        }
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e) => GetValues();
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {

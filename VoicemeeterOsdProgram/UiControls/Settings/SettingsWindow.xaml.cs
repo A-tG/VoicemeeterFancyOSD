@@ -89,6 +89,8 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             m_movedTimer.Stop();
             // need to hide Window instead of closing becase TabControl keeps Window in memory (internal memory leak?)
             Hide();
+
+            OptionsStorage.TrySave();
             m_pers.TrySaveWindowSettings();
         }
 
