@@ -10,9 +10,9 @@
                 <ControlTemplate TargetType="{x:Type TabItem}">
                     <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
                         <Border x:Name="mainBorder" Background="Transparent"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" 
-                    CornerRadius="2" Margin="4">
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="2" Margin="4">
                             <ContentPresenter x:Name="contentPresenter" ContentSource="Header" Focusable="False" Margin="8,2"
                                   HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" 
                                   RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
@@ -42,6 +42,7 @@
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Foreground" Value="{StaticResource VmActiveElementMainBrush}"/>
+                            <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource VmBgAltBrush}"/>
                             <Setter Property="BorderBrush" Value="{StaticResource VmActiveElementMainBrush}"/>
                             <Setter Property="Panel.ZIndex" Value="1"/>
                         </MultiDataTrigger>

@@ -10,9 +10,9 @@
         <vm:SliderOptionViewModel Label="Slider Label:" Max="2" SmallChange="0.1" TickFreq="0.1" LargeChange="0.5"/>
     </UserControl.DataContext>
     <StackPanel Orientation="Vertical">
-        <UniformGrid Rows="1">
-            <Label Content="{Binding Label}"/>
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+        <UniformGrid Rows="1" Margin="6,0,4,6">
+            <TextBlock Text="{Binding Label}" HorizontalAlignment="Left"/>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource VmLightTextBrush}"
                        Text="{Binding Value, ElementName=SliderOptControl, StringFormat={}{0:F2}}"/>
         </UniformGrid>
         <Slider Name="Slider" Value="{Binding Value, ElementName=SliderOptControl}"

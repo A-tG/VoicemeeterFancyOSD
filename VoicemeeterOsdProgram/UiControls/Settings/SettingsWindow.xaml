@@ -31,7 +31,10 @@
         <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource VmTabControlStyle}">
             <Setter Property="Padding" Value="8"/>
         </Style>
-        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource VmTextBoxStyle}"></Style>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource VmTextBoxStyle}"/>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
+        </Style>
         <Style TargetType="{x:Type local:OptionsSection}">
             <Setter Property="FontWeight" Value="Normal"/>
         </Style>
@@ -129,7 +132,7 @@
             </ScrollViewer>
         </TabItem>
         <TabItem Header="About">
-            <local:About Margin="8"/>
+            <local:About/>
         </TabItem>
     </TabControl>
 </Window>

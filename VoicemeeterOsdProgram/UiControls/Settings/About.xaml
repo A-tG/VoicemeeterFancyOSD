@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
+             xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
              mc:Ignorable="d">
     <UserControl.DataContext>
         <local:AboutViewModel/>
@@ -21,10 +22,10 @@
                     </TransformGroup>
                 </Image.LayoutTransform>
             </Image>
-            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+            <StackPanel Grid.Column="1" Margin="8,0,0,0" help:PanelMarginSetter.Margin="4">
                 <StackPanel Orientation="Horizontal">
-                    <Label FontWeight="Bold" Content="VoicemeeterFancyOSD " Padding="0" HorizontalAlignment="Left"/>
-                    <Label Content="{Binding Version}" Padding="0" HorizontalAlignment="Left"/>
+                    <TextBlock FontWeight="Bold" Text="VoicemeeterFancyOSD " Padding="0" HorizontalAlignment="Left"/>
+                    <TextBlock Text="{Binding Version}" Padding="0" HorizontalAlignment="Left"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

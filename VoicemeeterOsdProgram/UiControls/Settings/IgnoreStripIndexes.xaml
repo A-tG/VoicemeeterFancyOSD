@@ -10,6 +10,7 @@
         <Style TargetType="{x:Type UserControl}" BasedOn="{StaticResource PopupButtonUCStyle}"/>
     </UserControl.Style>
     <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{x:Null}"/>
         <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource VmListViewGridItemStyle}"/>
         <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource VmListViewGridStyle}"/>
         <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource VmGridViewColumnHeader}"/>
@@ -18,8 +19,10 @@
             CornerRadius="2" BorderThickness="2" Padding="2">
         <StackPanel Orientation="Vertical">
             <ListView Name="ListViewControl" SelectionMode="Multiple" SelectionChanged="OnSelectionChanged"/>
-            <StackPanel Orientation="Vertical" Margin="6">
-                <Label Content="Additional" HorizontalAlignment="Center"/>
+            <Separator Margin="6"/>
+            <StackPanel Orientation="Vertical" Margin="4,0,4,4">
+                <TextBlock Text="Additional" HorizontalAlignment="Center" Padding="4" 
+                           Foreground="{StaticResource VmDarkLighterTextBrush}"/>
                 <TextBox Name="TextBoxControl" TextChanged="OnTextChanged" PreviewTextInput="OnPreviewTextInput" AcceptsTab="False"/>
             </StackPanel>
         </StackPanel>

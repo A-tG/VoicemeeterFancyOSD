@@ -11,10 +11,10 @@
         <vm:AlignmentSelectsViewModel/>
     </UserControl.DataContext>
     <StackPanel Orientation="Vertical">
-        <Label Content="Alignment" HorizontalAlignment="Center" Padding="5,0,5,0"/>
+        <TextBlock Text="Alignment" HorizontalAlignment="Center" Padding="5,0,5,0"/>
         <UniformGrid Rows="1">
-            <Label Content="Horizontal" HorizontalAlignment="Center" Padding="2"/>
-            <Label Content="Vertical" HorizontalAlignment="Center" Padding="2"/>
+            <TextBlock Text="Horizontal" HorizontalAlignment="Center" Padding="4"/>
+            <TextBlock Text="Vertical" HorizontalAlignment="Center" Padding="4"/>
         </UniformGrid>
         <UniformGrid HorizontalAlignment="Stretch" Rows="1">
             <ComboBox Height="Auto" HorizontalAlignment="Stretch" Margin="4,0"
