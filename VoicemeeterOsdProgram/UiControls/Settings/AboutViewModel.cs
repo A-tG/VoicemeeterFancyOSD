@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using VoicemeeterOsdProgram.Types;
+﻿using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.Settings
 {
@@ -7,7 +6,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
     {
         public string Version
         {
-            get => Assembly.GetEntryAssembly().GetName().Version.ToString();
+            get => typeof(App).Assembly.GetName().Version.ToString();
             set { return; }
         }
     }
