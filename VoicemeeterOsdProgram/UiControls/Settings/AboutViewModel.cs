@@ -1,4 +1,6 @@
-﻿using VoicemeeterOsdProgram.Types;
+﻿using System.Windows.Input;
+using VoicemeeterOsdProgram.Types;
+using VoicemeeterOsdProgram.UiControls.Helpers;
 
 namespace VoicemeeterOsdProgram.UiControls.Settings
 {
@@ -9,5 +11,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             get => typeof(App).Assembly.GetName().Version.ToString();
             set { return; }
         }
+
+        public ICommand OpenUriCommand { get; } = new OpenUrlCommand();
     }
 }

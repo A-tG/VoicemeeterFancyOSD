@@ -27,6 +27,20 @@
                     <TextBlock FontWeight="Bold" Text="VoicemeeterFancyOSD " Padding="0" HorizontalAlignment="Left"/>
                     <TextBlock Text="{Binding Version}" Padding="0" HorizontalAlignment="Left"/>
                 </StackPanel>
+                <TextBlock>
+                    <Hyperlink NavigateUri="www.github.com/A-tG/VoicemeeterFancyOSD" 
+                               CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
+                               Command="{Binding OpenUriCommand}">
+                        Source code (GitHub)
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock>
+                    <Hyperlink NavigateUri="www.github.com/A-tG/VoicemeeterFancyOSD/issues" 
+                               CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
+                               Command="{Binding OpenUriCommand}">
+                        Report an Issue (GitHub)
+                    </Hyperlink>
+                </TextBlock>
             </StackPanel>
         </Grid>
     </StackPanel>
