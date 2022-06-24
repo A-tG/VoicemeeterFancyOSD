@@ -1,5 +1,4 @@
 ﻿using AtgDev.Utils;
-using System;
 using System.IO;
 using TopmostApp.Helpers;
 using VoicemeeterOsdProgram.Core;

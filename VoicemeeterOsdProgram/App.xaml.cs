@@ -6,7 +6,6 @@ using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Factories;
 using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Options;
-using VoicemeeterOsdProgram.UiControls;
 using VoicemeeterOsdProgram.Updater;
 using VoicemeeterOsdProgram.Updater.Types;
 

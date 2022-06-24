@@ -1,6 +1,5 @@
 ﻿using AtgDev.Utils;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using VoicemeeterOsdProgram.Factories;
 using VoicemeeterOsdProgram.Options;

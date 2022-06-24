@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows;
-
-namespace VoicemeeterOsdProgram.Core
+﻿namespace VoicemeeterOsdProgram.Core
 {
     public static class TrayIconManager
     {

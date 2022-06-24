@@ -43,5 +43,51 @@
                 </TextBlock>
             </StackPanel>
         </Grid>
+        <Label FontWeight="Bold" Content="Uses:"/>
+        <StackPanel Margin="22,0,0,0">
+            <TextBlock>
+                <Hyperlink NavigateUri="www.github.com/rickyah/ini-parser" 
+                           CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
+                           Command="{Binding OpenUriCommand}">
+                     rickyah/ini-parser
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Hyperlink NavigateUri="www.github.com/A-tG/voicemeeter-remote-api-extended" 
+                           CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
+                           Command="{Binding OpenUriCommand}">
+                     A-tG/voicemeeter-remote-api-extended
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Hyperlink NavigateUri="www.github.com/micdenny/WpfScreenHelper" 
+                           CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
+                           Command="{Binding OpenUriCommand}">
+                     micdenny/WpfScreenHelper
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Hyperlink NavigateUri="www.github.com/hardcodet/wpf-notifyicon" 
+                           CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
+                           Command="{Binding OpenUriCommand}">
+                     hardcodet/wpf-notifyicon
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Hyperlink NavigateUri="www.github.com/octokit/octokit.net" 
+                           CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
+                           Command="{Binding OpenUriCommand}">
+                     octokit/octokit.net
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                Partially code from the
+                <Hyperlink NavigateUri="www.github.com/ModernFlyouts-Community/ModernFlyouts" 
+                           CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
+                           Command="{Binding OpenUriCommand}">
+                     ModernFlyouts
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
     </StackPanel>
 </UserControl>

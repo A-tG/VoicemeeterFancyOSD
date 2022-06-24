@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VoicemeeterOsdProgram.Types
+﻿namespace VoicemeeterOsdProgram.Types
 {
     public interface IOsdRootElement
     {

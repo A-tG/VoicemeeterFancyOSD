@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using VoicemeeterOsdProgram.Options;
 
 namespace VoicemeeterOsdProgram.UiControls.Settings
