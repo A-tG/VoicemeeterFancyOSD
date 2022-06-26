@@ -12,16 +12,36 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type UserControl}">
                     <ToggleButton Name="TglBtn">
-                        <StackPanel>
-                            <ContentPresenter Content="{Binding BtnContent}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Content="{Binding BtnContent}" Grid.Column="0"
+                                                  VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                                <Grid Grid.Column="1" SnapsToDevicePixels="True"
+                                        HorizontalAlignment="Right" VerticalAlignment="Center">
+                                    <Path Fill="Transparent" Stroke="{Binding Foreground, ElementName=TglBtn}" StrokeThickness="2"
+                                          Data="M 8 0 L 1 0 q -1 0 -1 1 l 0 15 q 0 1 1 1 l 14 0 q 1 0 1 -1 l 0 -8"/>
+                                    <Path Name="Arrow" Fill="Transparent" 
+                                          Stroke="{Binding Foreground, ElementName=TglBtn}" StrokeThickness="2"
+                                          Data="M 8 8 l 8 -8 M 11 0 l 5 0 l 0 5"/>
+                                </Grid>
+                            </Grid>
                             <ui:PopupExt x:Name="PopupControl"
                                    HorizontalAlignment="Right" VerticalAlignment="Center" StaysOpen="False" PopupAnimation="Scroll"
                                    Placement="Right" PlacementTarget="{Binding ElementName=TglBtn}" AllowsTransparency="True"
                                    IsOpen="{Binding IsChecked, ElementName=TglBtn, Mode=TwoWay, Delay=200}">
                                 <ContentPresenter/>
                             </ui:PopupExt>
-                        </StackPanel>
+                        </Grid>
                     </ToggleButton>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsOpen, ElementName=PopupControl}" Value="True">
+                            <Setter Property="Stroke" TargetName="Arrow" Value="Transparent"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
