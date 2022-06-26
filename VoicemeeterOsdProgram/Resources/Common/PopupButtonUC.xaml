@@ -16,14 +16,14 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Content="{Binding BtnContent}" Grid.Column="0"
-                                                  VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                                                  VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 <Grid Grid.Column="1" SnapsToDevicePixels="True"
                                         HorizontalAlignment="Right" VerticalAlignment="Center">
                                     <Path Fill="Transparent" Stroke="{Binding Foreground, ElementName=TglBtn}" StrokeThickness="2"
-                                          Data="M 8 0 L 1 0 q -1 0 -1 1 l 0 15 q 0 1 1 1 l 14 0 q 1 0 1 -1 l 0 -8"/>
+                                          Data="M 9 0 L 1 0 q -1 0 -1 1 l 0 14 q 0 1 1 1 l 14 0 q 1 0 1 -1 l 0 -8"/>
                                     <Path Name="Arrow" Fill="Transparent" 
                                           Stroke="{Binding Foreground, ElementName=TglBtn}" StrokeThickness="2"
                                           Data="M 8 8 l 8 -8 M 11 0 l 5 0 l 0 5"/>
