@@ -19,7 +19,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Content="{Binding BtnContent}" Grid.Column="0"
-                                                  VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,4,0"/>
                                 <Grid Grid.Column="1" SnapsToDevicePixels="True"
                                         HorizontalAlignment="Right" VerticalAlignment="Center">
                                     <Path Fill="Transparent" Stroke="{Binding Foreground, ElementName=TglBtn}" StrokeThickness="2"
