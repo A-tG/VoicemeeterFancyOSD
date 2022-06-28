@@ -7,7 +7,8 @@
              xmlns:vm="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings.ViewModels"
              xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
              xmlns:opt="clr-namespace:VoicemeeterOsdProgram.Options"
-             mc:Ignorable="d">
+             xmlns:uivm="clr-namespace:VoicemeeterOsdProgram.UiControls.ViewModels"
+             mc:Ignorable="d" Name="Root">
     <UserControl.DataContext>
         <vm:UpdaterViewModel/>
     </UserControl.DataContext>
@@ -24,6 +25,17 @@
 
         <TextBlock Text="{Binding InfoText, Mode=OneWay}" HorizontalAlignment="Center"
                    TextWrapping="NoWrap" TextTrimming="None"/>
+
+        <UserControl HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Style="{StaticResource PopupButtonUCStyle}"
+                            IsEnabled="{Binding DataContext.IsRelNotesEnabled, ElementName=Root}">
+            <UserControl.DataContext>
+                <uivm:PopupButtonViewModel BtnContent="Release Notes"/>
+            </UserControl.DataContext>
+            <TextBox Text="{Binding DataContext.RelNotes, ElementName=Root}" 
+                     MaxWidth="500" TextWrapping="Wrap" Padding="8"
+                     BorderThickness="2" Margin="10" IsReadOnly="True" VerticalAlignment="Top"/>
+        </UserControl>
 
         <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
             <ProgressBar x:Name="ProgrBarControl" IsEnabled="{Binding IsInProgress, Mode=OneWay}" Orientation="Horizontal"

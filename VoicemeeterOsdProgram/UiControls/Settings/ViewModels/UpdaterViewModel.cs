@@ -23,8 +23,8 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
 
         private double m_progressVal = 0;
         private State m_state;
-        private string m_progressText = "", m_infoText, m_buttonText = "Check for Updates";
-        private bool m_isEnabled = true, m_isInProgress = false;
+        private string m_progressText = "", m_infoText, m_relNotes, m_buttonText = "Check for Updates";
+        private bool m_isEnabled = true, m_isInProgress = false, m_isRelNotesEnabled;
 
         public UpdaterViewModel()
         {
@@ -98,6 +98,33 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public bool IsRelNotesEnabled
+        {
+            get => m_isRelNotesEnabled;
+            set
+            {
+                m_isRelNotesEnabled = value;
+                if (value)
+                {
+                    RelNotes = string.IsNullOrEmpty(UpdateManager.LatestRelease?.Body) ? 
+                        "No release notes available" : 
+                        UpdateManager.LatestRelease.Body;
+                }
+                OnPropertyChanged();
+            }
+        }
+
+        public string RelNotes
+        {
+            get => m_relNotes;
+            set
+            {
+                m_relNotes = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         private State CurrentState
         {
@@ -205,9 +232,11 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
                     return;
                 case UpdaterResult.NewVersionFound:
                     CurrentState = State.NewVersionFound;
+                    IsRelNotesEnabled = true;
                     return;
                 case UpdaterResult.VersionUpToDate:
                     InfoText = "You're running the latest version";
+                    IsRelNotesEnabled = true;
                     break;
                 case UpdaterResult.ConnectionError:
                 case UpdaterResult.ArchitectureNotFound:
