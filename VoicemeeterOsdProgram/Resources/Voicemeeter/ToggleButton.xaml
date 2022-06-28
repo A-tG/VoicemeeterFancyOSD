@@ -18,7 +18,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource VmActiveElementMainBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource VmActiveElementMainBrush}"/>
         <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="4"/>
         <Setter Property="Template">
