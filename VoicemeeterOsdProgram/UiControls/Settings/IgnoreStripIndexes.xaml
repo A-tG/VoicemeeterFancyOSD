@@ -21,7 +21,7 @@
             <ListView Name="ListViewControl" SelectionMode="Multiple" SelectionChanged="OnSelectionChanged"/>
             <Separator Margin="6"/>
             <StackPanel Orientation="Vertical" Margin="4,0,4,4">
-                <TextBlock Text="Additional" HorizontalAlignment="Center" Padding="4" 
+                <TextBlock Text="Additional indices" HorizontalAlignment="Center" Padding="4" 
                            Foreground="{StaticResource VmDarkLighterTextBrush}"/>
                 <TextBox Name="TextBoxControl" TextChanged="OnTextChanged" PreviewTextInput="OnPreviewTextInput" AcceptsTab="False"/>
             </StackPanel>
