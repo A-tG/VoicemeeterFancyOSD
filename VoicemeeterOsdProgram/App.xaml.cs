@@ -46,7 +46,7 @@ namespace VoicemeeterOsdProgram
                 var updaterRes = await UpdateManager.TryCheckForUpdatesAsync();
                 if (updaterRes == UpdaterResult.NewVersionFound)
                 {
-                    TrayIconManager.OpenUpdaterWindow();
+                    TrayIconManager.OpenUpdater();
                 }
             }
 

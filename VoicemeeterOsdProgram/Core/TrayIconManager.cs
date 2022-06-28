@@ -2,23 +2,17 @@
 {
     public static class TrayIconManager
     {
-        private static UiControls.Tray.TrayIcon m_trayIcon;
+        private static UiControls.Tray.TrayIcon TrayIcon { get; }
 
         static TrayIconManager()
         {
-            m_trayIcon = new();
+            TrayIcon = new();
         }
 
         public static void Init() { }
 
-        public static void OpenUpdaterWindow()
-        {
-            m_trayIcon?.CheckForUpdate();
-        }
+        public static void OpenUpdater() => TrayIcon.OpenUpdater();
 
-        public static void Destroy()
-        {
-            m_trayIcon?.NotifyIcon?.Dispose();
-        }
+        public static void Destroy() => TrayIcon.NotifyIcon?.Dispose();
     }
 }

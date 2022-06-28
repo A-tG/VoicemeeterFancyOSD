@@ -23,7 +23,6 @@
         </tb:TaskbarIcon.Style>
         <tb:TaskbarIcon.Resources>
             <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource VmMenuItemStyle}"/>
-
         </tb:TaskbarIcon.Resources>
         <tb:TaskbarIcon.ContextMenu>
             <ContextMenu Style="{StaticResource VmContextMenuStyle}" FontSize="14"
@@ -33,7 +32,6 @@
                 <MenuItem Header="Open Config File" Click="OnOpenConfigClick"/>
                 <MenuItem Header="Open Config Folder" Click="OnOpenConfigFolderClick"/>
                 <Separator Background="{DynamicResource VmSepBrush}"/>
-                <MenuItem Header="Check for Updates" Click="CheckForUpdateClick"/>
                 <MenuItem Header="Paused" DataContext="{x:Static opts:OptionsStorage.Other}"
                           IsChecked="{Binding Paused, Mode=TwoWay}" Name="PausedItem" Click="OnPausedClick">
                     <MenuItem.Style>

@@ -13,8 +13,7 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
     /// </summary>
     public partial class TrayIcon : Window
     {
-        private UpdateDialog m_updateDialog;
-        private Window m_settingsWindow;
+        private SettingsWindow m_settingsWindow;
 
         public TrayIcon()
         {
@@ -28,15 +27,12 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
 #endif
         }
 
-        public void CheckForUpdate()
+        private SettingsWindow SettingsWindow => m_settingsWindow ??= new();
+
+        public void OpenUpdater()
         {
-            if (m_updateDialog is null)
-            {
-                m_updateDialog = new();
-                m_updateDialog.Closing += (_, _) => m_updateDialog = null;
-            }
-            m_updateDialog.Show();
-            m_updateDialog.Activate();
+            SettingsWindow.Show();
+            SettingsWindow.SelectUpdater();
         }
 
         private void OnSettingsClick(object sender, RoutedEventArgs e) => OpenSettingsWindow();
@@ -49,11 +45,6 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
         private void OnOpenConfigFolderClick(object sender, RoutedEventArgs e)
         {
             OpenInOs.TryOpen(OptionsStorage.ConfigFolder);
-        }
-
-        private void CheckForUpdateClick(object sender, RoutedEventArgs e)
-        {
-            CheckForUpdate();
         }
 
         private void OnPausedClick(object sender, RoutedEventArgs e)
@@ -74,12 +65,8 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
 
         private void OpenSettingsWindow()
         {
-            if (m_settingsWindow is null)
-            {
-                m_settingsWindow = new SettingsWindow();
-            }
-            m_settingsWindow.Show();
-            m_settingsWindow.Activate();
+            SettingsWindow.Show();
+            SettingsWindow.Activate();
         }
 
 

@@ -28,6 +28,11 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             SizeChanged += OnSizeChanged;
         }
 
+        public void SelectUpdater()
+        {
+            UpdaterTab.IsSelected = true;
+        }
+
         private async void OnInitialized(object sender, EventArgs e)
         {
             await m_pers.TryReadWindowSettingsAsync();
