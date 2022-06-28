@@ -58,21 +58,24 @@
                 <CheckBox Content="Wait for Voicemeeter initialization"
                           IsChecked="{Binding WaitForVoicemeeterInitialization, Mode=TwoWay}"/>
 
-                <local:StripElementsListView SelectedItems="{Binding DataContext.AlwaysShowElements, ElementName=OsdOptControl,
+                <local:StripElementsListView BorderThickness="2"
+                                             SelectedItems="{Binding DataContext.AlwaysShowElements, ElementName=OsdOptControl,
                                                              Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
                     <local:StripElementsListView.DataContext>
                         <vm:StripElementsListViewViewModel BtnContent="Always show Elements"/>
                     </local:StripElementsListView.DataContext>
                 </local:StripElementsListView>
 
-                <local:StripElementsListView SelectedItems="{Binding DataContext.NeverShowElements, ElementName=OsdOptControl,
+                <local:StripElementsListView BorderThickness="2"
+                                             SelectedItems="{Binding DataContext.NeverShowElements, ElementName=OsdOptControl,
                                                              Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
                     <local:StripElementsListView.DataContext>
                         <vm:StripElementsListViewViewModel BtnContent="Never show Elements"/>
                     </local:StripElementsListView.DataContext>
                 </local:StripElementsListView>
 
-                <local:IgnoreStripIndexes Values="{Binding DataContext.IgnoreStripsIndexes, ElementName=OsdOptControl,
+                <local:IgnoreStripIndexes BorderThickness="2"
+                                          Values="{Binding DataContext.IgnoreStripsIndexes, ElementName=OsdOptControl,
                                                              Mode=TwoWay}">
                     <local:IgnoreStripIndexes.DataContext>
                         <uivm:PopupButtonViewModel BtnContent="Ignore Strips"/>

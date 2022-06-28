@@ -11,7 +11,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type UserControl}">
-                    <ToggleButton Name="TglBtn">
+                    <ToggleButton Name="TglBtn" BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid>
                                 <Grid.ColumnDefinitions>

@@ -26,9 +26,9 @@
         <TextBlock Text="{Binding InfoText, Mode=OneWay}" HorizontalAlignment="Center"
                    TextWrapping="NoWrap" TextTrimming="None"/>
 
-        <UserControl HorizontalAlignment="Center" VerticalAlignment="Center"
-                            Style="{StaticResource PopupButtonUCStyle}"
-                            IsEnabled="{Binding DataContext.IsRelNotesEnabled, ElementName=Root}">
+        <UserControl HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"
+                     Style="{StaticResource PopupButtonUCStyle}" BorderThickness="1"
+                     IsEnabled="{Binding DataContext.IsRelNotesEnabled, ElementName=Root}">
             <UserControl.DataContext>
                 <uivm:PopupButtonViewModel BtnContent="Release Notes"/>
             </UserControl.DataContext>
@@ -39,7 +39,7 @@
 
         <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
             <ProgressBar x:Name="ProgrBarControl" IsEnabled="{Binding IsInProgress, Mode=OneWay}" Orientation="Horizontal"
-                         Margin="4" Height="28" Width="250"
+                         Height="28" Width="250"
                          Value="{Binding ProgressValue}"/>
             <Border HorizontalAlignment="Center" VerticalAlignment="Center" Padding="2"
                     Visibility="{Binding IsInProgress, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
