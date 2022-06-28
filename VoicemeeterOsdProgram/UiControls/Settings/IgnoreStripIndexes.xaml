@@ -5,10 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
              xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
-             mc:Ignorable="d" Name="Root">
-    <UserControl.Style>
-        <Style TargetType="{x:Type UserControl}" BasedOn="{StaticResource PopupButtonUCStyle}"/>
-    </UserControl.Style>
+             mc:Ignorable="d" Name="Root" Style="{StaticResource PopupButtonUCStyle}">
     <UserControl.Resources>
         <Style TargetType="TextBlock" BasedOn="{x:Null}"/>
         <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource VmListViewGridItemStyle}"/>
