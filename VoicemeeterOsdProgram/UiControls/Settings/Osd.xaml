@@ -22,7 +22,7 @@
 
                 <local:SliderOption Value="{Binding DataContext.Scale, ElementName=OsdOptControl, Mode=TwoWay}">
                     <local:SliderOption.DataContext>
-                        <vm:ScaleSliderOptionViewModel Label="Scale:"/>
+                        <vm:ScaleSliderOptionViewModel Label="Scale"/>
                     </local:SliderOption.DataContext>
                 </local:SliderOption>
 
@@ -39,7 +39,7 @@
 
                 <local:SliderOption Value="{Binding DataContext.BackgroundOpacity, ElementName=OsdOptControl, Mode=TwoWay}">
                     <local:SliderOption.DataContext>
-                        <vm:BgOpacitySliderOptionViewModel Label="Background opacity:"/>
+                        <vm:BgOpacitySliderOptionViewModel Label="Background opacity"/>
                     </local:SliderOption.DataContext>
                 </local:SliderOption>
 
@@ -47,16 +47,16 @@
 
                 <local:SliderOption Value="{Binding DataContext.BorderThickness, ElementName=OsdOptControl, Mode=TwoWay}">
                     <local:SliderOption.DataContext>
-                        <vm:BorderThSliderOptionViewModel Label="Border thickness:"/>
+                        <vm:BorderThSliderOptionViewModel Label="Border thickness"/>
                     </local:SliderOption.DataContext>
                 </local:SliderOption>
             </StackPanel>
             <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4" Margin="6,0,0,0">
                 <CheckBox Content="Use animations"
-              IsChecked="{Binding AnimationsEnabled, Mode=TwoWay}"/>
+                          IsChecked="{Binding AnimationsEnabled, Mode=TwoWay}"/>
 
                 <CheckBox Content="Wait for Voicemeeter initialization"
-              IsChecked="{Binding WaitForVoicemeeterInitialization, Mode=TwoWay}"/>
+                          IsChecked="{Binding WaitForVoicemeeterInitialization, Mode=TwoWay}"/>
 
                 <local:StripElementsListView SelectedItems="{Binding DataContext.AlwaysShowElements, ElementName=OsdOptControl,
                                                              Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
@@ -75,7 +75,7 @@
                 <local:IgnoreStripIndexes Values="{Binding DataContext.IgnoreStripsIndexes, ElementName=OsdOptControl,
                                                              Mode=TwoWay}">
                     <local:IgnoreStripIndexes.DataContext>
-                        <uivm:PopupButtonViewModel BtnContent="Ignore Strips Indexes"/>
+                        <uivm:PopupButtonViewModel BtnContent="Ignore Strips"/>
                     </local:IgnoreStripIndexes.DataContext>
                 </local:IgnoreStripIndexes>
 
