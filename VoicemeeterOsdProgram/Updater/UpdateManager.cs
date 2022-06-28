@@ -13,11 +13,14 @@ using System.Runtime.InteropServices;
 using AtgDev.Utils.DirectoryInfoExtensions;
 using AtgDev.Utils.StreamExtensions;
 using AtgDev.Utils.ZipFileExtensions;
+using AtgDev.Utils;
 
 namespace VoicemeeterOsdProgram.Updater
 {
     public static class UpdateManager
     {
+        public static Logger logger = Globals.logger;
+
         private const string Owner = "A-tG";
         private const string RepoName = "VoicemeeterFancyOSD";
         private const string ExtractedFolder = "VoicemeeterFancyOSD";
@@ -80,6 +83,8 @@ namespace VoicemeeterOsdProgram.Updater
             }
             catch (Exception e)
             {
+                logger?.LogError($"Error checking for update {e}");
+
                 if (e is ApiException) result = UpdaterResult.ConnectionError;
                 if (e is HttpRequestException) result = UpdaterResult.ConnectionError;
                 if (e is InvalidOperationException) result = UpdaterResult.ArchitectureNotFound;
@@ -109,18 +114,20 @@ namespace VoicemeeterOsdProgram.Updater
             {
                 if (TryCopyAndRestart(updateFolder, copyProgress))
                 {
-                    return UpdaterResult.Updated;
+                    result =  UpdaterResult.Updated;
                 }
                 else
                 {
-                    return UpdaterResult.UpdateFailed;
+                    result = UpdaterResult.UpdateFailed;
                 }
             }
             else
             {
                 TryDeleteFolder(updateFolder);
-                return result;
             }
+
+            LastResult = result;
+            return result;
         }
 
         public static bool TryDeleteBackup() => TryDeleteFolder(BackupFolderName);
@@ -157,7 +164,10 @@ namespace VoicemeeterOsdProgram.Updater
 
                 return true;
             }
-            catch { }
+            catch (Exception e) 
+            {
+                logger?.LogError($"Error restarting the program {e}");
+            }
             return false;
         }
 
@@ -199,7 +209,10 @@ namespace VoicemeeterOsdProgram.Updater
 
                 result = true;
             }
-            catch {}
+            catch (Exception e)
+            {
+                logger?.LogError($"Error overwriting files {e}");
+            }
             return result;
         }
 
@@ -214,6 +227,8 @@ namespace VoicemeeterOsdProgram.Updater
             catch (Exception e)
             { 
                 if (e is TaskCanceledException) result = UpdaterResult.Canceled;
+
+                logger?.LogError($"Error unzipping update {e}");
             }
             return result;
         }
@@ -257,6 +272,8 @@ namespace VoicemeeterOsdProgram.Updater
 
                 result.Path = string.Empty;
                 TryDeleteFolder(path);
+
+                logger?.LogError($"Error downloading update {e}");
             }
             return result;
         }
@@ -289,7 +306,10 @@ namespace VoicemeeterOsdProgram.Updater
                 }
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                logger?.LogError($"Error deleting folder {path} {e}");
+            }
             return false;
         }
 
