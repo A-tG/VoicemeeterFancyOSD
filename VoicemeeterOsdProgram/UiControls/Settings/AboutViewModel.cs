@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Runtime.InteropServices;
+using System.Windows.Input;
 using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.UiControls.Helpers;
 
@@ -8,7 +9,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
     {
         public string Version
         {
-            get => typeof(App).Assembly.GetName().Version.ToString();
+            get => $"{RuntimeInformation.ProcessArchitecture} {typeof(App).Assembly.GetName().Version}";
             set { return; }
         }
 
