@@ -42,11 +42,6 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
             OpenInOs.TryOpen(OptionsStorage.ConfigFilePath);
         }
 
-        private void OnOpenConfigFolderClick(object sender, RoutedEventArgs e)
-        {
-            OpenInOs.TryOpen(OptionsStorage.ConfigFolder);
-        }
-
         private void OnPausedClick(object sender, RoutedEventArgs e)
         {
             var mItem = (MenuItem)sender;
