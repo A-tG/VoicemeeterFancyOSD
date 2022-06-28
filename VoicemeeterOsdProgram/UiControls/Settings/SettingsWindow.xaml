@@ -50,7 +50,6 @@
         </Style>
         <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource VmToggleButtonStyle}">
             <Setter Property="Padding" Value="6"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
         <Style TargetType="{x:Type Label}">
             <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
@@ -106,13 +105,6 @@
 
                                 <local:OptionsSection>
                                     <local:OptionsSection.DataContext>
-                                        <vm:OptionsSectionViewModel LabelText="Updater"/>
-                                    </local:OptionsSection.DataContext>
-                                    <local:Updater/>
-                                </local:OptionsSection>
-
-                                <local:OptionsSection>
-                                    <local:OptionsSection.DataContext>
                                         <vm:OptionsSectionViewModel LabelText="Logger"/>
                                     </local:OptionsSection.DataContext>
                                     <local:Logger/>
@@ -136,6 +128,11 @@
                 </Grid>
             </ScrollViewer>
         </TabItem>
+
+        <TabItem Header="Updater" Name="UpdaterTab">
+            <local:UpdaterItem/>
+        </TabItem>
+        
         <TabItem Header="About">
             <local:About/>
         </TabItem>
