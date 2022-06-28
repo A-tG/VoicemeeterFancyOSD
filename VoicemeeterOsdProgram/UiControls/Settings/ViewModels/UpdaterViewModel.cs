@@ -13,7 +13,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
         {
             Initial,
             CheckingVersion,
-            VersionChecked,
+            NewVersionFound,
             Connecting,
             Downloading,
             Extracting,
@@ -30,10 +30,14 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
         {
             m_infoText = $"Press '{m_buttonText}'...";
             CurrentState = State.Initial;
+            if (UpdateManager.LastResult == UpdaterResult.NewVersionFound)
+            {
+                CurrentState = State.NewVersionFound;
+            }
             BtnCommand = new DelegateCommand(_ => OnUpdateBtn());
         }
 
-        public string VersionText => $"Current version: {RuntimeInformation.ProcessArchitecture} {UpdateManager.CurrentVersion}";
+        public string VersionText => $"Current version: {UpdateManager.CurrentVersion}";
 
         public double ProgressValue
         {
@@ -116,9 +120,9 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
                         break;
                     case State.Connecting:
                         isEnabled = false;
-                        ButtonText = "Connecting";
+                        ButtonText = "Connecting...";
                         break;
-                    case State.VersionChecked:
+                    case State.NewVersionFound:
                         InfoText = $"Version available: {UpdateManager.LatestVersion}";
                         ButtonText = "Update";
                         break;
@@ -151,7 +155,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
                 case State.Initial:
                     await CheckNewVersion();
                     break;
-                case State.VersionChecked:
+                case State.NewVersionFound:
                     await Update();
                     break;
                 case State.Downloading:
@@ -196,7 +200,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
                     CurrentState = State.Done;
                     return;
                 case UpdaterResult.NewVersionFound:
-                    CurrentState = State.VersionChecked;
+                    CurrentState = State.NewVersionFound;
                     return;
                 case UpdaterResult.VersionUpToDate:
                     InfoText = "You're running the latest version";
@@ -234,6 +238,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
             ProgressValue = val;
             ProgressText = $"{val}%";
         }
+
         private void InstProgrChanged(double val)
         {
             CurrentState = State.Installing;
