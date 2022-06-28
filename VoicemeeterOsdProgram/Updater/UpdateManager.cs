@@ -48,6 +48,8 @@ namespace VoicemeeterOsdProgram.Updater
             get => m_assembly.GetName().Version;
         }
 
+        public static UpdaterResult? LastResult { get; private set; }
+
         public static string RepoUrl
         {
             get => $"www.github.com/{Owner}/{RepoName}";
@@ -73,7 +75,7 @@ namespace VoicemeeterOsdProgram.Updater
                 LatestVersion = latestVer;
                 LatestRelease = rel;
 #if DEBUG // to be able download older version when debugging
-                return UpdaterResult.NewVersionFound;
+                result = UpdaterResult.NewVersionFound;
 #endif
             }
             catch (Exception e)
@@ -85,6 +87,7 @@ namespace VoicemeeterOsdProgram.Updater
                 m_latestAsset = null;
             }
 
+            LastResult = result;
             return result;
         }
 
