@@ -65,8 +65,9 @@
                         </Trigger>
                         
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource VmLightTextBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource VmLightTextBrush}"/>
                             <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource VmLightTextBrush}"/>
+                            <Setter Property="Background" Value="Transparent"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
