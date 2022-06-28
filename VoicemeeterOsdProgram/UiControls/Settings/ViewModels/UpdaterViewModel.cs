@@ -123,7 +123,11 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
                         ButtonText = "Connecting...";
                         break;
                     case State.NewVersionFound:
+#if DEBUG
                         InfoText = $"Version available: {UpdateManager.LatestVersion}";
+#else
+                        InfoText = $"New version available: {UpdateManager.LatestVersion}";
+#endif
                         ButtonText = "Update";
                         break;
                     case State.Downloading:

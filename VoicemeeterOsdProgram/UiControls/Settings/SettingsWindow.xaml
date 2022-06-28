@@ -62,6 +62,7 @@
         <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource VmSliderStyle}"/>
         <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource VmListViewStyle}"/>
         <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource VmListViewItemStyle}"/>
+        <Style TargetType="{x:Type ProgressBar}" BasedOn="{StaticResource VmProgressBarStyle}"/>
         <Style TargetType="{x:Type local:SliderOption}">
             <Setter Property="Foreground" Value="{StaticResource VmLightTextBrush}"/>
         </Style>

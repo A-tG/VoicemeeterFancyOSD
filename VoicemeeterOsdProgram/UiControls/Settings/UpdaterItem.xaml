@@ -26,12 +26,17 @@
                    TextWrapping="NoWrap" TextTrimming="None"/>
 
         <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-            <ProgressBar IsEnabled="{Binding IsInProgress, Mode=OneWay}" Orientation="Horizontal"
-                         Margin="4" Height="20" Width="250"
+            <ProgressBar x:Name="ProgrBarControl" IsEnabled="{Binding IsInProgress, Mode=OneWay}" Orientation="Horizontal"
+                         Margin="4" Height="28" Width="250"
                          Value="{Binding ProgressValue}"/>
-            <TextBlock Text="{Binding ProgressText}" FontWeight="SemiBold" 
-                       Visibility="{Binding IsInProgress, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Border HorizontalAlignment="Center" VerticalAlignment="Center" Padding="2"
+                    Visibility="{Binding IsInProgress, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    CornerRadius="2" BorderThickness="0">
+                <Border.Background>
+                    <SolidColorBrush Color="{Binding Background.Color ,ElementName=ProgrBarControl, Mode=OneWay}" Opacity="0.8"/>
+                </Border.Background>
+                <TextBlock Text="{Binding ProgressText}"/>
+            </Border>
         </Grid>
         
         <Button Content="{Binding ButtonText, Mode=OneWay}" IsEnabled="{Binding IsEnabled, Mode=OneWay}" HorizontalAlignment="Center"
