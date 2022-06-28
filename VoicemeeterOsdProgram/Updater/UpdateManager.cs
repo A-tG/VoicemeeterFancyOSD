@@ -23,7 +23,7 @@ namespace VoicemeeterOsdProgram.Updater
         private const string ExtractedFolder = "VoicemeeterFancyOSD";
         private const string BackupFolderName = $".{RepoName}UpdBak";
 
-        private static Assembly m_assembly = Assembly.GetEntryAssembly();
+        private static Assembly m_assembly = typeof(App).Assembly;
         private static HttpClient m_httpClient = new();
         private static GitHubClient m_ghClient = new(new ProductHeaderValue(m_assembly.GetName().Name));
         private static ReleaseAsset m_latestAsset;
