@@ -5,7 +5,7 @@
         <Setter Property="Background" Value="{StaticResource VmBgMainBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource VmDarkTextBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource VmActiveElementMainBrush}"/>
-        <Setter Property="SelectionBrush" Value="{StaticResource VmBgAltBrush}"/>
+        <Setter Property="SelectionBrush" Value="{StaticResource VmActiveElementCyanBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
