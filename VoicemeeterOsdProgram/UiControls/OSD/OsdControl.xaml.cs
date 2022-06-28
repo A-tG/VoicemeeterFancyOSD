@@ -73,12 +73,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             }
         }
 
-        public double BgOpacity
-        {
-            get => m_opacity;
-            set => BgBorder.Background.Opacity = value;
-        }
-
         public void UpdateSeparators()
         {
             WrapPanelExt cont = MainContent;

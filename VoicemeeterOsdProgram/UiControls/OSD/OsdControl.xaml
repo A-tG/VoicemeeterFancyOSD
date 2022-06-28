@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls"
+    xmlns:opt="clr-namespace:VoicemeeterOsdProgram.Options"
     x:Class="VoicemeeterOsdProgram.UiControls.OSD.OsdControl"
     mc:Ignorable="d"
     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SnapsToDevicePixels="True">
@@ -15,9 +16,11 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border Name="BgBorder" BorderThickness="1" CornerRadius="12" SnapsToDevicePixels="False">
+    <Border CornerRadius="12" SnapsToDevicePixels="False"
+            BorderThickness="{Binding BorderThickness, Source={x:Static opt:OptionsStorage.Osd}, Mode=OneWay}">
         <Border.Background>
-            <SolidColorBrush Color="{DynamicResource VmBgMainColor}"/>
+            <SolidColorBrush Color="{DynamicResource VmBgMainColor}"
+                             Opacity="{Binding BackgroundOpacity, Source={x:Static opt:OptionsStorage.Osd}, Mode=OneWay}"/>
         </Border.Background>
         <Border.BorderBrush>
             <SolidColorBrush Color="{DynamicResource VmActiveElementMainColor}"/>
