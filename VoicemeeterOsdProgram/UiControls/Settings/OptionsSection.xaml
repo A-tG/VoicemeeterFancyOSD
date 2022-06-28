@@ -22,7 +22,10 @@
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <Label Content="{Binding LabelText}" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"/>
+
+                                <Label Content="{Binding LabelText}" Grid.Row="0"
+                                       FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
                                 <ContentPresenter Grid.Row="1" Content="{TemplateBinding Content}"/>
                             </Grid>
                         </Border>
