@@ -13,7 +13,7 @@ namespace VoicemeeterOsdProgram
         public const string Name = "VoicemeeterFancyOSD";
         public const string UniqueName = "AtgDev_VoicemeeterFancyOSD";
 
-        private static App m_app;
+        public static App wpf_app;
 
         [STAThread]
         static void Main(string[] args) // if *Host.exe is launched "*Host.exe" may be the args[0]
@@ -37,8 +37,8 @@ namespace VoicemeeterOsdProgram
                 ComponentDispatcher.ThreadFilterMessage += OnTerminationSignal;
                 AppLifeManager.Start(args, () =>
                 {
-                    m_app = new();
-                    m_app.Run();
+                    wpf_app = new();
+                    wpf_app.Run();
                 });
             });
 
@@ -52,9 +52,9 @@ namespace VoicemeeterOsdProgram
             if ((msg.message == (int)WindowMessage.WM_CLOSE) || (msg.message == (int)WindowMessage.WM_QUIT))
             {
                 Debug.WriteLine("TERMINATION SIGNAL RECEIVED");
-                m_app?.Dispatcher.Invoke(() =>
+                wpf_app?.Dispatcher.Invoke(() =>
                 {
-                    m_app.Shutdown();
+                    wpf_app.Shutdown();
                 });
             }
         }
