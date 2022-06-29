@@ -22,7 +22,7 @@
                         <Grid>
                             <Grid SnapsToDevicePixels="True">
                                 <Ellipse Name="Circle" Width="18" Height="18" Fill="Transparent" 
-                                     StrokeThickness="1" Stroke="{StaticResource VmDarkElementBrush}"/>
+                                     StrokeThickness="2" Stroke="{StaticResource VmDarkElementBrush}"/>
                                 <Path Name="Path" HorizontalAlignment="Center" VerticalAlignment="Center"
                                   StrokeThickness="0" Fill="{StaticResource VmDarkElementBrush}"
                                   Data="M 0 0 h 2 v 2 h -2 Z M 0,3 h 2 v 6 h -2 z"/>
