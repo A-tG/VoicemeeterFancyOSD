@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using VoicemeeterOsdProgram.Types;
 using VoicemeeterOsdProgram.Updater;
 using VoicemeeterOsdProgram.Updater.Types;
@@ -34,7 +35,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
             {
                 CurrentState = State.NewVersionFound;
             }
-            BtnCommand = new DelegateCommand(_ => OnUpdateBtn());
+            BtnCommand = new RelayCommand(_ => OnUpdateBtn());
         }
 
         public string VersionText => $"Current version: {UpdateManager.CurrentVersion}";
@@ -177,7 +178,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
             }
         }
 
-        public DelegateCommand BtnCommand { get; }
+        public ICommand BtnCommand { get; }
 
         private async void OnUpdateBtn()
         {

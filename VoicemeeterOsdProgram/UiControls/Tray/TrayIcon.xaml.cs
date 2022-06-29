@@ -20,7 +20,7 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Destroy();
 
             InitializeComponent();
-            NotifyIcon.LeftClickCommand = new DelegateCommand(_ => OpenSettingsWindow());
+            NotifyIcon.LeftClickCommand = new RelayCommand(_ => OpenSettingsWindow());
 #if DEBUG
             DebugWindowItem.Visibility = Visibility.Visible;
             DebugWindowItem.Click += OnDebugWindowClick;
