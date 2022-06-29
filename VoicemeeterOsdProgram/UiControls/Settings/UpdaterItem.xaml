@@ -34,7 +34,7 @@
             </UserControl.DataContext>
             <TextBox Text="{Binding DataContext.RelNotes, ElementName=Root}" 
                      MaxWidth="500" TextWrapping="Wrap" Padding="8"
-                     BorderThickness="2" Margin="10" IsReadOnly="True" VerticalAlignment="Top"/>
+                     BorderThickness="2" IsReadOnly="True" VerticalAlignment="Top"/>
         </UserControl>
 
         <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
