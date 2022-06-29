@@ -16,7 +16,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border CornerRadius="12" SnapsToDevicePixels="False"
+    <Border CornerRadius="8" SnapsToDevicePixels="False"
             BorderThickness="{Binding BorderThickness, Source={x:Static opt:OptionsStorage.Osd}, Mode=OneWay}">
         <Border.Background>
             <SolidColorBrush Color="{DynamicResource VmBgMainColor}"
