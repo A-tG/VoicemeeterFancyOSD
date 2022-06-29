@@ -22,7 +22,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         public bool AllowAutoUpdateSeparators { get; set; } = true;
 
         private double m_scale = 1;
-        private double m_opacity = 1;
         private bool m_isInteractable;
         private double m_maxW;
         private double m_maxH;
