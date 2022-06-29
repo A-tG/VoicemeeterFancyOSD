@@ -71,16 +71,20 @@
                             <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
                                 <local:OptionsSection>
                                     <local:OptionsSection.DataContext>
-                                        <vm:OptionsSectionViewModel LabelText="OSD"
-                                                                    TooltipContent="On Screen Display's settings"/>
+                                        <vm:OptionsSectionViewModel 
+                                            LabelText="OSD"
+                                            TooltipContent="On Screen Display's settings"
+                                        />
                                     </local:OptionsSection.DataContext>
                                     <local:Osd/>
                                 </local:OptionsSection>
 
                                 <local:OptionsSection>
                                     <local:OptionsSection.DataContext>
-                                        <vm:OptionsSectionViewModel LabelText="OSD Alternative"
-                                                                    TooltipContent="Alternative settings for fullscreen apps specified in the list.&#10;Useful for for some OpenGL games where OSD is unable to work"/>
+                                        <vm:OptionsSectionViewModel 
+                                            LabelText="OSD Alternative"
+                                            TooltipContent="Alternative settings for fullscreen apps specified in the list.&#10;Useful for for some OpenGL games where OSD is unable to work"
+                                        />
                                     </local:OptionsSection.DataContext>
                                     <local:OsdAlt/>
                                 </local:OptionsSection>

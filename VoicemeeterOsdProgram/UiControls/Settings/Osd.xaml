@@ -55,8 +55,18 @@
                 <CheckBox Content="Use animations"
                           IsChecked="{Binding AnimationsEnabled, Mode=TwoWay}"/>
 
-                <CheckBox Content="Wait for Voicemeeter initialization"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Content="Wait for Voicemeeter initialization" Grid.Column="0"
                           IsChecked="{Binding WaitForVoicemeeterInitialization, Mode=TwoWay}"/>
+                    <ui:TooltipButton 
+                        Grid.Column="1" VerticalAlignment="Center"
+                        Content="When Voicemeeter is launched it may report changes for a few seconds, it will trigger OSD to show up.&#10;This option prevents it."
+                    />
+                </Grid>
 
                 <local:StripElementsListView BorderThickness="2"
                                              SelectedItems="{Binding DataContext.AlwaysShowElements, ElementName=OsdOptControl,
@@ -66,13 +76,20 @@
                     </local:StripElementsListView.DataContext>
                 </local:StripElementsListView>
 
-                <local:StripElementsListView BorderThickness="2"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ui:TooltipButton Grid.Column="0" Content="Prioritized over Always Show Elements" Margin="0,0,6,0"/>
+                    <local:StripElementsListView BorderThickness="2" HorizontalAlignment="Stretch" Grid.Column="1"
                                              SelectedItems="{Binding DataContext.NeverShowElements, ElementName=OsdOptControl,
                                                              Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
-                    <local:StripElementsListView.DataContext>
-                        <vm:StripElementsListViewViewModel BtnContent="Never show Elements"/>
-                    </local:StripElementsListView.DataContext>
-                </local:StripElementsListView>
+                        <local:StripElementsListView.DataContext>
+                            <vm:StripElementsListViewViewModel BtnContent="Never show Elements"/>
+                        </local:StripElementsListView.DataContext>
+                    </local:StripElementsListView>
+                </Grid>
 
                 <local:IgnoreStripIndexes BorderThickness="2"
                                           Values="{Binding DataContext.IgnoreStripsIndexes, ElementName=OsdOptControl,
