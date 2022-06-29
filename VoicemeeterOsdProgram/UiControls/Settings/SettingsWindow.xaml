@@ -7,7 +7,6 @@
         xmlns:vm="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings.ViewModels"
         xmlns:ui="clr-namespace:VoicemeeterOsdProgram.UiControls"
         xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
         Height="750" Width="700"
@@ -21,16 +20,6 @@
         <Style TargetType="{x:Type Hyperlink}">
             <Setter Property="Foreground" Value="{StaticResource VmActiveElementMainBrush}"/>
             <Setter Property="FocusVisualStyle" Value="{StaticResource VmFocusVisualStyle}"/>
-        </Style>
-        <Style TargetType="ToolTip">
-            <Style.Triggers>
-                <Trigger Property="Content" Value="{x:Static sys:String.Empty}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                </Trigger>
-                <Trigger Property="Content" Value="{x:Null}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
         <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource VmTabControlStyle}">
             <Setter Property="Padding" Value="8"/>
@@ -82,14 +71,16 @@
                             <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
                                 <local:OptionsSection>
                                     <local:OptionsSection.DataContext>
-                                        <vm:OptionsSectionViewModel LabelText="OSD"/>
+                                        <vm:OptionsSectionViewModel LabelText="OSD"
+                                                                    TooltipContent="On Screen Display's settings"/>
                                     </local:OptionsSection.DataContext>
                                     <local:Osd/>
                                 </local:OptionsSection>
 
                                 <local:OptionsSection>
                                     <local:OptionsSection.DataContext>
-                                        <vm:OptionsSectionViewModel LabelText="OSD Alternative"/>
+                                        <vm:OptionsSectionViewModel LabelText="OSD Alternative"
+                                                                    TooltipContent="Alternative settings for fullscreen apps specified in the list.&#10;Useful for for some OpenGL games where OSD is unable to work"/>
                                     </local:OptionsSection.DataContext>
                                     <local:OsdAlt/>
                                 </local:OptionsSection>

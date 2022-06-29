@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
-             xmlns:vm="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings.ViewModels"
+             xmlns:vm="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings.ViewModels" 
+             xmlns:ui="clr-namespace:VoicemeeterOsdProgram.UiControls"
              mc:Ignorable="d" 
              FontSize="12" FontWeight="Normal">
     <UserControl.DataContext>
@@ -23,8 +24,11 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
 
-                                <Label Content="{Binding LabelText}" Grid.Row="0"
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Label Content="{Binding LabelText}" Grid.Row="0"
                                        FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <ui:TooltipButton Content="{Binding TooltipContent}"/>
+                                </StackPanel>
 
                                 <ContentPresenter Grid.Row="1" Content="{TemplateBinding Content}"/>
                             </Grid>

@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
              xmlns:vm="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings.ViewModels"
              xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
+             xmlns:ui="clr-namespace:VoicemeeterOsdProgram.UiControls"
              mc:Ignorable="d" 
              Name="OsdAltOptControl">
     <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4">
@@ -25,7 +26,9 @@
         
         <Separator/>
 
-        <Button Content="Edit Apps list file" ToolTip="Each line - name of an App executable"
-                Click="EditListFileButtonClick" HorizontalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <ui:TooltipButton Content="Each line - name of an App executable" Margin="6,0,6,0"/>
+            <Button Content="Edit Apps list file" Click="EditListFileButtonClick" />
+        </StackPanel>
     </StackPanel>
 </UserControl>

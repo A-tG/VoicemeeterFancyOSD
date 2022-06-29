@@ -13,7 +13,7 @@
                                             Converter={StaticResource UintToStrConverter}}">
             <local:UintInputOption.DataContext>
                 <vm:InputOptionViewModel Label="Max old log files"
-                                            TooltipText="Maximum number of stored Log files (excluding new).&#x0a;0 - no limit"/>
+                                         TooltipText="Maximum number of stored Log files (excluding new).&#x0a;0 - no limit"/>
             </local:UintInputOption.DataContext>
         </local:UintInputOption>
     </StackPanel>

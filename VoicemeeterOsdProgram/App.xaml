@@ -30,6 +30,7 @@
                 <ResourceDictionary Source="Resources/Voicemeeter/ListViewItem.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/FocusCommonStyle.xaml"/>
                 <ResourceDictionary Source="Resources/Voicemeeter/ProgressBar.xaml"/>
+                <ResourceDictionary Source="Resources/Voicemeeter/TooltipButton.xaml"/>
                 <ResourceDictionary Source="Resources/Common/PopupButtonUC.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
