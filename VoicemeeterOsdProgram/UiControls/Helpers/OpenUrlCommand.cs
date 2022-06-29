@@ -1,14 +1,15 @@
 ﻿using AtgDev.Utils;
 using System;
 using System.Windows.Input;
+using VoicemeeterOsdProgram.Types;
 
 namespace VoicemeeterOsdProgram.UiControls.Helpers
 {
-    public class OpenUrlCommand : ICommand
+    public class OpenUrlCommand : RelayCommand
     {
-        public event EventHandler CanExecuteChanged;
+        public OpenUrlCommand() : base(OpenUri, CanOpenUri) { }
 
-        public bool CanExecute(object parameter)
+        private static bool CanOpenUri(object parameter)
         {
             if (parameter is Uri u)
             {
@@ -21,7 +22,7 @@ namespace VoicemeeterOsdProgram.UiControls.Helpers
             return false;
         }
 
-        public void Execute(object parameter)
+        private static void OpenUri(object parameter)
         {
             string command = parameter as string;
             if (parameter is Uri u)
