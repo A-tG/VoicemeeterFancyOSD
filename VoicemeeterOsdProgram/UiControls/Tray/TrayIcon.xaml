@@ -25,6 +25,21 @@
         <tb:TaskbarIcon.Resources>
             <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource VmMenuItemStyle}"/>
         </tb:TaskbarIcon.Resources>
+
+        <tb:TaskbarIcon.TrayToolTip>
+            <Border Background="{StaticResource VmBgMainBrush}" BorderThickness="1" BorderBrush="{StaticResource VmSepBrush}"
+                    CornerRadius="2" Padding="6">
+                <StackPanel>
+                    <TextBlock Foreground="{StaticResource VmDarkLighterTextBrush}" FontSize="14">
+                        <Bold>Single Click</Bold> to open 'Settings &amp; Info'
+                    </TextBlock>
+                    <Separator Background="{DynamicResource VmSepBrush}" Margin="4"/>
+                    <TextBlock Foreground="{StaticResource VmDarkLighterTextBrush}" FontSize="14">
+                        <Bold>Double Click</Bold> to toggle pause
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+        </tb:TaskbarIcon.TrayToolTip>
         
         <tb:TaskbarIcon.ContextMenu>
             <ContextMenu Style="{StaticResource VmContextMenuStyle}" FontSize="14"

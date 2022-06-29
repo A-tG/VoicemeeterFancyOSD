@@ -67,7 +67,6 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
 
         private void Destroy()
         {
-            System.Diagnostics.Debug.WriteLine("Disposing Tray Icon");
             App.Current.Dispatcher.Invoke(() => NotifyIcon?.Dispose());
         }
 
