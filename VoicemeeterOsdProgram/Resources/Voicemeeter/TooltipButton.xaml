@@ -17,6 +17,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ui:TooltipButton}">
                     <ToggleButton Name="TglBtn" Style="{StaticResource EmptyTglButtonStyle}" 
+                                  IsChecked="{Binding IsOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                   FocusVisualStyle="{StaticResource VmFocusVisualStyle}"
                                   BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
@@ -27,15 +28,15 @@
                                   StrokeThickness="0" Fill="{StaticResource VmDarkElementBrush}"
                                   Data="M 0 0 h 2 v 2 h -2 Z M 0 3 h 2 v 5 h -2 z"/>
                             </Grid>
-                            <ui:PopupExt x:Name="PopupControl"
+                            <Popup x:Name="PopupControl"
                                    HorizontalAlignment="Right" VerticalAlignment="Center" StaysOpen="False" PopupAnimation="Scroll"
-                                   Placement="Bottom" PlacementTarget="{Binding ElementName=TglBtn}" AllowsTransparency="True"
+                                   Placement="Top" PlacementTarget="{Binding ElementName=TglBtn}" AllowsTransparency="True"
                                    IsOpen="{Binding IsChecked, ElementName=TglBtn, Mode=TwoWay, Delay=200}">
                                 <Border Padding="4" Background="{StaticResource VmBgMainBrush}" CornerRadius="2" 
                                                 BorderThickness="1" BorderBrush="{StaticResource VmSepBrush}">
                                     <ContentPresenter TextBlock.Foreground="{StaticResource VmDarkLighterTextBrush}"/>
                                 </Border>
-                            </ui:PopupExt>
+                            </Popup>
                         </Grid>
                     </ToggleButton>
                     <ControlTemplate.Triggers>
