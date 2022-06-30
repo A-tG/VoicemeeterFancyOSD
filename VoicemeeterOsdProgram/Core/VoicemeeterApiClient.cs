@@ -107,7 +107,7 @@ namespace VoicemeeterOsdProgram.Core
             get => m_poolingRate;
             set
             {
-                m_logger.Log($"VmrApi Client pooling rate is set to: {value}");
+                m_logger?.Log($"VmrApi Client pooling rate is set to: {value}");
 
                 m_poolingRate = value;
                 if (IsIdling) return;
@@ -130,7 +130,7 @@ namespace VoicemeeterOsdProgram.Core
             {
                 if (m_isIdling == value) return;
 
-                m_logger.Log($"VmrApi Client is idling: {value}");
+                m_logger?.Log($"VmrApi Client is idling: {value}");
 
                 m_isIdling = value;
                 if (value)
