@@ -16,8 +16,8 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
     /// </summary>
     public partial class IgnoreStripIndexes : UserControl
     {
-        public bool IsIgnoreChanges;
 
+        private bool m_isIgnoreChanges;
         private PeriodicTimerExt m_textChangedDelay = new(TimeSpan.FromSeconds(1));
 
         public IgnoreStripIndexes()
@@ -37,9 +37,9 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             var selItems = control.ListViewControl.SelectedItems;
             if (source is null) return;
 
-            if (control.IsIgnoreChanges) return;
+            if (control.m_isIgnoreChanges) return;
 
-            control.IsIgnoreChanges = true;
+            control.m_isIgnoreChanges = true;
 
             Dictionary<uint, object> sourceDict = new();
             foreach (var objItem in source)
@@ -71,7 +71,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             control.TextBoxControl.Text = string.Join(' ', additionalVals);
             control.CaretToLastChar();
 
-            control.IsIgnoreChanges = false;
+            control.m_isIgnoreChanges = false;
         }
 
         public ImmutableHashSet<uint> Values
@@ -198,14 +198,14 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (IsIgnoreChanges) return;
+            if (m_isIgnoreChanges) return;
 
             GetValues();
         }
 
         private async void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (IsIgnoreChanges) return;
+            if (m_isIgnoreChanges) return;
 
             var text = TextBoxControl.Text;
             if (text.Contains(' '))
