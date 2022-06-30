@@ -18,8 +18,10 @@
         <local:UintInputOption InputValue="{Binding DataContext.InitializationDelay, ElementName=VmOptControl, Mode=TwoWay,
                                             Converter={StaticResource UintToStrConverter}}">
             <local:UintInputOption.DataContext>
-                <vm:InputOptionViewModel Label="Initialization delay" 
-                                            TooltipText="Wait ms before loading/connecting to Voicemeeter Remote API.&#x0a;Might help if program experience problems with Voicemeeter Remote API on system startup"/>
+                <vm:InputOptionViewModel 
+                    Label="Initialization delay" 
+                    TooltipText="Wait ms before loading/connecting to Voicemeeter Remote API.&#x0a;Might help if program experience problems with Voicemeeter Remote API on system startup"
+                />
             </local:UintInputOption.DataContext>
         </local:UintInputOption>
     </StackPanel>

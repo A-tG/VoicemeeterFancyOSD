@@ -31,7 +31,9 @@
                 <local:UintInputOption InputValue="{Binding DataContext.DurationMs, ElementName=OsdOptControl, Mode=TwoWay,
                                             Converter={StaticResource UintToStrConverter}}">
                     <local:UintInputOption.DataContext>
-                        <vm:InputOptionViewModel Label="Duration"/>
+                        <vm:InputOptionViewModel 
+                            Label="Duration"
+                            TooltipText="How long OSD is displayed (in milliseconds)"/>
                     </local:UintInputOption.DataContext>
                 </local:UintInputOption>
 
