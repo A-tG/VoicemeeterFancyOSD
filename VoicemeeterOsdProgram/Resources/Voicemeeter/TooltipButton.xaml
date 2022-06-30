@@ -21,11 +21,11 @@
                                   BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid SnapsToDevicePixels="True">
-                                <Ellipse Name="Circle" Width="18" Height="18" Fill="Transparent" 
-                                     StrokeThickness="2" Stroke="{StaticResource VmDarkElementBrush}"/>
+                                <Ellipse Name="Circle" Width="16" Height="16" Fill="Transparent" 
+                                     StrokeThickness="1" Stroke="{StaticResource VmDarkElementBrush}"/>
                                 <Path Name="Path" HorizontalAlignment="Center" VerticalAlignment="Center"
                                   StrokeThickness="0" Fill="{StaticResource VmDarkElementBrush}"
-                                  Data="M 0 0 h 2 v 2 h -2 Z M 0,3 h 2 v 6 h -2 z"/>
+                                  Data="M 0 0 h 2 v 2 h -2 Z M 0 3 h 2 v 5 h -2 z"/>
                             </Grid>
                             <ui:PopupExt x:Name="PopupControl"
                                    HorizontalAlignment="Right" VerticalAlignment="Center" StaysOpen="False" PopupAnimation="Scroll"
