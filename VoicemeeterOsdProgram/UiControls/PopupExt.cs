@@ -6,7 +6,7 @@ namespace VoicemeeterOsdProgram.UiControls
     {
         public PopupExt()
         {
-            MouseDown += (_, e) => e.Handled = true; 
+            MouseDown += (_, e) => e.Handled = true;
         }
     }
 }
