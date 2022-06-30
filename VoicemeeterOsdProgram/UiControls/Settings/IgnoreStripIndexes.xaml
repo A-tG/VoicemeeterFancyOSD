@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
              xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
+             xmlns:ui="clr-namespace:VoicemeeterOsdProgram.UiControls"
              mc:Ignorable="d" Name="Root" Style="{StaticResource PopupButtonUCStyle}">
     <UserControl.Resources>
         <Style TargetType="TextBlock" BasedOn="{x:Null}"/>
@@ -17,8 +18,11 @@
         <StackPanel Orientation="Vertical">
             <ListView Name="ListViewControl" SelectionMode="Multiple" SelectionChanged="OnSelectionChanged"/>
             <StackPanel Orientation="Vertical" Margin="4,0,4,4">
-                <TextBlock Text="Additional indices" HorizontalAlignment="Center" Padding="4" 
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Additional indices" Padding="4" 
                            Foreground="{StaticResource VmDarkLighterTextBrush}"/>
+                    <ui:TooltipButton Content="Values separated by commas"/>
+                </StackPanel>
                 <TextBox Name="TextBoxControl" AcceptsTab="False" LostFocus="OnTextBoxLostFocus"
                          TextChanged="OnTextChanged" PreviewTextInput="OnPreviewTextInput"/>
             </StackPanel>
