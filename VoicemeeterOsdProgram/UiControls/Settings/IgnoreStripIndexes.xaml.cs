@@ -16,7 +16,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
     /// </summary>
     public partial class IgnoreStripIndexes : UserControl
     {
-
         private bool m_isIgnoreChanges;
         private PeriodicTimerExt m_textChangedDelay = new(TimeSpan.FromSeconds(1));
 
@@ -68,7 +67,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
                 }
             }
 
-            control.TextBoxControl.Text = string.Join(' ', additionalVals);
+            control.TextBoxControl.Text = string.Join(',', additionalVals);
             control.CaretToLastChar();
 
             control.m_isIgnoreChanges = false;
