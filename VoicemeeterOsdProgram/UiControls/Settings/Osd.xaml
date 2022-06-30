@@ -28,8 +28,9 @@
 
                 <Separator/>
 
-                <local:UintInputOption InputValue="{Binding DataContext.DurationMs, ElementName=OsdOptControl, Mode=TwoWay,
-                                            Converter={StaticResource UintToStrConverter}}">
+                <local:UintInputOption 
+                    InputValue="{Binding DataContext.DurationMs, ElementName=OsdOptControl, Mode=TwoWay,
+                                 Converter={StaticResource UintToStrConverter}}">
                     <local:UintInputOption.DataContext>
                         <vm:InputOptionViewModel 
                             Label="Duration"
@@ -70,9 +71,10 @@
                     />
                 </Grid>
 
-                <local:StripElementsListView BorderThickness="2"
-                                             SelectedItems="{Binding DataContext.AlwaysShowElements, ElementName=OsdOptControl,
-                                                             Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
+                <local:StripElementsListView 
+                    BorderThickness="2"
+                    SelectedItems="{Binding DataContext.AlwaysShowElements, ElementName=OsdOptControl,
+                                    Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
                     <local:StripElementsListView.DataContext>
                         <vm:StripElementsListViewViewModel BtnContent="Always show Elements"/>
                     </local:StripElementsListView.DataContext>
@@ -84,9 +86,10 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <ui:TooltipButton Grid.Column="0" Content="Prioritized over Always Show Elements" Margin="0,0,6,0"/>
-                    <local:StripElementsListView BorderThickness="2" HorizontalAlignment="Stretch" Grid.Column="1"
-                                             SelectedItems="{Binding DataContext.NeverShowElements, ElementName=OsdOptControl,
-                                                             Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
+                    <local:StripElementsListView 
+                        BorderThickness="2" HorizontalAlignment="Stretch" Grid.Column="1"
+                        SelectedItems="{Binding DataContext.NeverShowElements, ElementName=OsdOptControl,
+                                        Mode=TwoWay, Converter={StaticResource StripElementsToListConverter}}">
                         <local:StripElementsListView.DataContext>
                             <vm:StripElementsListViewViewModel BtnContent="Never show Elements"/>
                         </local:StripElementsListView.DataContext>
@@ -110,8 +113,9 @@
 
                 <Separator/>
 
-                <local:AlignmentSelects HorAlignmentVal="{Binding DataContext.HorizontalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"
-                                        VertAlignmentVal="{Binding DataContext.VerticalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"/>
+                <local:AlignmentSelects 
+                    HorAlignmentVal="{Binding DataContext.HorizontalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"
+                    VertAlignmentVal="{Binding DataContext.VerticalAlignment, ElementName=OsdOptControl, Mode=TwoWay}"/>
             </StackPanel>
         </StackPanel>
     </StackPanel>
