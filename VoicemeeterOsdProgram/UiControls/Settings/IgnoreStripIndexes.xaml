@@ -16,11 +16,11 @@
             CornerRadius="2" BorderThickness="2" Padding="2">
         <StackPanel Orientation="Vertical">
             <ListView Name="ListViewControl" SelectionMode="Multiple" SelectionChanged="OnSelectionChanged"/>
-            <Separator Margin="6"/>
             <StackPanel Orientation="Vertical" Margin="4,0,4,4">
                 <TextBlock Text="Additional indices" HorizontalAlignment="Center" Padding="4" 
                            Foreground="{StaticResource VmDarkLighterTextBrush}"/>
-                <TextBox Name="TextBoxControl" TextChanged="OnTextChanged" PreviewTextInput="OnPreviewTextInput" AcceptsTab="False"/>
+                <TextBox Name="TextBoxControl" AcceptsTab="False" LostFocus="OnTextBoxLostFocus"
+                         TextChanged="OnTextChanged" PreviewTextInput="OnPreviewTextInput"/>
             </StackPanel>
         </StackPanel>
     </Border>

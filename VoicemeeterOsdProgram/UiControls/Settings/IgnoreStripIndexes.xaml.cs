@@ -1,4 +1,5 @@
-﻿using AtgDev.Voicemeeter.Types;
+﻿using AtgDev.Utils;
+using AtgDev.Voicemeeter.Types;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -15,6 +16,10 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
     /// </summary>
     public partial class IgnoreStripIndexes : UserControl
     {
+        public bool IsIgnoreChanges;
+
+        private PeriodicTimerExt m_textChangedDelay = new(TimeSpan.FromSeconds(1));
+
         public IgnoreStripIndexes()
         {
             InitializeComponent();
@@ -22,7 +27,53 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         }
 
         public static readonly DependencyProperty ValuesProperty = DependencyProperty.Register(
-            nameof(Values), typeof(ImmutableHashSet<uint>), typeof(IgnoreStripIndexes));
+            nameof(Values), typeof(ImmutableHashSet<uint>), typeof(IgnoreStripIndexes),
+            new PropertyMetadata(ValuesCallback));
+
+        private static void ValuesCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (IgnoreStripIndexes)d;
+            var source = control.ListViewControl.Items.SourceCollection;
+            var selItems = control.ListViewControl.SelectedItems;
+            if (source is null) return;
+
+            if (control.IsIgnoreChanges) return;
+
+            control.IsIgnoreChanges = true;
+
+            Dictionary<uint, object> sourceDict = new();
+            foreach (var objItem in source)
+            {
+                if (objItem is not List<string> item) continue;
+                if (item.Count == 0) continue;
+
+                if (uint.TryParse(item[0], out uint numb))
+                {
+                    sourceDict.Add(numb, objItem);
+                }
+            }
+
+            selItems.Clear();
+            var newVals = (ImmutableHashSet<uint>)e.NewValue;
+            HashSet<uint> additionalVals = new();
+            foreach (var val in newVals)
+            {
+                if (sourceDict.TryGetValue(val, out object item))
+                {
+                    selItems.Add(item);
+                }
+                else
+                {
+                    additionalVals.Add(val);
+                }
+            }
+
+            control.TextBoxControl.Text = string.Join(' ', additionalVals);
+            control.CaretToLastChar();
+
+            control.IsIgnoreChanges = false;
+        }
+
         public ImmutableHashSet<uint> Values
         {
             get => (ImmutableHashSet<uint>)GetValue(ValuesProperty);
@@ -145,17 +196,33 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
             Values = vals.ToImmutableHashSet();
         }
 
-        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e) => GetValues();
-
-        private void OnTextChanged(object sender, TextChangedEventArgs e)
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (IsIgnoreChanges) return;
+
+            GetValues();
+        }
+
+        private async void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (IsIgnoreChanges) return;
+
             var text = TextBoxControl.Text;
             if (text.Contains(' '))
             {
                 TextBoxControl.Text = text.Replace(" ", "");
+                CaretToLastChar();
                 return;
             }
+            m_textChangedDelay.Start();
+            if (!await m_textChangedDelay.WaitForNextTickAsync()) return;
+
             GetValues();
+        }
+
+        private void CaretToLastChar()
+        {
+            TextBoxControl.CaretIndex = TextBoxControl.Text.Length;
         }
 
         private void OnPreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
@@ -169,6 +236,11 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
                 }
             }
             e.Handled = false;
+        }
+
+        private void OnTextBoxLostFocus(object sender, RoutedEventArgs e)
+        {
+            GetValues();
         }
     }
 }
