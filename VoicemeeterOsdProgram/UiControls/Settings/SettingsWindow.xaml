@@ -35,10 +35,10 @@
             <Setter Property="FontSize" Value="14"/>
         </Style>
         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource VmButtonStyle}">
-            <Setter Property="Padding" Value="4"/>
+            <Setter Property="Padding" Value="5"/>
         </Style>
         <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource VmToggleButtonStyle}">
-            <Setter Property="Padding" Value="4"/>
+            <Setter Property="Padding" Value="5"/>
         </Style>
         <Style TargetType="{x:Type Label}">
             <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
