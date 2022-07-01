@@ -23,10 +23,10 @@
                                 <Grid Grid.Column="1" SnapsToDevicePixels="True"
                                         HorizontalAlignment="Right" VerticalAlignment="Center">
                                     <Path Fill="Transparent" Stroke="{Binding Foreground, ElementName=TglBtn}" StrokeThickness="2"
-                                          Data="M 9 0 H 1 q -1 0 -1 1 v 14 q 0 1 1 1 h 14 q 1 0 1 -1 v -8"/>
+                                          Data="M 7 0 H 1 q -1 0 -1 1 v 12 q 0 1 1 1 h 12 q 1 0 1 -1 v -6"/>
                                     <Path Name="Arrow" Fill="Transparent" 
                                           Stroke="{Binding Foreground, ElementName=TglBtn}" StrokeThickness="2"
-                                          Data="M 8 8 l 8 -8 M 11 0 h 5 v 5"/>
+                                          Data="M 7 7 l 7 -7 M 9 0 h 5 v 5"/>
                                 </Grid>
                             </Grid>
                             <ui:PopupExt x:Name="PopupControl"
