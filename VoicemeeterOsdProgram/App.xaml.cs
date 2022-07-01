@@ -64,7 +64,7 @@ namespace VoicemeeterOsdProgram
         {
             const string Msg = "Unable to create files/directories in the program's directory.\n" + 
                 "Updater and persistent config might not work.\n\n" + 
-                "Possible solution: if program is located in Program Files move it to a different folder/drive";
+                "Possible solution: if program is located in 'Program Files' move it to a different folder/drive";
 
             string path = AppDomain.CurrentDomain.BaseDirectory;
             bool canCreateDirs = IOAccessCheck.TryCreateRandomDirectory(path);
@@ -80,7 +80,7 @@ namespace VoicemeeterOsdProgram
 
         private void OnUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            Globals.logger.LogCritical($"Unhandled exception: {e.Exception}");
+            Globals.logger?.LogCritical($"Unhandled exception: {e.Exception}");
         }
     }
 }
