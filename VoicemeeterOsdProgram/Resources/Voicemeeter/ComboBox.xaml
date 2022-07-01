@@ -236,7 +236,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    
+
     <ControlTemplate x:Key="ComboBoxTemplate" TargetType="{x:Type ComboBox}">
         <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
             <Grid.ColumnDefinitions>
@@ -270,7 +270,10 @@
                           Grid.ColumnSpan="2" 
                           IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
                           Style="{StaticResource ComboBoxToggleButton}"/>
-            <ContentPresenter x:Name="contentPresenter"
+            <Grid>
+                <ItemsControl ItemsSource="{TemplateBinding ItemsSource}" Height="0" Margin="0" 
+                              DisplayMemberPath="{TemplateBinding DisplayMemberPath}"/>
+                <ContentPresenter x:Name="contentPresenter"
                               ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
                               ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
                               Content="{TemplateBinding SelectionBoxItem}" 
@@ -278,6 +281,7 @@
                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" 
                               Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Grid>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="true">
