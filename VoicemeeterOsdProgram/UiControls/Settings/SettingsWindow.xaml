@@ -9,7 +9,7 @@
         xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
         mc:Ignorable="d"
         Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
-        Height="750" Width="700"
+        Height="750" Width="650"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
         Closing="OnWindowClosing" Closed="OnClosed" Initialized="OnInitialized" LocationChanged="OnLocationChange"
         Icon="/Resources/Icons/MainIcon.ico">
