@@ -41,6 +41,13 @@
                         Report a Bug (GitHub)
                     </Hyperlink>
                 </TextBlock>
+                <TextBlock>
+                    <Hyperlink NavigateUri="www.boosty.to/a-tg.dev" Foreground="{StaticResource VmActiveElementOrangeBrush}"
+                               CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
+                               Command="{Binding OpenUriCommand}">
+                        Donate
+                    </Hyperlink>
+                </TextBlock>
             </StackPanel>
         </Grid>
         <Label FontWeight="Bold" Content="Uses:"/>
