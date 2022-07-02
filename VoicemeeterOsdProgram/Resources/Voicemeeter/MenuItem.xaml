@@ -209,7 +209,7 @@
                                   Height="16" Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" Width="16"/>
                 <Border x:Name="GlyphPanel" Background="Transparent" 
                         BorderBrush="{StaticResource VmActiveElementCyanBrush}" BorderThickness="2" ClipToBounds="False" CornerRadius="2"
-                        HorizontalAlignment="Center" Height="22" Margin="-1,0,0,0" VerticalAlignment="Center" Visibility="Hidden" Width="22">
+                        HorizontalAlignment="Center" Height="20" Width="20" Margin="-1,0,0,0" VerticalAlignment="Center" Visibility="Hidden">
                     <Path x:Name="Glyph" Data="{StaticResource Checkmark}" FlowDirection="LeftToRight" 
                           Fill="{StaticResource VmActiveElementCyanBrush}" Height="11" Width="10"/>
                 </Border>
@@ -225,11 +225,12 @@
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource VmBgAltBrush}"/>
                 <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
-                <Setter Property="Background" TargetName="templateRoot" Value="Transparent"/>
+                <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource VmBgAltBrush}"/>
                 <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource VmActiveElementCyanBrush}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
