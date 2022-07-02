@@ -263,7 +263,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
             var currentKb = val.Current / 1024;
             var totalKb = val.Total / 1024;
             ProgressValue = val.ProgressPercent;
-            ProgressText = $"{currentKb} / {totalKb} KB";
+            ProgressText = $"{currentKb} / {totalKb} kB";
         }
 
         private void ExtrProgrChanged(double val)
