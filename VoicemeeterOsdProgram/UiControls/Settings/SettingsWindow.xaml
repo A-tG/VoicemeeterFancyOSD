@@ -62,7 +62,7 @@
             <local:InfoItem/>
         </TabItem>
         
-        <TabItem Header="Options">
+        <TabItem Header="Options" IsSelected="True">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <Grid.RowDefinitions>
