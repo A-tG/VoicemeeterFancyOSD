@@ -12,7 +12,7 @@
     </UserControl.DataContext>
     <UniformGrid Rows="1">
         <StackPanel Orientation="Horizontal">
-            <ui:TooltipButton Content="{Binding TooltipText}"/>
+            <ui:TooltipButton Content="{Binding TooltipText}" Margin="3,0,0,0"/>
             <TextBlock Padding="6,0,6,0" Text="{Binding Label}" VerticalAlignment="Center"/>
         </StackPanel>
         <TextBox VerticalAlignment="Center" Margin="4,0"
