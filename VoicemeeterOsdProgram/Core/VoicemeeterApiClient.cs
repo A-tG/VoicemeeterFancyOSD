@@ -82,6 +82,16 @@ namespace VoicemeeterOsdProgram.Core
 
         public static bool IsHandlingParams { get; set; } = true;
 
+        public static VoicemeeterVersion VoicemeeterVersion
+        {
+            get
+            {
+                VoicemeeterVersion vers = new(0);
+                Api?.GetVoicemeeterVersion(out vers);
+                return vers;
+            }
+        }
+
         public static VoicemeeterType ProgramType
         {
             get
