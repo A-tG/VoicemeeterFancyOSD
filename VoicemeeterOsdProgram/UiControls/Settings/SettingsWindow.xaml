@@ -58,6 +58,10 @@
     </Window.Resources>
 
     <TabControl x:Name="Tab" TabStripPlacement="Left">
+        <TabItem Header="Info">
+            <local:InfoItem/>
+        </TabItem>
+        
         <TabItem Header="Options">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <Grid>
