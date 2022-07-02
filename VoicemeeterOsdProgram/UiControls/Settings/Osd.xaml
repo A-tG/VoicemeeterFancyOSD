@@ -13,10 +13,23 @@
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Horizontal">
             <StackPanel Orientation="Vertical" help:PanelMarginSetter.Margin="4" Margin="0,0,6,0">
-                <CheckBox Content="Don't show if Voicemeeter is visible"
-                  IsChecked="{Binding DontShowIfVoicemeeterVisible, Mode=TwoWay}"/>
-
-                <CheckBox Content="User can interact with OSD" IsChecked="{Binding IsInteractable, Mode=TwoWay}"/>
+                <local:CheckboxWrap IsChecked="{Binding DataContext.DontShowIfVoicemeeterVisible, 
+                                                ElementName=OsdOptControl, Mode=TwoWay}">
+                    <local:CheckboxWrap.DataContext>
+                        <vm:CheckboxWrapViewModel 
+                            Content="Prioritize Voicemeeter window"
+                            TooltipContent="Don't show OSD if Voicemeeter is visible and not obstructed"/>
+                    </local:CheckboxWrap.DataContext>
+                </local:CheckboxWrap>
+                
+                <local:CheckboxWrap IsChecked="{Binding DataContext.IsInteractable, 
+                                                ElementName=OsdOptControl, Mode=TwoWay}">
+                    <local:CheckboxWrap.DataContext>
+                        <vm:CheckboxWrapViewModel 
+                            Content="Interactable"
+                            TooltipContent="User can interact with OSD Elements (drag Gain fader, click buttons)"/>
+                    </local:CheckboxWrap.DataContext>
+                </local:CheckboxWrap>
 
                 <Separator/>
 
@@ -58,18 +71,14 @@
                 <CheckBox Content="Use animations"
                           IsChecked="{Binding AnimationsEnabled, Mode=TwoWay}"/>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <CheckBox Content="Wait for Voicemeeter initialization" Grid.Column="0"
-                          IsChecked="{Binding WaitForVoicemeeterInitialization, Mode=TwoWay}"/>
-                    <ui:TooltipButton 
-                        Grid.Column="1" VerticalAlignment="Center"
-                        Content="When Voicemeeter is launched it may report changes for a few seconds, it will trigger OSD to show up.&#10;This option prevents it."
-                    />
-                </Grid>
+                <local:CheckboxWrap IsChecked="{Binding DataContext.WaitForVoicemeeterInitialization, 
+                                                ElementName=OsdOptControl, Mode=TwoWay}">
+                    <local:CheckboxWrap.DataContext>
+                        <vm:CheckboxWrapViewModel 
+                            Content="Wait for Voicemeeter initialization"
+                            TooltipContent="When Voicemeeter is launched it may report changes for a few seconds, it will trigger OSD to show up.&#10;This option prevents it."/>
+                    </local:CheckboxWrap.DataContext>
+                </local:CheckboxWrap>
 
                 <local:StripElementsListView 
                     BorderThickness="2"
@@ -85,7 +94,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <ui:TooltipButton Grid.Column="0" Content="Prioritized over Always Show Elements" Margin="0,0,6,0"/>
+                    <ui:TooltipButton Grid.Column="0" Content="Prioritized over Always Show Elements" Margin="3,0"/>
                     <local:StripElementsListView 
                         BorderThickness="2" HorizontalAlignment="Stretch" Grid.Column="1"
                         SelectedItems="{Binding DataContext.NeverShowElements, ElementName=OsdOptControl,

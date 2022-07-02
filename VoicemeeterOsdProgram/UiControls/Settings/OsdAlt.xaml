@@ -27,7 +27,7 @@
         <Separator/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <ui:TooltipButton Content="Each line - name of an App executable" Margin="6,0,6,0"/>
+            <ui:TooltipButton Content="Each line - name of an App executable" Margin="4,0"/>
             <Button Content="Edit Apps list file" Click="EditListFileButtonClick" />
         </StackPanel>
     </StackPanel>
