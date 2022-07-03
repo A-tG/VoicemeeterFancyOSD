@@ -30,8 +30,8 @@ namespace VoicemeeterOsdProgram
             RenderOptions.ProcessRenderMode = OptionsStorage.Program.RenderMode;
             OptionsStorage.Program.RenderModeChanged += (_, val) => RenderOptions.ProcessRenderMode = val;
 
-            VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPoolingRate;
-            OptionsStorage.Voicemeeter.ApiPoolingRateChanged += (_, val) => VoicemeeterApiClient.PoolingRate = val;
+            VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPollingRate;
+            OptionsStorage.Voicemeeter.ApiPollingRateChanged += (_, val) => VoicemeeterApiClient.PoolingRate = val;
 
             DpiHelper.Init();
             TrayIconManager.Init();
