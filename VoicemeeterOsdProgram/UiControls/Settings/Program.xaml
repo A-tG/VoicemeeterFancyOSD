@@ -1,16 +1,22 @@
 ﻿<UserControl x:Class="VoicemeeterOsdProgram.UiControls.Settings.Program"
-            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-            xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
-            xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
-            mc:Ignorable="d"
-            Name="ProgramOptControl">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
+             xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
+             xmlns:ui="clr-namespace:VoicemeeterOsdProgram.UiControls"
+             mc:Ignorable="d"
+             Name="ProgramOptControl">
     <StackPanel help:PanelMarginSetter.Margin="4" Orientation="Vertical">
         <CheckBox Content="Autostart with Windows" IsChecked="{Binding Autostart, Mode=TwoWay}"/>
         <UniformGrid DataContext="{Binding ElementName=ProgramOptControl}" Rows="1">
-            <Label Content="Rendering Mode" Grid.Column="0"/>
+            <StackPanel Orientation="Horizontal">
+                <ui:TooltipButton
+                    Margin="3,0,0,0"
+                    Content="Program uses hardware acceleration if posible by default.&#x0a;Use Software if your system have problems with GPU/drivers"/>
+                <Label Content="Rendering Mode" Padding="6,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
+            </StackPanel>
             <ComboBox VerticalAlignment="Center" Margin="4,0"
                       ItemsSource="{Binding Path=RmodeValues}" DisplayMemberPath="Value" SelectedValuePath="Key"
                       SelectedValue="{Binding DataContext.RenderMode, Mode=TwoWay}"/>
