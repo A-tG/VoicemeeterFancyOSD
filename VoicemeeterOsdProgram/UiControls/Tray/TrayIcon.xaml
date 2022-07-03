@@ -1,26 +1,72 @@
-﻿<Window
-  x:Class="VoicemeeterOsdProgram.UiControls.Tray.TrayIcon"
-  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:tb="http://www.hardcodet.net/taskbar">
-
+﻿<Window x:Class="VoicemeeterOsdProgram.UiControls.Tray.TrayIcon"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:opts="clr-namespace:VoicemeeterOsdProgram.Options">
     <tb:TaskbarIcon x:Name="NotifyIcon"
-                Visibility="Visible"
-                ToolTipText="Voicemeeter Fancy OSD"
-                IconSource="/Resources/Icons/MainIcon.ico"
-                MenuActivation="RightClick"
-                TrayMouseDoubleClick="NotifyIcon_TrayMouseDoubleClick">
+                    Visibility="Visible"
+                    ToolTipText="Voicemeeter Fancy OSD"
+                    DataContext="{x:Static opts:OptionsStorage.Other}"
+                    MenuActivation="RightClick"
+                    TrayMouseDoubleClick="NotifyIcon_TrayMouseDoubleClick">
+        <tb:TaskbarIcon.Style>
+            <Style>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Paused}" Value="True">
+                        <Setter Property="tb:TaskbarIcon.IconSource" Value="/Resources/Icons/MainIconInactive.ico"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Paused}" Value="False">
+                        <Setter Property="tb:TaskbarIcon.IconSource" Value="/Resources/Icons/MainIcon.ico"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </tb:TaskbarIcon.Style>
+        
+        <tb:TaskbarIcon.Resources>
+            <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource VmMenuItemStyle}"/>
+        </tb:TaskbarIcon.Resources>
+
+        <tb:TaskbarIcon.TrayToolTip>
+            <Border Background="{StaticResource VmBgMainBrush}" BorderThickness="1" BorderBrush="{StaticResource VmSepBrush}"
+                    CornerRadius="2" Padding="6">
+                <StackPanel>
+                    <TextBlock Foreground="{StaticResource VmDarkLighterTextBrush}" FontSize="14">
+                        <Bold>Single Click</Bold> to open 'Settings &amp; Info'
+                    </TextBlock>
+                    <Separator Background="{DynamicResource VmSepBrush}" Margin="4"/>
+                    <TextBlock Foreground="{StaticResource VmDarkLighterTextBrush}" FontSize="14">
+                        <Bold>Double Click</Bold> to toggle pause
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+        </tb:TaskbarIcon.TrayToolTip>
+        
         <tb:TaskbarIcon.ContextMenu>
-            <ContextMenu BorderThickness="0">
+            <ContextMenu Style="{StaticResource VmContextMenuStyle}" FontSize="14"
+                         Foreground="{StaticResource VmActiveElementMainBrush}">
                 <MenuItem Header="DEBUG WINDOW" Name="DebugWindowItem" Visibility="Collapsed"/>
+                <MenuItem Header="Settings &amp; Info" Click="OnSettingsClick"/>
                 <MenuItem Header="Open Config File" Click="OnOpenConfigClick"/>
-                <MenuItem Header="Open Config Folder" Click="OnOpenConfigFolderClick"/>
-                <Separator/>
-                <MenuItem Header="Check for Updates" Click="CheckForUpdateClick"/>
-                <MenuItem Header="Paused" Name="PausedItem" Click="OnPausedClick"/>
-                <Separator/>
+                <Separator Background="{DynamicResource VmSepBrush}"/>
+                
+                <MenuItem Header="Paused" DataContext="{x:Static opts:OptionsStorage.Other}"
+                          IsChecked="{Binding Paused, Mode=TwoWay}" Name="PausedItem" Click="OnPausedClick">
+                    <MenuItem.Style>
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="{StaticResource VmActiveElementCyanBrush}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+                <Separator Background="{DynamicResource VmSepBrush}"/>
+                
                 <MenuItem Header="Exit" Click="ExitClick"/>
-                <Separator/>
+                <Separator Background="{DynamicResource VmSepBrush}"/>
+                
                 <MenuItem Header="Close Menu"/>
             </ContextMenu>
         </tb:TaskbarIcon.ContextMenu>

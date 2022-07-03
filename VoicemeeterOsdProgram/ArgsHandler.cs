@@ -1,6 +1,7 @@
 ﻿using AtgDev.Utils;
+using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using VoicemeeterOsdProgram.Factories;
 using VoicemeeterOsdProgram.Options;
@@ -18,6 +19,7 @@ namespace VoicemeeterOsdProgram
             public const string Unpause = "-unpause";
             public const string TogglePause = "-toggle-pause";
             public const string SetOption = "-set-option";
+            public const string Exit = "-exit";
             public const string Help = "-help";
         }
 
@@ -69,6 +71,9 @@ namespace VoicemeeterOsdProgram
                     break;
                 case Args.SetOption:
                     return await SetOptionAsync(args, i);
+                case Args.Exit:
+                    Exit();
+                    break;
                 case Args.Help:
                     ShowHelpWindow();
                     return true;
@@ -79,6 +84,23 @@ namespace VoicemeeterOsdProgram
             m_logger?.Log($"Command line argument processed: {arg}");
             return true;
         }
+
+        private static void Exit()
+        {
+            var disp = Program.wpf_app?.Dispatcher;
+            if (disp is null)
+            {
+                Environment.Exit(0);
+            }
+            else
+            {
+                disp.Invoke(() =>
+                {
+                    Program.wpf_app.Shutdown();
+                });
+            }
+        }
+
 
         private static void ShowHelpWindow()
         {

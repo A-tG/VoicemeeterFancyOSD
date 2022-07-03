@@ -1,6 +1,4 @@
 ﻿using System.Windows;
-using TopmostApp.Helpers;
-using VoicemeeterOsdProgram.Options;
 using WpfScreenHelper;
 
 namespace VoicemeeterOsdProgram.Core

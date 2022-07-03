@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="VoicemeeterOsdProgram.UiControls.Settings.InfoItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings" 
+             xmlns:types="clr-namespace:AtgDev.Voicemeeter.Types;assembly=VmrapiDynWrapExt"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Label Content="Voicemeeter:" FontWeight="Bold"/>
+        <UniformGrid Columns="2">
+            <TextBlock Text="API Status"/>
+            <TextBlock Margin="4" HorizontalAlignment="Center">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsApiInit}" Value="true">
+                                <Setter Property="TextBlock.Foreground" Value="{StaticResource VmActiveElementMainBrush}"/>
+                                <Setter Property="TextBlock.Text" Value="OK"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsApiInit}" Value="false">
+                                <Setter Property="TextBlock.Foreground" Value="{StaticResource VmActiveElementRedBrush}"/>
+                                <Setter Property="TextBlock.Text" Value="Unable to Connect"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <TextBlock Text="Running"/>
+            <TextBlock Margin="4" HorizontalAlignment="Center">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRunning}" Value="true">
+                                <Setter Property="TextBlock.Foreground" Value="{StaticResource VmActiveElementMainBrush}"/>
+                                <Setter Property="TextBlock.Text" Value="Yes"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsRunning}" Value="false">
+                                <Setter Property="TextBlock.Foreground" Value="{StaticResource VmActiveElementRedBrush}"/>
+                                <Setter Property="TextBlock.Text" Value="No"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <TextBlock Text="Type"/>
+            <TextBlock Text="{Binding TypeName}" Foreground="{StaticResource VmLightTextBrush}" HorizontalAlignment="Center"/>
+
+            <TextBlock Text="Version"/>
+            <TextBlock Text="{Binding VersionName}" Foreground="{StaticResource VmLightTextBrush}" HorizontalAlignment="Center"/>
+        </UniformGrid>
+    </StackPanel>
+</UserControl>

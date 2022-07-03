@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
@@ -12,7 +13,7 @@ namespace VoicemeeterOsdProgram
         public const string Name = "VoicemeeterFancyOSD";
         public const string UniqueName = "AtgDev_VoicemeeterFancyOSD";
 
-        private static App m_app;
+        public static App wpf_app;
 
         [STAThread]
         static void Main(string[] args) // if *Host.exe is launched "*Host.exe" may be the args[0]
@@ -36,8 +37,8 @@ namespace VoicemeeterOsdProgram
                 ComponentDispatcher.ThreadFilterMessage += OnTerminationSignal;
                 AppLifeManager.Start(args, () =>
                 {
-                    m_app = new();
-                    m_app.Run();
+                    wpf_app = new();
+                    wpf_app.Run();
                 });
             });
 
@@ -46,22 +47,14 @@ namespace VoicemeeterOsdProgram
             thread.Start();
         }
 
-        private static void ShowExceptionMsgBox(Exception ex)
-        {
-            const string message = "PRESS Ctrl + C TO COPY THIS TEXT\n" + "Unhandled exception:";
-
-            MessageBox.Show($"{message}\n{ex.GetType}\n{ex.Message} {ex.StackTrace}", Name, MessageBoxButton.OK, MessageBoxImage.Error);
-            Environment.Exit(1);
-        }
-
         private static void OnTerminationSignal(ref MSG msg, ref bool handled)
         {
             if ((msg.message == (int)WindowMessage.WM_CLOSE) || (msg.message == (int)WindowMessage.WM_QUIT))
             {
                 Debug.WriteLine("TERMINATION SIGNAL RECEIVED");
-                m_app?.Dispatcher.Invoke(() =>
+                wpf_app?.Dispatcher.Invoke(() =>
                 {
-                    m_app.Shutdown();
+                    wpf_app.Shutdown();
                 });
             }
         }
@@ -69,10 +62,19 @@ namespace VoicemeeterOsdProgram
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Debug.WriteLine("UNHANDLED EXCEPTION");
-
-            var ex = e.ExceptionObject as Exception;
-
-            ShowExceptionMsgBox(ex);
+            try
+            {
+                var ex = e.ExceptionObject as Exception;
+                var path = AppDomain.CurrentDomain.BaseDirectory + @"\crashes";
+                var filePath = path + @$"\crash {DateTime.Now:dd-MM-yyyy HH-mm-ss}.log";
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                using StreamWriter sr = new(filePath);
+                sr.WriteLine($"{ex.GetType}\n{ex.Message}\n{ex.StackTrace}");
+            }
+            catch { }
         }
 
         private static void OnProcessExit(object sender, EventArgs e)

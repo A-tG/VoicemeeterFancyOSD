@@ -1,0 +1,142 @@
+﻿<Window x:Class="VoicemeeterOsdProgram.UiControls.Settings.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings"
+        xmlns:vm="clr-namespace:VoicemeeterOsdProgram.UiControls.Settings.ViewModels"
+        xmlns:ui="clr-namespace:VoicemeeterOsdProgram.UiControls"
+        xmlns:help="clr-namespace:VoicemeeterOsdProgram.UiControls.Helpers"
+        mc:Ignorable="d"
+        Title="VoicemeeterFancyOSD Settings and Info" SizeToContent="Manual" 
+        Height="750" Width="650"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
+        Closing="OnWindowClosing" Closed="OnClosed" Initialized="OnInitialized" LocationChanged="OnLocationChange"
+        Icon="/Resources/Icons/MainIcon.ico">
+    <Window.Resources>
+        <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource VmScrollBarStyle}"/>
+        <Style TargetType="{x:Type ResizeGrip}" BasedOn="{StaticResource VmResizeGripStyle}"/>
+        <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource VmComboBoxItemStyle}"/>
+        <Style TargetType="{x:Type Hyperlink}">
+            <Setter Property="Foreground" Value="{StaticResource VmActiveElementMainBrush}"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource VmFocusVisualStyle}"/>
+        </Style>
+        <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource VmTabControlStyle}">
+            <Setter Property="Padding" Value="8"/>
+        </Style>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource VmTextBoxStyle}"/>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
+        </Style>
+        <Style TargetType="{x:Type local:OptionsSection}">
+            <Setter Property="FontWeight" Value="Normal"/>
+        </Style>
+        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource VmTabItemStyle}">
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource VmButtonStyle}">
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+        <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource VmToggleButtonStyle}">
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="{StaticResource VmDarkLighterTextBrush}"/>
+        </Style>
+        <Style TargetType="{x:Type Separator}">
+            <Setter Property="Background" Value="{StaticResource VmSepBrush}"/>
+        </Style>
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource VmCheckBoxStyle}"/>
+        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource VmComboBoxStyle}"/>
+        <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource VmSliderStyle}"/>
+        <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource VmListViewStyle}"/>
+        <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource VmListViewItemStyle}"/>
+        <Style TargetType="{x:Type ProgressBar}" BasedOn="{StaticResource VmProgressBarStyle}"/>
+        <Style TargetType="{x:Type local:SliderOption}">
+            <Setter Property="Foreground" Value="{StaticResource VmLightTextBrush}"/>
+        </Style>
+    </Window.Resources>
+
+    <TabControl x:Name="Tab" TabStripPlacement="Left">
+        <TabItem Header="Info">
+            <local:InfoItem/>
+        </TabItem>
+        
+        <TabItem Header="Options" IsSelected="True">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TabControl VerticalAlignment="Top" Grid.Row="0">
+                        <TabItem Header="OSD">
+                            <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
+                                <local:OptionsSection>
+                                    <local:OptionsSection.DataContext>
+                                        <vm:OptionsSectionViewModel 
+                                            LabelText="OSD"
+                                            TooltipContent="On Screen Display's settings"
+                                        />
+                                    </local:OptionsSection.DataContext>
+                                    <local:Osd/>
+                                </local:OptionsSection>
+
+                                <local:OptionsSection>
+                                    <local:OptionsSection.DataContext>
+                                        <vm:OptionsSectionViewModel 
+                                            LabelText="OSD Alternative"
+                                            TooltipContent="Alternative settings for fullscreen apps specified in the list.&#10;Useful for for some OpenGL games where OSD is unable to work"
+                                        />
+                                    </local:OptionsSection.DataContext>
+                                    <local:OsdAlt/>
+                                </local:OptionsSection>
+                            </WrapPanel>
+                        </TabItem>
+                        <TabItem Header="Other">
+                            <WrapPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
+                                <local:OptionsSection>
+                                    <local:OptionsSection.DataContext>
+                                        <vm:OptionsSectionViewModel LabelText="Program"/>
+                                    </local:OptionsSection.DataContext>
+                                    <local:Program/>
+                                </local:OptionsSection>
+
+                                <local:OptionsSection>
+                                    <local:OptionsSection.DataContext>
+                                        <vm:OptionsSectionViewModel LabelText="Logger"/>
+                                    </local:OptionsSection.DataContext>
+                                    <local:Logger/>
+                                </local:OptionsSection>
+
+                                <local:OptionsSection>
+                                    <local:OptionsSection.DataContext>
+                                        <vm:OptionsSectionViewModel LabelText="Voicemeeter"/>
+                                    </local:OptionsSection.DataContext>
+                                    <local:Voicemeeter/>
+                                </local:OptionsSection>
+                            </WrapPanel>
+                        </TabItem>
+                    </TabControl>
+
+                    <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Bottom">
+                        <Separator Margin="4"/>
+                        <StackPanel Orientation="Horizontal" help:PanelMarginSetter.Margin="4">
+                            <Button Content="Open Config File" FontSize="12" Click="OpenConfigFileClick"/>
+                            <Button Content="Open Config Folder" FontSize="12" Click="OpenConfigFolderClick"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="Updater" Name="UpdaterTab">
+            <local:UpdaterItem/>
+        </TabItem>
+        
+        <TabItem Header="About">
+            <local:About/>
+        </TabItem>
+    </TabControl>
+</Window>

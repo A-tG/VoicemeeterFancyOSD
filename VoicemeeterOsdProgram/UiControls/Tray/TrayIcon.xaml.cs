@@ -1,8 +1,10 @@
 ﻿using AtgDev.Utils;
 using System;
-using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using VoicemeeterOsdProgram.Options;
+using VoicemeeterOsdProgram.Types;
+using VoicemeeterOsdProgram.UiControls.Settings;
 
 namespace VoicemeeterOsdProgram.UiControls.Tray
 {
@@ -11,79 +13,39 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
     /// </summary>
     public partial class TrayIcon : Window
     {
-        private UpdateDialog m_updateDialog;
-        private bool m_isPaused = false;
+        private SettingsWindow m_settingsWindow;
 
         public TrayIcon()
         {
-            InitializeComponent();
-            IsPaused = OptionsStorage.Other.Paused;
-            OptionsStorage.Other.PausedChanged += (_, val) => IsPaused = val;
+            AppDomain.CurrentDomain.UnhandledException += (_, _) => Destroy();
 
+            InitializeComponent();
+            NotifyIcon.LeftClickCommand = new RelayCommand(_ => OpenSettingsWindow());
 #if DEBUG
             DebugWindowItem.Visibility = Visibility.Visible;
             DebugWindowItem.Click += OnDebugWindowClick;
 #endif
         }
 
-        public bool IsPaused
-        {
-            get => m_isPaused;
-            set
-            {
-                if (m_isPaused == value) return;
+        private SettingsWindow SettingsWindow => m_settingsWindow ??= new();
 
-                m_isPaused = value;
-                TogglePaused(value);
-            }
+        public void OpenUpdater()
+        {
+            SettingsWindow.Show();
+            SettingsWindow.SelectUpdater();
         }
 
-        public void CheckForUpdate()
-        {
-            if (m_updateDialog is null)
-            {
-                m_updateDialog = new();
-                m_updateDialog.Closing += (_, _) => m_updateDialog = null;
-            }
-            m_updateDialog.Show();
-            m_updateDialog.Activate();
-        }
-
-        private void TogglePaused(bool val)
-        {
-            if (val)
-            {
-                NotifyIcon.Icon = Properties.Resources.MainIconInactive;
-                PausedItem.FontWeight = FontWeights.Bold;
-            }
-            else
-            {
-                NotifyIcon.Icon = Properties.Resources.MainIcon;
-                PausedItem.FontWeight = FontWeights.Normal;
-            }
-            OptionsStorage.Other.Paused = val;
-            PausedItem.IsChecked = val;
-        }
+        private void OnSettingsClick(object sender, RoutedEventArgs e) => OpenSettingsWindow();
 
         private void OnOpenConfigClick(object sender, RoutedEventArgs e)
         {
             OpenInOs.TryOpen(OptionsStorage.ConfigFilePath);
         }
 
-        private void OnOpenConfigFolderClick(object sender, RoutedEventArgs e)
-        {
-            string folder = Path.GetDirectoryName(OptionsStorage.ConfigFilePath);
-            OpenInOs.TryOpen(folder);
-        }
-
-        private void CheckForUpdateClick(object sender, RoutedEventArgs e)
-        {
-            CheckForUpdate();
-        }
-
         private void OnPausedClick(object sender, RoutedEventArgs e)
         {
-            IsPaused = !IsPaused;
+            var mItem = (MenuItem)sender;
+            mItem.IsChecked = !mItem.IsChecked;
         }
 
         private void ExitClick(object sender, RoutedEventArgs e)
@@ -93,7 +55,19 @@ namespace VoicemeeterOsdProgram.UiControls.Tray
 
         private void NotifyIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            IsPaused = !IsPaused;
+            PausedItem.IsChecked = !PausedItem.IsChecked;
+        }
+
+        private void OpenSettingsWindow()
+        {
+            SettingsWindow.Show();
+            SettingsWindow.Activate();
+        }
+
+
+        private void Destroy()
+        {
+            App.Current.Dispatcher.Invoke(() => NotifyIcon?.Dispose());
         }
 
 #if DEBUG

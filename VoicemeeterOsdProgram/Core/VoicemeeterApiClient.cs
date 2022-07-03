@@ -36,7 +36,6 @@ namespace VoicemeeterOsdProgram.Core
         static VoicemeeterApiClient()
         {
             AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
-            Application.Current.DispatcherUnhandledException += (_, _) => Exit();
             Application.Current.Exit += (_, _) => Exit();
 
             PoolingRate = Rate.Normal;
@@ -83,6 +82,16 @@ namespace VoicemeeterOsdProgram.Core
 
         public static bool IsHandlingParams { get; set; } = true;
 
+        public static VoicemeeterVersion VoicemeeterVersion
+        {
+            get
+            {
+                VoicemeeterVersion vers = new(0);
+                Api?.GetVoicemeeterVersion(out vers);
+                return vers;
+            }
+        }
+
         public static VoicemeeterType ProgramType
         {
             get
@@ -108,7 +117,7 @@ namespace VoicemeeterOsdProgram.Core
             get => m_poolingRate;
             set
             {
-                m_logger.Log($"VmrApi Client pooling rate is set to: {value}");
+                m_logger?.Log($"VmrApi Client pooling rate is set to: {value}");
 
                 m_poolingRate = value;
                 if (IsIdling) return;
@@ -131,7 +140,7 @@ namespace VoicemeeterOsdProgram.Core
             {
                 if (m_isIdling == value) return;
 
-                m_logger.Log($"VmrApi Client is idling: {value}");
+                m_logger?.Log($"VmrApi Client is idling: {value}");
 
                 m_isIdling = value;
                 if (value)
@@ -205,6 +214,8 @@ namespace VoicemeeterOsdProgram.Core
 
         public static void Exit()
         {
+
+            System.Diagnostics.Debug.WriteLine("Exiting VMRAPI");
             m_loopTimer?.Stop();
             Api?.Logout();
         }

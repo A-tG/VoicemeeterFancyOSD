@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VoicemeeterOsdProgram.Updater.Types
+﻿namespace VoicemeeterOsdProgram.Updater.Types
 {
     public struct CurrentTotalBytes
     {

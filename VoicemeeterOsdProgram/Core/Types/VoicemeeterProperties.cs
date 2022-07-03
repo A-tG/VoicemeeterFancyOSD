@@ -4,10 +4,10 @@ namespace VoicemeeterOsdProgram.Core.Types
 {
     public struct VoicemeeterProperties
     {
-        public int hardInputs;
-        public int virtInputs;
-        public int hardOutputs;
-        public int virtOutputs;
+        public readonly int hardInputs;
+        public readonly int virtInputs;
+        public readonly int hardOutputs;
+        public readonly int virtOutputs;
         public readonly VoicemeeterType type;
 
         public VoicemeeterProperties(VoicemeeterType type)

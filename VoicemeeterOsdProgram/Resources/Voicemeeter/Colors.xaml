@@ -2,9 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Color x:Key="VmBgMainColor">#2C3D4D</Color>
     <Color x:Key="VmBgAltColor">#36495A</Color>
-    <Color x:Key="VmSepColor">#4D6377</Color>
+    <Color x:Key="VmSepColor">#526574</Color>
 
-    <Color x:Key="VmDarkTextColor">#718CA2</Color>
+    <Color x:Key="VmDarkTextColor">#6f8ca0</Color>
+    <Color x:Key="VmDarkLighterTextColor">#789cb9</Color>
     <Color x:Key="VmLightTextColor">#B4B4B4</Color>
 
     <Color x:Key="VmDarkElementColor">#5F7889</Color>
@@ -14,6 +15,24 @@
     <Color x:Key="VmActiveElementCyanColor">#68E6F8</Color>
     <Color x:Key="VmActiveElementBlueColor">#296FFD</Color>
 
-    <Color x:Key="VmLimiterBg">#3C3C00</Color>
-    <Color x:Key="VmLimiterFg">#FFFF1E</Color>
+    <Color x:Key="VmLimiterBgColor">#3C3C00</Color>
+    <Color x:Key="VmLimiterFgColor">#FFFF1E</Color>
+
+    <SolidColorBrush x:Key="VmBgMainBrush" Color="{DynamicResource VmBgMainColor}"/>
+    <SolidColorBrush x:Key="VmBgAltBrush" Color="{DynamicResource VmBgAltColor}"/>
+    <SolidColorBrush x:Key="VmSepBrush" Color="{DynamicResource VmSepColor}"/>
+
+    <SolidColorBrush x:Key="VmDarkTextBrush" Color="{DynamicResource VmDarkTextColor}"/>
+    <SolidColorBrush x:Key="VmDarkLighterTextBrush" Color="{DynamicResource VmDarkLighterTextColor}"/>
+    <SolidColorBrush x:Key="VmLightTextBrush" Color="{DynamicResource VmLightTextColor}"/>
+
+    <SolidColorBrush x:Key="VmDarkElementBrush" Color="{DynamicResource VmDarkElementColor}"/>
+    <SolidColorBrush x:Key="VmActiveElementMainBrush" Color="{DynamicResource VmActiveElementMainColor}"/>
+    <SolidColorBrush x:Key="VmActiveElementRedBrush" Color="{DynamicResource VmActiveElementRedColor}"/>
+    <SolidColorBrush x:Key="VmActiveElementOrangeBrush" Color="{DynamicResource VmActiveElementOrangeColor}"/>
+    <SolidColorBrush x:Key="VmActiveElementCyanBrush" Color="{DynamicResource VmActiveElementCyanColor}"/>
+    <SolidColorBrush x:Key="VmActiveElementBlueBrush" Color="{DynamicResource VmActiveElementBlueColor}"/>
+
+    <SolidColorBrush x:Key="VmLimiterBgBrush" Color="{DynamicResource VmLimiterBgColor}"/>
+    <SolidColorBrush x:Key="VmLimiterFgBrush" Color="{DynamicResource VmLimiterFgColor}"/>
 </ResourceDictionary>

@@ -59,16 +59,12 @@ namespace VoicemeeterOsdProgram.Core
             m_WaitForVmTypeTimer.Tick += WaitForVmTypeTimerTick;
             
             IsInteractable = options.IsInteractable;
-            osd.BgOpacity = options.BackgroundOpacity;
             IsEnabled = !OptionsStorage.Other.Paused;
             osd.Scale = options.Scale;
-            osd.BgBorder.BorderThickness = new Thickness(options.BorderThickness);
 
             options.IsInteractableChanged += (_, val) => IsInteractable = val;
             options.ScaleChanged += (_, val) => osd.Scale = val;
             options.DurationMsChanged += (_, val) => DurationMs = val;
-            options.BackgroundOpacityChanged += (_, val) => osd.BgOpacity = val;
-            options.BorderThicknessChanged += (_, val) => osd.BgBorder.BorderThickness = new Thickness(val);
             options.WaitForVoicemeeterInitializationChanged += (_, val) => SetupWaitTimers(val);
             OptionsStorage.Other.PausedChanged += (_, val) => IsEnabled = !val;
 

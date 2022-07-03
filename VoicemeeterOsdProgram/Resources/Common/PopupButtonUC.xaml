@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="clr-namespace:VoicemeeterOsdProgram.UiControls"
+                    xmlns:vm="clr-namespace:VoicemeeterOsdProgram.UiControls.ViewModels">
+    <Style x:Key="PopupButtonUCStyle" TargetType="{x:Type UserControl}">
+        <Setter Property="DataContext">
+            <Setter.Value>
+                <vm:PopupButtonViewModel/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type UserControl}">
+                    <ToggleButton Name="TglBtn" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Content="{Binding BtnContent}" Grid.Column="0"
+                                                  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,4,0"/>
+                                <Grid Grid.Column="1" SnapsToDevicePixels="True"
+                                        HorizontalAlignment="Right" VerticalAlignment="Center">
+                                    <Path Fill="Transparent" Stroke="{Binding Foreground, ElementName=TglBtn}" StrokeThickness="2"
+                                          Data="M 7 0 H 1 q -1 0 -1 1 v 12 q 0 1 1 1 h 12 q 1 0 1 -1 v -6"/>
+                                    <Path Name="Arrow" Fill="Transparent" 
+                                          Stroke="{Binding Foreground, ElementName=TglBtn}" StrokeThickness="2"
+                                          Data="M 7 7 l 7 -7 M 9 0 h 5 v 5"/>
+                                </Grid>
+                            </Grid>
+                            <ui:PopupExt x:Name="PopupControl"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center" StaysOpen="False" PopupAnimation="Scroll"
+                                   Placement="Right" PlacementTarget="{Binding ElementName=TglBtn}" AllowsTransparency="True"
+                                   IsOpen="{Binding IsChecked, ElementName=TglBtn, Mode=TwoWay, Delay=200}">
+                                <ContentPresenter/>
+                            </ui:PopupExt>
+                        </Grid>
+                    </ToggleButton>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsOpen, ElementName=PopupControl}" Value="True">
+                            <Setter Property="Stroke" TargetName="Arrow" Value="Transparent"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

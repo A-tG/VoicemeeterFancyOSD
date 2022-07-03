@@ -6,7 +6,6 @@ using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Factories;
 using VoicemeeterOsdProgram.Helpers;
 using VoicemeeterOsdProgram.Options;
-using VoicemeeterOsdProgram.UiControls;
 using VoicemeeterOsdProgram.Updater;
 using VoicemeeterOsdProgram.Updater.Types;
 
@@ -31,8 +30,8 @@ namespace VoicemeeterOsdProgram
             RenderOptions.ProcessRenderMode = OptionsStorage.Program.RenderMode;
             OptionsStorage.Program.RenderModeChanged += (_, val) => RenderOptions.ProcessRenderMode = val;
 
-            VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPoolingRate;
-            OptionsStorage.Voicemeeter.ApiPoolingRateChanged += (_, val) => VoicemeeterApiClient.PoolingRate = val;
+            VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPollingRate;
+            OptionsStorage.Voicemeeter.ApiPollingRateChanged += (_, val) => VoicemeeterApiClient.PoolingRate = val;
 
             DpiHelper.Init();
             TrayIconManager.Init();
@@ -47,7 +46,7 @@ namespace VoicemeeterOsdProgram
                 var updaterRes = await UpdateManager.TryCheckForUpdatesAsync();
                 if (updaterRes == UpdaterResult.NewVersionFound)
                 {
-                    TrayIconManager.OpenUpdaterWindow();
+                    TrayIconManager.OpenUpdater();
                 }
             }
 
@@ -65,7 +64,7 @@ namespace VoicemeeterOsdProgram
         {
             const string Msg = "Unable to create files/directories in the program's directory.\n" + 
                 "Updater and persistent config might not work.\n\n" + 
-                "Possible solution: if program is located in Program Files move it to a different folder/drive";
+                "Possible solution: if program is located in 'Program Files' move it to a different folder/drive";
 
             string path = AppDomain.CurrentDomain.BaseDirectory;
             bool canCreateDirs = IOAccessCheck.TryCreateRandomDirectory(path);
@@ -81,7 +80,7 @@ namespace VoicemeeterOsdProgram
 
         private void OnUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            Globals.logger.LogCritical($"Unhandled exception: {e.Exception}");
+            Globals.logger?.LogCritical($"Unhandled exception: {e.Exception}");
         }
     }
 }

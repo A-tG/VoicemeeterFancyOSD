@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using TopmostApp.Helpers;
-using VoicemeeterOsdProgram.Options;
 using WpfScreenHelper;
 
 namespace VoicemeeterOsdProgram.Core
