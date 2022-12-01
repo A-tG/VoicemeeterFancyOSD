@@ -19,7 +19,6 @@ namespace VoicemeeterOsdProgram
         public App()
         {
             InitializeComponent();
-
             Current.DispatcherUnhandledException += OnUnhandledException;
         }
 
@@ -27,7 +26,7 @@ namespace VoicemeeterOsdProgram
         {
             var optionsTask = OptionsStorage.InitAsync();
 
-            RenderOptions.ProcessRenderMode = OptionsStorage.Program.RenderMode;
+            OptionsStorage.Program.RenderMode = RenderOptions.ProcessRenderMode;
             OptionsStorage.Program.RenderModeChanged += (_, val) => RenderOptions.ProcessRenderMode = val;
 
             VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPollingRate;
