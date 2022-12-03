@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using TopmostApp.Interop;
+using System.Windows.Media;
 
 namespace VoicemeeterOsdProgram
 {
@@ -37,6 +38,10 @@ namespace VoicemeeterOsdProgram
                 ComponentDispatcher.ThreadFilterMessage += OnTerminationSignal;
                 AppLifeManager.Start(args, () =>
                 {
+<<<<<<< Updated upstream
+=======
+                    RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+>>>>>>> Stashed changes
                     wpf_app = new();
                     wpf_app.Run();
                 });
