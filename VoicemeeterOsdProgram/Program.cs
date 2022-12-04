@@ -38,10 +38,7 @@ namespace VoicemeeterOsdProgram
                 ComponentDispatcher.ThreadFilterMessage += OnTerminationSignal;
                 AppLifeManager.Start(args, () =>
                 {
-<<<<<<< Updated upstream
-=======
                     RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
->>>>>>> Stashed changes
                     wpf_app = new();
                     wpf_app.Run();
                 });
