@@ -26,8 +26,7 @@ namespace VoicemeeterOsdProgram
         async void OnAppStartup(object sender, StartupEventArgs e)
         {
             var optionsTask = OptionsStorage.InitAsync();
-
-            RenderOptions.ProcessRenderMode = OptionsStorage.Program.RenderMode;
+            OptionsStorage.Program.RenderMode = RenderOptions.ProcessRenderMode;
             OptionsStorage.Program.RenderModeChanged += (_, val) => RenderOptions.ProcessRenderMode = val;
 
             VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPollingRate;
