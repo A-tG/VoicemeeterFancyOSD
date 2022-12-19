@@ -12,6 +12,9 @@ The program is portable, no installation is required, but you need [.NET Desktop
 
 `winget install Microsoft.DotNet.DesktopRuntime.6`
 
+**Future version may reqiure .NET 7.0.** Install it in advance 
+`winget install Microsoft.DotNet.DesktopRuntime.7` (in Command Prompt)
+
 (winget is bundled in Windows 11 and some modern versions of Windows 10 by default as the "App Installer", if your Windows version does not include it, you may read [here](https://docs.microsoft.com/en-us/windows/package-manager/winget/) for further instructions on how to get it). 
 
 Download the latest version of VoicemeeterFancyOSD from the [Releases](https://github.com/A-tG/VoicemeeterFancyOSD/releases) page, unpack and launch VoicemeeterFancyOsdHost.exe (if you're on Windows 8.1 or newer). For any other scenario such as running an older Windows version, or if VoicemeeterFancyOsdHost.exe simply doesn't work for some reason, you may instead try and run VoicemeeterFancyOsd.exe. Do not use the program from Windows' 'Program Files' since that might cause problems creating the config file or installing future updates because of Windows' permissions and policies.
