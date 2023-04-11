@@ -19,7 +19,6 @@ namespace VoicemeeterOsdProgram
         public App()
         {
             InitializeComponent();
-
             Current.DispatcherUnhandledException += OnUnhandledException;
         }
 

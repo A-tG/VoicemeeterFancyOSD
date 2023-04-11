@@ -31,9 +31,9 @@ namespace VoicemeeterOsdProgram.Core
             set
             {
                 var screens = Screen.AllScreens.ToArray();
+                m_mainScreenIndex = value;
                 if (value < screens.Length)
                 {
-                    m_mainScreenIndex = value;
                     MainScreen = screens[value];
                 }
             }

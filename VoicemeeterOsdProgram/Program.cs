@@ -39,6 +39,7 @@ namespace VoicemeeterOsdProgram
                 AppLifeManager.Start(args, () =>
                 {
                     RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+                    System.Windows.Media.RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
                     wpf_app = new();
                     wpf_app.Run();
                 });
