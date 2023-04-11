@@ -61,6 +61,7 @@ HRESULT LoadCLR()
     int argc = 0;
     LPWSTR* argv = CommandLineToArgvW(GetCommandLine(), &argc);
 
+    int32_t init_res;
     if (argc > 1)
     {
         const char_t** dotnet_args = new const char_t * [argc + 1];
@@ -72,12 +73,19 @@ HRESULT LoadCLR()
         // TODO: We should clear up the array BTW.
         // But the process will exit after .NET CoreCLR shuts down anyway so... *shrug*
 
-        auto hmm = init_cmdline(1 + argc, dotnet_args, &params, &handle);
+        init_res = init_cmdline(1 + argc, dotnet_args, &params, &handle);
     }
     else
     {
         const char_t* dotnet_args[1] = { exec_path.c_str() };
-        auto hmm = init_cmdline(1, dotnet_args, &params, &handle);
+        init_res = init_cmdline(1, dotnet_args, &params, &handle);
+    }
+
+    bool isSuccess = (init_res >= 0) && (init_res <= 2);
+    if (!isSuccess)
+    {
+        MessageBox(0, L"Check if the correct version of .NET is installed\nProgram may use different .NET version after update", 
+            L"Error loading CLR", 0);
     }
 
     run_fptr(handle);

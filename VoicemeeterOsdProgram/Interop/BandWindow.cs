@@ -350,8 +350,8 @@ namespace TopmostApp.Interop
                     wind_class.hInstance,
                     IntPtr.Zero);
             }
-            if (hWnd == IntPtr.Zero)
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+            if (hWnd == IntPtr.Zero) throw new Win32Exception(Marshal.GetLastWin32Error());
+
             Handle = hWnd;
             OnSourceCreated();
 
