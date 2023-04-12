@@ -8,12 +8,9 @@ Windows 10 or newer is required. May work with older Windows versions (no older 
 It might also not work with some OpenGL games, even if in borderless mode. Basically if "Xbox Game Bar" or standard Volume/Media pop-up is not showing on top of the game, neither will this OSD.
 
 # Installation and Usage
-The program is portable, no installation is required, but you need [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/6.0/runtime) (click '*Download x64*' under '*Run desktop apps*') **or alternatively** you may install the runtime via Command Prompt with the following command: 
+The program is portable, no installation is required, but you need [.NET Desktop runtime](https://dotnet.microsoft.com/download/dotnet/7.0/runtime) (click '*Download x64*' under '*Run desktop apps*') **or alternatively** you may install the runtime via Command Prompt with the following command: 
 
-`winget install Microsoft.DotNet.DesktopRuntime.6`
-
-**Future version may reqiure .NET 7.0.** Install it in advance 
-`winget install Microsoft.DotNet.DesktopRuntime.7` (in Command Prompt)
+`winget install Microsoft.DotNet.DesktopRuntime.7`
 
 (winget is bundled in Windows 11 and some modern versions of Windows 10 by default as the "App Installer", if your Windows version does not include it, you may read [here](https://docs.microsoft.com/en-us/windows/package-manager/winget/) for further instructions on how to get it). 
 
@@ -36,7 +33,7 @@ So this program should be a good "replacement" of the default volume pop-up in W
 
 
 # Build instructions
-[.NET 6.0](https://dotnet.microsoft.com/download) WPF project
+[.NET 7.0](https://dotnet.microsoft.com/download) WPF project
 
 Start/build in debug mode to get acces to Debug Window in tray context menu.
 
