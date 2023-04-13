@@ -2,6 +2,7 @@
 using VoicemeeterOsdProgram.Core.Types;
 using System.Windows;
 using VoicemeeterOsdProgram.Types;
+using Octokit;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 {
@@ -25,6 +26,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                     if (m_vmParam is not null)
                     {
                         m_vmParam.ReadValueChanged -= OnVmValueChanged;
+                        m_vmParam.ValueRead -= OnVmValueRead;
                         Btn.Click -= OnBtnClick;
                         m_vmParam = null;
                     }
@@ -34,9 +36,12 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                 m_vmParam = value;
                 Btn.State = (uint)m_vmParam.Value;
                 m_vmParam.ReadValueChanged += OnVmValueChanged;
+                m_vmParam.ValueRead += OnVmValueRead;
                 Btn.Click += OnBtnClick;
             }
         }
+
+        private void OnVmValueRead(object sender, ValOldNew<float> e) => Btn.State = (uint)e.newVal;
 
         private void OnVmValueChanged(object sender, ValOldNew<float> e)
         {
@@ -55,7 +60,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                     OsdParent.HasAnyChildVisibleFlag = true;
                 }
             }
-            Btn.State = (uint)e.newVal;
         }
 
         private void OnBtnClick(object sender, RoutedEventArgs e)
