@@ -151,6 +151,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
                         ButtonText = "Connecting...";
                         break;
                     case State.NewVersionFound:
+                        IsRelNotesEnabled = true;
 #if DEBUG
                         InfoText = $"Version available: {UpdateManager.LatestVersion}";
 #else
@@ -233,7 +234,6 @@ namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
                     return;
                 case UpdaterResult.NewVersionFound:
                     CurrentState = State.NewVersionFound;
-                    IsRelNotesEnabled = true;
                     return;
                 case UpdaterResult.VersionUpToDate:
                     InfoText = "You're running the latest version";
