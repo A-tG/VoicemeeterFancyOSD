@@ -25,6 +25,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                     if (m_vmParam is not null)
                     {
                         m_vmParam.ReadValueChanged -= OnVmValueChanged;
+                        m_vmParam.ValueRead -= OnVmValueRead;
                         Fader.ValueChanged -= OnFaderValueChanged;
                         m_vmParam = null;
                     }
@@ -34,8 +35,17 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                 m_vmParam = value;
                 Fader.Value = m_vmParam.Value;
                 m_vmParam.ReadValueChanged += OnVmValueChanged;
+                m_vmParam.ValueRead += OnVmValueRead;
                 Fader.ValueChanged += OnFaderValueChanged;
             }
+        }
+
+        private void OnVmValueRead(object sender, ValOldNew<float> e)
+        {
+            // using flag to prevent triggering OnFaderValueChanged
+            Fader.isCustomFlag = true;
+            Fader.Value = e.newVal;
+            Fader.isCustomFlag = false;
         }
 
         private void OnVmValueChanged(object sender, ValOldNew<float> e)
@@ -55,11 +65,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
                     OsdParent.HasAnyChildVisibleFlag = true;
                 }
             }
-
-            // To prevent triggering OnFaderValueChanged
-            Fader.isCustomFlag = true;
-            Fader.Value = e.newVal;
-            Fader.isCustomFlag = false;
         }
 
         private void OnFaderValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
