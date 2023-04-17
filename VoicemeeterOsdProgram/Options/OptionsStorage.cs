@@ -35,7 +35,7 @@ namespace VoicemeeterOsdProgram.Options
 
         public static string ConfigFilePath { get; } = Path.Combine(ConfigFolder, "config.ini");
 
-        private static Logger m_logger = Globals.logger;
+        private static Logger m_logger = Globals.Logger;
 
         static OptionsStorage()
         {

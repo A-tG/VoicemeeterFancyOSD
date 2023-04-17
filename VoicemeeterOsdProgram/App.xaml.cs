@@ -53,7 +53,7 @@ namespace VoicemeeterOsdProgram
             // start to recieve command-line arguments from other launched instance
             AppLifeManager.StartArgsPipeServer();
 
-            Globals.logger?.Log("Program initialized");
+            Globals.Logger?.Log("Program initialized");
 
             await CheckProgramDirectoryIOAsync();
         }
@@ -78,7 +78,7 @@ namespace VoicemeeterOsdProgram
 
         private void OnUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            Globals.logger?.LogCritical($"Unhandled exception: {e.Exception}");
+            Globals.Logger?.LogCritical($"Unhandled exception: {e.Exception}");
         }
     }
 }

@@ -31,7 +31,7 @@ namespace VoicemeeterOsdProgram.Core
         private static Rate m_poolingRate;
         private static bool m_isInit = false;
 
-        private static Logger m_logger = Globals.logger;
+        private static Logger m_logger = Globals.Logger;
 
         static VoicemeeterApiClient()
         {

@@ -10,7 +10,7 @@ namespace VoicemeeterOsdProgram;
 public static class Globals
 {
     public static readonly AutostartManager autostartManager = UtilsFactory.GetAutostartManager();
-    public static readonly Logger logger = UtilsFactory.GetLogger();
+    public static readonly Logger Logger = UtilsFactory.GetLogger();
     public static readonly string FullscreenAppsListFile = Path.Combine(OptionsStorage.ConfigFolder, "detect_apps.txt");
 
     public static class Osd

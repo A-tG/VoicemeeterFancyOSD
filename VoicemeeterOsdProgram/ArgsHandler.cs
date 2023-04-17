@@ -24,7 +24,7 @@ namespace VoicemeeterOsdProgram
         }
 
         private static Dialog m_helpDialog;
-        private static Logger m_logger = Globals.logger;
+        private static Logger m_logger = Globals.Logger;
 
         public static void HandleSpecial(string[] args)
         {

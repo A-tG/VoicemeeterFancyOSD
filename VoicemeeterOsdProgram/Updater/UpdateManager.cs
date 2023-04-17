@@ -19,7 +19,7 @@ namespace VoicemeeterOsdProgram.Updater
 {
     public static class UpdateManager
     {
-        public static Logger logger = Globals.logger;
+        public static Logger logger = Globals.Logger;
 
         private const string Owner = "A-tG";
         private const string RepoName = "VoicemeeterFancyOSD";

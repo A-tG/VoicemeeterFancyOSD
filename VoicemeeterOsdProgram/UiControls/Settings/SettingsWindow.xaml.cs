@@ -22,7 +22,7 @@ namespace VoicemeeterOsdProgram.UiControls.Settings
         {
             m_pers = new(this, Path.Combine(OptionsStorage.ConfigFolder, "SettingsWindow"))
             {
-                logger = Globals.logger
+                logger = Globals.Logger
             };
             InitializeComponent();
             SizeChanged += OnSizeChanged;
