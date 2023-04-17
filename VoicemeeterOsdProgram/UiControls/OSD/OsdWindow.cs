@@ -1,5 +1,7 @@
-﻿using Microsoft.Win32;
+﻿using AtgDev.Utils;
+using Microsoft.Win32;
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media.Animation;
 using TopmostApp.Interop;
@@ -12,6 +14,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 {
     public class OsdWindow : BandWindow
     {
+        public Logger Logger;
+
         private const int FadeOutTimeMs = 200;
 
         private Rect m_workingArea;
@@ -36,7 +40,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             InitAlignEvents();
 
             // triggered if any setting is changed including taskbar resize, display resolution
-            SystemEvents.UserPreferenceChanged += OnEventUpdatePos;
+            SystemEvents.UserPreferenceChanged += OnUserPrefChanged;
+            SystemEvents.DisplaySettingsChanged += OnDispSettChanged;
 
             Unloaded += OsdWindow_Unloaded;
         }
@@ -128,6 +133,15 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void UpdatePos()
         {
+            var i = 0;
+            Screen.AllScreens.Count(s =>
+            {
+                var a = s.WorkingArea;
+                System.Diagnostics.Debug.WriteLine($"{i} {a.Left} {a.Top} {a.Width} {a.Height}");
+                i++;
+                return true;
+            });
+            System.Diagnostics.Debug.WriteLine("");
             UpdateWorkingArea();
             UpdatePosAlign();
         }
@@ -137,6 +151,17 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             m_fadeOutAnim.Completed -= OnFadeOutComplete;
             BeginAnimation(OpacityProperty, null);
             m_fadeOutAnim.Completed += OnFadeOutComplete;
+        }
+        private void OnDispSettChanged(object sender, EventArgs e)
+        {
+            Logger?.Log("Display Settings changed, updating OSD");
+            UpdatePos();
+        }
+
+        private void OnUserPrefChanged(object sender, UserPreferenceChangedEventArgs e)
+        {
+            Logger?.Log("User Preferences changed, updating OSD");
+            UpdatePos();
         }
 
         // do unsubcribing really works?
@@ -153,7 +178,8 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
             OptionsStorage.Osd.VerticalAlignmentChanged -= OnEventUpdatePosAlign;
             OptionsStorage.AltOsdOptionsFullscreenApps.HorizontalAlignmentChanged -= OnEventUpdatePosAlign;
             OptionsStorage.AltOsdOptionsFullscreenApps.VerticalAlignmentChanged -= OnEventUpdatePosAlign;
-            SystemEvents.UserPreferenceChanged -= OnEventUpdatePos;
+            SystemEvents.UserPreferenceChanged -= OnUserPrefChanged;
+            SystemEvents.DisplaySettingsChanged -= OnDispSettChanged;
         }
     }
 }
