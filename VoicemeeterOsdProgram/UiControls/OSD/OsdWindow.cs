@@ -145,13 +145,13 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
         }
         private void OnDispSettChanged(object sender, EventArgs e)
         {
-            Logger?.Log("Display Settings changed, updating OSD");
+            Logger?.Log("System Display Settings changed, updating OSD");
             UpdatePos();
         }
 
         private void OnUserPrefChanged(object sender, UserPreferenceChangedEventArgs e)
         {
-            Logger?.Log("User Preferences changed, updating OSD");
+            Logger?.Log("System User Preferences changed, updating OSD");
             UpdatePos();
         }
 
