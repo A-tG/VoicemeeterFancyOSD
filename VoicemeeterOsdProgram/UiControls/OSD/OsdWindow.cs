@@ -133,15 +133,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void UpdatePos()
         {
-            var i = 0;
-            Screen.AllScreens.Count(s =>
-            {
-                var a = s.WorkingArea;
-                System.Diagnostics.Debug.WriteLine($"{i} {a.Left} {a.Top} {a.Width} {a.Height}");
-                i++;
-                return true;
-            });
-            System.Diagnostics.Debug.WriteLine("");
             UpdateWorkingArea();
             UpdatePosAlign();
         }
