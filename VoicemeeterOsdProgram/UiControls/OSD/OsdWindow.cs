@@ -163,7 +163,6 @@ namespace VoicemeeterOsdProgram.UiControls.OSD
 
         private void OsdWindow_Unloaded(object sender, RoutedEventArgs e)
         {
-            Globals.Osd.fullscreenAppsWatcher.IsDetectedChanged -= OnEventUpdatePos;
             Globals.Osd.screenProvider.MainScreenChanged -= OnEventUpdatePos;
             OptionsStorage.Osd.HorizontalAlignmentChanged -= OnEventUpdatePosAlign;
             OptionsStorage.Osd.VerticalAlignmentChanged -= OnEventUpdatePosAlign;
