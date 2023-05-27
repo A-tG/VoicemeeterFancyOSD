@@ -230,7 +230,11 @@
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
-                <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource VmBgAltBrush}"/>
+                <Setter Property="Background" TargetName="templateRoot">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{StaticResource VmActiveElementCyanColor}" Opacity="0.2"/>
+                    </Setter.Value>
+                </Setter>
                 <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource VmActiveElementCyanBrush}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
