@@ -41,13 +41,20 @@
                         Report a Bug (GitHub)
                     </Hyperlink>
                 </TextBlock>
-                <TextBlock>
-                    <Hyperlink NavigateUri="www.boosty.to/a-tg.dev" Foreground="{StaticResource VmActiveElementOrangeBrush}"
-                               CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
-                               Command="{Binding OpenUriCommand}">
-                        Donate
-                    </Hyperlink>
-                </TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center">
+                        <Hyperlink NavigateUri="https://payeer.com" Foreground="{StaticResource VmActiveElementOrangeBrush}"
+                                   CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
+                                   Command="{Binding OpenUriCommand}">
+                            Donate
+                        </Hyperlink>
+                        Account No.
+                    </TextBlock>
+                    <TextBox VerticalAlignment="Center" Background="Transparent" 
+                             BorderThickness="0" IsReadOnly="True" AutoWordSelection="True">
+                        P1096853186
+                    </TextBox>
+                </StackPanel>
             </StackPanel>
         </Grid>
         <Label FontWeight="Bold" Content="Uses:"/>
