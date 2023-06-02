@@ -60,4 +60,4 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 * [What "private" API is used](https://blog.adeltax.com/window-z-order-in-windows-10/)
 
 ## Donate to support the project
-[Payeer](https://payeer.com) P1096853186
+[Available methods](https://taplink.cc/atgdev)
