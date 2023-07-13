@@ -31,6 +31,8 @@ For example, in Voicemeeter when you change the gain from 0 to -60, you will exp
 
 So this program should be a good "replacement" of the default volume pop-up in Windows, considering that you're using Voicemeeter of course.
 
+# Advanced troubleshooting
+VoicemeeterFancyOsdHost.exe, hostfxr.dll and DXGI.dll are necessary to display OSD on top of fulscreen games, but if you have weird problems launching both VoicemeeterFancyOsdHost.exe you could try to replace hostfxr.dll with different version bundled with Dotnet from `C:\Program Files\dotnet\host\fxr\N.N.N\hostfxr.dll`. Also VoicemeeterFancyOsdHost.exe is a renamed ApplicationFrameHost.exe from `C:\Windows\System32` and can be replaced too if there are some problems with it. DXGI.dll is compiled and helps to launch program itself by Host.exe. If even VoicemeeterFancyOsd.exe is not working deletion of these is also an option but you lose that functionaluty with fullscreen games of course.
 
 # Build instructions
 [.NET 7.0](https://dotnet.microsoft.com/download) WPF project
