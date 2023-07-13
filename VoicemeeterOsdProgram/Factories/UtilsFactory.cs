@@ -30,23 +30,19 @@ public static class UtilsFactory
 
     public static AutostartManager GetAutostartManager()
     {
-        const string ExeName = "VoicemeeterFancyOsd.exe";
-        const string ExeHostName = "VoicemeeterFancyOsdHost.exe";
-
-        var osVer = Environment.OSVersion.Version;
-        var win8dot1Ver = new Version(6, 3);
-        string exe = osVer < win8dot1Ver ? ExeName : ExeHostName;
+        const string BaseExe = $"VoicemeeterFancyOsd.exe";
+        string currentExe = $"{System.Diagnostics.Process.GetCurrentProcess().ProcessName}.exe";
 
         if (!AutostartManager.IsOsSupported)
         {
-            return new AutostartManager();
+            return new();
         }
 
         AutostartManager autostart = new()
         {
             ProgramName = Program.Name,
-            ProgramPath = AppDomain.CurrentDomain.BaseDirectory + exe,
-            IconLocation = AppDomain.CurrentDomain.BaseDirectory + ExeName,
+            ProgramPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, currentExe),
+            IconLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, BaseExe),
             IsEnabled = OptionsStorage.Program.Autostart,
         };
         OptionsStorage.Program.AutostartChanged += (_, val) => autostart.IsEnabled = val;
