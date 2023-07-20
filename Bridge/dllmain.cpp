@@ -84,8 +84,9 @@ HRESULT LoadCLR()
     bool isSuccess = (init_res >= 0) && (init_res <= 2);
     if (!isSuccess)
     {
-        MessageBox(0, L"Check if the correct version of .NET is installed\nProgram may use different .NET version after update", 
-            L"Error loading CLR", 0);
+        std::wstring message = L"Result code: " + std::to_wstring(init_res) +
+            L". Check if the correct version of .NET is installed\nProgram may use different .NET version after update";
+        MessageBox(0, message.c_str(), L"Error loading CLR", 0);
     }
 
     run_fptr(handle);
