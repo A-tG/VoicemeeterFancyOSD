@@ -69,6 +69,7 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
             {
                 // "ValueChanged" can be triggered by adding "Value" attribute in the XAML before other properties are initialized
                 if (!IsInitialized) return;
+
                 if (m_isChangeToSecondColor != value)
                 {
                     Background = value ? SecondBg : FirstBg;
@@ -85,6 +86,9 @@ namespace VoicemeeterOsdProgram.UiControls.OSD.Strip
 
         private void UpdateColor()
         {
+            // reading Value before Loaded event can break Value displaying on element
+            if (!IsLoaded) return;
+
             if (GreaterOrEqualValChangeClr is null)
             {
                 IsChangeToSecondColor = Value > GreaterThanValChangeClr;
