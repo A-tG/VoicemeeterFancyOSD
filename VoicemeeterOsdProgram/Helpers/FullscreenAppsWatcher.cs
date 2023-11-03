@@ -80,8 +80,6 @@ namespace TopmostApp.Helpers
             switch (eventType)
             {
                 case (uint)Events.EVENT_SYSTEM_FOREGROUND:
-                    CheckWindow(hWnd);
-                    break;
                 // EVENT_SYSTEM_FOREGROUND is not activated if window is "un-minimized" from the taskbar
                 case (uint)Events.EVENT_SYSTEM_MINIMIZEEND:
                     CheckWindow(hWnd);
@@ -96,10 +94,11 @@ namespace TopmostApp.Helpers
             string name = "";
             if (hWnd == IntPtr.Zero) return name;
 
-            GetWindowThreadProcessId(hWnd, out int ID);
+            _ = GetWindowThreadProcessId(hWnd, out int ID);
             try
             {
-                name = Process.GetProcessById(ID).ProcessName;
+                using var p = Process.GetProcessById(ID);
+                name = p.ProcessName;
             }
             catch { }
             return name;
