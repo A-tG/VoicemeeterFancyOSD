@@ -5,7 +5,8 @@
         public enum Events : uint
         {
             EVENT_SYSTEM_FOREGROUND = 0x0003,
-            EVENT_SYSTEM_MINIMIZEEND = 0x0017
+            EVENT_SYSTEM_MINIMIZEEND = 0x0017,
+            EVENT_OBJECT_LOCATIONCHANGE = 0x800B
         }
 
         public enum WinEvents : uint
