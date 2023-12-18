@@ -106,17 +106,12 @@ namespace TopmostApp.Helpers
 
         private bool IsAppToDetect(string name)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                return false;
-            }
-            else
-            {
-                return appsToDetect?.Any(el => Path.GetFileNameWithoutExtension(el).ToLower() == name.ToLower()) ?? false;
-            }
+            if (string.IsNullOrEmpty(name)) return false;
+                
+            return appsToDetect?.Any(el => Path.GetFileNameWithoutExtension(el).ToLower() == name.ToLower()) ?? false;
         }
 
-        private bool IsFullscreenWindow(IntPtr hWnd)
+        private static bool IsFullscreenWindow(IntPtr hWnd)
         {
             bool rectRes = GetWindowRect(hWnd, out RECT rect);
             if (!rectRes) return false;
