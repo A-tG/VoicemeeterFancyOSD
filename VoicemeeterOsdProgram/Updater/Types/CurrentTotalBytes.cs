@@ -1,46 +1,45 @@
-﻿namespace VoicemeeterOsdProgram.Updater.Types
+﻿namespace VoicemeeterOsdProgram.Updater.Types;
+
+public struct CurrentTotalBytes
 {
-    public struct CurrentTotalBytes
+    private ulong m_current = 0;
+    private ulong m_total = 0;
+
+    public CurrentTotalBytes(ulong total)
     {
-        private ulong m_current = 0;
-        private ulong m_total = 0;
+        Total = total;
+    }
 
-        public CurrentTotalBytes(ulong total)
+    public ulong Current
+    {
+        get => m_current;
+        set
         {
-            Total = total;
+            var val = value;
+            if (val > Total)
+            {
+                val = Total;
+            }
+            m_current = val;
         }
+    }
 
-        public ulong Current
+    public ulong Total
+    { 
+        get => m_total;
+        set
         {
-            get => m_current;
-            set
-            {
-                var val = value;
-                if (val > Total)
-                {
-                    val = Total;
-                }
-                m_current = val;
-            }
+            m_total = value;
         }
+    }
 
-        public ulong Total
-        { 
-            get => m_total;
-            set
-            {
-                m_total = value;
-            }
-        }
-
-        public double ProgressPercent
+    public double ProgressPercent
+    {
+        get
         {
-            get
-            {
-                if (Total == 0) return 0;
+            if (Total == 0) return 0;
 
-                return Current * 100 / Total;
-            }
+            return Current * 100 / Total;
         }
     }
 }

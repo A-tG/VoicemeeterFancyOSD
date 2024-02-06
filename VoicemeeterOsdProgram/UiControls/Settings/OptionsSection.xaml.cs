@@ -1,15 +1,14 @@
 ﻿using System.Windows.Controls;
 
-namespace VoicemeeterOsdProgram.UiControls.Settings
+namespace VoicemeeterOsdProgram.UiControls.Settings;
+
+/// <summary>
+/// Interaction logic for OptionsSection.xaml
+/// </summary>
+public partial class OptionsSection : UserControl
 {
-    /// <summary>
-    /// Interaction logic for OptionsSection.xaml
-    /// </summary>
-    public partial class OptionsSection : UserControl
+    public OptionsSection()
     {
-        public OptionsSection()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

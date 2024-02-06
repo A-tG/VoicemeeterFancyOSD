@@ -14,19 +14,18 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VoicemeeterOsdProgram.UiControls.Settings.ViewModels;
 
-namespace VoicemeeterOsdProgram.UiControls.Settings
+namespace VoicemeeterOsdProgram.UiControls.Settings;
+
+/// <summary>
+/// Interaction logic for InfoItem.xaml
+/// </summary>
+public partial class InfoItem : UserControl
 {
-    /// <summary>
-    /// Interaction logic for InfoItem.xaml
-    /// </summary>
-    public partial class InfoItem : UserControl
+    public InfoItem()
     {
-        public InfoItem()
-        {
-            VoicemeeterInfoViewModel vm = new();
-            DataContext = vm;
-            Unloaded += (_, _) => vm.Dispose();
-            InitializeComponent();
-        }
+        VoicemeeterInfoViewModel vm = new();
+        DataContext = vm;
+        Unloaded += (_, _) => vm.Dispose();
+        InitializeComponent();
     }
 }

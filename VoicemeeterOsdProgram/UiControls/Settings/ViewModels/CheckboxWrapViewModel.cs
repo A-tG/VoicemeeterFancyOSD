@@ -5,30 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using VoicemeeterOsdProgram.Types;
 
-namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
+namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels;
+
+public class CheckboxWrapViewModel : BaseViewModel
 {
-    public class CheckboxWrapViewModel : BaseViewModel
+    private object m_content, m_tooltipContent;
+
+    public object Content
     {
-        private object m_content, m_tooltipContent;
-
-        public object Content
+        get => m_content;
+        set
         {
-            get => m_content;
-            set
-            {
-                m_content = value;
-                OnPropertyChanged();
-            }
+            m_content = value;
+            OnPropertyChanged();
         }
+    }
 
-        public object TooltipContent
+    public object TooltipContent
+    {
+        get => m_tooltipContent;
+        set
         {
-            get => m_tooltipContent;
-            set
-            {
-                m_tooltipContent = value;
-                OnPropertyChanged();
-            }
+            m_tooltipContent = value;
+            OnPropertyChanged();
         }
     }
 }

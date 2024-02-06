@@ -1,9 +1,8 @@
 ﻿using System.Windows.Controls;
 
-namespace VoicemeeterOsdProgram.UiControls
+namespace VoicemeeterOsdProgram.UiControls;
+
+public class SliderExt : Slider
 {
-    public class SliderExt : Slider
-    {
-        public bool isCustomFlag;
-    }
+    public bool isCustomFlag;
 }

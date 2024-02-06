@@ -1,8 +1,7 @@
-﻿namespace VoicemeeterOsdProgram.Core.Types
+﻿namespace VoicemeeterOsdProgram.Core.Types;
+
+public enum StripType
 {
-    public enum StripType
-    {
-        Input,
-        Output
-    }
+    Input,
+    Output
 }

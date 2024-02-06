@@ -9,76 +9,75 @@ using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Updater;
 using VoicemeeterOsdProgram.Updater.Types;
 
-namespace VoicemeeterOsdProgram
+namespace VoicemeeterOsdProgram;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public App()
     {
-        public App()
+        InitializeComponent();
+        Current.DispatcherUnhandledException += OnUnhandledException;
+    }
+
+    async void OnAppStartup(object sender, StartupEventArgs e)
+    {
+        var optionsTask = OptionsStorage.InitAsync();
+        OptionsStorage.Program.RenderMode = RenderOptions.ProcessRenderMode;
+        OptionsStorage.Program.RenderModeChanged += (_, val) => RenderOptions.ProcessRenderMode = val;
+
+        VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPollingRate;
+        OptionsStorage.Voicemeeter.ApiPollingRateChanged += (_, val) => VoicemeeterApiClient.PoolingRate = val;
+
+        DpiHelper.Init();
+        TrayIconManager.Init();
+        OsdWindowManager.Init();
+        UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
+
+        await optionsTask;
+        var vmTask = VoicemeeterApiClient.InitAsync((int)OptionsStorage.Voicemeeter.InitializationDelay);
+
+        if (OptionsStorage.Updater.CheckOnStartup)
         {
-            InitializeComponent();
-            Current.DispatcherUnhandledException += OnUnhandledException;
-        }
-
-        async void OnAppStartup(object sender, StartupEventArgs e)
-        {
-            var optionsTask = OptionsStorage.InitAsync();
-            OptionsStorage.Program.RenderMode = RenderOptions.ProcessRenderMode;
-            OptionsStorage.Program.RenderModeChanged += (_, val) => RenderOptions.ProcessRenderMode = val;
-
-            VoicemeeterApiClient.PoolingRate = OptionsStorage.Voicemeeter.ApiPollingRate;
-            OptionsStorage.Voicemeeter.ApiPollingRateChanged += (_, val) => VoicemeeterApiClient.PoolingRate = val;
-
-            DpiHelper.Init();
-            TrayIconManager.Init();
-            OsdWindowManager.Init();
-            UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
-
-            await optionsTask;
-            var vmTask = VoicemeeterApiClient.InitAsync((int)OptionsStorage.Voicemeeter.InitializationDelay);
-
-            if (OptionsStorage.Updater.CheckOnStartup)
+            var updaterRes = await UpdateManager.TryCheckForUpdatesAsync();
+            if (updaterRes == UpdaterResult.NewVersionFound)
             {
-                var updaterRes = await UpdateManager.TryCheckForUpdatesAsync();
-                if (updaterRes == UpdaterResult.NewVersionFound)
-                {
-                    TrayIconManager.OpenUpdater();
-                }
-            }
-
-            await vmTask;
-            await ArgsHandler.HandleAsync(AppLifeManager.appArgs);
-            // start to recieve command-line arguments from other launched instance
-            AppLifeManager.StartArgsPipeServer();
-
-            Globals.Logger?.Log("Program initialized");
-
-            await CheckProgramDirectoryIOAsync();
-        }
-
-        private async Task CheckProgramDirectoryIOAsync()
-        {
-            const string Msg = "Unable to create files/directories in the program's directory.\n" + 
-                "Updater and persistent config might not work.\n\n" + 
-                "Possible solution: if program is located in 'Program Files' move it to a different folder/drive";
-
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            bool canCreateDirs = IOAccessCheck.TryCreateRandomDirectory(path);
-            bool canCreateFiles = await IOAccessCheck.TryCreateRandomFileAsync(path);
-            if (!canCreateDirs || !canCreateFiles)
-            {
-                var exType = IOAccessCheck.LastException.GetType();
-                var d = MsgBoxFactory.GetWarning();
-                d.ContentToDisplay.Content = $"{exType}\n{Msg}";
-                d.Show();
+                TrayIconManager.OpenUpdater();
             }
         }
 
-        private void OnUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        await vmTask;
+        await ArgsHandler.HandleAsync(AppLifeManager.appArgs);
+        // start to recieve command-line arguments from other launched instance
+        AppLifeManager.StartArgsPipeServer();
+
+        Globals.Logger?.Log("Program initialized");
+
+        await CheckProgramDirectoryIOAsync();
+    }
+
+    private async Task CheckProgramDirectoryIOAsync()
+    {
+        const string Msg = "Unable to create files/directories in the program's directory.\n" + 
+            "Updater and persistent config might not work.\n\n" + 
+            "Possible solution: if program is located in 'Program Files' move it to a different folder/drive";
+
+        string path = AppDomain.CurrentDomain.BaseDirectory;
+        bool canCreateDirs = IOAccessCheck.TryCreateRandomDirectory(path);
+        bool canCreateFiles = await IOAccessCheck.TryCreateRandomFileAsync(path);
+        if (!canCreateDirs || !canCreateFiles)
         {
-            Globals.Logger?.LogCritical($"Unhandled exception: {e.Exception}");
+            var exType = IOAccessCheck.LastException.GetType();
+            var d = MsgBoxFactory.GetWarning();
+            d.ContentToDisplay.Content = $"{exType}\n{Msg}";
+            d.Show();
         }
+    }
+
+    private void OnUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+    {
+        Globals.Logger?.LogCritical($"Unhandled exception: {e.Exception}");
     }
 }

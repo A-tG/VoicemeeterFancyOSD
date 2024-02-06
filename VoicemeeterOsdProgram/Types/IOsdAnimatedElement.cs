@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace VoicemeeterOsdProgram.Types
+namespace VoicemeeterOsdProgram.Types;
+
+public interface IOsdAnimatedElement
 {
-    public interface IOsdAnimatedElement
-    {
-        public Func<bool> IsAnimationsEnabled { get; set; }
-    }
+    public Func<bool> IsAnimationsEnabled { get; set; }
 }

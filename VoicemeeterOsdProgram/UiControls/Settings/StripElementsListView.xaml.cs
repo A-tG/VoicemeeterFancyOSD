@@ -2,25 +2,24 @@
 using System.Collections.Generic;
 using System.Windows;
 
-namespace VoicemeeterOsdProgram.UiControls.Settings
+namespace VoicemeeterOsdProgram.UiControls.Settings;
+
+/// <summary>
+/// Interaction logic for OsdElementsListView.xaml
+/// </summary>
+public partial class StripElementsListView
 {
-    /// <summary>
-    /// Interaction logic for OsdElementsListView.xaml
-    /// </summary>
-    public partial class StripElementsListView
+    public StripElementsListView()
     {
-        public StripElementsListView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(
-            nameof(SelectedItems), typeof(IEnumerable), typeof(StripElementsListView), new PropertyMetadata(new HashSet<object>()));
+    public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(
+        nameof(SelectedItems), typeof(IEnumerable), typeof(StripElementsListView), new PropertyMetadata(new HashSet<object>()));
 
-        public IEnumerable SelectedItems
-        {
-            get => (IEnumerable)GetValue(SelectedItemsProperty);
-            set => SetValue(SelectedItemsProperty, value);
-        }
+    public IEnumerable SelectedItems
+    {
+        get => (IEnumerable)GetValue(SelectedItemsProperty);
+        set => SetValue(SelectedItemsProperty, value);
     }
 }

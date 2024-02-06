@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls.Primitives;
 
-namespace VoicemeeterOsdProgram.UiControls
+namespace VoicemeeterOsdProgram.UiControls;
+
+public class PopupExt : Popup
 {
-    public class PopupExt : Popup
+    public PopupExt()
     {
-        public PopupExt()
-        {
-            MouseDown += (_, e) => e.Handled = true;
-        }
+        MouseDown += (_, e) => e.Handled = true;
     }
 }

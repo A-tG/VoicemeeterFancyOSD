@@ -15,352 +15,351 @@ using AtgDev.Utils.StreamExtensions;
 using AtgDev.Utils.ZipFileExtensions;
 using AtgDev.Utils;
 
-namespace VoicemeeterOsdProgram.Updater
+namespace VoicemeeterOsdProgram.Updater;
+
+public static class UpdateManager
 {
-    public static class UpdateManager
+    public static Logger logger = Globals.Logger;
+
+    private const string Owner = "A-tG";
+    private const string RepoName = "VoicemeeterFancyOSD";
+    private const string ExtractedFolder = "VoicemeeterFancyOSD";
+    private const string BackupFolderName = $".{RepoName}UpdBak";
+
+    private static Assembly m_assembly = typeof(App).Assembly;
+    private static HttpClient m_httpClient = new();
+    private static GitHubClient m_ghClient = new(new ProductHeaderValue(m_assembly.GetName().Name));
+    private static ReleaseAsset m_latestAsset;
+    private static CancellationTokenSource m_cts = new();
+
+    public static Release LatestRelease
     {
-        public static Logger logger = Globals.Logger;
+        get;
+        private set;
+    }
 
-        private const string Owner = "A-tG";
-        private const string RepoName = "VoicemeeterFancyOSD";
-        private const string ExtractedFolder = "VoicemeeterFancyOSD";
-        private const string BackupFolderName = $".{RepoName}UpdBak";
+    public static Version LatestVersion
+    {
+        get;
+        private set;
+    }
 
-        private static Assembly m_assembly = typeof(App).Assembly;
-        private static HttpClient m_httpClient = new();
-        private static GitHubClient m_ghClient = new(new ProductHeaderValue(m_assembly.GetName().Name));
-        private static ReleaseAsset m_latestAsset;
-        private static CancellationTokenSource m_cts = new();
+    public static OSPlatform DefaultOS { get; set; }
 
-        public static Release LatestRelease
+    public static Version CurrentVersion
+    {
+        get => m_assembly.GetName().Version;
+    }
+
+    public static UpdaterResult? LastResult { get; private set; }
+
+    public static string RepoUrl
+    {
+        get => $"www.github.com/{Owner}/{RepoName}";
+    }
+
+    public static async Task<UpdaterResult> TryCheckForUpdatesAsync()
+    {
+        UpdaterResult result = default;
+
+        try
         {
-            get;
-            private set;
-        }
+            var allReleases = await m_ghClient.Repository.Release.GetAll(Owner, RepoName);
+            var releases = allReleases.Where(r => !r.Prerelease).ToList();
+            if (releases.Count == 0) return UpdaterResult.ReleasesNotFound;
 
-        public static Version LatestVersion
-        {
-            get;
-            private set;
-        }
+            var rel = releases[0];
 
-        public static OSPlatform DefaultOS { get; set; }
+            var latestVer = new Version(FilterVersionString(rel.TagName));
+            m_latestAsset = rel.Assets.First((el) => IsArchitectureMatch(el.Name));
 
-        public static Version CurrentVersion
-        {
-            get => m_assembly.GetName().Version;
-        }
+            result = latestVer > CurrentVersion ? UpdaterResult.NewVersionFound : UpdaterResult.VersionUpToDate;
 
-        public static UpdaterResult? LastResult { get; private set; }
-
-        public static string RepoUrl
-        {
-            get => $"www.github.com/{Owner}/{RepoName}";
-        }
-
-        public static async Task<UpdaterResult> TryCheckForUpdatesAsync()
-        {
-            UpdaterResult result = default;
-
-            try
-            {
-                var allReleases = await m_ghClient.Repository.Release.GetAll(Owner, RepoName);
-                var releases = allReleases.Where(r => !r.Prerelease).ToList();
-                if (releases.Count == 0) return UpdaterResult.ReleasesNotFound;
-
-                var rel = releases[0];
-
-                var latestVer = new Version(FilterVersionString(rel.TagName));
-                m_latestAsset = rel.Assets.First((el) => IsArchitectureMatch(el.Name));
-
-                result = latestVer > CurrentVersion ? UpdaterResult.NewVersionFound : UpdaterResult.VersionUpToDate;
-
-                LatestVersion = latestVer;
-                LatestRelease = rel;
+            LatestVersion = latestVer;
+            LatestRelease = rel;
 #if DEBUG // to be able download older version when debugging
-                result = UpdaterResult.NewVersionFound;
+            result = UpdaterResult.NewVersionFound;
 #endif
-            }
-            catch (Exception e)
-            {
-                logger?.LogError($"Error checking for update {e}");
+        }
+        catch (Exception e)
+        {
+            logger?.LogError($"Error checking for update {e}");
 
-                if (e is ApiException) result = UpdaterResult.ConnectionError;
-                if (e is HttpRequestException) result = UpdaterResult.ConnectionError;
-                if (e is InvalidOperationException) result = UpdaterResult.ArchitectureNotFound;
+            if (e is ApiException) result = UpdaterResult.ConnectionError;
+            if (e is HttpRequestException) result = UpdaterResult.ConnectionError;
+            if (e is InvalidOperationException) result = UpdaterResult.ArchitectureNotFound;
 
-                m_latestAsset = null;
-            }
-
-            LastResult = result;
-            return result;
+            m_latestAsset = null;
         }
 
-        public static async Task<UpdaterResult> TryUpdateAsync(
-            IProgress<CurrentTotalBytes> downloadProgress = null, 
-            IProgress<double> extractionProgress = null, 
-            IProgress<double> copyProgress = null)
+        LastResult = result;
+        return result;
+    }
+
+    public static async Task<UpdaterResult> TryUpdateAsync(
+        IProgress<CurrentTotalBytes> downloadProgress = null, 
+        IProgress<double> extractionProgress = null, 
+        IProgress<double> copyProgress = null)
+    {
+        var result = await TryCheckForUpdatesAsync();
+        if (result != UpdaterResult.NewVersionFound) return result;
+
+        var downloadRes = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name, downloadProgress);
+        if ((downloadRes.Res != UpdaterResult.Downloaded) || string.IsNullOrEmpty(downloadRes.Path)) return downloadRes.Res;
+
+        var path = downloadRes.Path;
+        var updateFolder = Path.GetDirectoryName(path);
+        result = await TryUnzipAsync(path, extractionProgress);
+        if (result == UpdaterResult.Unpacked)
         {
-            var result = await TryCheckForUpdatesAsync();
-            if (result != UpdaterResult.NewVersionFound) return result;
-
-            var downloadRes = await TryDownloadAsync(m_latestAsset.BrowserDownloadUrl, m_latestAsset.Name, downloadProgress);
-            if ((downloadRes.Res != UpdaterResult.Downloaded) || string.IsNullOrEmpty(downloadRes.Path)) return downloadRes.Res;
-
-            var path = downloadRes.Path;
-            var updateFolder = Path.GetDirectoryName(path);
-            result = await TryUnzipAsync(path, extractionProgress);
-            if (result == UpdaterResult.Unpacked)
+            if (TryCopyAndRestart(updateFolder, copyProgress))
             {
-                if (TryCopyAndRestart(updateFolder, copyProgress))
-                {
-                    result =  UpdaterResult.Updated;
-                }
-                else
-                {
-                    result = UpdaterResult.UpdateFailed;
-                }
+                result =  UpdaterResult.Updated;
             }
             else
             {
-                TryDeleteFolder(updateFolder);
+                result = UpdaterResult.UpdateFailed;
+            }
+        }
+        else
+        {
+            TryDeleteFolder(updateFolder);
+        }
+
+        LastResult = result;
+        return result;
+    }
+
+    public static bool TryDeleteBackup() => TryDeleteFolder(BackupFolderName);
+
+    public static void CancelUpdate()
+    {
+        m_cts.Cancel();
+        m_cts.Dispose();
+        m_cts = new();
+    }
+
+    private static bool TryCopyAndRestart(string updateFolder, IProgress<double> copyProgress = null)
+    {
+        try
+        {
+            string copyTo = Path.TrimEndingDirectorySeparator(AppDomain.CurrentDomain.BaseDirectory);
+            string copyFrom = updateFolder + @$"\{ExtractedFolder}";
+            string program = Environment.ProcessPath;
+
+            // just in case
+            bool isValidPaths = (Directory.GetParent(updateFolder).ToString() == copyTo) &&
+                (Directory.GetParent(program).ToString() == copyTo);
+            if (string.IsNullOrEmpty(program) || !isValidPaths) return false;
+
+            if (!TryOvewriteFiles(copyFrom, copyTo, copyProgress))
+            {
+                TryDeleteBackup();
+                return false;
             }
 
-            LastResult = result;
-            return result;
+            TryDeleteFolder(updateFolder);
+
+            Process.Start(program, ArgsHandler.Args.AfterUpdateArg);
+
+            return true;
         }
-
-        public static bool TryDeleteBackup() => TryDeleteFolder(BackupFolderName);
-
-        public static void CancelUpdate()
+        catch (Exception e) 
         {
-            m_cts.Cancel();
-            m_cts.Dispose();
-            m_cts = new();
+            logger?.LogError($"Error restarting the program {e}");
         }
+        return false;
+    }
 
-        private static bool TryCopyAndRestart(string updateFolder, IProgress<double> copyProgress = null)
+    private static bool TryOvewriteFiles(string fromFolder, string toFolder, IProgress<double> copyProgress = null)
+    {
+        bool result = false;
+        try
         {
-            try
+            DirectoryInfo fromDir, toDir, bakDir;
+            fromDir = new(fromFolder);
+            toDir = new(toFolder);
+            bakDir = Directory.CreateDirectory(Path.Combine(toDir.ToString(), BackupFolderName));
+
+            ulong totalSize, readSize = 0;
+            totalSize = fromDir.GetSize();
+
+            foreach (var file in fromDir.GetFiles())
             {
-                string copyTo = Path.TrimEndingDirectorySeparator(AppDomain.CurrentDomain.BaseDirectory);
-                string copyFrom = updateFolder + @$"\{ExtractedFolder}";
-                string program = Environment.ProcessPath;
-
-                // just in case
-                bool isValidPaths = (Directory.GetParent(updateFolder).ToString() == copyTo) &&
-                    (Directory.GetParent(program).ToString() == copyTo);
-                if (string.IsNullOrEmpty(program) || !isValidPaths) return false;
-
-                if (!TryOvewriteFiles(copyFrom, copyTo, copyProgress))
+                FileInfo targetFile = new(Path.Combine(toFolder, file.Name));
+                if (targetFile.Exists)
                 {
-                    TryDeleteBackup();
-                    return false;
+                    string bakPath = Path.Combine(bakDir.ToString(), targetFile.Name);
+                    targetFile.MoveTo(bakPath, true);
                 }
+                file.MoveTo(Path.Combine(toFolder, file.Name));
 
-                TryDeleteFolder(updateFolder);
-
-                Process.Start(program, ArgsHandler.Args.AfterUpdateArg);
-
-                return true;
+                readSize += (ulong)file.Length;
+                if (totalSize != 0) copyProgress.Report(readSize / totalSize);
+                
             }
-            catch (Exception e) 
+
+            foreach (var dir in fromDir.GetDirectories())
             {
-                logger?.LogError($"Error restarting the program {e}");
+                dir.MoveTo(Path.Combine(bakDir.ToString(), dir.Name));
+
+                readSize += dir.GetSize();
+                if (totalSize != 0) copyProgress.Report(readSize / totalSize);
             }
-            return false;
+
+            result = true;
         }
-
-        private static bool TryOvewriteFiles(string fromFolder, string toFolder, IProgress<double> copyProgress = null)
+        catch (Exception e)
         {
-            bool result = false;
-            try
+            logger?.LogError($"Error overwriting files {e}");
+        }
+        return result;
+    }
+
+    private static async Task<UpdaterResult> TryUnzipAsync(string path, IProgress<double> progress = null)
+    {
+        var result = UpdaterResult.ArchiveExtractionFailed;
+        try
+        {
+            await ZipFileExtension.ExtractToDirectoryAsync(path, Path.GetDirectoryName(path), totalProg: progress, cancellationToken: m_cts.Token);
+            result = UpdaterResult.Unpacked;
+        }
+        catch (Exception e)
+        { 
+            if (e is TaskCanceledException) result = UpdaterResult.Canceled;
+
+            logger?.LogError($"Error unzipping update {e}");
+        }
+        return result;
+    }
+
+    private static async Task<(UpdaterResult Res, string Path)> TryDownloadAsync(string url, string fileName, IProgress<CurrentTotalBytes> progress = null)
+    {
+        var result = (Res: UpdaterResult.DownloadFailed, Path: string.Empty);
+        string path = "";
+        try
+        {
+            using var resp = await m_httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, m_cts.Token);
+            resp.EnsureSuccessStatusCode();
+
+            var contentLen = resp.Content.Headers.ContentLength;
+
+            path = $"{AppDomain.CurrentDomain.BaseDirectory}{GenerateName()}";
+            Directory.CreateDirectory(path);
+            result.Path = $@"{path}\{fileName}";
+
+            await using FileStream fs = File.Create(result.Path);
+            await using var download = await resp.Content.ReadAsStreamAsync(m_cts.Token);
+            if ((contentLen is null) || (progress is null))
             {
-                DirectoryInfo fromDir, toDir, bakDir;
-                fromDir = new(fromFolder);
-                toDir = new(toFolder);
-                bakDir = Directory.CreateDirectory(Path.Combine(toDir.ToString(), BackupFolderName));
-
-                ulong totalSize, readSize = 0;
-                totalSize = fromDir.GetSize();
-
-                foreach (var file in fromDir.GetFiles())
+                await download.CopyToAsync(fs, m_cts.Token);
+            }
+            else
+            {
+                CurrentTotalBytes bytes = new((ulong)contentLen.Value);
+                var relProgress = new Progress<long>(readBytes =>
                 {
-                    FileInfo targetFile = new(Path.Combine(toFolder, file.Name));
-                    if (targetFile.Exists)
-                    {
-                        string bakPath = Path.Combine(bakDir.ToString(), targetFile.Name);
-                        targetFile.MoveTo(bakPath, true);
-                    }
-                    file.MoveTo(Path.Combine(toFolder, file.Name));
-
-                    readSize += (ulong)file.Length;
-                    if (totalSize != 0) copyProgress.Report(readSize / totalSize);
-                    
-                }
-
-                foreach (var dir in fromDir.GetDirectories())
-                {
-                    dir.MoveTo(Path.Combine(bakDir.ToString(), dir.Name));
-
-                    readSize += dir.GetSize();
-                    if (totalSize != 0) copyProgress.Report(readSize / totalSize);
-                }
-
-                result = true;
+                    bytes.Current = (ulong)readBytes;
+                    progress.Report(bytes);
+                });
+                await download.CopyToAsync(fs, relProgress, m_cts.Token);
             }
-            catch (Exception e)
-            {
-                logger?.LogError($"Error overwriting files {e}");
-            }
-            return result;
+            result.Res = UpdaterResult.Downloaded;
         }
-
-        private static async Task<UpdaterResult> TryUnzipAsync(string path, IProgress<double> progress = null)
+        catch (Exception e)
         {
-            var result = UpdaterResult.ArchiveExtractionFailed;
-            try
-            {
-                await ZipFileExtension.ExtractToDirectoryAsync(path, Path.GetDirectoryName(path), totalProg: progress, cancellationToken: m_cts.Token);
-                result = UpdaterResult.Unpacked;
-            }
-            catch (Exception e)
-            { 
-                if (e is TaskCanceledException) result = UpdaterResult.Canceled;
+            if (e is TaskCanceledException) result.Res = UpdaterResult.Canceled;
 
-                logger?.LogError($"Error unzipping update {e}");
-            }
-            return result;
+            result.Path = string.Empty;
+            TryDeleteFolder(path);
+
+            logger?.LogError($"Error downloading update {e}");
         }
+        return result;
+    }
 
-        private static async Task<(UpdaterResult Res, string Path)> TryDownloadAsync(string url, string fileName, IProgress<CurrentTotalBytes> progress = null)
+    private static string GenerateName()
+    {
+        Random rand = new();
+        StringBuilder sbIn = new(Guid.NewGuid().ToString());
+        StringBuilder sbOut = new();
+        var len = sbIn.Length;
+        for (int i = 0; i < len; i++)
         {
-            var result = (Res: UpdaterResult.DownloadFailed, Path: string.Empty);
-            string path = "";
-            try
+            // randomly remove '-' from guid to obfuscate name
+            if (sbIn[i] == '-')
             {
-                using var resp = await m_httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, m_cts.Token);
-                resp.EnsureSuccessStatusCode();
-
-                var contentLen = resp.Content.Headers.ContentLength;
-
-                path = $"{AppDomain.CurrentDomain.BaseDirectory}{GenerateName()}";
-                Directory.CreateDirectory(path);
-                result.Path = $@"{path}\{fileName}";
-
-                await using FileStream fs = File.Create(result.Path);
-                await using var download = await resp.Content.ReadAsStreamAsync(m_cts.Token);
-                if ((contentLen is null) || (progress is null))
-                {
-                    await download.CopyToAsync(fs, m_cts.Token);
-                }
-                else
-                {
-                    CurrentTotalBytes bytes = new((ulong)contentLen.Value);
-                    var relProgress = new Progress<long>(readBytes =>
-                    {
-                        bytes.Current = (ulong)readBytes;
-                        progress.Report(bytes);
-                    });
-                    await download.CopyToAsync(fs, relProgress, m_cts.Token);
-                }
-                result.Res = UpdaterResult.Downloaded;
+                if (rand.Next(100) < 60) continue;
             }
-            catch (Exception e)
-            {
-                if (e is TaskCanceledException) result.Res = UpdaterResult.Canceled;
-
-                result.Path = string.Empty;
-                TryDeleteFolder(path);
-
-                logger?.LogError($"Error downloading update {e}");
-            }
-            return result;
+            sbOut.Append(sbIn[i]);
         }
+        return sbOut.ToString();
+    }
 
-        private static string GenerateName()
+    private static bool TryDeleteFolder(string path)
+    {
+        try
         {
-            Random rand = new();
-            StringBuilder sbIn = new(Guid.NewGuid().ToString());
-            StringBuilder sbOut = new();
-            var len = sbIn.Length;
-            for (int i = 0; i < len; i++)
+            if (!string.IsNullOrEmpty(path))
             {
-                // randomly remove '-' from guid to obfuscate name
-                if (sbIn[i] == '-')
-                {
-                    if (rand.Next(100) < 60) continue;
-                }
-                sbOut.Append(sbIn[i]);
+                Directory.Delete(path, true);
             }
-            return sbOut.ToString();
+            return true;
         }
-
-        private static bool TryDeleteFolder(string path)
+        catch (Exception e)
         {
-            try
-            {
-                if (!string.IsNullOrEmpty(path))
-                {
-                    Directory.Delete(path, true);
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                logger?.LogError($"Error deleting folder {path} {e}");
-            }
-            return false;
+            logger?.LogError($"Error deleting folder {path} {e}");
         }
+        return false;
+    }
 
-        private static bool IsArchitectureMatch(string name)
+    private static bool IsArchitectureMatch(string name)
+    {
+        var arch = RuntimeInformation.ProcessArchitecture;
+        switch (arch)
         {
-            var arch = RuntimeInformation.ProcessArchitecture;
-            switch (arch)
-            {
-                case Architecture.X86:
-                case Architecture.X64:
-                case Architecture.Arm:
-                case Architecture.Arm64:
-                    return name.Contains(arch.ToString(), StringComparison.OrdinalIgnoreCase);
-                default:
-                    return false;
-            }
+            case Architecture.X86:
+            case Architecture.X64:
+            case Architecture.Arm:
+            case Architecture.Arm64:
+                return name.Contains(arch.ToString(), StringComparison.OrdinalIgnoreCase);
+            default:
+                return false;
         }
+    }
 
-        private static bool IsOsMatch(string name)
+    private static bool IsOsMatch(string name)
+    {
+        bool result = false;
+        string strToCheck = "";
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            bool result = false;
-            string strToCheck = "";
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                strToCheck = "win";
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                strToCheck = "linux";
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                strToCheck = "macos";
-            }
-            return result = name.Contains(strToCheck, StringComparison.OrdinalIgnoreCase);
+            strToCheck = "win";
         }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            strToCheck = "linux";
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            strToCheck = "macos";
+        }
+        return result = name.Contains(strToCheck, StringComparison.OrdinalIgnoreCase);
+    }
 
-        private static string FilterVersionString(string ver)
+    private static string FilterVersionString(string ver)
+    {
+        StringBuilder versionIn = new(ver);
+        StringBuilder versionOut = new();
+        var len = versionIn.Length;
+        for (int i = 0; i < len; i++)
         {
-            StringBuilder versionIn = new(ver);
-            StringBuilder versionOut = new();
-            var len = versionIn.Length;
-            for (int i = 0; i < len; i++)
+            var ch = versionIn[i];
+            if (char.IsDigit(ch) || (ch == '.'))
             {
-                var ch = versionIn[i];
-                if (char.IsDigit(ch) || (ch == '.'))
-                {
-                    versionOut.Append(ch);
-                }
+                versionOut.Append(ch);
             }
-            return versionOut.ToString();
         }
+        return versionOut.ToString();
     }
 }

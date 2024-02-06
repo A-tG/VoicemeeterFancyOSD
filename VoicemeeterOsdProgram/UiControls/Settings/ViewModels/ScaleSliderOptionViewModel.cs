@@ -1,14 +1,13 @@
-﻿namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
+﻿namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels;
+
+public class ScaleSliderOptionViewModel : SliderOptionViewModel
 {
-    public class ScaleSliderOptionViewModel : SliderOptionViewModel
+    public ScaleSliderOptionViewModel()
     {
-        public ScaleSliderOptionViewModel()
-        {
-            SmallChange = 0.01;
-            LargeChange = 0.05;
-            TickFreq = 0.01;
-            Min = 0.5;
-            Max = 2;
-        }
+        SmallChange = 0.01;
+        LargeChange = 0.05;
+        TickFreq = 0.01;
+        Min = 0.5;
+        Max = 2;
     }
 }
