@@ -2,29 +2,23 @@
 using System;
 using System.Linq;
 
-namespace VoicemeeterOsdProgram.Core.Types
+namespace VoicemeeterOsdProgram.Core.Types;
+
+public abstract class VoicemeeterParameterBase<T> : VoicemeeterParameterBase
 {
-    public abstract class VoicemeeterParameterBase<T> : VoicemeeterParameterBase
+    protected T m_value; // can be null, initialize in derived class
+
+    public VoicemeeterParameterBase(RemoteApiExtender api, string command) : base(api, command) { }
+
+    public T Value
     {
-        protected T m_value; // can be null, initialize in derived class
-
-        public VoicemeeterParameterBase(RemoteApiExtender api, string command) : base(api, command) { }
-
-        public T Value
+        get => m_value;
+        protected set
         {
-            get => m_value;
-            protected set
-            {
-<<<<<<< Updated upstream
-                if (!m_value.Equals(value))
-                {
-                    OnReadValueChanged(m_value, value);
-                }
-                m_value = value;
-=======
-                OnReadValueChanged(m_value, value);
-            }
+            if (m_value.Equals(value)) return;
+
             m_value = value;
+            OnReadValueChanged(m_value, value);
         }
     }
 
@@ -54,8 +48,6 @@ namespace VoicemeeterOsdProgram.Core.Types
     {
         if (!IsEnabled) return;
 
-        if (m_api is null) return;
-
         if (SetParameter(value) == 0)
         {
             m_value = value;
@@ -69,88 +61,34 @@ namespace VoicemeeterOsdProgram.Core.Types
             foreach (var del in ReadValueChanged.GetInvocationList().Cast<EventHandler<ValOldNew<T>>>())
             {
                 ReadValueChanged -= del;
->>>>>>> Stashed changes
             }
         }
 
-        public abstract int GetParameter(out T value);
-
-        public abstract int SetParameter(T value);
-
-        public override void ReadIsNotifyChanges(bool isNotify)
+        if (ValueRead is not null)
         {
-<<<<<<< Updated upstream
-            if (!IsEnabled) return;
-
-            if ((m_api is null) || string.IsNullOrEmpty(m_name)) return;
-
-            var res = GetParameter(out T val);
-            if (res == 0)
-=======
             foreach (var del in ValueRead.GetInvocationList().Cast<EventHandler<ValOldNew<T>>>())
->>>>>>> Stashed changes
             {
-                var oldVal = m_value;
-                if (isNotify)
-                {
-                    Value = val;
-                }
-                else
-                {
-                    m_value = val;
-                }
-                OnValueRead(oldVal, val);
+                ValueRead -= del;
             }
         }
+    }
 
-        public void Write(T value)
-        {
-            if (!IsEnabled) return;
+    public event EventHandler<ValOldNew<T>> ReadValueChanged;
+    public event EventHandler<ValOldNew<T>> ValueRead;
 
-            if ((m_api is null) || string.IsNullOrEmpty(m_name)) return;
+    private void OnReadValueChanged(T oldVal, T newVal)
+    {
+        if (!IsEnabled) return;
 
-            if (SetParameter(value) == 0)
-            {
-                m_value = value;
-            }
-        }
+        ValOldNew<T> values = new(oldVal, newVal);
+        ReadValueChanged?.Invoke(this, values);
+    }
 
-        public override void ClearEvents()
-        {
-            if (ReadValueChanged is not null)
-            {
-                foreach (EventHandler<ValOldNew<T>> del in ReadValueChanged.GetInvocationList())
-                {
-                    ReadValueChanged -= del;
-                }
-            }
+    protected void OnValueRead(T oldVal, T newVal)
+    {
+        if (!IsEnabled) return;
 
-            if (ValueRead is not null)
-            {
-                foreach (EventHandler<ValOldNew<T>> del in ValueRead.GetInvocationList())
-                {
-                    ValueRead -= del;
-                }
-            }
-        }
-
-        public event EventHandler<ValOldNew<T>> ReadValueChanged;
-        public event EventHandler<ValOldNew<T>> ValueRead;
-
-        private void OnReadValueChanged(T oldVal, T newVal)
-        {
-            if (!IsEnabled) return;
-
-            ValOldNew<T> values = new(oldVal, newVal);
-            ReadValueChanged?.Invoke(this, values);
-        }
-
-        protected void OnValueRead(T oldVal, T newVal)
-        {
-            if (!IsEnabled) return;
-
-            ValOldNew<T> values = new(oldVal, newVal);
-            ValueRead?.Invoke(this, values);
-        }
+        ValOldNew<T> values = new(oldVal, newVal);
+        ValueRead?.Invoke(this, values);
     }
 }

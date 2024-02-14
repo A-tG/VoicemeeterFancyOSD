@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 
 namespace VoicemeeterOsdProgram.Core.Types;
+
 unsafe static internal class VmParamsMemory
 {
     internal static byte* ParamNamesBuffer { get; private set; }
