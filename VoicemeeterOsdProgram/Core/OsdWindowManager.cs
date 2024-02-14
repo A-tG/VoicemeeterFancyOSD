@@ -1,5 +1,6 @@
 ﻿using AtgDev.Voicemeeter.Types;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
 using VoicemeeterOsdProgram.Core.Types;
@@ -93,11 +94,27 @@ namespace VoicemeeterOsdProgram.Core
             Show();
         }
 
+<<<<<<< Updated upstream
         public static void Hide()
+=======
+    private static void UpdateVmParams(bool isNotifyChanges)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+
+        var len = m_vmParams.Length;
+        for (int i = 0; i < len; i++)
+>>>>>>> Stashed changes
         {
             IsShown = false;
             m_window.HideAnimated();
         }
+<<<<<<< Updated upstream
+=======
+
+        sw.Stop();
+        Debug.WriteLine(sw.Elapsed.TotalNanoseconds);
+    }
+>>>>>>> Stashed changes
 
         public static void Hide(uint fadeOutDuration)
         {

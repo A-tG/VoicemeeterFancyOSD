@@ -31,10 +31,25 @@ namespace VoicemeeterOsdProgram.Core.Types
 
         unsafe public override int SetParameter(string value)
         {
-            fixed (byte* command = m_nameBuffer)
+            int res = IsOptimized ? 
+                m_api.GetParameter((IntPtr)NameBuffer, (IntPtr)buffPtr) : 
+                m_api.GetParameter(Name, (IntPtr)buffPtr);
+            if (res == ResultCodes.Ok)
             {
+<<<<<<< Updated upstream
                 return m_api.SetParameter((IntPtr)command, value);
+=======
+                val = new string(buffPtr);
+>>>>>>> Stashed changes
             }
+            return res;
         }
     }
+<<<<<<< Updated upstream
+=======
+
+    unsafe public override int SetParameter(string value) => IsOptimized ?
+            m_api.SetParameter((IntPtr)NameBuffer, value) :
+            m_api.SetParameter(Name, value);
+>>>>>>> Stashed changes
 }

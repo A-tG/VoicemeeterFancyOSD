@@ -1,6 +1,12 @@
 ﻿using AtgDev.Voicemeeter.Types;
 
+<<<<<<< Updated upstream
 namespace VoicemeeterOsdProgram.Core.Types
+=======
+namespace VoicemeeterOsdProgram.Core.Types;
+
+public readonly struct VoicemeeterProperties
+>>>>>>> Stashed changes
 {
     public struct VoicemeeterProperties
     {

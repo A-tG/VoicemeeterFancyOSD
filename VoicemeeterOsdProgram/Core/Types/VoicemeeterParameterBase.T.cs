@@ -1,5 +1,6 @@
 ﻿using AtgDev.Voicemeeter;
 using System;
+using System.Linq;
 
 namespace VoicemeeterOsdProgram.Core.Types
 {
@@ -14,11 +15,61 @@ namespace VoicemeeterOsdProgram.Core.Types
             get => m_value;
             protected set
             {
+<<<<<<< Updated upstream
                 if (!m_value.Equals(value))
                 {
                     OnReadValueChanged(m_value, value);
                 }
                 m_value = value;
+=======
+                OnReadValueChanged(m_value, value);
+            }
+            m_value = value;
+        }
+    }
+
+    public abstract int GetParameter(out T value);
+
+    public abstract int SetParameter(T value);
+
+    public override void ReadIsNotifyChanges(bool isNotify)
+    {
+        if (!IsEnabled) return;
+
+        if (0 != GetParameter(out T val)) return;
+
+        var oldVal = m_value;
+        if (isNotify)
+        {
+            Value = val;
+        }
+        else
+        {
+            m_value = val;
+        }
+        OnValueRead(oldVal, val);
+    }
+
+    public void Write(T value)
+    {
+        if (!IsEnabled) return;
+
+        if (m_api is null) return;
+
+        if (SetParameter(value) == 0)
+        {
+            m_value = value;
+        }
+    }
+
+    public override void ClearEvents()
+    {
+        if (ReadValueChanged is not null)
+        {
+            foreach (var del in ReadValueChanged.GetInvocationList().Cast<EventHandler<ValOldNew<T>>>())
+            {
+                ReadValueChanged -= del;
+>>>>>>> Stashed changes
             }
         }
 
@@ -28,12 +79,16 @@ namespace VoicemeeterOsdProgram.Core.Types
 
         public override void ReadIsNotifyChanges(bool isNotify)
         {
+<<<<<<< Updated upstream
             if (!IsEnabled) return;
 
             if ((m_api is null) || string.IsNullOrEmpty(m_name)) return;
 
             var res = GetParameter(out T val);
             if (res == 0)
+=======
+            foreach (var del in ValueRead.GetInvocationList().Cast<EventHandler<ValOldNew<T>>>())
+>>>>>>> Stashed changes
             {
                 var oldVal = m_value;
                 if (isNotify)
