@@ -30,7 +30,7 @@ public abstract class VoicemeeterParameterBase<T> : VoicemeeterParameterBase
     {
         if (!IsEnabled) return;
 
-        if (0 != GetParameter(out T val)) return;
+        if (GetParameter(out T val) != ResultCodes.Ok) return;
 
         var oldVal = m_value;
         if (isNotify)
@@ -48,7 +48,7 @@ public abstract class VoicemeeterParameterBase<T> : VoicemeeterParameterBase
     {
         if (!IsEnabled) return;
 
-        if (SetParameter(value) == 0)
+        if (SetParameter(value) == ResultCodes.Ok)
         {
             m_value = value;
         }
