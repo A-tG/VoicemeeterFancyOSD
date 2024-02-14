@@ -20,7 +20,7 @@ public abstract class VoicemeeterParameterBase
     public VoicemeeterParameterBase(RemoteApiExtender api, string command)
     {
         ArgumentNullException.ThrowIfNull(api);
-        if (string.IsNullOrWhiteSpace(command)) throw new ArgumentNullException(nameof(command));
+        ArgumentException.ThrowIfNullOrWhiteSpace(command);
 
         m_api = api;
         Name = command;
