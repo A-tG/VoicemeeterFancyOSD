@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace VoicemeeterOsdProgram.UiControls.Settings
+namespace VoicemeeterOsdProgram.UiControls.Settings;
+
+/// <summary>
+/// Interaction logic for UpdaterItem.xaml
+/// </summary>
+public partial class UpdaterItem : UserControl
 {
-    /// <summary>
-    /// Interaction logic for UpdaterItem.xaml
-    /// </summary>
-    public partial class UpdaterItem : UserControl
+    public UpdaterItem()
     {
-        public UpdaterItem()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

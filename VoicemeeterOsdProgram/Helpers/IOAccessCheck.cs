@@ -2,46 +2,45 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace VoicemeeterOsdProgram.Helpers
+namespace VoicemeeterOsdProgram.Helpers;
+
+static public class IOAccessCheck
 {
-    static public class IOAccessCheck
+    public static Exception LastException { get; private set; }
+
+    static public async Task<bool> TryCreateRandomFileAsync(string folderPath)
     {
-        public static Exception LastException { get; private set; }
-
-        static public async Task<bool> TryCreateRandomFileAsync(string folderPath)
+        try
         {
-            try
-            {
-                var p = Path.Combine(folderPath, Guid.NewGuid().ToString());
-                using var fs = File.Create(p);
-                await fs.DisposeAsync();
-                File.Delete(p);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                LastException = ex;
-            }
-            return false;
+            var p = Path.Combine(folderPath, Guid.NewGuid().ToString());
+            using var fs = File.Create(p);
+            await fs.DisposeAsync();
+            File.Delete(p);
+            return true;
         }
-
-        static public bool TryCreateRandomDirectory(string inFolder)
+        catch (Exception ex)
         {
-            try
-            {
-                var p = Path.Combine(inFolder, Guid.NewGuid().ToString());
-                var dir = Directory.CreateDirectory(p);
-                if (dir.Exists)
-                {
-                    dir.Delete();
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                LastException = ex;
-            }
-            return false;
+            LastException = ex;
         }
+        return false;
+    }
+
+    static public bool TryCreateRandomDirectory(string inFolder)
+    {
+        try
+        {
+            var p = Path.Combine(inFolder, Guid.NewGuid().ToString());
+            var dir = Directory.CreateDirectory(p);
+            if (dir.Exists)
+            {
+                dir.Delete();
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            LastException = ex;
+        }
+        return false;
     }
 }

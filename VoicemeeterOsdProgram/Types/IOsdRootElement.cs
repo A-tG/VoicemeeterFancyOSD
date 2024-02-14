@@ -1,10 +1,9 @@
-﻿namespace VoicemeeterOsdProgram.Types
+﻿namespace VoicemeeterOsdProgram.Types;
+
+public interface IOsdRootElement
 {
-    public interface IOsdRootElement
-    {
-        public bool HasChangesFlag { get; set; }
+    public bool HasChangesFlag { get; set; }
 
-        public bool HasAnyChildVisibleFlag { get; set; }
+    public bool HasAnyChildVisibleFlag { get; set; }
 
-    }
 }

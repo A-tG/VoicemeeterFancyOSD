@@ -1,27 +1,26 @@
 ﻿using System.Diagnostics;
 
-namespace AtgDev.Utils
-{
-    public static class OpenInOs
-    {
-        public static bool TryOpen(string path)
-        {
-            bool result = false;
-            try
-            {
-                using Process p = new();
-                ProcessStartInfo info = new()
-                {
-                    FileName = path,
-                    UseShellExecute = true
-                };
-                p.StartInfo = info;
-                _ = p.Start();
+namespace AtgDev.Utils;
 
-                result = true;
-            }
-            catch { }
-            return result;
+public static class OpenInOs
+{
+    public static bool TryOpen(string path)
+    {
+        bool result = false;
+        try
+        {
+            using Process p = new();
+            ProcessStartInfo info = new()
+            {
+                FileName = path,
+                UseShellExecute = true
+            };
+            p.StartInfo = info;
+            _ = p.Start();
+
+            result = true;
         }
+        catch { }
+        return result;
     }
 }

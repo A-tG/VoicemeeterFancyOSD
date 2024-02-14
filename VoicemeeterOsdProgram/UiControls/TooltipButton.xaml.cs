@@ -14,75 +14,74 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace VoicemeeterOsdProgram.UiControls
+namespace VoicemeeterOsdProgram.UiControls;
+
+/// <summary>
+/// Interaction logic for TooltipButton.xaml
+/// </summary>
+public partial class TooltipButton : UserControl
 {
-    /// <summary>
-    /// Interaction logic for TooltipButton.xaml
-    /// </summary>
-    public partial class TooltipButton : UserControl
+    private bool m_isOpenedByHover;
+    private PeriodicTimerExt m_hoverTimer = new(TimeSpan.FromSeconds(0.4));
+
+    public static readonly DependencyProperty IsOpenProperty = DependencyProperty.Register(
+        nameof(IsOpen), typeof(bool), typeof(TooltipButton));
+
+    public bool IsOpen
     {
-        private bool m_isOpenedByHover;
-        private PeriodicTimerExt m_hoverTimer = new(TimeSpan.FromSeconds(0.4));
-
-        public static readonly DependencyProperty IsOpenProperty = DependencyProperty.Register(
-            nameof(IsOpen), typeof(bool), typeof(TooltipButton));
-
-        public bool IsOpen
+        get => (bool)GetValue(IsOpenProperty);
+        set
         {
-            get => (bool)GetValue(IsOpenProperty);
-            set
+            if (!value)
             {
-                if (!value)
-                {
-                    m_isOpenedByHover = false;
-                    m_hoverTimer.Stop();
-                }
-                SetValue(IsOpenProperty, value);
+                m_isOpenedByHover = false;
+                m_hoverTimer.Stop();
             }
+            SetValue(IsOpenProperty, value);
         }
+    }
 
-        public TooltipButton()
+    public TooltipButton()
+    {
+        MouseLeave += (_, _) => OnLeave();
+        MouseEnter += (_, _) => OnEnter();
+        MouseMove += OnMove;
+        Unloaded += (_, _) => m_hoverTimer.Stop();
+        InitializeComponent();
+    }
+
+    private void OnMove(object sender, MouseEventArgs e)
+    {
+        var pos = e.GetPosition(this);
+        var x = pos.X;
+        var y = pos.Y;
+        bool isOut = (x < 0) || (y < 0) ||
+            (x > ActualWidth) || (y > ActualHeight);
+        if (isOut)
         {
-            MouseLeave += (_, _) => OnLeave();
-            MouseEnter += (_, _) => OnEnter();
-            MouseMove += OnMove;
-            Unloaded += (_, _) => m_hoverTimer.Stop();
-            InitializeComponent();
+            OnLeave();
         }
+    }
 
-        private void OnMove(object sender, MouseEventArgs e)
+    private void OnLeave()
+    {
+        if (m_isOpenedByHover)
         {
-            var pos = e.GetPosition(this);
-            var x = pos.X;
-            var y = pos.Y;
-            bool isOut = (x < 0) || (y < 0) ||
-                (x > ActualWidth) || (y > ActualHeight);
-            if (isOut)
-            {
-                OnLeave();
-            }
+            IsOpen = false;
         }
+    }
 
-        private void OnLeave()
-        {
-            if (m_isOpenedByHover)
-            {
-                IsOpen = false;
-            }
-        }
+    private async void OnEnter()
+    {
+        m_hoverTimer.Start();
+        if (IsOpen) return;
 
-        private async void OnEnter()
+        if (await m_hoverTimer.WaitForNextTickAsync())
         {
-            m_hoverTimer.Start();
             if (IsOpen) return;
 
-            if (await m_hoverTimer.WaitForNextTickAsync())
-            {
-                if (IsOpen) return;
-
-                m_isOpenedByHover = true;
-                IsOpen = true;
-            }
+            m_isOpenedByHover = true;
+            IsOpen = true;
         }
     }
 }

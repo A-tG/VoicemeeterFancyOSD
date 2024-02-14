@@ -1,70 +1,69 @@
 ﻿using VoicemeeterOsdProgram.Types;
 
-namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
+namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels;
+
+public class SliderOptionViewModel : BaseViewModel
 {
-    public class SliderOptionViewModel : BaseViewModel
+    private string m_label = "";
+    private double m_min, m_max, m_tickFreq, m_smallChange, m_largeChange;
+    
+    public string Label
     {
-        private string m_label = "";
-        private double m_min, m_max, m_tickFreq, m_smallChange, m_largeChange;
-        
-        public string Label
+        get => m_label;
+        set
         {
-            get => m_label;
-            set
-            {
-                m_label = value;
-                OnPropertyChanged();
-            }
+            m_label = value;
+            OnPropertyChanged();
         }
+    }
 
-        public double Min
+    public double Min
+    {
+        get => m_min;
+        set
         {
-            get => m_min;
-            set
-            {
-                m_min = value;
-                OnPropertyChanged();
-            }
+            m_min = value;
+            OnPropertyChanged();
         }
+    }
 
-        public double Max
+    public double Max
+    {
+        get => m_max;
+        set
         {
-            get => m_max;
-            set
-            {
-                m_max = value;
-                OnPropertyChanged();
-            }
+            m_max = value;
+            OnPropertyChanged();
         }
+    }
 
-        public double TickFreq
+    public double TickFreq
+    {
+        get => m_tickFreq;
+        set 
+        { 
+            m_tickFreq = value; 
+            OnPropertyChanged(); 
+        } 
+    }
+
+    public double SmallChange
+    {
+        get => m_smallChange;
+        set
         {
-            get => m_tickFreq;
-            set 
-            { 
-                m_tickFreq = value; 
-                OnPropertyChanged(); 
-            } 
+            m_smallChange = value;
+            OnPropertyChanged();
         }
+    }
 
-        public double SmallChange
+    public double LargeChange
+    {
+        get => m_largeChange;
+        set
         {
-            get => m_smallChange;
-            set
-            {
-                m_smallChange = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double LargeChange
-        {
-            get => m_largeChange;
-            set
-            {
-                m_largeChange = value;
-                OnPropertyChanged();
-            }
+            m_largeChange = value;
+            OnPropertyChanged();
         }
     }
 }

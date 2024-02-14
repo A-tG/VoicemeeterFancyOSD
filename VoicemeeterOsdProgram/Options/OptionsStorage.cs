@@ -9,301 +9,300 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace VoicemeeterOsdProgram.Options
+namespace VoicemeeterOsdProgram.Options;
+
+public static class OptionsStorage
 {
-    public static class OptionsStorage
+    public static readonly ProgramOptions Program = new();
+    public static readonly OsdOptions Osd = new();
+    public static readonly VoicemeeterOptions Voicemeeter = new();
+    public static readonly OsdAlternative AltOsdOptionsFullscreenApps = new();
+    public static readonly UpdaterOptions Updater = new();
+    public static readonly LoggerOption Logger = new();
+    public static readonly OtherOptions Other = new();
+
+    private static readonly IniDataParser m_parser = new();
+    private static IniData m_data = new();
+    private static FileSystemWatcher m_watcher = new();
+    private static PeriodicTimerExt m_timer = new(TimeSpan.FromSeconds(1));
+    private static bool m_isWatcherEnabled;
+    private static bool m_isWatcherPaused;
+    private static bool m_isInit = false;
+    private static Dispatcher m_disp;
+    private static Dictionary<string, OptionsBase> m_sectionsOptions;
+
+    public static string ConfigFolder { get; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config");
+
+    public static string ConfigFilePath { get; } = Path.Combine(ConfigFolder, "config.ini");
+
+    private static Logger m_logger = Globals.Logger;
+
+    static OptionsStorage()
     {
-        public static readonly ProgramOptions Program = new();
-        public static readonly OsdOptions Osd = new();
-        public static readonly VoicemeeterOptions Voicemeeter = new();
-        public static readonly OsdAlternative AltOsdOptionsFullscreenApps = new();
-        public static readonly UpdaterOptions Updater = new();
-        public static readonly LoggerOption Logger = new();
-        public static readonly OtherOptions Other = new();
+        AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
+        System.Windows.Application.Current.Exit += (_, _) => Exit();
 
-        private static readonly IniDataParser m_parser = new();
-        private static IniData m_data = new();
-        private static FileSystemWatcher m_watcher = new();
-        private static PeriodicTimerExt m_timer = new(TimeSpan.FromSeconds(1));
-        private static bool m_isWatcherEnabled;
-        private static bool m_isWatcherPaused;
-        private static bool m_isInit = false;
-        private static Dispatcher m_disp;
-        private static Dictionary<string, OptionsBase> m_sectionsOptions;
+        Program.logger = m_logger;
+        Osd.logger = m_logger;
+        Voicemeeter.logger = m_logger;
+        AltOsdOptionsFullscreenApps.logger = m_logger;
+        Updater.logger = m_logger;
+        Logger.logger = m_logger;
+    }
 
-        public static string ConfigFolder { get; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config");
 
-        public static string ConfigFilePath { get; } = Path.Combine(ConfigFolder, "config.ini");
+    public static async Task InitAsync()
+    {
+        if (m_isInit) return;
 
-        private static Logger m_logger = Globals.logger;
+        m_isInit = true;
 
-        static OptionsStorage()
+        await ValidateConfigFileAsync();
+
+        m_disp = Dispatcher.CurrentDispatcher;
+        m_watcher.Path = Path.GetDirectoryName(ConfigFilePath);
+        m_watcher.Filter = Path.GetFileName(ConfigFilePath);
+        m_watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+        m_watcher.Changed += OnConfigFileChanged;
+        IsWatcherEnabled = true;
+    }
+
+    public static bool IsWatcherEnabled
+    {
+        get => m_isWatcherEnabled;
+        set
         {
-            AppDomain.CurrentDomain.UnhandledException += (_, _) => Exit();
-            System.Windows.Application.Current.Exit += (_, _) => Exit();
-
-            Program.logger = m_logger;
-            Osd.logger = m_logger;
-            Voicemeeter.logger = m_logger;
-            AltOsdOptionsFullscreenApps.logger = m_logger;
-            Updater.logger = m_logger;
-            Logger.logger = m_logger;
-        }
-
-
-        public static async Task InitAsync()
-        {
-            if (m_isInit) return;
-
-            m_isInit = true;
-
-            await ValidateConfigFileAsync();
-
-            m_disp = Dispatcher.CurrentDispatcher;
-            m_watcher.Path = Path.GetDirectoryName(ConfigFilePath);
-            m_watcher.Filter = Path.GetFileName(ConfigFilePath);
-            m_watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
-            m_watcher.Changed += OnConfigFileChanged;
-            IsWatcherEnabled = true;
-        }
-
-        public static bool IsWatcherEnabled
-        {
-            get => m_isWatcherEnabled;
-            set
+            m_isWatcherEnabled = value;
+            if (value)
             {
-                m_isWatcherEnabled = value;
-                if (value)
+                m_watcher.EnableRaisingEvents = !IsWatcherPaused;
+                if (IsWatcherPaused)
                 {
-                    m_watcher.EnableRaisingEvents = !IsWatcherPaused;
-                    if (IsWatcherPaused)
-                    {
-                        m_timer.Stop();
-                    }
+                    m_timer.Stop();
                 }
-                else
+            }
+            else
+            {
+                m_watcher.EnableRaisingEvents = false;
+                m_timer.Stop();
+            }
+        }
+    }
+
+    public static bool IsWatcherPaused
+    {
+        get => m_isWatcherPaused;
+        set
+        {
+            m_isWatcherPaused = value;
+            if (value)
+            {
+                m_watcher.EnableRaisingEvents = false;
+                m_timer.Stop();
+            }
+            else
+            {
+                m_watcher.EnableRaisingEvents = IsWatcherEnabled;
+                if (!IsWatcherEnabled)
                 {
-                    m_watcher.EnableRaisingEvents = false;
                     m_timer.Stop();
                 }
             }
         }
+    }
 
-        public static bool IsWatcherPaused
+    public static IEnumerable<string> Sections => SectionsOptions.Keys;
+
+    private static IDictionary<string, OptionsBase> SectionsOptions
+    {
+        get
         {
-            get => m_isWatcherPaused;
-            set
-            {
-                m_isWatcherPaused = value;
-                if (value)
+            return m_sectionsOptions ??= typeof(OptionsStorage).
+                GetFields(BindingFlags.Public | BindingFlags.Static).
+                Where(o =>
                 {
-                    m_watcher.EnableRaisingEvents = false;
-                    m_timer.Stop();
-                }
-                else
-                {
-                    m_watcher.EnableRaisingEvents = IsWatcherEnabled;
-                    if (!IsWatcherEnabled)
-                    {
-                        m_timer.Stop();
-                    }
-                }
-            }
+                    var val = o.GetValue(null);
+                    return (val is OptionsBase) && (val is not OtherOptions);
+                }).
+                ToDictionary(f => f.Name.ToLower(), f => (OptionsBase)f.GetValue(null));
+        }
+    }
+
+    public static bool TryGetSectionOptions(string sectionName, out OptionsBase options)
+    {
+        if (SectionsOptions.TryGetValue(sectionName.ToLower(), out OptionsBase o))
+        {
+            options = o;
+            return true;
         }
 
-        public static IEnumerable<string> Sections => SectionsOptions.Keys;
+        options = default;
+        return false;
+    }
 
-        private static IDictionary<string, OptionsBase> SectionsOptions
+    public static void SaveData()
+    {
+        var directoryPath = Path.GetDirectoryName(ConfigFilePath);
+        if (!Directory.Exists(directoryPath))
         {
-            get
-            {
-                return m_sectionsOptions ??= typeof(OptionsStorage).
-                    GetFields(BindingFlags.Public | BindingFlags.Static).
-                    Where(o =>
-                    {
-                        var val = o.GetValue(null);
-                        return (val is OptionsBase) && (val is not OtherOptions);
-                    }).
-                    ToDictionary(f => f.Name.ToLower(), f => (OptionsBase)f.GetValue(null));
-            }
+            Directory.CreateDirectory(directoryPath);
         }
 
-        public static bool TryGetSectionOptions(string sectionName, out OptionsBase options)
+        OptionsToIniData(Program, nameof(Program));
+        OptionsToIniData(Osd, nameof(Osd));
+        OptionsToIniData(Voicemeeter, nameof(Voicemeeter));
+        OptionsToIniData(Updater, nameof(Updater));
+        OptionsToIniData(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
+        OptionsToIniData(Logger, nameof(Logger));
+    }
+
+    public static bool TrySave()
+    {
+
+        m_logger?.Log("Writing config...");
+        bool result = false;
+        if (!m_isInit) return result;
+
+        IsWatcherPaused = true;
+
+        try
         {
-            if (SectionsOptions.TryGetValue(sectionName.ToLower(), out OptionsBase o))
+            SaveData();
+            using (StreamWriter sw = new(ConfigFilePath))
             {
-                options = o;
-                return true;
+                sw.Write(m_data.ToString());
             }
 
-            options = default;
-            return false;
+            result = true;
+            m_logger?.Log("Writing config: OK");
+        }
+        catch (Exception e)
+        {
+            m_logger?.LogError($"Writing config: FAILED {e.GetType} {e.Message}");
         }
 
-        public static void SaveData()
+        IsWatcherPaused = false;
+        return result;
+    }
+
+    public static async Task<bool> TrySaveAsync()
+    {
+        m_logger?.Log("Writing config...");
+        bool result = false;
+        if (!m_isInit) return result;
+
+        IsWatcherPaused = true;
+
+        try
         {
-            var directoryPath = Path.GetDirectoryName(ConfigFilePath);
-            if (!Directory.Exists(directoryPath))
+            SaveData();
+            await using (StreamWriter sw = new(ConfigFilePath))
             {
-                Directory.CreateDirectory(directoryPath);
+                await sw.WriteAsync(m_data.ToString());
             }
 
-            OptionsToIniData(Program, nameof(Program));
-            OptionsToIniData(Osd, nameof(Osd));
-            OptionsToIniData(Voicemeeter, nameof(Voicemeeter));
-            OptionsToIniData(Updater, nameof(Updater));
-            OptionsToIniData(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
-            OptionsToIniData(Logger, nameof(Logger));
+            result = true;
+            m_logger?.Log("Writing config: OK");
+        }
+        catch (Exception e)
+        {
+            m_logger?.LogError($"Writing config: FAILED {e.GetType} {e.Message}");
         }
 
-        public static bool TrySave()
+        IsWatcherPaused = false;
+        return result;
+    }
+
+    public static async Task<bool> TryReadAsync()
+    {
+        m_logger?.Log("Reading config...");
+        bool result = false;
+        if (!m_isInit) return result;
+
+        IsWatcherPaused = false;
+
+        try
         {
+            const long MB = 1024 * 1024;
+            if (new FileInfo(ConfigFilePath).Length > 100 * MB) throw new InvalidOperationException("Config file size is too large");
 
-            m_logger?.Log("Writing config...");
-            bool result = false;
-            if (!m_isInit) return result;
+            using StreamReader sr = new(ConfigFilePath);
+            string fileData = await sr.ReadToEndAsync();
 
-            IsWatcherPaused = true;
+            m_data = m_parser.Parse(fileData);
+            IniDataToOptions(Program, nameof(Program));
+            IniDataToOptions(Osd, nameof(Osd));
+            IniDataToOptions(Voicemeeter, nameof(Voicemeeter));
+            IniDataToOptions(Updater, nameof(Updater));
+            IniDataToOptions(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
+            IniDataToOptions(Logger, nameof(Logger));
 
-            try
-            {
-                SaveData();
-                using (StreamWriter sw = new(ConfigFilePath))
-                {
-                    sw.Write(m_data.ToString());
-                }
-
-                result = true;
-                m_logger?.Log("Writing config: OK");
-            }
-            catch (Exception e)
-            {
-                m_logger?.LogError($"Writing config: FAILED {e.GetType} {e.Message}");
-            }
-
-            IsWatcherPaused = false;
-            return result;
+            m_data = new();
+            result = true;
+            m_logger?.Log("Reading config: OK");
+        }
+        catch (Exception e)
+        {
+            m_logger?.LogError($"Reading config: FAILED {e.GetType} {e.Message}");
         }
 
-        public static async Task<bool> TrySaveAsync()
+        IsWatcherPaused = true;
+        return result;
+    }
+
+    private static void OptionsToIniData(OptionsBase opt, string sectionName)
+    {
+        foreach (var item in opt.ToDict())
         {
-            m_logger?.Log("Writing config...");
-            bool result = false;
-            if (!m_isInit) return result;
+            var optName = item.Key;
+            m_data[sectionName][optName] = item.Value;
 
-            IsWatcherPaused = true;
-
-            try
+            var description = opt.GetOptionDescription(optName);
+            for (int i = 0; i < description.Count; i++) // prepend space
             {
-                SaveData();
-                await using (StreamWriter sw = new(ConfigFilePath))
-                {
-                    await sw.WriteAsync(m_data.ToString());
-                }
-
-                result = true;
-                m_logger?.Log("Writing config: OK");
+                description[i] = " " + description[i];
             }
-            catch (Exception e)
+            if (description.Count > 0)
             {
-                m_logger?.LogError($"Writing config: FAILED {e.GetType} {e.Message}");
-            }
-
-            IsWatcherPaused = false;
-            return result;
-        }
-
-        public static async Task<bool> TryReadAsync()
-        {
-            m_logger?.Log("Reading config...");
-            bool result = false;
-            if (!m_isInit) return result;
-
-            IsWatcherPaused = false;
-
-            try
-            {
-                const long MB = 1024 * 1024;
-                if (new FileInfo(ConfigFilePath).Length > 100 * MB) throw new InvalidOperationException("Config file size is too large");
-
-                using StreamReader sr = new(ConfigFilePath);
-                string fileData = await sr.ReadToEndAsync();
-
-                m_data = m_parser.Parse(fileData);
-                IniDataToOptions(Program, nameof(Program));
-                IniDataToOptions(Osd, nameof(Osd));
-                IniDataToOptions(Voicemeeter, nameof(Voicemeeter));
-                IniDataToOptions(Updater, nameof(Updater));
-                IniDataToOptions(AltOsdOptionsFullscreenApps, nameof(AltOsdOptionsFullscreenApps));
-                IniDataToOptions(Logger, nameof(Logger));
-
-                m_data = new();
-                result = true;
-                m_logger?.Log("Reading config: OK");
-            }
-            catch (Exception e)
-            {
-                m_logger?.LogError($"Reading config: FAILED {e.GetType} {e.Message}");
-            }
-
-            IsWatcherPaused = true;
-            return result;
-        }
-
-        private static void OptionsToIniData(OptionsBase opt, string sectionName)
-        {
-            foreach (var item in opt.ToDict())
-            {
-                var optName = item.Key;
-                m_data[sectionName][optName] = item.Value;
-
-                var description = opt.GetOptionDescription(optName);
-                for (int i = 0; i < description.Count; i++) // prepend space
-                {
-                    description[i] = " " + description[i];
-                }
-                if (description.Count > 0)
-                {
-                    m_data[sectionName].GetKeyData(optName).Comments = description;
-                }
+                m_data[sectionName].GetKeyData(optName).Comments = description;
             }
         }
+    }
 
-        private static void IniDataToOptions(OptionsBase opt, string sectionName)
+    private static void IniDataToOptions(OptionsBase opt, string sectionName)
+    {
+        Dictionary<string, string> dict = new();
+        foreach (var item in m_data[sectionName])
         {
-            Dictionary<string, string> dict = new();
-            foreach (var item in m_data[sectionName])
-            {
-                dict.Add(item.KeyName, item.Value);
-            }
-            opt.FromDict(dict);
+            dict.Add(item.KeyName, item.Value);
         }
+        opt.FromDict(dict);
+    }
 
-        private static async Task ValidateConfigFileAsync()
-        {
-            _ = await TryReadAsync();
-            _ = await TrySaveAsync();
-            m_isInit = true;
-        }
+    private static async Task ValidateConfigFileAsync()
+    {
+        _ = await TryReadAsync();
+        _ = await TrySaveAsync();
+        m_isInit = true;
+    }
 
-        private static void Exit()
-        {
-            m_timer?.Stop();
-        }
+    private static void Exit()
+    {
+        m_timer?.Stop();
+    }
 
-        private static async void OnConfigFileChanged(object sender, FileSystemEventArgs e)
-        {
-            // need to to use Dispatcher or this code will run on another thread
-            _ = await m_disp.InvokeAsync(async () =>
+    private static async void OnConfigFileChanged(object sender, FileSystemEventArgs e)
+    {
+        // need to to use Dispatcher or this code will run on another thread
+        _ = await m_disp.InvokeAsync(async () =>
+          {
+              m_timer.Start();
+              if (await m_timer.WaitForNextTickAsync())
               {
-                  m_timer.Start();
-                  if (await m_timer.WaitForNextTickAsync())
-                  {
-                      m_timer.Stop();
-                      m_logger?.Log("Config file changed, validating...");
-                      await ValidateConfigFileAsync();
-                  }
-              });
-        }
+                  m_timer.Stop();
+                  m_logger?.Log("Config file changed, validating...");
+                  await ValidateConfigFileAsync();
+              }
+          });
     }
 }

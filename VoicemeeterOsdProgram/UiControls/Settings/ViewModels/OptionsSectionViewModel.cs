@@ -1,30 +1,29 @@
 ﻿using VoicemeeterOsdProgram.Types;
 
-namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels
+namespace VoicemeeterOsdProgram.UiControls.Settings.ViewModels;
+
+public class OptionsSectionViewModel : BaseViewModel
 {
-    public class OptionsSectionViewModel : BaseViewModel
+    private string m_label;
+    private object m_tooltip;
+
+    public string LabelText
     {
-        private string m_label;
-        private object m_tooltip;
-
-        public string LabelText
+        get => m_label;
+        set
         {
-            get => m_label;
-            set
-            {
-                m_label = value;
-                OnPropertyChanged();
-            }
+            m_label = value;
+            OnPropertyChanged();
         }
+    }
 
-        public object TooltipContent
+    public object TooltipContent
+    {
+        get => m_tooltip;
+        set
         {
-            get => m_tooltip;
-            set
-            {
-                m_tooltip = value;
-                OnPropertyChanged();
-            }
+            m_tooltip = value;
+            OnPropertyChanged();
         }
     }
 }

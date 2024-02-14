@@ -1,17 +1,16 @@
 ﻿using System.Windows.Controls;
 using VoicemeeterOsdProgram.Options;
 
-namespace VoicemeeterOsdProgram.UiControls.Settings
+namespace VoicemeeterOsdProgram.UiControls.Settings;
+
+/// <summary>
+/// Interaction logic for Logger.xaml
+/// </summary>
+public partial class Logger : UserControl
 {
-    /// <summary>
-    /// Interaction logic for Logger.xaml
-    /// </summary>
-    public partial class Logger : UserControl
+    public Logger()
     {
-        public Logger()
-        {
-            DataContext = OptionsStorage.Logger;
-            InitializeComponent();
-        }
+        DataContext = OptionsStorage.Logger;
+        InitializeComponent();
     }
 }

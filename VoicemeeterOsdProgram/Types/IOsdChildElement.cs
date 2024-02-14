@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace VoicemeeterOsdProgram.Types
+namespace VoicemeeterOsdProgram.Types;
+
+public interface IOsdChildElement
 {
-    public interface IOsdChildElement
-    {
-        public IOsdRootElement OsdParent { get; set; }
+    public IOsdRootElement OsdParent { get; set; }
 
-        public Func<bool> IsAlwaysVisible { get; set; }
+    public Func<bool> IsAlwaysVisible { get; set; }
 
-        public Func<bool> IsNeverShow { get; set; }
-    }
+    public Func<bool> IsNeverShow { get; set; }
 }

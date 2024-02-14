@@ -42,7 +42,7 @@
                     </Hyperlink>
                 </TextBlock>
                 <TextBlock>
-                    <Hyperlink NavigateUri="www.boosty.to/a-tg.dev" Foreground="{StaticResource VmActiveElementOrangeBrush}"
+                    <Hyperlink NavigateUri="https://taplink.cc/atgdev" Foreground="{StaticResource VmActiveElementOrangeBrush}"
                                CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
                                Command="{Binding OpenUriCommand}">
                         Donate

@@ -1,20 +1,19 @@
-﻿namespace VoicemeeterOsdProgram.Updater.Types
+﻿namespace VoicemeeterOsdProgram.Updater.Types;
+
+public enum UpdaterResult
 {
-    public enum UpdaterResult
-    {
-        Error,
-        Updated,
-        Downloaded,
-        Unpacked,
-        NewVersionFound,
-        VersionUpToDate,
-        ConnectionError,
-        ArchitectureNotFound,
-        OsNotFound,
-        ReleasesNotFound,
-        UpdateFailed,
-        DownloadFailed,
-        ArchiveExtractionFailed,
-        Canceled
-    }
+    Error,
+    Updated,
+    Downloaded,
+    Unpacked,
+    NewVersionFound,
+    VersionUpToDate,
+    ConnectionError,
+    ArchitectureNotFound,
+    OsNotFound,
+    ReleasesNotFound,
+    UpdateFailed,
+    DownloadFailed,
+    ArchiveExtractionFailed,
+    Canceled
 }
