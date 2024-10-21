@@ -24,6 +24,8 @@ public abstract class VoicemeeterParameterBase
 
         m_api = api;
         Name = command;
+
+        Read();
     }
 
     public void ReadNotifyChanges() => ReadIsNotifyChanges(true);
