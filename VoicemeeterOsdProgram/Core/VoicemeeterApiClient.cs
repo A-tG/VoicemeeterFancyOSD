@@ -2,6 +2,7 @@
 using AtgDev.Voicemeeter;
 using AtgDev.Voicemeeter.Types;
 using AtgDev.Voicemeeter.Utils;
+using AtgDev.Voicemeeter.Extensions;
 using System;
 using System.Threading.Tasks;
 using System.Timers;
@@ -55,7 +56,7 @@ public static class VoicemeeterApiClient
         m_isInit = true;
     }
 
-    public static RemoteApiExtender Api { get; private set; }
+    public static RemoteApiWrapper Api { get; private set; }
 
     public static bool IsLoaded { get; private set; }
 
