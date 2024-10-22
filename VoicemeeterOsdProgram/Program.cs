@@ -29,8 +29,7 @@ public class Program
 
         if (AppLifeManager.IsAlreadyRunning && (args.Length == 0))
         {
-            MessageBox.Show("The program is already running", Name, MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
+            args = [ArgsHandler.Args.OpenSettings];
         }
 
         Thread thread = new(() =>
