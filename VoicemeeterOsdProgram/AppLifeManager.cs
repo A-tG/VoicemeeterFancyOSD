@@ -1,11 +1,14 @@
 ﻿using AtgDev.Utils.ProcessExtensions;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
+using System.Threading.Channels;
 using System.Windows.Threading;
+using static VoicemeeterOsdProgram.ArgsHandler;
 
 namespace VoicemeeterOsdProgram;
 
@@ -14,6 +17,10 @@ public static class AppLifeManager
     private static Mutex m_mutex = new(true, Program.UniqueName);
     private static bool? m_isLareadyRunning;
     private static Dispatcher m_dispatcher;
+    private static Channel<string[]> m_argsChannel = Channel.CreateUnbounded<string[]>(new() {
+        SingleReader = true,
+        SingleWriter = true
+    });
 
     public static string[] appArgs = Array.Empty<string>();
 
@@ -21,10 +28,7 @@ public static class AppLifeManager
     {
         get
         {
-            if (m_isLareadyRunning is null)
-            {
-                m_isLareadyRunning = !m_mutex.WaitOne(0, false);
-            }
+            m_isLareadyRunning ??= !m_mutex.WaitOne(0, false);
             return m_isLareadyRunning.Value;
         }
     }
@@ -56,12 +60,29 @@ public static class AppLifeManager
 
     public static void StartArgsPipeServer()
     {
+        Thread t = new(ArgsThreadLoop)
+        {
+            IsBackground = true
+        };
+        t.Start();
+
         Thread pipeServerThread = new(CreatePipeServer)
         {
             IsBackground = true,
         };
         pipeServerThread.SetApartmentState(ApartmentState.STA);
         pipeServerThread.Start();
+    }
+
+    private static void ArgsThreadLoop()
+    {
+        while (true)
+        {
+            if (m_argsChannel.Reader.TryRead(out string[] args))
+            {
+                m_dispatcher.Invoke(async () => await ArgsHandler.HandleAsync(args));
+            }
+        }
     }
 
     private static void SendArgsToFirstInstance(string[] args)
@@ -107,7 +128,7 @@ public static class AppLifeManager
                 {
                     args.Add(arg);
                 }
-                m_dispatcher.Invoke(async () => await ArgsHandler.HandleAsync(args.ToArray()));
+                m_argsChannel.Writer.TryWrite([..args]);
             }
             catch { }
             server.Disconnect();
