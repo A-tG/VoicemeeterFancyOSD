@@ -51,7 +51,7 @@ public class Logger : IDisposable, IAsyncDisposable
 
         FolderPath = folderPath;
 
-        Task.Run(async () => await Loop());
+        Task.Run(async () => await ProcessLogsLoop());
     }
 
     public string FolderPath { get; }
@@ -134,7 +134,7 @@ public class Logger : IDisposable, IAsyncDisposable
         return result;
     }
 
-    private async ValueTask Loop()
+    private async ValueTask ProcessLogsLoop()
     {
         await foreach (var m in m_messageChannel.Reader.ReadAllAsync(m_token))
         {

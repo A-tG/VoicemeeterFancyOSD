@@ -59,7 +59,7 @@ public static class AppLifeManager
 
     public static void StartArgsPipeServer()
     {
-        Task.Run(async () => await ArgsThreadLoop());
+        Task.Run(async () => await ProcessArgsLoop());
 
         Thread pipeServerThread = new(CreatePipeServer)
         {
@@ -69,7 +69,7 @@ public static class AppLifeManager
         pipeServerThread.Start();
     }
 
-    private static async ValueTask ArgsThreadLoop()
+    private static async ValueTask ProcessArgsLoop()
     {
         await foreach (var a in m_argsChannel.Reader.ReadAllAsync())
         {
