@@ -1,14 +1,13 @@
 ﻿using AtgDev.Utils.ProcessExtensions;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Channels;
+using System.Threading.Tasks;
 using System.Windows.Threading;
-using static VoicemeeterOsdProgram.ArgsHandler;
 
 namespace VoicemeeterOsdProgram;
 
@@ -60,11 +59,7 @@ public static class AppLifeManager
 
     public static void StartArgsPipeServer()
     {
-        Thread t = new(ArgsThreadLoop)
-        {
-            IsBackground = true
-        };
-        t.Start();
+        Task.Run(async () => await ArgsThreadLoop());
 
         Thread pipeServerThread = new(CreatePipeServer)
         {
@@ -74,14 +69,11 @@ public static class AppLifeManager
         pipeServerThread.Start();
     }
 
-    private static void ArgsThreadLoop()
+    private static async ValueTask ArgsThreadLoop()
     {
-        while (true)
+        await foreach (var a in m_argsChannel.Reader.ReadAllAsync())
         {
-            if (m_argsChannel.Reader.TryRead(out string[] args))
-            {
-                m_dispatcher.Invoke(async () => await ArgsHandler.HandleAsync(args));
-            }
+            await m_dispatcher.Invoke(async () => await ArgsHandler.HandleAsync(a));
         }
     }
 

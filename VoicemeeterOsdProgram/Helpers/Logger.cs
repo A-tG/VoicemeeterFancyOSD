@@ -38,7 +38,8 @@ public class Logger : IDisposable, IAsyncDisposable
         SingleReader = true,
         SingleWriter = true
     });
-    private Thread m_writeThread;
+    private CancellationTokenSource m_tokenSource = new();
+    private CancellationToken m_token;
     private StreamWriter m_writer;
     private uint m_maxLogs = 0;
 
@@ -46,13 +47,11 @@ public class Logger : IDisposable, IAsyncDisposable
     {
         if (!Directory.Exists(folderPath)) throw new DirectoryNotFoundException(folderPath);
 
+        m_token = m_tokenSource.Token;
+
         FolderPath = folderPath;
 
-        m_writeThread = new(Loop)
-        {
-            IsBackground = true
-        };
-        m_writeThread.Start();
+        Task.Run(async () => await Loop());
     }
 
     public string FolderPath { get; }
@@ -135,17 +134,14 @@ public class Logger : IDisposable, IAsyncDisposable
         return result;
     }
 
-    private void Loop()
+    private async ValueTask Loop()
     {
-        while (true && !m_disposed)
+        await foreach (var m in m_messageChannel.Reader.ReadAllAsync(m_token))
         {
-            if (m_messageChannel.Reader.TryRead(out var m))
-            {
 #if !DEBUG
                 if (m.Type == LogType.Debug) continue;
 #endif
-                TryWrite(m);
-            }
+            TryWrite(m);
         }
     }
 
@@ -199,6 +195,8 @@ public class Logger : IDisposable, IAsyncDisposable
         if (m_disposed) return;
 
         await (m_writer?.DisposeAsync() ?? ValueTask.CompletedTask);
+        m_tokenSource.Cancel();
+        m_tokenSource.Dispose();
         m_disposed = true;
         
         GC.SuppressFinalize(this);
