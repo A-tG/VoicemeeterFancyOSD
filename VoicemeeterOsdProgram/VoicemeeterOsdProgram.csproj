@@ -81,7 +81,7 @@
     <PackageReference Include="a-tg.VmrapiDynWrapExt" Version="1.1.4" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="ini-parser-netstandard" Version="2.5.2" />
-    <PackageReference Include="Octokit" Version="0.50.0" />
+    <PackageReference Include="Octokit" Version="13.0.1" />
     <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
   </ItemGroup>
 
