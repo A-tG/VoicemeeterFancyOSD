@@ -60,13 +60,7 @@ public static class AppLifeManager
     public static void StartArgsPipeServer()
     {
         Task.Run(async () => await ProcessArgsLoop());
-
-        Thread pipeServerThread = new(CreatePipeServer)
-        {
-            IsBackground = true,
-        };
-        pipeServerThread.SetApartmentState(ApartmentState.STA);
-        pipeServerThread.Start();
+        Task.Run(async () => await PipeServerLoop());
     }
 
     private static async ValueTask ProcessArgsLoop()
@@ -105,18 +99,18 @@ public static class AppLifeManager
         }
     }
 
-    private static void CreatePipeServer()
+    private static async ValueTask PipeServerLoop(CancellationToken ct = default)
     {
-        using NamedPipeServerStream server = new(Program.UniqueName, PipeDirection.In);
+        await using NamedPipeServerStream server = new(Program.UniqueName, PipeDirection.In);
         using StreamReader reader = new(server);
-        while (true)
+        while (!ct.IsCancellationRequested)
         {
-            server.WaitForConnection();
+            await server.WaitForConnectionAsync();
             try
             {
                 List<string> args = new();
                 string arg;
-                while (!string.IsNullOrEmpty(arg = reader.ReadLine()))
+                while (!string.IsNullOrEmpty(arg = await reader.ReadLineAsync()))
                 {
                     args.Add(arg);
                 }
