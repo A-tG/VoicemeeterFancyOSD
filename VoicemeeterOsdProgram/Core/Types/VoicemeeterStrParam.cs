@@ -7,7 +7,7 @@ public class VoicemeeterStrParam : VoicemeeterParameterBase<string>
 {
     protected readonly char[] m_strGetValueBuffer = new char[512];
 
-    public VoicemeeterStrParam(RemoteApiExtender api, string command) : base(api, command)
+    public VoicemeeterStrParam(RemoteApiWrapper api, string command) : base(api, command)
     {
         m_value = string.Empty;
     }

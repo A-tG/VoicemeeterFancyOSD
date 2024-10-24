@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace VoicemeeterOsdProgram.Core.Types;
 
-public abstract class VoicemeeterParameterBase<T>(RemoteApiExtender api, string command) : VoicemeeterParameterBase(api, command)
+public abstract class VoicemeeterParameterBase<T>(RemoteApiWrapper api, string command) : VoicemeeterParameterBase(api, command)
 {
     protected T m_value; // can be null, initialize in derived class
 

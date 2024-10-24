@@ -3,7 +3,7 @@ using System;
 
 namespace VoicemeeterOsdProgram.Core.Types;
 
-public class VoicemeeterNumParam(RemoteApiExtender api, string command) : VoicemeeterParameterBase<float>(api, command)
+public class VoicemeeterNumParam(RemoteApiWrapper api, string command) : VoicemeeterParameterBase<float>(api, command)
 {
     unsafe public override int GetParameter(out float val) => IsOptimized ?
             m_api.GetParameter((IntPtr)NameBuffer, out val) :

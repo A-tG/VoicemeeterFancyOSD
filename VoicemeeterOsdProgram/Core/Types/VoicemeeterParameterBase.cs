@@ -5,7 +5,7 @@ namespace VoicemeeterOsdProgram.Core.Types;
 
 public abstract class VoicemeeterParameterBase
 {
-    protected readonly RemoteApiExtender m_api;
+    protected readonly RemoteApiWrapper m_api;
 
     public string Name { get; private set; }
 
@@ -17,7 +17,7 @@ public abstract class VoicemeeterParameterBase
     internal unsafe byte* NameBuffer { get; private set; }
     internal bool IsOptimized { get; private set; } = false;
 
-    public VoicemeeterParameterBase(RemoteApiExtender api, string command)
+    public VoicemeeterParameterBase(RemoteApiWrapper api, string command)
     {
         ArgumentNullException.ThrowIfNull(api);
         ArgumentException.ThrowIfNullOrWhiteSpace(command);
