@@ -139,7 +139,7 @@ public class Logger : IDisposable, IAsyncDisposable
         await foreach (var m in m_messageChannel.Reader.ReadAllAsync(m_token))
         {
 #if !DEBUG
-                if (m.Type == LogType.Debug) continue;
+            if (m.Type == LogType.Debug) continue;
 #endif
             TryWrite(m);
         }
