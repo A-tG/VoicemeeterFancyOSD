@@ -54,16 +54,20 @@ public static class AppLifeManager
             string programName = Path.GetFileNameWithoutExtension(exeFile.Name);
             var procs = Process.GetProcessesByName(programName);
             RequestKillDuplicateProcesses(procs);
+            foreach (var p in procs)
+            {
+                p.Dispose();
+            }
         }
     }
 
     public static void StartArgsPipeServer()
     {
-        Task.Run(async () => await ProcessArgsLoop());
-        Task.Run(async () => await PipeServerLoop());
+        _ = ProcessArgsLoop();
+        _ = PipeServerLoop();
     }
 
-    private static async ValueTask ProcessArgsLoop()
+    private static async Task ProcessArgsLoop()
     {
         await foreach (var a in m_argsChannel.Reader.ReadAllAsync())
         {
@@ -99,7 +103,7 @@ public static class AppLifeManager
         }
     }
 
-    private static async ValueTask PipeServerLoop(CancellationToken ct = default)
+    private static async Task PipeServerLoop(CancellationToken ct = default)
     {
         await using NamedPipeServerStream server = new(Program.UniqueName, PipeDirection.In);
         using StreamReader reader = new(server);
