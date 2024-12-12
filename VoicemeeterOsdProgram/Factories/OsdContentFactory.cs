@@ -1,5 +1,6 @@
 ﻿using AtgDev.Voicemeeter.Types;
 using System.Collections.Generic;
+using System.Text;
 using VoicemeeterOsdProgram.Core.Types;
 using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.Types;
@@ -34,6 +35,7 @@ public static partial class OsdContentFactory
         m_vmParams.Clear();
         m_vmParams = null;
         m_selButtons = null;
+        OptimizeParams(vmParams);
     }
 
     public static void InitChildElement(IOsdRootElement parent, IOsdChildElement element, StripElements type)
@@ -71,6 +73,7 @@ public static partial class OsdContentFactory
             var name = (m_vmProperties.virtOutputs == 1) ? "B" : $"B{i + 1}";
             strip.StripLabel.Text = name;
 
+            MakeLabelParam(strip, stripIndex, name, StripType.Output);
             MakeFaderParam(strip, stripIndex, StripType.Output);
             InitChildElement(strip, strip.FaderCont, StripElements.Fader);
 
@@ -206,5 +209,30 @@ public static partial class OsdContentFactory
         MakeButtonParam(BtnType.Mono, StripType.Input, btn, stripIndex);
         strip.ControlBtnsContainer.Children.Insert(0, btn);
         return strip;
+    }
+
+    internal unsafe static void OptimizeParams(VoicemeeterParameterBase[] vmParams)
+    {
+        var paramNamesLen = 0;
+        foreach (var p in vmParams)
+        {
+            paramNamesLen += p.Name.Length + 1;
+        }
+
+        VmParamsMemory.Allocate((nuint)paramNamesLen);
+        var namesSequence = VmParamsMemory.ParamNamesBuffer;
+        var paramIndex = 0;
+        foreach (var p in vmParams)
+        {
+            var len = p.Name.Length;
+            fixed (char* ch = p.Name)
+            {
+                Encoding.ASCII.GetBytes(ch, len, &namesSequence[paramIndex], len);
+                namesSequence[paramIndex + len] = 0; // adding null character
+            }
+            var lenWithNull = len + 1;
+            p.SetupNameBufferP(namesSequence, paramIndex, lenWithNull);
+            paramIndex += lenWithNull;
+        }
     }
 }

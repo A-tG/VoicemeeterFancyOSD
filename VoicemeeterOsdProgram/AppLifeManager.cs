@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace VoicemeeterOsdProgram;
@@ -14,6 +16,10 @@ public static class AppLifeManager
     private static Mutex m_mutex = new(true, Program.UniqueName);
     private static bool? m_isLareadyRunning;
     private static Dispatcher m_dispatcher;
+    private static Channel<string[]> m_argsChannel = Channel.CreateUnbounded<string[]>(new() {
+        SingleReader = true,
+        SingleWriter = true
+    });
 
     public static string[] appArgs = Array.Empty<string>();
 
@@ -21,10 +27,7 @@ public static class AppLifeManager
     {
         get
         {
-            if (m_isLareadyRunning is null)
-            {
-                m_isLareadyRunning = !m_mutex.WaitOne(0, false);
-            }
+            m_isLareadyRunning ??= !m_mutex.WaitOne(0, false);
             return m_isLareadyRunning.Value;
         }
     }
@@ -51,17 +54,25 @@ public static class AppLifeManager
             string programName = Path.GetFileNameWithoutExtension(exeFile.Name);
             var procs = Process.GetProcessesByName(programName);
             RequestKillDuplicateProcesses(procs);
+            foreach (var p in procs)
+            {
+                p.Dispose();
+            }
         }
     }
 
     public static void StartArgsPipeServer()
     {
-        Thread pipeServerThread = new(CreatePipeServer)
+        _ = ProcessArgsLoop();
+        _ = PipeServerLoop();
+    }
+
+    private static async Task ProcessArgsLoop()
+    {
+        await foreach (var a in m_argsChannel.Reader.ReadAllAsync())
         {
-            IsBackground = true,
-        };
-        pipeServerThread.SetApartmentState(ApartmentState.STA);
-        pipeServerThread.Start();
+            await m_dispatcher.Invoke(async () => await ArgsHandler.HandleAsync(a));
+        }
     }
 
     private static void SendArgsToFirstInstance(string[] args)
@@ -92,22 +103,22 @@ public static class AppLifeManager
         }
     }
 
-    private static void CreatePipeServer()
+    private static async Task PipeServerLoop(CancellationToken ct = default)
     {
-        using NamedPipeServerStream server = new(Program.UniqueName, PipeDirection.In);
+        await using NamedPipeServerStream server = new(Program.UniqueName, PipeDirection.In);
         using StreamReader reader = new(server);
-        while (true)
+        while (!ct.IsCancellationRequested)
         {
-            server.WaitForConnection();
+            await server.WaitForConnectionAsync();
             try
             {
                 List<string> args = new();
                 string arg;
-                while (!string.IsNullOrEmpty(arg = reader.ReadLine()))
+                while (!string.IsNullOrEmpty(arg = await reader.ReadLineAsync()))
                 {
                     args.Add(arg);
                 }
-                m_dispatcher.Invoke(async () => await ArgsHandler.HandleAsync(args.ToArray()));
+                m_argsChannel.Writer.TryWrite([..args]);
             }
             catch { }
             server.Disconnect();

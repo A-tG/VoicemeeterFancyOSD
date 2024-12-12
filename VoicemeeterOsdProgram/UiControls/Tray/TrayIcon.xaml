@@ -67,7 +67,7 @@
                 <MenuItem Header="Exit" Click="ExitClick"/>
                 <Separator Background="{DynamicResource VmSepBrush}"/>
                 
-                <MenuItem Header="Close Menu"/>
+                <MenuItem Header="Close Menu" FontStyle="Italic"/>
             </ContextMenu>
         </tb:TaskbarIcon.ContextMenu>
     </tb:TaskbarIcon>

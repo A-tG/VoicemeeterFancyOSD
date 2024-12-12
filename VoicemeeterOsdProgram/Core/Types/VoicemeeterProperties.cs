@@ -2,7 +2,7 @@
 
 namespace VoicemeeterOsdProgram.Core.Types;
 
-public struct VoicemeeterProperties
+public readonly struct VoicemeeterProperties
 {
     public readonly int hardInputs;
     public readonly int virtInputs;

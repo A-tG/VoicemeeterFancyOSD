@@ -35,6 +35,12 @@ public partial class TrayIcon : Window
         SettingsWindow.SelectUpdater();
     }
 
+    public void OpenSettingsWindow()
+    {
+        SettingsWindow.Show();
+        SettingsWindow.Activate();
+    }
+
     private void OnSettingsClick(object sender, RoutedEventArgs e) => OpenSettingsWindow();
 
     private void OnOpenConfigClick(object sender, RoutedEventArgs e)
@@ -56,12 +62,6 @@ public partial class TrayIcon : Window
     private void NotifyIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
     {
         PausedItem.IsChecked = !PausedItem.IsChecked;
-    }
-
-    private void OpenSettingsWindow()
-    {
-        SettingsWindow.Show();
-        SettingsWindow.Activate();
     }
 
 

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace AtgDev.Utils;
@@ -34,8 +34,12 @@ public class Logger : IDisposable, IAsyncDisposable
         public DateTime Timestamp { get; private set; }
     }
 
-    private Thread m_thread;
-    private BlockingCollection<Message> m_logs = new(new ConcurrentQueue<Message>());
+    private Channel<Message> m_messageChannel = Channel.CreateUnbounded<Message>(new() {
+        SingleReader = true,
+        SingleWriter = true
+    });
+    private CancellationTokenSource m_tokenSource = new();
+    private CancellationToken m_token;
     private StreamWriter m_writer;
     private uint m_maxLogs = 0;
 
@@ -43,13 +47,11 @@ public class Logger : IDisposable, IAsyncDisposable
     {
         if (!Directory.Exists(folderPath)) throw new DirectoryNotFoundException(folderPath);
 
+        m_token = m_tokenSource.Token;
+
         FolderPath = folderPath;
 
-        m_thread = new(Loop)
-        {
-            IsBackground = true
-        };
-        m_thread.Start();
+        Task.Run(async () => await ProcessLogsLoop());
     }
 
     public string FolderPath { get; }
@@ -72,11 +74,7 @@ public class Logger : IDisposable, IAsyncDisposable
     {
         if (!IsEnabled) return;
 
-        try
-        {
-            m_logs.Add(m);
-        }
-        catch { }
+        m_messageChannel.Writer.TryWrite(m);
     }
 
     public void Log(string text, LogType type = LogType.Info) => Log(new Message(text, type));
@@ -136,10 +134,9 @@ public class Logger : IDisposable, IAsyncDisposable
         return result;
     }
 
-    private void Loop()
+    private async ValueTask ProcessLogsLoop()
     {
-
-        foreach (var m in m_logs.GetConsumingEnumerable())
+        await foreach (var m in m_messageChannel.Reader.ReadAllAsync(m_token))
         {
 #if !DEBUG
             if (m.Type == LogType.Debug) continue;
@@ -185,9 +182,9 @@ public class Logger : IDisposable, IAsyncDisposable
     {
         if (m_disposed) return;
 
-        m_logs.CompleteAdding();
         m_writer?.Dispose();
-        m_logs?.Dispose();
+        m_messageChannel.Writer.Complete();
+
         m_disposed = true;
 
         GC.SuppressFinalize(this);
@@ -197,9 +194,9 @@ public class Logger : IDisposable, IAsyncDisposable
     {
         if (m_disposed) return;
 
-        m_logs.CompleteAdding();
-        m_logs?.Dispose();
         await (m_writer?.DisposeAsync() ?? ValueTask.CompletedTask);
+        m_tokenSource.Cancel();
+        m_tokenSource.Dispose();
         m_disposed = true;
         
         GC.SuppressFinalize(this);

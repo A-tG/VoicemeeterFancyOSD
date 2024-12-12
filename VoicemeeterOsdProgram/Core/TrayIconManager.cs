@@ -13,5 +13,7 @@ public static class TrayIconManager
 
     public static void OpenUpdater() => TrayIcon.OpenUpdater();
 
+    public static void OpenSettings() => TrayIcon.OpenSettingsWindow();
+
     public static void Destroy() => TrayIcon.NotifyIcon?.Dispose();
 }

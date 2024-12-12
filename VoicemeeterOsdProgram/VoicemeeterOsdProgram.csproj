@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <ApplicationIcon>Resources\Icons\MainIcon.ico</ApplicationIcon>
@@ -15,7 +15,7 @@
   <PropertyGroup>
       <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
       <ApplicationManifest>app.manifest</ApplicationManifest>
-      <Version>1.1.0.7</Version>
+      <Version>1.2.0.0</Version>
       <PackageId>VoicemeeterFancyOsd</PackageId>
       <Description>On-screen display for Voicemeeter</Description>
       <AssemblyName>VoicemeeterFancyOsd</AssemblyName>
@@ -78,10 +78,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="a-tg.VmrapiDynWrapExt" Version="1.1.4" />
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+    <PackageReference Include="a-tg.VmrapiDynWrapExt" Version="2.0.0" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="ini-parser-netstandard" Version="2.5.2" />
-    <PackageReference Include="Octokit" Version="0.50.0" />
+    <PackageReference Include="Octokit" Version="13.0.1" />
     <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
   </ItemGroup>
 

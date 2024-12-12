@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using VoicemeeterOsdProgram.Core;
 using VoicemeeterOsdProgram.Factories;
 using VoicemeeterOsdProgram.Options;
 using VoicemeeterOsdProgram.UiControls;
@@ -21,6 +22,7 @@ public static class ArgsHandler
         public const string SetOption = "-set-option";
         public const string Exit = "-exit";
         public const string Help = "-help";
+        public const string OpenSettings = "-open-settings";
     }
 
     private static Dialog m_helpDialog;
@@ -77,6 +79,9 @@ public static class ArgsHandler
             case Args.Help:
                 ShowHelpWindow();
                 return true;
+            case Args.OpenSettings:
+                TrayIconManager.OpenSettings();
+                break;
             default:
                 m_logger?.LogError($"Unknown command line argument: {arg}");
                 return false;

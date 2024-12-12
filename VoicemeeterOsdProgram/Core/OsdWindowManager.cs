@@ -1,5 +1,6 @@
 ﻿using AtgDev.Voicemeeter.Types;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
 using VoicemeeterOsdProgram.Core.Types;
@@ -48,8 +49,7 @@ public static partial class OsdWindowManager
             Activatable = false,
             TopMost = true,
             IsClickThrough = true,
-            ZBandID = GetTopMostZBandID(),
-            Logger = Globals.Logger
+            ZBandID = GetTopMostZBandID()
         };
         win.CreateWindow();
         m_window = win;

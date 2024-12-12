@@ -1,24 +1,22 @@
 ﻿using AtgDev.Voicemeeter;
 using System;
+using System.Linq;
 
 namespace VoicemeeterOsdProgram.Core.Types;
 
-public abstract class VoicemeeterParameterBase<T> : VoicemeeterParameterBase
+public abstract class VoicemeeterParameterBase<T>(RemoteApiWrapper api, string command) : VoicemeeterParameterBase(api, command)
 {
     protected T m_value; // can be null, initialize in derived class
-
-    public VoicemeeterParameterBase(RemoteApiExtender api, string command) : base(api, command) { }
 
     public T Value
     {
         get => m_value;
         protected set
         {
-            if (!m_value.Equals(value))
-            {
-                OnReadValueChanged(m_value, value);
-            }
+            if (m_value.Equals(value)) return;
+
             m_value = value;
+            OnReadValueChanged(m_value, value);
         }
     }
 
@@ -30,31 +28,25 @@ public abstract class VoicemeeterParameterBase<T> : VoicemeeterParameterBase
     {
         if (!IsEnabled) return;
 
-        if ((m_api is null) || string.IsNullOrEmpty(m_name)) return;
+        if (GetParameter(out T val) != ResultCodes.Ok) return;
 
-        var res = GetParameter(out T val);
-        if (res == 0)
+        var oldVal = m_value;
+        if (isNotify)
         {
-            var oldVal = m_value;
-            if (isNotify)
-            {
-                Value = val;
-            }
-            else
-            {
-                m_value = val;
-            }
-            OnValueRead(oldVal, val);
+            Value = val;
         }
+        else
+        {
+            m_value = val;
+        }
+        OnValueRead(oldVal, val);
     }
 
     public void Write(T value)
     {
         if (!IsEnabled) return;
 
-        if ((m_api is null) || string.IsNullOrEmpty(m_name)) return;
-
-        if (SetParameter(value) == 0)
+        if (SetParameter(value) == ResultCodes.Ok)
         {
             m_value = value;
         }
@@ -64,7 +56,7 @@ public abstract class VoicemeeterParameterBase<T> : VoicemeeterParameterBase
     {
         if (ReadValueChanged is not null)
         {
-            foreach (EventHandler<ValOldNew<T>> del in ReadValueChanged.GetInvocationList())
+            foreach (var del in ReadValueChanged.GetInvocationList().Cast<EventHandler<ValOldNew<T>>>())
             {
                 ReadValueChanged -= del;
             }
@@ -72,7 +64,7 @@ public abstract class VoicemeeterParameterBase<T> : VoicemeeterParameterBase
 
         if (ValueRead is not null)
         {
-            foreach (EventHandler<ValOldNew<T>> del in ValueRead.GetInvocationList())
+            foreach (var del in ValueRead.GetInvocationList().Cast<EventHandler<ValOldNew<T>>>())
             {
                 ValueRead -= del;
             }
