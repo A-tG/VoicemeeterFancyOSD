@@ -73,6 +73,7 @@ public static partial class OsdContentFactory
             var name = (m_vmProperties.virtOutputs == 1) ? "B" : $"B{i + 1}";
             strip.StripLabel.Text = name;
 
+            MakeLabelParam(strip, stripIndex, name, StripType.Output);
             MakeFaderParam(strip, stripIndex, StripType.Output);
             InitChildElement(strip, strip.FaderCont, StripElements.Fader);
 
