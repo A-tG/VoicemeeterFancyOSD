@@ -53,5 +53,5 @@ partial class OsdWindowManager
     }
 
     public static bool IsIgnoreVmParameters =>
-        m_isMouseEntered || OptionsStorage.Osd.DontShowIfVoicemeeterVisible && IsVoicemeeterWindowForeground();
+        IsMouseEntered || OptionsStorage.Osd.DontShowIfVoicemeeterVisible && IsVoicemeeterWindowForeground();
 }

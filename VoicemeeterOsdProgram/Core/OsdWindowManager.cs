@@ -27,11 +27,12 @@ public static partial class OsdWindowManager
     private static DispatcherTimer m_WaitForVmStartedTimer = new(DispatcherPriority.Normal);
     private static DispatcherTimer m_WaitForVmTypeTimer = new(DispatcherPriority.Normal);
 
-    private static bool m_isMouseEntered;
     private static bool m_changingOsdContent;
     private static bool m_isVmStarting;
     private static bool m_isVmTypeChanging;
     private static VoicemeeterParameterBase[] m_vmParams = Array.Empty<VoicemeeterParameterBase>();
+
+    public static bool IsMouseEntered { get; private set; }
 
     static OsdWindowManager()
     {
@@ -80,7 +81,7 @@ public static partial class OsdWindowManager
 
     public static void Show()
     {
-        if (!m_isMouseEntered)
+        if (!IsMouseEntered)
         {
             ResetShowTimer();
         }
@@ -198,7 +199,10 @@ public static partial class OsdWindowManager
         const string WindowClass = "VBCABLE0Voicemeeter0MainWindow0";
 
         IntPtr hWnd = FindWindowEx(IntPtr.Zero, IntPtr.Zero, WindowClass, null);
-        bool isFocused = GetForegroundWindow() == hWnd;
+        var foregroundHandle = GetForegroundWindow();
+        if (foregroundHandle == IntPtr.Zero) return false;
+
+        bool isFocused = foregroundHandle == hWnd;
         return isFocused || !WindowObstructedHelper.IsObstructed(hWnd);
     }
 
