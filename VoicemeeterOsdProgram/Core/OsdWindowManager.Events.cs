@@ -73,13 +73,13 @@ partial class OsdWindowManager
 
     private static void OnMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
     {
-        m_isMouseEntered = true;
+        IsMouseEntered = true;
         m_displayDurationTimer.Stop();
     }
 
     private static void OnMouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
     {
-        m_isMouseEntered = false;
+        IsMouseEntered = false;
         if (IsShown)
         {
             ResetShowTimer();
