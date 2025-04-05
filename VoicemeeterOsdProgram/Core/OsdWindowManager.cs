@@ -199,7 +199,10 @@ public static partial class OsdWindowManager
         const string WindowClass = "VBCABLE0Voicemeeter0MainWindow0";
 
         IntPtr hWnd = FindWindowEx(IntPtr.Zero, IntPtr.Zero, WindowClass, null);
-        bool isFocused = GetForegroundWindow() == hWnd;
+        var foregroundHandle = GetForegroundWindow();
+        if (foregroundHandle == IntPtr.Zero) return false;
+
+        bool isFocused = foregroundHandle == hWnd;
         return isFocused || !WindowObstructedHelper.IsObstructed(hWnd);
     }
 
