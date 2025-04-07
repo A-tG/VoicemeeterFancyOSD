@@ -8,15 +8,13 @@ namespace VoicemeeterOsdProgram.Interop;
 public static class WindowObstructedHelper
 {
     private static IntPtr m_targetHwnd;
-    private static List<IntPtr> m_windowsOnTop = new();
+    private static List<IntPtr> m_windowsOnTop = [];
 
     public static bool IsObstructed(IntPtr hWnd)
     {
         if ((hWnd == IntPtr.Zero) || !IsWindowVisible(hWnd)) return true;
 
         m_targetHwnd = hWnd;
-        _ = EnumWindows(EnumWindowsHigherZOrder, IntPtr.Zero);
-
         GetDwmWindowRect(m_targetHwnd, out RECT r);
 
         bool isInsideScreen = IsRectInScreen(r);
@@ -24,17 +22,23 @@ public static class WindowObstructedHelper
 
         if (isInsideScreen)
         {
-            var targetRect = r.ToRect();
-            result = m_windowsOnTop.Any(hWnd =>
-            {
-                GetDwmWindowRect(hWnd, out RECT r);
-                return targetRect.IntersectsWith(r.ToRect());
-            });
+            result = IsRectObstructedByAnyWindow(r);
         }
-
-        m_windowsOnTop.Clear();
         m_targetHwnd = IntPtr.Zero;
         return result;
+    }
+
+    private static bool IsRectObstructedByAnyWindow(RECT r)
+    {
+        m_windowsOnTop.Clear();
+        _ = EnumWindows(EnumWindowsHigherZOrder, IntPtr.Zero);
+
+        var targetRect = r.ToRect();
+        return m_windowsOnTop.Any(hWnd =>
+        {
+            GetDwmWindowRect(hWnd, out RECT r);
+            return targetRect.IntersectsWith(r.ToRect());
+        });
     }
 
     private static bool IsRectInScreen(RECT r)
