@@ -105,4 +105,10 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+      <ResolvedFileToPublish Include="$(SolutionDir)$(Platform)\$(Configuration)\DXGI.dll">
+        <RelativePath>DXGI.dll</RelativePath>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+
 </Project>
