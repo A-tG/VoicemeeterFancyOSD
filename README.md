@@ -42,6 +42,7 @@ Start/build in debug mode to get acces to Debug Window in tray context menu.
 * Select Target Platform (x64 or x86, dont use AnyCpu or \*Host.exe will not be copied).
 * Press "Rebuild Solution" to guarantee that up-to-date Host.exe and dependencies are copied to the results folder.
 * The program will be compiled in the **Solution** folder.
+* For some reason DXGI.dll is not copied on Publish, need to be copied manually
 * Launch \*Host.exe or on-top fullscreen functionality will not work.
 
 # Uses
