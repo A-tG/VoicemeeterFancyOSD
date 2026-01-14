@@ -22,7 +22,6 @@ public partial class OsdControl : UserControl
     public bool AllowAutoUpdateSeparators { get; set; } = true;
 
     private double m_scale = 1;
-    private bool m_isInteractable;
     private double m_maxW;
     private double m_maxH;
 
@@ -57,18 +56,6 @@ public partial class OsdControl : UserControl
             LayoutTransform = new ScaleTransform(value, value);
             MaxW = m_maxW;
             MaxH = m_maxH;
-        }
-    }
-
-    public bool IsInteractable
-    {
-        get => m_isInteractable;
-        set
-        {
-            if (m_isInteractable == value) return;
-
-            CloseBtn.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            m_isInteractable = value;
         }
     }
 

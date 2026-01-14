@@ -13,11 +13,13 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Voicemeeter/StripButtons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Border CornerRadius="8" SnapsToDevicePixels="False"
-            BorderThickness="{Binding BorderThickness, Source={x:Static opt:OptionsStorage.Osd}, Mode=OneWay}">
+            BorderThickness="{Binding BorderThickness, Source={x:Static opt:OptionsStorage.Osd}, Mode=OneWay}" 
+            IsHitTestVisible="{Binding IsInteractable, Source={x:Static opt:OptionsStorage.Osd}, Mode=OneWay}" >
         <Border.Background>
             <SolidColorBrush Color="{DynamicResource VmBgMainColor}"
                              Opacity="{Binding BackgroundOpacity, Source={x:Static opt:OptionsStorage.Osd}, Mode=OneWay}"/>
@@ -36,7 +38,9 @@
                             Margin="5" Padding="0" BorderThickness="0"
                             Width="20" Height="20"
                             HorizontalAlignment="Right" VerticalAlignment="Top" 
-                            Visibility="Collapsed" Background="Transparent">
+                            Visibility="{Binding IsInteractable, Source={x:Static opt:OptionsStorage.Osd}, 
+                                Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" 
+                            Background="Transparent">
                         <Viewbox Stretch="Uniform">
                             <Canvas Width="100" Height="100">
                                 <Path x:Name="Cross" StrokeThickness="16" Stroke="{Binding Foreground, ElementName=CloseBtn}"

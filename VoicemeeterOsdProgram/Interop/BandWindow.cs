@@ -311,9 +311,10 @@ public partial class BandWindow : ContentControl, IWndProcObject
         if (regResult == 0)
             throw new Win32Exception(Marshal.GetLastWin32Error());
 
-        var extStyles = (int)(ExtendedWindowStyles.WS_EX_TRANSPARENT | ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP
-                | (Activatable ? 0 : ExtendedWindowStyles.WS_EX_NOACTIVATE)
-                | (TopMost ? ExtendedWindowStyles.WS_EX_TOPMOST : 0));
+        var extStyles = (int)(ExtendedWindowStyles.WS_EX_TRANSPARENT |
+            ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP | 
+            (Activatable ? 0 : ExtendedWindowStyles.WS_EX_NOACTIVATE) | 
+            (TopMost ? ExtendedWindowStyles.WS_EX_TOPMOST : 0));
         var styles = (uint)WindowStyles.WS_POPUP & ~(uint)WindowStyles.WS_SYSMENU;
 
         IntPtr hWnd;

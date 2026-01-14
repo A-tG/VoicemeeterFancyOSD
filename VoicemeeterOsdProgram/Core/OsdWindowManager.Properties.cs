@@ -18,13 +18,9 @@ partial class OsdWindowManager
 
     public static bool IsInteractable
     {
-        get => m_wpfControl.IsInteractable;
         set
         {
-            if (m_wpfControl.IsInteractable == value) return;
-
             m_window.IsClickThrough = !value;
-            m_wpfControl.IsInteractable = value;
         }
     }
 
