@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
 using VoicemeeterOsdProgram;
@@ -140,17 +141,21 @@ public partial class BandWindow
         if (hWnd == IntPtr.Zero) return;
         int styles = GetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE).ToInt32();
 
-        // !!! BUGGED on WINDOWS 11 window disappear after removing WS_EX_LAYERED when WS_EX_NOREDIRECTIONBITMAP is enabled
-        var stylesToApply = (int)ExtendedWindowStyles.WS_EX_LAYERED;
+        var transparent = (int)ExtendedWindowStyles.WS_EX_TRANSPARENT;
+        var layered = (int)ExtendedWindowStyles.WS_EX_LAYERED;
         if (isEnabled)
         {
-            styles |= stylesToApply;
+            styles |= transparent;
         }
         else
         {
-            styles &= ~stylesToApply;
+            styles &= ~transparent;
         }
-        SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)styles);
+        // dirty hack remove style, refresh, add back
+        SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, styles & ~layered);
+        // Have to call with SWP.SHOWWINDOW to force style "refresh"
+        SetWindowPos(hWnd, 0, 0, 0, 0, 0, SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW);
+        SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, styles | layered);
     }
 
     private void InitCustomProperties(object sender, RoutedEventArgs e)
