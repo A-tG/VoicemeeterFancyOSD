@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using VoicemeeterOsdProgram;
 using static TopmostApp.Interop.NativeMethods;
 using static VoicemeeterOsdProgram.Interop.NativeMethods;
 
@@ -138,6 +139,8 @@ public partial class BandWindow
         var hWnd = Handle;
         if (hWnd == IntPtr.Zero) return;
         int styles = GetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE).ToInt32();
+
+        // !!! BUGGED on WINDOWS 11 window disappear after removing WS_EX_LAYERED when WS_EX_NOREDIRECTIONBITMAP is enabled
         var stylesToApply = (int)ExtendedWindowStyles.WS_EX_LAYERED;
         if (isEnabled)
         {
