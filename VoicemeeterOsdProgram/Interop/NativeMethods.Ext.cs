@@ -38,4 +38,7 @@ public static partial class NativeMethods
         catch { }
         return zbid;
     }
+
+    [DllImport("user32.dll")]
+    static public extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
 }

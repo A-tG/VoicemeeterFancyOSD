@@ -143,6 +143,17 @@ public partial class BandWindow
 
         var transparent = (int)ExtendedWindowStyles.WS_EX_TRANSPARENT;
         var layered = (int)ExtendedWindowStyles.WS_EX_LAYERED;
+        void reset()
+        {
+            SetWindowPos(hWnd, IntPtr.Zero, 0, 0, 0, 0, SWP.NOMOVE | SWP.NOSIZE | SWP.NOZORDER | SWP.DRAWFRAME |
+            SWP.NOACTIVATE | SWP.SHOWWINDOW | SWP.FRAMECHANGED | SWP.NOOWNERZORDER);
+            //InvalidateRect(hWnd, IntPtr.Zero, true);
+        }
+        // !!! removing WS_EX_LAYERED works on Windows10, but not 11
+        // !!! removing WS_EX_TRANSPARENT bugged, works with hack on 10
+        // !!! changing styles with something like winspy++ works better than inside the program, like re-adding WS_EX_LAYERED
+        // dirty hack remove style, refresh, add back
+        SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, styles & ~layered);
         if (isEnabled)
         {
             styles |= transparent;
@@ -151,11 +162,8 @@ public partial class BandWindow
         {
             styles &= ~transparent;
         }
-        // dirty hack remove style, refresh, add back
-        SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, styles & ~layered);
-        // Have to call with SWP.SHOWWINDOW to force style "refresh"
-        SetWindowPos(hWnd, 0, 0, 0, 0, 0, SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW);
         SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, styles | layered);
+        reset();
     }
 
     private void InitCustomProperties(object sender, RoutedEventArgs e)
