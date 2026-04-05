@@ -60,11 +60,18 @@ public static class OptionsStorage
         await ValidateConfigFileAsync();
 
         m_disp = Dispatcher.CurrentDispatcher;
-        m_watcher.Path = Path.GetDirectoryName(ConfigFilePath);
-        m_watcher.Filter = Path.GetFileName(ConfigFilePath);
-        m_watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
-        m_watcher.Changed += OnConfigFileChanged;
-        IsWatcherEnabled = true;
+        try
+        {
+            m_watcher.Path = Path.GetDirectoryName(ConfigFilePath);
+            m_watcher.Filter = Path.GetFileName(ConfigFilePath);
+            m_watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+            m_watcher.Changed += OnConfigFileChanged;
+            IsWatcherEnabled = true;
+        }
+        catch (Exception e)
+        {
+            m_logger?.LogError($"Error initializing options {e.Message}");
+        }
     }
 
     public static bool IsWatcherEnabled
@@ -75,7 +82,7 @@ public static class OptionsStorage
             m_isWatcherEnabled = value;
             if (value)
             {
-                m_watcher.EnableRaisingEvents = !IsWatcherPaused;
+                try { m_watcher.EnableRaisingEvents = !IsWatcherPaused; } catch { }
                 if (IsWatcherPaused)
                 {
                     m_timer.Stop();
@@ -83,7 +90,7 @@ public static class OptionsStorage
             }
             else
             {
-                m_watcher.EnableRaisingEvents = false;
+                try { m_watcher.EnableRaisingEvents = false; } catch {  }
                 m_timer.Stop();
             }
         }
