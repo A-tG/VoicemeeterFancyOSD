@@ -2,7 +2,6 @@
 using VoicemeeterOsdProgram.Core.Types;
 using System.Windows;
 using VoicemeeterOsdProgram.Types;
-using Octokit;
 
 namespace VoicemeeterOsdProgram.UiControls.OSD.Strip;
 

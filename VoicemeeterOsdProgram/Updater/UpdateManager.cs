@@ -1,19 +1,20 @@
-﻿using Octokit;
+﻿using AtgDev.Utils;
+using AtgDev.Utils.DirectoryInfoExtensions;
+using AtgDev.Utils.StreamExtensions;
+using AtgDev.Utils.ZipFileExtensions;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using VoicemeeterOsdProgram.Updater.Types;
-using System.Runtime.InteropServices;
-using AtgDev.Utils.DirectoryInfoExtensions;
-using AtgDev.Utils.StreamExtensions;
-using AtgDev.Utils.ZipFileExtensions;
-using AtgDev.Utils;
 
 namespace VoicemeeterOsdProgram.Updater;
 
@@ -24,12 +25,12 @@ public static class UpdateManager
     private const string Owner = "A-tG";
     private const string RepoName = "VoicemeeterFancyOSD";
     private const string ExtractedFolder = "VoicemeeterFancyOSD";
+    private const string apiUrl = $"api.github.com/repos/{Owner}/{RepoName}/releases/latest";
     private const string BackupFolderName = $".{RepoName}UpdBak";
 
     private static Assembly m_assembly = typeof(App).Assembly;
     private static HttpClient m_httpClient = new();
-    private static GitHubClient m_ghClient = new(new ProductHeaderValue(m_assembly.GetName().Name));
-    private static ReleaseAsset m_latestAsset;
+    private static Asset m_latestAsset;
     private static CancellationTokenSource m_cts = new();
 
     public static Release LatestRelease
@@ -58,25 +59,29 @@ public static class UpdateManager
         get => $"www.github.com/{Owner}/{RepoName}";
     }
 
+    static UpdateManager()
+    {
+        m_httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(m_assembly.GetName().Name);
+    }
+
     public static async Task<UpdaterResult> TryCheckForUpdatesAsync()
     {
         UpdaterResult result = default;
 
         try
         {
-            var allReleases = await m_ghClient.Repository.Release.GetAll(Owner, RepoName);
-            var releases = allReleases.Where(r => !r.Prerelease).ToList();
-            if (releases.Count == 0) return UpdaterResult.ReleasesNotFound;
+            var release = await m_httpClient.GetFromJsonAsync<Release>($"https://{apiUrl}",
+                new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower });
 
-            var rel = releases[0];
+            if ((release?.Assets?.Count ?? 0) == 0) return UpdaterResult.ReleasesNotFound;
 
-            var latestVer = new Version(FilterVersionString(rel.TagName));
-            m_latestAsset = rel.Assets.First((el) => IsArchitectureMatch(el.Name));
+            var latestVer = new Version(FilterVersionString(release.TagName));
+            m_latestAsset = release.Assets.First((el) => IsArchitectureMatch(el.Name));
 
             result = latestVer > CurrentVersion ? UpdaterResult.NewVersionFound : UpdaterResult.VersionUpToDate;
 
             LatestVersion = latestVer;
-            LatestRelease = rel;
+            LatestRelease = release;
 #if DEBUG // to be able download older version when debugging
             result = UpdaterResult.NewVersionFound;
 #endif
@@ -85,7 +90,6 @@ public static class UpdateManager
         {
             logger?.LogError($"Error checking for update {e}");
 
-            if (e is ApiException) result = UpdaterResult.ConnectionError;
             if (e is HttpRequestException) result = UpdaterResult.ConnectionError;
             if (e is InvalidOperationException) result = UpdaterResult.ArchitectureNotFound;
 

@@ -717,11 +717,11 @@ public static partial class NativeMethods
     [DllImport("user32.dll")]
     internal static extern bool UpdateWindow(IntPtr hWnd);
 
-    [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
-    private static extern IntPtr GetWindowLongPtr32(IntPtr hWnd, int nIndex);
+    [LibraryImport("user32.dll", EntryPoint = "GetWindowLongW")]
+    private static partial IntPtr GetWindowLongPtr32(IntPtr hWnd, int nIndex);
 
-    [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
-    private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
+    [LibraryImport("user32.dll", EntryPoint = "GetWindowLongPtrW")]
+    private static partial IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
 
     public static IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex)
     {
