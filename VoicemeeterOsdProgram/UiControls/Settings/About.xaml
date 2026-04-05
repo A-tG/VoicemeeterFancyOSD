@@ -81,13 +81,6 @@
                 </Hyperlink>
             </TextBlock>
             <TextBlock>
-                <Hyperlink NavigateUri="www.github.com/octokit/octokit.net" 
-                           CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
-                           Command="{Binding OpenUriCommand}">
-                     octokit/octokit.net
-                </Hyperlink>
-            </TextBlock>
-            <TextBlock>
                 Partially code from the
                 <Hyperlink NavigateUri="www.github.com/ModernFlyouts-Community/ModernFlyouts" 
                            CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource self}}"
