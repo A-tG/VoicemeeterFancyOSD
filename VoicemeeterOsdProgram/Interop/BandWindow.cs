@@ -317,7 +317,7 @@ public partial class BandWindow : ContentControl, IWndProcObject
             (TopMost ? ExtendedWindowStyles.WS_EX_TOPMOST : 0));
         var styles = (uint)WindowStyles.WS_POPUP & ~(uint)WindowStyles.WS_SYSMENU;
         // dirty hack for windows 11, breaks transparency
-        if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000) && IsClickThrough)
+        if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000))
         {
             extStyles &= ~(int)ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP;
         }
