@@ -1,7 +1,7 @@
 ﻿namespace VoicemeeterOsdProgram.Updater.Types;
 
-public class Asset
+public record Asset
 {
-    public string Name { get; set; } = "";
-    public string BrowserDownloadUrl { get; set; } = "";
+    public required string Name { get; set; }
+    public required string BrowserDownloadUrl { get; set; }
 }
