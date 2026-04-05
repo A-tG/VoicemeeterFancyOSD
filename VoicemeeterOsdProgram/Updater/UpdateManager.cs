@@ -68,11 +68,13 @@ public static class UpdateManager
     {
         UpdaterResult result = default;
 
+        logger?.Log("Checking for updates");
         try
         {
             var release = await m_httpClient.GetFromJsonAsync<Release>($"https://{apiUrl}",
                 new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower });
 
+            logger?.Log($"Parsed object from server response {JsonSerializer.Serialize(release)}");
             if ((release?.Assets?.Count ?? 0) == 0) return UpdaterResult.ReleasesNotFound;
 
             var latestVer = new Version(FilterVersionString(release.TagName));
@@ -97,6 +99,7 @@ public static class UpdateManager
         }
 
         LastResult = result;
+        logger?.Log($"Checking for updates result: {result}");
         return result;
     }
 
