@@ -27,7 +27,7 @@
                     <local:CheckboxWrap.DataContext>
                         <vm:CheckboxWrapViewModel 
                             Content="Interactable"
-                            TooltipContent="User can interact with OSD Elements (drag Gain fader, click buttons)"/>
+                            TooltipContent="User can interact with OSD Elements (drag Gain fader, click buttons). Bugged on Windows 11 breaks transparency and may require restart"/>
                     </local:CheckboxWrap.DataContext>
                 </local:CheckboxWrap>
 
