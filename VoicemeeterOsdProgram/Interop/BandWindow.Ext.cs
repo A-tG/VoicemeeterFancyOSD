@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using VoicemeeterOsdProgram;
@@ -138,37 +140,33 @@ public partial class BandWindow
     private void ToggleClickThrough(bool isEnabled)
     {
         var hWnd = Handle;
-        if (hWnd == IntPtr.Zero) return;
-        int styles = GetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE).ToInt32();
+        if ((hWnd == IntPtr.Zero) || !HasSourceCreated) return;
 
-        var transparent = (int)ExtendedWindowStyles.WS_EX_TRANSPARENT;
-        var layered = (int)ExtendedWindowStyles.WS_EX_LAYERED;
-        void reset()
-        {
-            SetWindowPos(hWnd, IntPtr.Zero, 0, 0, 0, 0, SWP.NOMOVE | SWP.NOSIZE | SWP.NOZORDER | SWP.DRAWFRAME |
-            SWP.NOACTIVATE | SWP.SHOWWINDOW | SWP.FRAMECHANGED | SWP.NOOWNERZORDER);
-            //InvalidateRect(hWnd, IntPtr.Zero, true);
-        }
-        // !!! removing WS_EX_LAYERED works on Windows10, but not 11
-        // !!! removing WS_EX_TRANSPARENT bugged, works with hack on 10
-        // !!! changing styles with something like winspy++ works better than inside the program, like re-adding WS_EX_LAYERED
-        // dirty hack remove style, refresh, add back
-        SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, styles & ~layered);
+        int styles = GetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE).ToInt32();
+        var t = (int)ExtendedWindowStyles.WS_EX_TRANSPARENT;
+        var l = (int)ExtendedWindowStyles.WS_EX_LAYERED;
+        var newStyles = styles | l;
         if (isEnabled)
         {
-            styles |= transparent;
+            newStyles |= t;
         }
         else
         {
-            styles &= ~transparent;
+            newStyles &= ~t;
         }
-        SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, styles | layered);
-        reset();
+        if (styles == newStyles) return;
+
+        SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, newStyles);
+        SetLayeredWindowAttributes(hWnd, 0, 255, LWA_ALPHA);
+        //UpdateLayeredWindow(hWnd, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, 0, IntPtr.Zero, LWA_ALPHA);
+        /*SetWindowPos(hWnd, IntPtr.Zero, 0, 0, 0, 0, SWP.NOMOVE | SWP.NOSIZE | SWP.NOZORDER |
+            SWP.NOACTIVATE | SWP.SHOWWINDOW | SWP.NOOWNERZORDER);
+        InvalidateRect(hWnd, IntPtr.Zero, true);*/
     }
 
     private void InitCustomProperties(object sender, RoutedEventArgs e)
     {
-        if (IsClickThrough) ToggleClickThrough(true);
+        //if (IsClickThrough) ToggleClickThrough(true);
         if (IsBgBlurred) TryToggleBgBlur(true);
         SetPosition(Left, Top);
     }
