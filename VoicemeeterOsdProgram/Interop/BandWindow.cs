@@ -311,13 +311,16 @@ public partial class BandWindow : ContentControl, IWndProcObject
         if (regResult == 0)
             throw new Win32Exception(Marshal.GetLastWin32Error());
 
-        var extStyles = (int)(ExtendedWindowStyles.WS_EX_LAYERED |
+        var extStyles = (int)(ExtendedWindowStyles.WS_EX_LAYERED | ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP |
             (IsClickThrough ? 0 : ExtendedWindowStyles.WS_EX_TRANSPARENT) |
             (Activatable ? 0 : ExtendedWindowStyles.WS_EX_NOACTIVATE) | 
             (TopMost ? ExtendedWindowStyles.WS_EX_TOPMOST : 0));
         var styles = (uint)WindowStyles.WS_POPUP & ~(uint)WindowStyles.WS_SYSMENU;
         // dirty hack for windows 11, breaks transparency
-        extStyles |= OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000) ? 0 : (int)ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP;
+        if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000) && IsClickThrough)
+        {
+            extStyles &= ~(int)ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP;
+        }
 
         IntPtr hWnd;
         if (IsBandWindowSupported())
