@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Interop;
 using TopmostApp.Interop;
 using System.Windows.Media;
+using VoicemeeterOsdProgram.Updater;
 
 namespace VoicemeeterOsdProgram;
 

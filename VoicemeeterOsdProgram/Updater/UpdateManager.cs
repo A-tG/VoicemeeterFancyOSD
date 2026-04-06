@@ -20,7 +20,7 @@ namespace VoicemeeterOsdProgram.Updater;
 
 public static class UpdateManager
 {
-    public static Logger logger = Globals.Logger;
+    public static Logger logger;
 
     private const string Owner = "A-tG";
     private const string RepoName = "VoicemeeterFancyOSD";
@@ -61,7 +61,7 @@ public static class UpdateManager
 
     static UpdateManager()
     {
-        m_httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(m_assembly.GetName().Name);
+        //m_httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(m_assembly.GetName().Name);
     }
 
     public static async Task<UpdaterResult> TryCheckForUpdatesAsync()
@@ -71,6 +71,7 @@ public static class UpdateManager
         logger?.Log("Checking for updates");
         try
         {
+            m_httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(m_assembly.GetName().Name);
             var release = await m_httpClient.GetFromJsonAsync<Release>($"https://{apiUrl}",
                 new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower });
 

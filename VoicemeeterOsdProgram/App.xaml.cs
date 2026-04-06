@@ -34,6 +34,8 @@ public partial class App : Application
         DpiHelper.Init();
         TrayIconManager.Init();
         OsdWindowManager.Init();
+        
+        UpdateManager.logger = Globals.Logger;
         UpdateManager.DefaultOS = System.Runtime.InteropServices.OSPlatform.Windows;
 
         await optionsTask;
