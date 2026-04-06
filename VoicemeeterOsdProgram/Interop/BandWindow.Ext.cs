@@ -140,24 +140,27 @@ public partial class BandWindow
     private void ToggleClickThrough(bool isEnabled)
     {
         var hWnd = Handle;
-        if ((hWnd == IntPtr.Zero) || !HasSourceCreated) return;
+        var hWndSrc = hwndSource.Handle;
+        if ((hWnd == IntPtr.Zero) || (hWndSrc == IntPtr.Zero) || !HasSourceCreated) return;
 
         int styles = GetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE).ToInt32();
+        int stylesSrc = GetWindowLongPtr(hWndSrc, (int)GetWindowLongFields.GWL_EXSTYLE).ToInt32();
         var t = (int)ExtendedWindowStyles.WS_EX_TRANSPARENT;
         var l = (int)ExtendedWindowStyles.WS_EX_LAYERED;
-        var newStyles = styles | l;
         if (isEnabled)
         {
-            newStyles |= t;
+            styles |= t;
+            stylesSrc |= t;
         }
         else
         {
-            newStyles &= ~t;
+            styles &= ~t;
+            stylesSrc &= ~t;
         }
-        if (styles == newStyles) return;
 
-        SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, newStyles);
-        SetLayeredWindowAttributes(hWnd, 0, 255, LWA_ALPHA);
+        SetWindowLongPtr(hWnd, (int)GetWindowLongFields.GWL_EXSTYLE, styles);
+        SetWindowLongPtr(hWndSrc, (int)GetWindowLongFields.GWL_EXSTYLE, stylesSrc);
+        //SetLayeredWindowAttributes(hWnd, 0, 255, LWA_ALPHA);
         //UpdateLayeredWindow(hWnd, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, 0, IntPtr.Zero, LWA_ALPHA);
         /*SetWindowPos(hWnd, IntPtr.Zero, 0, 0, 0, 0, SWP.NOMOVE | SWP.NOSIZE | SWP.NOZORDER |
             SWP.NOACTIVATE | SWP.SHOWWINDOW | SWP.NOOWNERZORDER);

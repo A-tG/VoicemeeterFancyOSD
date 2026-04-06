@@ -311,16 +311,12 @@ public partial class BandWindow : ContentControl, IWndProcObject
         if (regResult == 0)
             throw new Win32Exception(Marshal.GetLastWin32Error());
 
-        var extStyles = (int)(ExtendedWindowStyles.WS_EX_LAYERED | ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP |
-            (IsClickThrough ? 0 : ExtendedWindowStyles.WS_EX_TRANSPARENT) |
+        var extStyles = (int)(ExtendedWindowStyles.WS_EX_LAYERED | 
+            ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP |
+            (IsClickThrough ? ExtendedWindowStyles.WS_EX_TRANSPARENT : 0) |
             (Activatable ? 0 : ExtendedWindowStyles.WS_EX_NOACTIVATE) | 
             (TopMost ? ExtendedWindowStyles.WS_EX_TOPMOST : 0));
         var styles = (uint)WindowStyles.WS_POPUP & ~(uint)WindowStyles.WS_SYSMENU;
-        // dirty hack for windows 11, breaks transparency
-        if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000))
-        {
-            extStyles &= ~(int)ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP;
-        }
 
         IntPtr hWnd;
         if (IsBandWindowSupported())
@@ -364,7 +360,11 @@ public partial class BandWindow : ContentControl, IWndProcObject
         hookManager.OnHwndCreated(hWnd);
         HwndSourceParameters param = new()
         {
-            WindowStyle = (int)(WindowStyles.WS_VISIBLE | WindowStyles.WS_CHILD),
+            WindowStyle = unchecked((int)(WindowStyles.WS_VISIBLE | WindowStyles.WS_POPUP)),
+            // may need to update hwndSource's styles on property change
+            ExtendedWindowStyle = (int)((Activatable ? 0 : ExtendedWindowStyles.WS_EX_NOACTIVATE) |
+                (TopMost ? ExtendedWindowStyles.WS_EX_TOPMOST : 0) |
+                (IsClickThrough ? ExtendedWindowStyles.WS_EX_TRANSPARENT : 0)),
             ParentWindow = hWnd,
             UsesPerPixelTransparency = true
         };
@@ -431,7 +431,7 @@ public partial class BandWindow : ContentControl, IWndProcObject
     private void RepositionHwndSource()
     {
         if (hwndSource == null) return;
-        SetWindowPos(hwndSource.Handle, IntPtr.Zero, 0, 0, 0, 0, SWP.NOSIZE | SWP.NOZORDER | SWP.NOACTIVATE);
+        SetWindowPos(hwndSource.Handle, IntPtr.Zero, (int)Left, (int)Top, 0, 0, SWP.NOSIZE | SWP.NOZORDER | SWP.NOACTIVATE);
     }
 
     private void HandleDpiChange(IntPtr wParam, IntPtr lParam)
@@ -516,6 +516,7 @@ public partial class BandWindow : ContentControl, IWndProcObject
             (int)Math.Round(x),
             (int)Math.Round(y),
             0, 0, SWP.NOZORDER | SWP.NOSIZE | SWP.NOACTIVATE);
+        RepositionHwndSource();
         UpdateWindow(Handle);
         ActualLeft = x;
         ActualTop = y;
