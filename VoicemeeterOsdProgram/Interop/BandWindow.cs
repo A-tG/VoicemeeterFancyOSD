@@ -313,9 +313,8 @@ public partial class BandWindow : ContentControl, IWndProcObject
 
         var extStyles = (int)(ExtendedWindowStyles.WS_EX_LAYERED | 
             ExtendedWindowStyles.WS_EX_NOREDIRECTIONBITMAP |
-            (IsClickThrough ? ExtendedWindowStyles.WS_EX_TRANSPARENT : 0) |
-            (Activatable ? 0 : ExtendedWindowStyles.WS_EX_NOACTIVATE) | 
-            (TopMost ? ExtendedWindowStyles.WS_EX_TOPMOST : 0));
+            ExtendedWindowStyles.WS_EX_TRANSPARENT |
+            ExtendedWindowStyles.WS_EX_NOACTIVATE);
         var styles = (uint)WindowStyles.WS_POPUP & ~(uint)WindowStyles.WS_SYSMENU;
 
         IntPtr hWnd;
@@ -361,7 +360,7 @@ public partial class BandWindow : ContentControl, IWndProcObject
         HwndSourceParameters param = new()
         {
             WindowStyle = unchecked((int)(WindowStyles.WS_VISIBLE | WindowStyles.WS_POPUP)),
-            // may need to update hwndSource's styles on property change
+            // !!! may need to update hwndSource's styles on property change and only hwndSource
             ExtendedWindowStyle = (int)((Activatable ? 0 : ExtendedWindowStyles.WS_EX_NOACTIVATE) |
                 (TopMost ? ExtendedWindowStyles.WS_EX_TOPMOST : 0) |
                 (IsClickThrough ? ExtendedWindowStyles.WS_EX_TRANSPARENT : 0)),
