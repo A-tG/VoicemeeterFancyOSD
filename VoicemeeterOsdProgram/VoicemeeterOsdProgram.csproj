@@ -79,7 +79,7 @@
 
   <ItemGroup>
     <PackageReference Include="a-tg.VmrapiDynWrapExt" Version="2.0.1" />
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
+    <PackageReference Include="H.NotifyIcon.Wpf" Version="2.4.1" />
     <PackageReference Include="ini-parser-netstandard" Version="2.5.2" />
     <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
   </ItemGroup>
